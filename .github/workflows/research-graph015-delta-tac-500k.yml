@@ -29,7 +29,7 @@ jobs:
           OMP_NUM_THREADS: '2'
           MKL_NUM_THREADS: '2'
         run: |
-          python -m py_compile graph015_delta_tac_500k.py graph015_train_real_delta_tac_500k.py graph015_equal_cache_dev_runner.py test_graph015_delta_tac_500k.py
+          python -m py_compile graph015_delta_tac_500k.py graph015_train_real_delta_tac_500k.py graph015_equal_cache_dev_runner.py graph015_test001_cmake_frozen_replay.py test_graph015_delta_tac_500k.py
           python -m unittest -v test_graph015_delta_tac_500k.py
       - name: Explicit scientific status
         run: |
