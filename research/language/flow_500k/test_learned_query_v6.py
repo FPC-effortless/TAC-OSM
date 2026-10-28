@@ -26,7 +26,7 @@ class LearnedQueryContracts(unittest.TestCase):
         self.assertTrue(bool((a["posterior"]>0).all()))
 
     def test_differentiable_nonexact_query_and_gradient_nonzero(self):
-        x=(torch.arange(43).reshape(1,-1)*7%127).long()
+        x=torch.randint(0,9,(2,87),dtype=torch.long)
         result=self.q.predict_window(x)
         self.assertGreater(int(result["hit"].sum()),0)
         # Teacher-forced next symbol, only on nonexact graph009 misses.
@@ -37,6 +37,19 @@ class LearnedQueryContracts(unittest.TestCase):
         self.assertTrue(all(torch.isfinite(g).all() for g in grads))
         self.assertGreater(float(grads[0].norm()),1e-10)
         self.assertGreater(float(grads[1].norm()),1e-10)
+
+    def test_unique_future_continuations_can_starve_query_gradient(self):
+        # Negative diagnostic: when every observed continuation is unique,
+        # no retrieved candidate can vote for its true next byte. The
+        # query-ranking gradient may vanish. Real FIT must measure this rate.
+        x=(torch.arange(43).reshape(1,-1)*7%127).long()
+        a=self.q.predict_window(x)
+        chosen=a["hit"][:,:-1]
+        self.assertTrue(bool(chosen.any()))
+        loss=-a["posterior"][:,:-1].clamp_min(1e-30).log().gather(
+            -1,x[:,1:,None]).squeeze(-1)[chosen].mean()
+        g=torch.autograd.grad(loss,self.q.embedding.weight)[0]
+        self.assertLess(float(g.norm()),1e-8)
 
     def test_chunk_parity_global_ordinal_owner_and_bounded_state(self):
         x=torch.randint(0,8,(2,89),dtype=torch.long)
