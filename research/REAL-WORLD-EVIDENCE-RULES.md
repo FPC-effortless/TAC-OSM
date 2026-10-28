@@ -1,3 +1,24 @@
+## Three-model authentic CPU language full-exposure study (2026-10-28)
+
+Following the user's instruction to exclude Mamba-3 and run only on
+GitHub Actions CPU, `LANGCOMPARE031` is a separate, prospective,
+source-matched follow-up to the already completed 16-update
+`LANGCOMPARE030` pilot. The explicit, study-scoped
+`owner-2026-10-28-500k` exception permits only the three unchanged
+actual 500K language model variants (TAC-CONTEXT026, official BDH,
+causal Transformer) to train for exactly **320 updates × 8 original
+FIT windows × 128 next-byte targets**, across five registered original
+seeds (1701–1705). All trainable and deployed model parameters remain
+within 1%. The experiment uses separate `single_model_training`
+internal registrations per architecture/seed and reports equal source
+exposure, not equal FLOPs. A source-matched exploratory DEV NLL ranking
+may be described factually; **architecture superiority is ineligible
+without matching total measured training FLOPs and an independent
+unexposed evaluation**. Four already-exposed DEV sources are not a
+protected test. This amendment does not relax any other model scale
+or authorize GPU quotas, new sources, protected TEST, merge, promotion,
+commercial or safety claims. The 16-update pilot remains immutable.
+
 ## CPU-only 500K language pilot amendment (2026-10-28)
 
 The owner explicitly requested dropping Mamba-3 from the currently active
