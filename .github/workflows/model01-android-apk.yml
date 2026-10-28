@@ -156,6 +156,11 @@ jobs:
             set -eu
             gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111LocalRuntimeAndroidTest,org.tacosm.mobile.me111.Me111LongStreamAndroidTest
             APP=org.tacosm.mobile.model01.demo
+            # connectedDebugAndroidTest may uninstall its test runner during
+            # cleanup. Reinstall both exact, just-compiled APKs before the
+            # two independent instrumentation process invocations.
+            adb install -r mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
+            adb install -r mobile/android/model01/sample-app/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             adb shell am instrument -w -e class org.tacosm.mobile.me111.Me111ProcessSeedAndroidTest "${APP}.test/androidx.test.runner.AndroidJUnitRunner" | tee /tmp/me111-process-seed.txt
             grep -q 'OK (1 test)' /tmp/me111-process-seed.txt
             adb shell am force-stop "$APP"
