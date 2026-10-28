@@ -129,7 +129,7 @@ def score_document(model,data:bytes,order:int):
     for t in range(len(data)-1):
         # No source is visible after position t. The label at t+1 is read
         # only after the probability law has been produced for the prefix.
-        p=law(model,data[:t+1],order)
+        p=law(model,data[max(0,t-2):t+1],order)
         target=data[t+1]
         total["n"]+=1
         nll=-math.log(p[target])
