@@ -1,0 +1,92 @@
+{
+  "schema": "graph017-authentic-exposed-dev-numeric-receipt-v1",
+  "date": "2026-10-28",
+  "model_sha256": "cd1f0a1c947fd2e29649d312d1109bbd1b4e8c2d4e74b6b2b72b75f9aa0e5f8e",
+  "original_source_archive_sha256": "cde9a91be40a4e613975c0bd8caa4c19ac24e3d1d0e993db5cacfbd002fecc32",
+  "learned_parameters": 512634,
+  "original_tac_parameters": 499290,
+  "source_count_verified": 36,
+  "source": "Vim9.1 publisher 30 real FIT chapters and six EXPOSED DEV chapters",
+  "seeds": [
+    1701,
+    1702,
+    1703,
+    1704,
+    1705
+  ],
+  "targets_per_seed": {
+    "1": 6144,
+    "4": 6000,
+    "16": 5424
+  },
+  "exact_original_fit_sample_schedule": true,
+  "training_updates": 120,
+  "batch": 8,
+  "loss_weights": {
+    "1": 1,
+    "4": 0.15,
+    "16": 0.15
+  },
+  "per_seed": [
+    {
+      "seed": 1701,
+      "checkpoint_sha256": "c0eea97a980a24de81aedf13a817530917f8ba011c0356b6dbb0a2bf38341766",
+      "nll1": 2.5915977557500205,
+      "nll4": 3.4936463216145834,
+      "nll16": 3.572571025837136
+    },
+    {
+      "seed": 1702,
+      "checkpoint_sha256": "f7b60d08d614c2dc461ae9a39b6bd16d29db2f309022a7dc3c06458c381ab3db",
+      "nll1": 2.5384596586227417,
+      "nll4": 3.510112060546875,
+      "nll16": 3.5356110429341814
+    },
+    {
+      "seed": 1703,
+      "checkpoint_sha256": "116061480a98607b5ceea7d715af308e13948066e2dd93001d3f87f7c3befd8d",
+      "nll1": 2.531740387280782,
+      "nll4": 3.534326578776042,
+      "nll16": 3.6710914904389056
+    },
+    {
+      "seed": 1704,
+      "checkpoint_sha256": "a6e5f932f122c4eec112eea826264df27a95ef06fb26409bf78bb9475b6997f5",
+      "nll1": 2.526082475980123,
+      "nll4": 3.49533642578125,
+      "nll16": 3.530184450402724
+    },
+    {
+      "seed": 1705,
+      "checkpoint_sha256": "953c6e487261126922d431c6628c91284148839869ef998732235346cc90bfa7",
+      "nll1": 2.5634586413701377,
+      "nll4": 3.502804972330729,
+      "nll16": 3.5596863063035813
+    }
+  ],
+  "means": {
+    "h1": 2.550267783800761,
+    "h4": 3.5072452718098956,
+    "h16": 3.573828863183306
+  },
+  "baseline": {
+    "original_tac_h1": 2.537437987327576,
+    "fit_trigram_h4": 2.6755178380453124,
+    "fit_trigram_h16": 3.195463240828708
+  },
+  "mean_h1_regression": 0.012829796473185339,
+  "gate": {
+    "local_cold_replay": "PASS_5_OF_5",
+    "registered_h1_guardrail": "FAIL",
+    "h4_vs_fit_reference": "FAIL",
+    "h16_vs_fit_reference": "FAIL",
+    "real_independent_test": "NOT_RUN",
+    "source_binary_repo_cold_replay": "BLOCKED",
+    "architecture_superiority": "NOT_ESTABLISHED"
+  },
+  "limitations": [
+    "Original new checkpoint binary bytes preserved in downloadable archive; NOT Git tracked",
+    "All scored real DEV already previously exposed",
+    "No claim of actual novel intelligence or commercial skill"
+  ]
+}
