@@ -92,6 +92,17 @@ def load_bdh(path):
 
 def load_mamba3():
     if not torch.cuda.is_available():return None
+    # Official SISO kernel coerces Q/K/V to BF16. T4 = SM75 and cannot execute
+    # native BF16 tensor cores. Fail BEFORE importing kernels or using GPU quota.
+    major, minor = torch.cuda.get_device_capability(torch.cuda.current_device())
+    if major < 8:
+        raise RuntimeError(
+            f"official Mamba-3 SISO uses BF16 kernel path; CUDA SM{major}{minor} "
+            "is below minimum SM80. Kaggle T4 SM75 is NOT an eligible comparator. "
+            "Do not silently substitute Mamba-2, FP16, or a custom recurrence."
+        )
+    if not torch.cuda.is_bf16_supported():
+        raise RuntimeError("BF16 unavailable on requested CUDA accelerator")
     # This imports the *official* Mamba-3 layer and correct LM wrapper.
     from mamba_ssm.models.config_mamba import MambaConfig
     from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
