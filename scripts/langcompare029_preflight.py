@@ -81,7 +81,7 @@ def load_bdh(path):
     if path is None:return None
     p=Path(path)
     raw=p.read_bytes()
-    git_sha=hashlib.sha1(b"blob "+str(len(raw)).encode()+b"\\0"+raw).hexdigest()
+    git_sha=hashlib.sha1(b"blob "+str(len(raw)).encode()+b"\0"+raw).hexdigest()
     if git_sha!=BDH_GIT_BLOB:raise ValueError("BDH file differs from audited official Git blob")
     spec=importlib.util.spec_from_file_location("bdh_official_029",str(p))
     mod=importlib.util.module_from_spec(spec)
@@ -158,7 +158,7 @@ def main():
     args=p.parse_args()
     r=preflight(bdh_path=args.bdh_source,attempt_mamba=args.attempt_official_mamba3,
                 require_complete=args.require_complete)
-    raw=json.dumps(r,indent=2,sort_keys=True,allow_nan=False)+"\\n"
+    raw=json.dumps(r,indent=2,sort_keys=True,allow_nan=False)+"\n"
     if args.output:
         if args.output.exists():raise ValueError("refuse to overwrite prior receipts")
         args.output.parent.mkdir(parents=True,exist_ok=True)
