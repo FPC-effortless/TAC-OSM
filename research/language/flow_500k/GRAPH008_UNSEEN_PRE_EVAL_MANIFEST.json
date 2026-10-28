@@ -1,0 +1,20 @@
+{
+  "study": "TAC-LANG-MEM-500K-008-SUPPLEMENTAL-UNSEEN",
+  "frozen_before_scoring": true,
+  "purpose": "No-training generalization check, not official or previously sealed TEST",
+  "selection": "Six named Vim9.1 reference manuals outside all original 30 FIT and six DEV partitions; no numerical metric used to select",
+  "documents": {
+    "autocmd.txt": "d3b3c15428e4c208949ebda4af5cbfed9bc6ffe3ec25d798780122cf38e9884b",
+    "builtin.txt": "e55c3e448f79983e91728ef2c4bf1ee08a5765515f420df724d3a67b15b81ce5",
+    "cmdline.txt": "bcd12c3c8eb9f73bb873e9e8fe8ff4d4cd1015a92c61ec200c382db3ea922bd0",
+    "eval.txt": "5b85174771ad557134ee2c3b11e84a25dd6a7d72a48fa65b357692e057bc5e3e",
+    "options.txt": "1218e683279aab8424f370b6ada98b0ab2c71ff74e47009c5473557aa51f6479",
+    "syntax.txt": "7510804446f96d78587214c4f7b3d824a6ec13c6f34a2d196b35adc476142d35"
+  },
+  "window_selection": "8 fixed equally spaced windows per document, window length 257, 48 windows; context 256; historical lags 64 and 192; 5 original trained seed checkpoints",
+  "evaluation": "frozen NLL, top1, FIT-only unigram prior, zero reads; no updates, recalibration, sample selection or retuning based on these scores",
+  "external_validity": "same publisher Vim help domain, not a general-language or true source-query-discovery test",
+  "candidate": "GRAPH008 v4 503514-parameter history model",
+  "controls": "GRAPH007 historical v3 503514-parameter history model, graph008 zero-read intervention, smoothed FIT-only character-frequency prior",
+  "no_protected_original_test": true
+}
