@@ -1,0 +1,45 @@
+name: Model01 Android-compatible offline Java export (host JVM only)
+on:
+  push:
+    branches:
+      - product/model01-android-offline-export-20261028
+    paths:
+      - 'mobile/android/model01/**'
+      - 'scripts/export_model01_android_java.py'
+      - 'tests/test_model01_android_export.py'
+      - 'research/replay-bundles/PRODUCT-MODEL01-UCI374-CLASSICAL/**'
+      - '.github/workflows/model01-android-offline-export.yml'
+  pull_request:
+    paths:
+      - 'mobile/android/model01/**'
+      - 'scripts/export_model01_android_java.py'
+      - 'tests/test_model01_android_export.py'
+      - 'research/replay-bundles/PRODUCT-MODEL01-UCI374-CLASSICAL/**'
+      - '.github/workflows/model01-android-offline-export.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-model-host-jvm-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Verify original frozen checkpoint against deterministic export
+        run: python scripts/export_model01_android_java.py --check
+      - name: Verify compiled local inference vs original frozen Python reference
+        run: python -m unittest discover -s tests -p 'test_model01_android_export.py' -v
+      - name: Explicit scientific/device evidence boundary
+        run: |
+          echo 'HOST_JVM_PARITY=TESTED_BY_WORKFLOW'
+          echo 'ANDROID_PHYSICAL_DEVICE=NOT_RUN'
+          echo 'AIRPLANE_MODE=NOT_RUN'
+          echo 'ENERGY_AND_RAM=NOT_RUN'
+          echo 'TAC_NEURAL_EXPORT=NOT_RUN'
