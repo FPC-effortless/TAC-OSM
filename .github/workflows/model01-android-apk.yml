@@ -11,6 +11,7 @@ on:
       - 'scripts/verify_me111_256step_cpu.py'
       - 'scripts/create_me111_android_256step_fixture.py'
       - 'scripts/verify_me111_source_input_parity.py'
+      - 'scripts/create_me111_original_fit_android_oracle.py'
       - '.github/workflows/model01-android-apk.yml'
   pull_request:
     paths:
@@ -86,6 +87,12 @@ jobs:
           python scripts/create_me111_android_256step_fixture.py \
             --source-root pinned-me111 \
             --output mobile/android/model01/sample-app/app/src/androidTest/assets/me111_256_reference_vectors.json
+      - name: Generate original FIT-source 256-step raw-to-PyTorch Android test oracle
+        run: |
+          python scripts/create_me111_original_fit_android_oracle.py \
+            --source-root pinned-me111 \
+            --csv-output mobile/android/model01/sample-app/app/src/androidTest/assets/me111-original-fit-first256.csv \
+            --reference-output mobile/android/model01/sample-app/app/src/androidTest/assets/me111_original_fit_expected.json
       - name: Verify host JVM input/state guards and SHA256 state codec negatives
         run: python -m unittest discover -s tests -p 'test_me111_android*.py' -v
       - name: Verify authentic original FIT source raw-to-Java feature transformation
@@ -169,7 +176,7 @@ jobs:
           script: |
             # Each command is a separate shell in this emulator action; do not
             # rely on variables or set -e surviving from a previous command.
-            gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111LocalRuntimeAndroidTest,org.tacosm.mobile.me111.Me111LongStreamAndroidTest
+            gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111LocalRuntimeAndroidTest,org.tacosm.mobile.me111.Me111LongStreamAndroidTest,org.tacosm.mobile.me111.Me111OriginalFitReplayAndroidTest
             # Use fully qualified literal component names across shell calls.
             # connectedDebugAndroidTest may uninstall its test runner during
             # cleanup. Reinstall both exact, just-compiled APKs before the
