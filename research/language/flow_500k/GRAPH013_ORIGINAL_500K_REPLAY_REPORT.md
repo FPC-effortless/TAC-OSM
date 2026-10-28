@@ -11,7 +11,7 @@ Five original WaveCED500K trained checkpoints are available in the researcher-ow
 - Verified source SHA256 for 30 authentic FIT and six previously examined DEV Vim 9.1 publisher chapters.
 - Verified five original checkpoint byte hashes, original 120×8 per-seed FIT sampling schedule, stored complete optimizer and RNG metadata, and frozen scoring with restricted weights_only=True checkpoint loading.
 - Recomputed 48 authentic *exposed* DEV windows, 128 real next-character targets per window, **6,144 per model per seed**. Maximum deviation from checkpoint's stored original NLL: **7.95e-8**, against original declared tolerance 1e-6.
-- Executed four local source-only regression tests. GitHub source-only CI does not have checkpoint binaries and MUST NOT claim original clean-checkout score replay.
+- Executed five local source-only regression tests, including a tampered original archive rejection. GitHub source-only CI does not have checkpoint binaries and MUST NOT claim original clean-checkout score replay.
 
 | Original 500K TAC seed | Replayed exposed DEV NLL |
 | --- | ---: |
