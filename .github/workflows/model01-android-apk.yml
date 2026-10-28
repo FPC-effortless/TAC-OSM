@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
 # Cancel obsolete same-branch emulator builds to avoid repeated paid/CI CPU usage.
 concurrency:
-  group: me111-android-${{ github.ref }}
+  group: me111-android-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 permissions:
   contents: read
