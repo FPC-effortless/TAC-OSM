@@ -1,0 +1,89 @@
+name: LANGCOMPARE030 authentic CPU language pilot (TAC / BDH / Transformer)
+on:
+  pull_request:
+    paths:
+      - "scripts/langcompare030_cpu_fit.py"
+      - "research/mathematical-engineering/langcompare030/**"
+      - ".github/workflows/langcompare030-cpu.yml"
+      - "scripts/validate_research_parity.py"
+permissions:
+  contents: read
+jobs:
+  cpu-authentic-fit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [tac_context026, bdh_official, causal_transformer]
+    env:
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      CUDA_VISIBLE_DEVICES: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install pinned CPU-only environment
+        run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Original registration and source-only prefit
+        run: |
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langcompare030/FAIR_COMPARISON.json \
+            --phase preflight
+          PYTHONPATH=src:. python - <<'PY'
+          import json
+          from scripts.langcompare029_sampling import fit_sources,schedule_receipt
+          d=json.load(open('research/mathematical-engineering/langcompare030/FAIR_COMPARISON.json'))
+          assert d['study_type']=='single_model_training'
+          assert d['no_architecture_superiority_claim'] is True
+          assert d['budget']['pilot_updates']==16
+          fit=fit_sources()
+          assert len(fit)==14
+          r=schedule_receipt(fit,1701,steps=16)
+          assert r['examples_seen']==128 and r['next_byte_targets_seen']==16384
+          PY
+      - name: Acquire official pinned BDH source (verified by model loader)
+        if: matrix.arm == 'bdh_official'
+        run: |
+          curl -fsSL --retry 3 \
+            https://raw.githubusercontent.com/pathwaycom/bdh/2b0d7a45b058d4309c84a10e0768d541fe18bdc2/bdh.py \
+            -o /tmp/langcompare030-official-bdh.py
+      - name: Fit ACTUAL 16-step model on publisher FIT and score only exposed DEV
+        run: |
+          PYTHONPATH=src:. python scripts/langcompare030_cpu_fit.py \
+            --arm ${{ matrix.arm }} \
+            --seed 1701 --steps 16 \
+            --bdh-source /tmp/langcompare030-official-bdh.py \
+            --out langcompare030-results/${{ matrix.arm }}
+      - name: Validate result integrity
+        run: |
+          PYTHONPATH=src:. python - <<'PY'
+          import glob,json,hashlib
+          paths=glob.glob("langcompare030-results/*/FIT_AND_EXPOSED_DEV_RECEIPT.json")
+          assert len(paths)==1
+          r=json.load(open(paths[0]))
+          assert r['updates']==16 and r['target_bytes_seen']==16384
+          assert r['parameters']['trainable']==r['parameters']['deployed']
+          assert r['checkpoint_reloaded_identical_scored_DEV'] is True
+          assert r['DEV_EXPOSED_4096_ONLY']['n']==4096
+          assert r['GPU_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          assert r['matched_training_FLOPs']=='NOT_VERIFIED'
+          cp=glob.glob("langcompare030-results/*/*.pt")
+          assert len(cp)==1
+          assert hashlib.sha256(open(cp[0],'rb').read()).hexdigest()==r['checkpoint_sha256']
+          PY
+      - name: Preserve genuine result and trained original checkpoint
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGCOMPARE030-CPU-FIT-${{ matrix.arm }}-seed1701
+          path: langcompare030-results/${{ matrix.arm }}/
+          retention-days: 90
+          if-no-files-found: warn
