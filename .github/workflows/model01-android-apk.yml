@@ -114,8 +114,10 @@ jobs:
           fi
           sudo chmod a+rw /dev/kvm
           test -r /dev/kvm && test -w /dev/kvm
-          "$ANDROID_HOME/emulator/emulator" -accel-check
-          echo 'ANDROID_EMULATOR_KVM=ENABLED_HOST_ONLY_NOT_MODEL_EVIDENCE'
+          ls -l /dev/kvm
+          # Emulator executable is installed LATER by android-emulator-runner;
+          # invoking it here on a fresh runner caused an exit-127 infrastructure error.
+          echo 'ANDROID_EMULATOR_KVM_DEVICE_PERMISSIONS=PASS_NOT_EMULATOR_BOOT_EVIDENCE'
       - name: Exercise actual Android ONNX JNI and local state on emulator only
         uses: reactivecircus/android-emulator-runner@v2
         with:
