@@ -52,7 +52,7 @@ class GraphStreamingRepairTests(unittest.TestCase):
         with torch.no_grad():
             full,history,position=m.forward_with_history(
                 x,lags=(64,192),return_positions=True)
-            _,state=m.forward_with_history(x[:,:200],lags=(64,192),return_state=True)
+            _,_,state=m.forward_with_history(x[:,:200],lags=(64,192),return_state=True)
             resumed,h2,pos2,state2=m.forward_with_history(
                 x[:,200:],lags=(64,192),start=200,initial_state=state,
                 return_state=True,return_positions=True)
