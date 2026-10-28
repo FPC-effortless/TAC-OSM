@@ -60,6 +60,18 @@ def logits_of(model,tokens):
     if hasattr(output,"logits"):return output.logits
     return output[0]
 
+SOURCE_MODEL_SHA256="c88f3f7c1b628cb733a4a58dcd168a75411d8bb3d80e382068593713e887510a"
+LAYERED_MODEL_GIT_BLOB="0de36915feb969f423cc1ed9760cb08a9cd03c9b"
+
+def model_source_preflight():
+    source=(ROOT/"research/mathematical-engineering/context026/context_transition.py").read_bytes()
+    layered=(ROOT/"research/mathematical-engineering/langlayer034/layered_transition.py").read_bytes()
+    if hashlib.sha256(source).hexdigest()!=SOURCE_MODEL_SHA256:
+        raise ValueError("CONTEXT026 source differs from audited pinned original")
+    git_blob=hashlib.sha1(b"blob "+str(len(layered)).encode()+b"\\0"+layered).hexdigest()
+    if git_blob!=LAYERED_MODEL_GIT_BLOB:
+        raise ValueError("LANGLAYER034 source differs from pinned independent math reference")
+
 def model_for(arm,bdh_source=None):
     if arm=="tac_context026":return ContextTransition026(vocab=256,ffn_width=501)
     if arm=="tac_layer2":return LayeredContextTAC034(vocab=256,depth=2)
@@ -124,6 +136,7 @@ def cold_reload(raw,arm,seed,bdh_source,sample_hash):
 
 def run(arm,seed,steps,bdh_source,out):
     if out.exists():raise FileExistsError("refuse overwrite evidence")
+    model_source_preflight()
     prefit_registration(arm,seed,steps)
     # All three arms must operate on identical source and original byte sampling.
     fit=fit_sources()
