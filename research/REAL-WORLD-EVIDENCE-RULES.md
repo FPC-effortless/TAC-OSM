@@ -362,3 +362,27 @@ finite gradient checks and checkpoint+optimizer+RNG cold replay per seed.
 PNDS source-level unit correspondence is inherited from #62/#63; full
 whole-model Lean/IEEE/AD mathematical certification is still OPEN and must be
 completed before architecture qualification, not silently treated as PASS.
+
+## Narrow owner-directed follow-on language FFN depth control — 2026-10-29
+
+Study **LANGLAYER037** is explicitly included in the author's 500K-language
+research scale after the owner instructed to proceed from LANGLAYER036's
+frozen recurrent/concept-gradient and ablation findings. Only this named
+prospective two/three-layer **tokenwise FFN-only** depth-control experiment
+is authorized at 475K–525K genuine learned coordinates on the identical
+original CPython FIT data as LANGLAYER035. The policy validator now permits
+this study ID with the exact `owner-2026-10-28-500k` contract. Its general
+100K constraint remains unchanged for all other studies.
+
+The two controls are 499,661 and 499,684 actual active/deployed learned
+parameters; each matches its corresponding original recurrent-depth arm
+(499,725/499,934) to much better than 1%. Five seeds 1701–1705, exactly
+320 optimizer updates, B8, 128 original-byte next-targets per window, same
+source-owned sample schedule and optimizer/clip, zero GPU. Original prior
+15 checkpoints are immutable and only reused as *historical same-protocol
+references*, never silently refit or rewritten. DEV is previously exposed;
+TEST is not accessed. Historical comparison training FLOPs remain unmatched;
+performance differences are engineering observations, not certified proof of
+architectural superiority. Failed runs, entire seed cohort, replay evidence,
+source integrity, lack of external eligibility and complete negative evidence
+must remain in the research ledger.
