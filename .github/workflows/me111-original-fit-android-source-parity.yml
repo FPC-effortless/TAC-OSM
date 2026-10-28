@@ -1,0 +1,45 @@
+name: ME111 original FIT raw-source feature parity (no neural training)
+on:
+  push:
+    branches:
+      - product/tac-neural-android-local-runtime-20261028
+    paths:
+      - 'scripts/verify_me111_source_input_parity.py'
+      - 'mobile/android/model01/sample-app/app/src/main/java/org/tacosm/mobile/me111/Me111SourceFeatures.java'
+      - 'mobile/android/model01/sample-app/app/src/main/java/org/tacosm/mobile/me111/Me111Contract.java'
+      - '.github/workflows/me111-original-fit-android-source-parity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-original-source-feature-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pin original ME111 UCI source and FIT preprocessing (no fitting)
+        uses: actions/checkout@v4
+        with:
+          ref: 3fc2fbe8e4974491349caecd8d6171e738810b54
+          path: pinned-me111
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: pip install 'numpy==2.3.5'
+      - name: Exact real FIT original raw->Java 13-channel mask/age/calendar parity
+        run: |
+          python scripts/verify_me111_source_input_parity.py \
+            --source-root pinned-me111 \
+            --receipt /tmp/me111-source-fit-java-parity.json
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me111-original-source-java-fit-parity
+          path: /tmp/me111-source-fit-java-parity.json
+          retention-days: 14
+          if-no-files-found: warn
