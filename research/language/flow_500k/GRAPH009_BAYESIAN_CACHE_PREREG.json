@@ -1,0 +1,33 @@
+{
+  "name": "GRAPH009_BAYESIAN_COUNT_CACHE_FIT_CONTROL",
+  "parent": "GRAPH009_EXTERNAL_EVAL_PREREG.json",
+  "timing": "pre external Python source scoring",
+  "calibration_data": "Same 30 source-hash-verified genuine Vim9.1 FIT chapters: 16 fit gate-training, remaining 14 fit-validation",
+  "architecture": "bounded source-owner cache counts of all earlier observed next bytes following exact suffix; k in {2,3,4}; no future target in cache",
+  "law": "p_cache(y)=(c_h(y)+tau p_FIT(y))/(n_h+tau); p_mix=(1-lambda)p_Tac+lambda p_cache on hit, base p_TAC on miss",
+  "grid": {
+    "orders": [
+      2,
+      3,
+      4
+    ],
+    "tau": [
+      0.05,
+      0.2,
+      1,
+      4
+    ],
+    "lambda": [
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7
+    ]
+  },
+  "selection": "Pick unique lowest pooled seed1701 FIT validation NLL; ties smaller complexity/order and lambda; freeze before Python evaluation",
+  "controls": "Fixed last-match .5 baseline, six-weight gate selected at epoch0, no-cache, shared cache model available to frozen GRAPH007 and GRAPH008 five-seed comparators.",
+  "scope": "No official TEST, no independent architecture superiority, no semantic retrieval."
+}
