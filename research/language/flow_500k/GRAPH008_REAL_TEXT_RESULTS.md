@@ -43,3 +43,33 @@ GRAPH008 wins historical source NLL against both references **5/5 frozen seeds**
 - Mathematical CI is separate; theorem checks do NOT establish full Torch/IEEE/AD proof. PR remains draft. Do not promote or merge on these scores.
 
 **Scientific decision:** Specific old-source factual reconstruction improved on authentic documents by replacing low-rank interference with explicit bounded source slots. The result is a **memory-capacity tradeoff with an externally supplied address**, not a compressed or autonomously retrieving language model. The next real experiment must train a source-derived query policy and show incremental *next-token* gain versus cache-equipped rival models on newly unseen data.
+
+
+### Additional post-hoc lag512 frozen diagnostic (not a new independent TEST)
+
+After seeing the source-pinned lag192 results, the original five graph008 historical checkpoints were **not refitted**. A different 769-byte window framing of the **same six already-scored supplemental Vim manuals** was used to measure the extrapolation of the shared learned decoder to lag512. At 768 observed inputs, the known source ordinal `t-512` is supplied to the same bounded 512-slot memory.
+
+| Five-seed mean | Lag512 NLL ↓ |
+| --- | ---: |
+| GRAPH008 learned historical decoder | **3.19650** |
+| FIT-only character-frequency prior | 3.55445 |
+| Graph008 zero-read ablation | 4.77881 |
+
+All five individual lag512 checkpoints beat the FIT prior; mean correct-source top1 is ~52.57%. This tests exactly the **512-token bounded horizon**, not >512, autonomous key discovery, or a newly independent held-out data source. No optimizer, data augmentation or selection followed the outcome.
+
+### State-space algebraic limitation and CPU engineering cost
+
+The original lag-read matrix has value width16 and key width8. For **linear** source retrieval over N independent source positions, the read matrix factors as `R=M Q`, where `Q` is 8×N; hence `rank(R)≤8` (≤16 for two such heads). Thus it cannot reproduce **arbitrary higher-rank value matrices** by exact linear reads over N=192 or 512 distinct keys. This statement does **not** rule out nonlinear finite-precision coding of structured sequences. The indexed 512×16 slot state explicitly spends additional memory to eliminate these live-source address collisions.
+
+Uncompiled PyTorch 2.10 CPU, two threads, full forward including lag64/192 history heads, 256-character contexts, 32 timed runs after warmup, frozen seed1701:
+
+| Model | Batch1 p50 ms | Batch4 p50 ms |
+|---|---:|---:|
+| GRAPH007 historical | **12.092** | **37.777** |
+| GRAPH008 historical | 13.371 | 41.903 |
+
+GRAPH008 incurs ~10–11% higher measured eager CPU full-forward latency in this limited comparison, as well as the much larger state buffer. **Not a fused-kernel or single-token production benchmark.**
+
+### CI verdict
+
+New GRAPH008 TAC causal/gradient/source-slot numerical workflow, streaming baseline, prospective parameter-count checks and compulsory research-integrity workflow **PASS** on the current branch. PNDS #56 dedicated language theorem/axiom audit, prospective PNDS numerical-contract workflow and full Lean root build **PASS** at head `b1c6f7fd3a03886a9d292aefe779ea73a9e7c18e`. The compiled seven source-slot theorems are scoped exact-real invariants, not whole PyTorch/IEEE/AD refinements.
