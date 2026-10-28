@@ -21,3 +21,4 @@ jobs:
           python -m py_compile research/language/flow_500k/learned_context_query_v6.py research/language/flow_500k/source_query_hybrid_v6.py research/language/flow_500k/fit_learned_query_v6.py
           OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m unittest discover -s research/language/flow_500k -p 'test_calibrated_retrieval_v5.py' -v
           OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m unittest discover -s research/language/flow_500k -p 'test_learned_query_v6.py' -v
+          OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m unittest discover -s research/language/flow_500k -p 'test_query_hybrid_v6.py' -v
