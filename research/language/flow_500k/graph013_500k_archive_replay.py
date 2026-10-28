@@ -19,6 +19,8 @@ from tac_wave_ced_500k import WaveCED500K
 
 ROOT = "tac_language_500k/"
 SEEDS = tuple(range(1701, 1706))
+EXPECTED_ARCHIVE_SHA256 = "cde9a91be40a4e613975c0bd8caa4c19ac24e3d1d0e993db5cacfbd002fecc32"
+EXPECTED_MODEL_SHA256 = "acf80cb9051b7f2d2c3900d1676eed212890208cd5213088c6751f9cfd24392c"
 REQUIRED_KEYS = {"model", "optimizer", "torch_rng", "numpy_rng", "python_rng",
                  "sampler_rng", "seed", "samples_sha256", "dev", "updates"}
 
@@ -35,6 +37,8 @@ def _safe_checkpoint(raw: bytes):
 def replay(archive: Path, source_root: Path):
     if not archive.is_file():
         raise ValueError("original historical 500K archive is absent")
+    if _sha(archive.read_bytes()) != EXPECTED_ARCHIVE_SHA256:
+        raise ValueError("historical archive fails independently pinned SHA256")
     torch.set_num_threads(2)
     model_source = Path(__file__).with_name("tac_wave_ced_500k.py")
     if not model_source.is_file():
@@ -52,7 +56,7 @@ def replay(archive: Path, source_root: Path):
                 raise ValueError("source/checkpoint byte hash mismatch: " + name)
             return raw
         model_bytes = get(ROOT + "tac_wave_ced_500k.py")
-        if model_source.read_bytes() != model_bytes:
+        if _sha(model_bytes) != EXPECTED_MODEL_SHA256 or model_source.read_bytes() != model_bytes:
             raise ValueError("local model differs from original checkpoint source")
         proto = json.loads(get(ROOT + "SOURCE_PARTITION_MANIFEST.json"))["source"]
         parts = proto["doc_partitions"]
