@@ -14,6 +14,10 @@ on:
       - 'tests/test_me111_android_contract.py'
       - '.github/workflows/model01-android-apk.yml'
   workflow_dispatch:
+# Cancel obsolete same-branch emulator builds to avoid repeated paid/CI CPU usage.
+concurrency:
+  group: me111-android-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
