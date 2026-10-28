@@ -96,6 +96,53 @@ class LearnedContextQuery(nn.Module):
                 "max_cosine":torch.cat((torch.full((B,k-1),-1.,device=observed.device,dtype=score.dtype),
                         vals.masked_fill(~good,-1).max(-1).values),1)}
 
+    def contrastive_window_loss(self,observed):
+        """FIT-only supervised source-continuation retrieval objective.
+
+        Train using later observed labels in LOSS ONLY. Query embeddings are
+        functions only of context x_0..x_t; no labels/future bytes enter
+        predict_window or scan. Positives are earlier non-identical contexts
+        with the same observed NEXT byte. If no positives exist, skip rather
+        than pretending any arbitrary neighbor can recover the target.
+        """
+        if observed.ndim!=2 or observed.dtype!=torch.long or observed.shape[1]<self.order+2:
+            raise ValueError("long enough int64 source training window required")
+        if not bool(((observed>=0)&(observed<128)).all()):
+            raise ValueError("source byte outside vocabulary")
+        k=self.order;B,T=observed.shape
+        ctx=observed.unfold(1,k,1).contiguous()
+        N=ctx.shape[1]
+        z=self.encode(ctx)
+        scores=(z@z.transpose(-1,-2))/self.temperature
+        ix=torch.arange(N,device=observed.device)
+        j=ix[None,:];i=ix[:,None]
+        legal=(j+1<i)&(i-j-1<=self.capacity)
+        same=(ctx[:,:,None,:]==ctx[:,None,:,:]).all(-1)
+        exact=(same&legal[None]).any(-1)
+        possible=legal[None] & ~same & ~exact[:,:,None]
+        # The last source context has no next-byte target inside this
+        # training window, and is always excluded from training labels.
+        target=observed[:,k:]  # [B,N-1]: next byte after each context
+        label=torch.cat((target,observed.new_zeros((B,1))),1)
+        positives=possible&(label[:,:,None]==label[:,None,:])
+        has_positive=positives.any(-1)
+        eligible=has_positive.clone()
+        eligible[:,-1]=False
+        if not bool(eligible.any()):
+            return scores.sum()*0,{
+                "training_queries":int(B*(N-1)),
+                "nonexact_miss_queries":int((~exact[:,:-1]).sum()),
+                "positive_evidence_queries":0}
+        all_score=torch.logsumexp(scores.masked_fill(~possible,float("-inf")),dim=-1)
+        pos_score=torch.logsumexp(scores.masked_fill(~positives,float("-inf")),dim=-1)
+        loss=(all_score-pos_score)[eligible].mean()
+        if not bool(torch.isfinite(loss)):
+            raise ValueError("nonfinite positive-evidence ranking loss")
+        return loss,{
+            "training_queries":int(B*(N-1)),
+            "nonexact_miss_queries":int((~exact[:,:-1]).sum()),
+            "positive_evidence_queries":int(eligible.sum())}
+
     def empty(self,owners):
         if type(owners) is not tuple or not owners or any(type(x) is not str or not x for x in owners):
             raise ValueError("nonempty unique owner identifiers required")
