@@ -12,6 +12,8 @@ import torch
 
 from source_checkpoint_replay_v7 import VerifiedSparseReplay
 from source_calibrated_tac_v5 import SourceCalibratedTAC
+from source_query_hybrid_v6 import SourceQueryHybridV6
+from learned_context_query_v6 import LearnedContextQuery
 from tac_wave_ced_500k_v4 import SlotTAC500K
 
 
@@ -61,6 +63,26 @@ class SparseReplayContracts(unittest.TestCase):
         self.assertEqual(len(dense.checkpoints),len(self.source))
         self.assertEqual(len(sparse.checkpoints),5)
         self.assertGreater(sparse.model_weight_bytes,0)
+
+    def test_graph010_learned_source_carry_also_replays(self):
+        # Original GRAPH009 cache and GRAPH010 learned approximate cache both
+        # form part of each complete checkpoint; no hidden source state.
+        query=LearnedContextQuery(self.m.fit_prior,capacity=32).eval()
+        hybrid=SourceQueryHybridV6(self.m,query).eval()
+        hybrid.requires_grad_(False)
+        replay=VerifiedSparseReplay(
+            hybrid,self.source,owner="repo-source-owner",
+            block=16,source_sha256=self.digest).prepare()
+        with torch.inference_mode():
+            full=hybrid(torch.tensor(list(self.source),dtype=torch.long)[None,:],
+                        source_ids=("repo-source-owner",))
+        for t in (1,17,33,64,65):
+            got,_,receipt=replay.predict_at(t,owner="repo-source-owner",
+                                           expected_sha256=self.digest)
+            self.assertTrue(torch.allclose(
+                got,full[:,t-1,:],atol=3e-4,rtol=3e-4))
+            self.assertLessEqual(receipt.replayed_tokens,16)
+        self.assertGreater(replay.model_weight_bytes,1997160)
 
     def test_fail_closed_wrong_identity_source_and_model(self):
         index=self.index(8)
