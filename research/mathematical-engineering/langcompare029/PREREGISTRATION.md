@@ -34,6 +34,10 @@ test, NOT evidence of action/decision world modeling.
   Causal mask must apply to EVERY attention layer; reject future leakage.
 
 Expected preliminary spread: 501,884−496,960 = 4,924 (<1% of 501,884).
+Source pins: BDH official upstream at `2b0d7a45b058d4309c84a10e0768d541fe18bdc2`,
+Git blob `4cfff79df97fa6faafb33bf20739a027edd8f360`;
+Mamba official upstream candidate at `e9594ce1c732d97440f0332fdc43170a2294dbfa`.
+Pin the exact package/dependencies and first-source CI inspection before importing compiled Mamba modules.
 **These are not final prefit counts.** Abort unless deployed/trainable actual
 counts of all four are in the explicitly authorized 500K band and
 (max−min)/max <= 0.01, with zero dummy/frozen compensating parameters.
@@ -72,17 +76,27 @@ narrow owner-scale amendment and complete parity manifest must land before fitti
   failed run and original LANGTRAIN025 FAIL 0/5 vs P3.
 
 ## Hard gates / present evidence
-- No-fit parameter arithmetic and Transformer instantiation: partly verified.
-- BDH ACTUAL model and Mamba-3 ACTUAL model on execution hardware: pending.
-- Mamba-3 compiled CUDA forward/backward, exact version pins, two independent
-  physically verified T4s and quota approval: pending; NEVER silently use a
-  substitute or charge GPU quota.
+- No-fit actual parameter/causal checks: TAC, Transformer and official BDH pass
+  CI; five-seed FIT-only source sampling (320×8×128 per seed) is frozen and
+  independently re-derived in CI. CI/receipts are not new training or NLL.
+- **BDH** actual original 501,504p and causal prefix smoke PASS in CPU run 40775709259;
+  **Mamba-3** actual model on qualified hardware still PENDING.
+- **Hard hardware incompatibility identified:** official Mamba-3 SISO casts
+  Q/K/V etc to BF16, but the current operator-required T4×2 venue is SM75
+  without native BF16 Tensor Cores. A pre-kernel SM80+ guard now rejects it.
+  The four-way experiment is BLOCKED on this execution venue; cannot pass by
+  just changing the model input dtype. A separately approved venue providing
+  SM80+ and matched execution resources is required. Never silently use a
+  substitute, consume quota or claim a four-arm winner.
+- Exact official CUDA Mamba-3 version pins, measured forward/backward, new
+  appropriate venue and quota approval: pending.
 - Same-source model-specific prefix and future-poison checks, source and target
   boundary controls, layer/weight gradient activity and replay: pending.
 - PNDS Lean full-graph exact-real work is ongoing separately, with CED solve/
   executable correspondence/IEEE/AD obligations openly pending.
-- New study-specific 500K rule amendment and full machine-checkable parity
-  manifest: pending. No new neural optimizer step is currently permitted.
+- Study-specific 500K rule amendment: implemented in this draft only, matching
+  user-authorized current language scale; full machine-checkable actual source/
+  FLOP parity manifest remains OPEN. No new neural optimizer step is currently permitted.
 - Publication threshold: 5/5 seed complete, no source violations, matched
   counts/data/tuning/evaluation and measured compute; if compute differs, DO NOT
   call this a three-way fully matched superiority result.
