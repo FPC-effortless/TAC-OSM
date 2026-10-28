@@ -7,6 +7,7 @@ on:
       - 'mobile/android/model01/**'
       - 'tests/test_me111_android_contract.py'
       - 'scripts/create_me111_android_host_fixture.py'
+      - 'scripts/verify_me111_256step_cpu.py'
       - '.github/workflows/model01-android-apk.yml'
   pull_request:
     paths:
@@ -57,6 +58,20 @@ jobs:
           PY
           mkdir -p mobile/android/model01/sample-app/app/src/main/assets
           cp /tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx mobile/android/model01/sample-app/app/src/main/assets/tac_me111.onnx
+      - name: Verify 256-event original PyTorch vs ONNX state/forecast parity
+        run: |
+          python scripts/verify_me111_256step_cpu.py \
+            --source-root pinned-me111 \
+            --onnx /tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx \
+            --receipt /tmp/me111-256step-host-parity.json
+      - name: Preserve full long-stream parity evidence, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me111-256step-original-pytorch-onnx-cpu-diagnostic
+          path: /tmp/me111-256step-host-parity.json
+          if-no-files-found: warn
+          retention-days: 14
       - name: Generate original PyTorch two-step constructed reference for Android JNI parity
         run: |
           python scripts/create_me111_android_host_fixture.py \
