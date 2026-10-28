@@ -1,0 +1,29 @@
+name: GRAPH012 equal-cache scoring contracts (constructed diagnostics only)
+on:
+  push:
+    branches: [research/graph012-equal-cache-scoring-2026-10-28]
+  pull_request:
+    paths:
+      - 'research/language/flow_500k/equal_cache_score_v1.py'
+      - 'research/language/flow_500k/test_equal_cache_score_v1.py'
+      - 'research/language/flow_500k/graph012_rollup_v1.py'
+      - 'research/language/flow_500k/test_graph012_rollup_v1.py'
+      - 'research/language/flow_500k/GRAPH012_EQUAL_CACHE_ARCHITECTURE_GATE.md'
+      - '.github/workflows/research-graph012-equal-cache-scoring.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-math-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate causal-gate, five-seed and paired scoring math (NO model results)
+        working-directory: research/language/flow_500k
+        run: |
+          python -m py_compile equal_cache_score_v1.py test_equal_cache_score_v1.py graph012_rollup_v1.py test_graph012_rollup_v1.py
+          python -m unittest -v test_equal_cache_score_v1.py test_graph012_rollup_v1.py
