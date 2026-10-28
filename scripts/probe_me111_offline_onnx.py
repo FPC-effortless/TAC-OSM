@@ -131,6 +131,18 @@ def probe(output_dir):
         input_names=names, output_names=output_names, dynamo=False
     )
     onnx.checker.check_model(str(path))
+    inspected = onnx.load(str(path), load_external_data=False)
+    operator_inventory = {
+        "opset_imports": [{"domain": item.domain, "version": item.version}
+                         for item in inspected.opset_import],
+        "operator_types": sorted(set(node.op_type for node in inspected.graph.node)),
+        "operator_node_count": len(inspected.graph.node),
+        "original_checkpoint_sha256": EXPECTED_SHA256,
+        "model_sha256": sha(path),
+        "status": "HOST_ONNX_ONLY_NOT_ANDROID_OPERATOR_VERIFIED"
+    }
+    (output_dir / "OPERATORS.json").write_text(
+        json.dumps(operator_inventory, indent=2, sort_keys=True) + "\n")
     session = ort.InferenceSession(str(path), providers=["CPUExecutionProvider"])
     exported_inputs = [i.name for i in session.get_inputs()]
     if set(exported_inputs) != set(names):
@@ -180,6 +192,8 @@ def probe(output_dir):
         "per_output_shapes": all_output_shapes,
         "onnx_model_bytes": path.stat().st_size,
         "onnx_model_sha256": sha(path),
+        "operator_types": operator_inventory["operator_types"],
+        "operator_node_count": operator_inventory["operator_node_count"],
         "original_source_scientific_gate": "FAIL_MIXED_TRADEOFF_ME111",
         "torch_python_validation_guards_exported": "NOT_VERIFIED_REQUIRE_LOCAL_SDK_VALIDATION",
         "physical_android": "NOT_RUN", "airplane_mode": "NOT_RUN",
