@@ -1,0 +1,50 @@
+{
+  "experiment": "GRAPH010_FIT_ONLY_APPROXIMATE_CONTEXT_QUERY",
+  "date": "2026-10-28",
+  "status": "PRETRAINING_REGISTRATION_NO_REPORTED_RESULT",
+  "research_family": "System-1 Language within six TAC families",
+  "parent": "GRAPH009_BAYESIAN_CACHE_PREREG.json",
+  "source": {
+    "original_manifest": "TAC-LANG-GATE-003 source PROTOCOL.json; verify all 36 genuine Vim9.1 chapter SHA256s",
+    "fit_query_training": "First 16 of the archived ordered 30 FIT chapters",
+    "fit_query_validation": "Remaining 14 FIT chapters, whole-document disjoint",
+    "independent_test": "NOT TOUCHED; six Python 3.13 files from GRAPH009 already examined, NOT a new independent test"
+  },
+  "model": {
+    "frozen_neural_backbone_params": 499290,
+    "new_query_params": 2816,
+    "joint_learned_params_if_attached": 502106,
+    "relative_increase": 0.005639,
+    "query": "three-character encoded context normalized 16D; top-8 nonexact matches",
+    "cache_capacity_events_per_owner": 512,
+    "source_causality": "observed candidate continuation index strictly smaller than current query ordinal",
+    "exact_hit_policy": "GRAPH009 unchanged; learned approximate retrieval ONLY for exact-key miss",
+    "query_training": "FIT-only supervised contrastive loss: logsumexp(eligible candidates)-logsumexp(eligible same-next-byte positive candidates)",
+    "gradient_coverage_requirement": "report positive-evidence fraction; zero-evidence examples give no claimed training signal",
+    "fusion": "fixed GRAPH009 lambda=0.6, tau=0.05; query must abstain when no eligible neighbor"
+  },
+  "training": {
+    "seeds": [1701,1702,1703,1704,1705],
+    "steps_per_seed": 256,
+    "batch": 4,
+    "window_characters": 129,
+    "optimizer": "AdamW lr=0.001, weight_decay=0.01, gradient_clip_norm=1",
+    "fit_window_sampler": "sample source document with weight proportional to number of eligible 129-byte windows, then uniformly choose offset",
+    "checkpoint": "persist learned model, optimizer, random generators, source SHA, sample-order SHA, protocol and cold-reload metrics per seed"
+  },
+  "controls": [
+    "GRAPH009 exact-three-gram count only with identical owner/capacity/smoothing/prior",
+    "untrained seed-matched 2816-parameter approximate query with same topK, cache and fusion",
+    "learned 2816-parameter query enabled only on exact misses",
+    "standalone FIT unigram",
+    "unmatched-query/no-evidence abstention"
+  ],
+  "metrics": ["FIT-validation next-byte NLL all positions", "exact-miss conditional NLL", "exact-match hit rate", "approximate-miss hit rate", "positive-continuation gradient coverage", "effective cache event count and query time", "five paired seed results"],
+  "success_gate": "Learned better than untrained same-geometry and exact-only count baseline on overall FIT-validation NLL, with no negative performance on exact hits and positive value on exact misses in >=4/5 seeds; then freeze for a new external source before any independent claim.",
+  "caveats": [
+    "This is approximate context matching for a tiny character model, not proof of semantic understanding.",
+    "Extra source event cache and query FLOPs must be counted, including when attached to matched SSM.",
+    "Model-only parameter parity does not equal end-to-end memory or compute parity.",
+    "Do not claim real external evaluation, new training or checkpoint replay until executed."
+  ]
+}
