@@ -1,0 +1,50 @@
+name: SOURCE023 original publisher byte-corpus admission
+on:
+  pull_request:
+    paths:
+      - 'research/source-bundles/LANGUAGE-SOURCE023/**'
+      - 'research/mathematical-engineering/language_source023*/**'
+      - 'research/phone_queue/language-source023*.json'
+      - 'src/tac_osm/byte_source_documents.py'
+      - 'scripts/audit_language_source023.py'
+      - 'tests/test_byte_source_documents.py'
+      - '.github/workflows/language-source023.yml'
+permissions:
+  contents: read
+jobs:
+  original-byte-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Engineering fixtures only
+        run: python -m pytest -q tests/test_byte_source_documents.py tests/test_research_execution_levels.py
+      - name: Original tutorial sources, prefix controls and frozen roles
+        run: |
+          mkdir -p source023-results
+          python scripts/phone_lab.py plan research/phone_queue/language-source023.json > source023-results/PLAN.json
+          cmp source023-results/PLAN.json research/mathematical-engineering/language_source023/COMPUTE_DECISION.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/language_source023/FAIR_COMPARISON.json --phase preflight
+          python scripts/audit_language_source023.py --refetch --output source023-results/ORIGINAL_TUTORIAL.json
+          cmp source023-results/ORIGINAL_TUTORIAL.json research/mathematical-engineering/language_source023/RESULTS.json
+      - name: Separately preregistered genuine UTF8 FIT supplement
+        run: |
+          python scripts/phone_lab.py plan research/phone_queue/language-source023b.json > source023-results/SUPPLEMENT_PLAN.json
+          cmp source023-results/SUPPLEMENT_PLAN.json research/mathematical-engineering/language_source023b/COMPUTE_DECISION.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/language_source023b/FAIR_COMPARISON.json --phase preflight
+          python scripts/audit_language_source023.py --supplement --refetch --output source023-results/UTF8_SUPPLEMENT.json
+          cmp source023-results/UTF8_SUPPLEMENT.json research/mathematical-engineering/language_source023b/RESULTS.json
+          echo 'Real source admission only. Original FIT is ASCII-only; separate genuine UTF8 supplement retained. No model/NLL/training/TEST or independently qualified gain.' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: source023-original-admission
+          path: source023-results/
