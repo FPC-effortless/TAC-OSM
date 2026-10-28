@@ -1,0 +1,37 @@
+{
+  "study": "TAC-LANG-FORMAL-004",
+  "origin_study": "TAC-LANG-GATE-003",
+  "date": "2026-10-27",
+  "archive_name": "tac_language_gate003_complete.zip",
+  "archive_sha256": "2490e13186d31167a8100d12d709a4c125419a6165ccb8e12f64687abe0c3d11",
+  "model_source_sha256": "835212d74cc0d2d4d22ff7e75beb12771586cce58f2e63943690e5d859417457",
+  "original_bundle_members_verified": 31,
+  "model_checkpoints_verified": 10,
+  "arms": [
+    "tanh",
+    "silu"
+  ],
+  "seeds": [
+    1701,
+    1702,
+    1703,
+    1704,
+    1705
+  ],
+  "vim91_chapter_hash_matches": 36,
+  "vim91_chapter_hash_total": 36,
+  "observed_result": "PASS all ten original checkpoint model scores and historical-query scores within original 1e-6 tolerance",
+  "checkpoint_deserialization": "torch.load(..., weights_only=True, map_location='cpu')",
+  "torch_version": "2.10.0+cpu",
+  "python_version": "3.13.5",
+  "optimizer_steps_performed": 0,
+  "checkpoint_parameters_modified": false,
+  "qualification": "LOCAL_REPLAY_ONLY; original copyrighted data and binary checkpoints absent from GitHub CI",
+  "limitations": [
+    "No full model formal IEEE verification",
+    "No complete Torch autograd/optimizer law refinement",
+    "Previously exposed DEV scores only",
+    "No independent language ability claim",
+    "Does not infer safe arbitrary untrusted archive extraction"
+  ]
+}
