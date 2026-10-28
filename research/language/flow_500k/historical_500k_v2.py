@@ -36,15 +36,16 @@ class HistoricalWaveCED500K(WaveCED500K):
             return_trace=True,return_state=True,graph_scale=graph_scale)
         b,t=tokens.shape
         historical={}
-        positions={}
+        positions={} if return_positions else None
         for lag in lags:
             # Each output covers the subset of this chunk with a strictly
             # past, globally valid target; no data from the target is read.
             first=max(0,lag-start,lag-key_shift-start)
             if first>=t:
                 historical[lag]=logits.new_empty((b,0,self.vocab))
-                positions[lag]=dict(current_ordinals=tuple(),
-                                    target_ordinals=tuple(),local_start=t)
+                if return_positions:
+                    positions[lag]=dict(current_ordinals=tuple(),
+                                        target_ordinals=tuple(),local_start=t)
                 continue
             current=torch.arange(start+first,start+t,device=tokens.device)
             query=(current-lag+key_shift).view(1,-1).expand(b,-1)
@@ -54,9 +55,10 @@ class HistoricalWaveCED500K(WaveCED500K):
                               trace['aligned_prewrite'][:,first:],hist_key)
             if zero_read: read=torch.zeros_like(read)
             historical[lag]=self.history_head(read.flatten(-2))
-            positions[lag]=dict(current_ordinals=tuple(current.tolist()),
-                                target_ordinals=tuple((current-lag).tolist()),
-                                local_start=first)
+            if return_positions:
+                positions[lag]=dict(current_ordinals=tuple(current.tolist()),
+                                    target_ordinals=tuple((current-lag).tolist()),
+                                    local_start=first)
         parts=[logits,historical]
         if return_positions:parts.append(positions)
         if return_state:parts.append(state)
