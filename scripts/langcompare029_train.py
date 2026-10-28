@@ -28,8 +28,8 @@ def blockers():
     """Pure CPU reads; no device allocation or optimizer."""
     r=json.loads(READINESS.read_text())
     issues=[]
-    if r["compute"]["mamba3_t4_status"]!="SUPPORTED_AND_VERIFIED":
-        issues.append("OFFICIAL_MAMBA3_T4_SM75_BF16_INCOMPATIBLE")
+    if r["compute"].get("approved_gpu_sm80_compatible") is not True:
+        issues.append("NO_APPROVED_SM80_PLUS_BF16_TWO_GPU_COMPARISON_VENUE")
     if r["compute"]["actual_mamba_parameters"]=="NOT_MEASURED":
         issues.append("MAMBA3_ACTUAL_PARAMETERS_NOT_VERIFIED")
     if r["compute"]["matched_FLOPs"]=="NOT_MEASURED":
