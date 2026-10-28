@@ -1,3 +1,5 @@
+**LATEST OWNER PARAMETER SCALE OVERRIDE (2026-10-28):** For all NEW TAC-OSM models, use 500,000 learned trainable/deployed active parameters, permitted [475,000,525,000], matched architecture comparators within 1%, equal data/compute/objectives for superiority claims, independent real evidence and repo-owned replay. The older 95K–105K references BELOW are historical-only and must not gate new trials or alter archived evaluations. Canonical new-scale contract: [research/PARAMETER_SCALE_500K_PROSPECTIVE.md](research/PARAMETER_SCALE_500K_PROSPECTIVE.md).
+
 # Agent guidance
 
 For substantive engineering, product or research tasks, read `.agents/skills/fpc-universal/SKILL.md` and then the relevant repository-local instructions, specs, README, workflows and tests. Repository-specific safety, release, data, science and architecture requirements always override general skill guidance. Never assume a skill grants permission to access secrets, incur compute costs, deploy, merge or make external changes. Use a task branch and verify before submitting a PR.
