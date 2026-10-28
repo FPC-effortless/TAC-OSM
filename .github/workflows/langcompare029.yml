@@ -5,6 +5,7 @@ on:
       - "scripts/langcompare029_preflight.py"
       - "scripts/langcompare029_sampling.py"
       - "scripts/langcompare029_checkpoint.py"
+      - "scripts/langcompare029_train.py"
       - "scripts/langcompare029_mamba_ledger.py"
       - "scripts/langcompare029_source_pins.py"
       - "research/mathematical-engineering/langcompare029/**"
@@ -44,6 +45,9 @@ jobs:
             --output langcompare029-results/FROZEN_TRAINING_SCHEDULE.json
           python scripts/langcompare029_mamba_ledger.py \
             --output langcompare029-results/MAMBA3_SISO_ANALYTICAL_LEDGER.json
+          python scripts/langcompare029_train.py --mode dry-run \
+            --arm tac_context026 --seed 1701 \
+            --output langcompare029-results/FIT_LAUNCH_GATE.json
           python scripts/langcompare029_source_pins.py \
             --output langcompare029-results/OFFICIAL_SOURCE_IDENTITIES.json
           python -m pytest -q tests/test_langcompare029_preflight.py
@@ -62,6 +66,9 @@ jobs:
           assert all(x["examples_seen"]==2560 for x in sched["by_seed"])
           pins=json.load(open("langcompare029-results/OFFICIAL_SOURCE_IDENTITIES.json"))
           assert pins["status"]=="OFFICIAL_SOURCE_IDENTITIES_VERIFIED_NO_FIT"
+          gate=json.load(open("langcompare029-results/FIT_LAUNCH_GATE.json"))
+          assert gate["status"]=="BLOCKED_NO_FIT"
+          assert gate["gpu_minutes"]==0 and gate["optimizer_steps"]==0
           PY
       - name: Authentic FIT label backward probe on official BDH (no optimizer)
         run: |
