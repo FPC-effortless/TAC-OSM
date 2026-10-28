@@ -12,6 +12,9 @@ class CountContracts(unittest.TestCase):
    x=torch.randint(0,5,(2,109),dtype=torch.long)
    owners=('A','B');c=ScannedCountCache(cap)
    full,_=c.scan_counts(x,source_ids=owners)
+   self.assertTrue(torch.equal(full['counts'].sum(-1),full['totals']))
+   self.assertTrue(bool((full['totals']<=cap).all()))
+   self.assertTrue(bool((full['counts']>=0).all()))
    for row in range(2):
     seq=x[row].tolist()
     for now in range(109):
