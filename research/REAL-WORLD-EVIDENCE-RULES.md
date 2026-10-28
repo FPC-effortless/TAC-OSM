@@ -337,3 +337,28 @@ common allocated compute budget to favor a preferred architecture.
 The earlier 56.7% TAC-versus-GRU CPU-runtime difference is an **efficiency
 measurement, not a fairness violation**. The original measured values remain
 unaltered; only their scientific interpretation is corrected.
+
+
+## Language-specific scale authorization — owner request 2026-10-29 (LANGLAYER035)
+
+The owner explicitly requested training/benchmarking the previously registered ~500K
+layered language TAC architecture after selecting a 500K language research track.
+For study **LANGLAYER035 only**, allow live 475,000–525,000 active and total
+learned model parameters with explicit `parameter_budget_contract:
+owner-2026-10-28-500k`, exactly as already scoped for LANGTRAIN025.
+This does **not** change the global prospective 100k rule for other studies,
+relax the cross-model 1% relative size matching requirement, or retrospectively
+change any historical result. This authorizes only bounded CPU internal FIT/DEV
+training on the previously audited genuine publisher corpus and never permits
+protected TEST, independent certification, reward-based promotion, GPU quota,
+a merge, unregistered model configurations, or external expenses.
+
+The pilot is an **exposure-matched exploratory three-arm study**, not a
+training-FLOP-matched scientific superiority comparison. It may report
+individual actual trained scores as **exposed-DEV engineering measurements**;
+all superiority or independent generalization claims remain ineligible. Require
+source integrity, frozen sampling, causal boundaries, actual parameter counts,
+finite gradient checks and checkpoint+optimizer+RNG cold replay per seed.
+PNDS source-level unit correspondence is inherited from #62/#63; full
+whole-model Lean/IEEE/AD mathematical certification is still OPEN and must be
+completed before architecture qualification, not silently treated as PASS.
