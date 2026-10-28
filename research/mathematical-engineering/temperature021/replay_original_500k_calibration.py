@@ -25,15 +25,28 @@ def load_original_checkpoint(raw):
             np.dtypes.UInt32DType,np.dtypes.Float64DType]):
         return torch.load(io.BytesIO(raw),map_location="cpu",weights_only=True)
 
+def validate_moments(z,y,a):
+    if type(a) not in (float,int) or not math.isfinite(a) or a<=0:
+        raise ValueError("positive finite inverse temperature required")
+    if (z.ndim!=2 or not z.shape[0] or z.shape[1]<2 or y.ndim!=1
+        or y.shape[0]!=z.shape[0] or z.dtype!=torch.float64 or y.dtype!=torch.long
+        or z.device.type!="cpu" or y.device!=z.device):
+        raise ValueError("aligned CPU FP64 logits/int64 labels required")
+    if not torch.isfinite(z).all() or not ((y>=0)&(y<z.shape[1])).all():
+        raise ValueError("nonfinite logits or out-of-vocabulary labels")
+
 def moments(z,y,a):
+    validate_moments(z,y,a)
     z=z-z.max(-1,keepdim=True).values
     lp=a*z-torch.logsumexp(a*z,-1,keepdim=True)
     p=lp.exp()
     mu=(p*z).sum(-1)
     gold=z.gather(-1,y[:,None]).squeeze(-1)
-    return (-(lp.gather(-1,y[:,None]).squeeze(-1)).mean().item(),
+    result=(-(lp.gather(-1,y[:,None]).squeeze(-1)).mean().item(),
             (mu-gold).mean().item(),
             (p*(z-mu[:,None]).square()).sum(-1).mean().item())
+    if not all(math.isfinite(x) for x in result):raise ValueError("nonfinite scalar moments")
+    return result
 
 def fit(z,y):
     low,high=.25,4.
@@ -60,6 +73,10 @@ def score(z,y,a):
     if any(result["identity"][k]!=result["calibrated"][k] for k in ("top1","top5")):
         raise ValueError("positive scalar changed ranking")
     return result
+
+def require_replay_nll(actual,expected):
+    if not math.isfinite(actual) or not math.isfinite(expected) or abs(actual-expected)>1e-6:
+        raise ValueError("original 6144-character native score replay FAILED")
 
 def replay(archive:Path,source_root:Path):
     torch.set_num_threads(2)
@@ -102,9 +119,16 @@ def replay(archive:Path,source_root:Path):
                 old=load_original_checkpoint(blob)
                 if old["seed"]!=seed or old["updates"]!=120 or not old["optimizer"]["state"]:
                     raise ValueError("original optimizer, seed or training-step receipt missing")
+                required={"model","optimizer","torch_rng","numpy_rng","python_rng",
+                          "sampler_rng","seed","samples_sha256","dev","updates"}
+                if not required.issubset(old) or not isinstance(old["torch_rng"],torch.Tensor) or not old["torch_rng"].numel():
+                    raise ValueError("original checkpoint RNG/replay fields missing")
+                if not all(torch.isfinite(v).all() for v in old["model"].values()):
+                    raise ValueError("original checkpoint has nonfinite model weights")
                 model=mod.WaveCED500K().eval()
                 if model.parameter_count()!=499290:raise ValueError("original learned parameter count drift")
                 model.load_state_dict(old["model"],strict=True)
+                frozen={k:v.detach().clone() for k,v in model.state_dict().items()}
                 batches={}
                 with torch.no_grad():
                     for name in CAL+SCORE:
@@ -118,8 +142,7 @@ def replay(archive:Path,source_root:Path):
                             torch.cat([batches[n][1] for n in names]))
                 all_z,all_y=collect(CAL+SCORE)
                 full=moments(all_z,all_y,1.)[0]
-                if abs(full-float(old["dev"]["nll"]))>1e-6:
-                    raise ValueError("original 6144-character native score replay FAILED")
+                require_replay_nll(full,float(old["dev"]["nll"]))
                 cz,cy=collect(CAL)
                 sz,sy=collect(SCORE)
                 if cy.numel()!=3072 or sy.numel()!=3072:raise ValueError("disjoint role totals changed")
@@ -128,6 +151,9 @@ def replay(archive:Path,source_root:Path):
                 if c["calibrated"]["nll"]>c["identity"]["nll"]+1e-12:
                     raise ValueError("calibration identity fallback failed")
                 docs_score={name:score(*batches[name],scalar) for name in CAL+SCORE}
+                if any(p.grad is not None for p in model.parameters()) or any(
+                    not torch.equal(v,frozen[k]) for k,v in model.state_dict().items()):
+                    raise ValueError("frozen checkpoint model changed during replay")
                 results.append({"seed":seed,"checkpoint_sha256":digest(blob),
                     "original_native_dev_nll":float(old["dev"]["nll"]),
                     "replayed_full_dev_nll":full,"inverse_temperature":scalar,
@@ -159,6 +185,6 @@ def main():
     args=p.parse_args()
     receipt=replay(args.archive,args.source_root)
     args.output.parent.mkdir(parents=True,exist_ok=True)
-    args.output.write_text(json.dumps(receipt,indent=2,sort_keys=True)+"\n",encoding="utf-8")
+    args.output.write_text(json.dumps(receipt,indent=2,sort_keys=True,allow_nan=False)+"\n",encoding="utf-8")
     print("TEMP021 original frozen model calibration completed: EXPOSED DEV ONLY")
 if __name__=="__main__":main()
