@@ -60,6 +60,7 @@ class LearnedQueryContracts(unittest.TestCase):
         self.assertGreater(stats["nonexact_miss_queries"],0)
         self.assertTrue(bool(torch.isfinite(loss)))
         g=torch.autograd.grad(loss,(self.q.embedding.weight,self.q.project.weight))
+        self.assertTrue(all(torch.isfinite(gi).all() for gi in g))
         self.assertGreater(float(g[0].norm()),1e-8)
         self.assertGreater(float(g[1].norm()),1e-8)
 
