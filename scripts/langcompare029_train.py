@@ -8,8 +8,9 @@ No GPU workflow invokes fit on this draft. Runs only after an explicit future
 matched-venue amendment and operator approval in a protected environment.
 """
 from __future__ import annotations
-import argparse, json, os, random
+import argparse, json, os, random, sys
 from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import numpy as np
 import torch
 from torch.nn import functional as F
