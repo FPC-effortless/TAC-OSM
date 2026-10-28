@@ -17,6 +17,14 @@ from context_transition import ContextTransition026
 def main():
     d=ROOT/'research/mathematical-engineering/context026';link=json.loads((d/'PNDS_MATH_LINK.json').read_text())
     if hashlib.sha256((d/'context_transition.py').read_bytes()).hexdigest()!=link['tac_source_sha256']:raise ValueError('actual candidate source differs')
+    base=f"https://raw.githubusercontent.com/FPC-effortless/pnds-lean/{link['pnds_commit']}/"
+    for name,key in [('PNDS/ContextTransition026.lean','lean_sha256'),('foundation/v1/context026.json','record_sha256')]:
+        with urllib.request.urlopen(base+name,timeout=30) as response:content=response.read()
+        if hashlib.sha256(content).hexdigest()!=link[key]:raise ValueError('paired PNDS formulation differs')
+        if key=='record_sha256':
+            record=json.loads(content)
+            if record['tac_commit']!=link['tac_commit'] or record['tac_source_sha256']!=link['tac_source_sha256']:
+                raise ValueError('reciprocal source pin differs')
     url=f"https://raw.githubusercontent.com/FPC-effortless/pnds-lean/{link['pnds_commit']}/foundation/v1/context026.py"
     with urllib.request.urlopen(url,timeout=30) as response:raw=response.read()
     if hashlib.sha256(raw).hexdigest()!=link['python_sha256']:raise ValueError('PNDS reference differs')
