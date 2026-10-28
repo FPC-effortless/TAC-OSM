@@ -1,0 +1,55 @@
+name: Original language replay intake (no model execution)
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/replay_intake.py'
+      - 'scripts/check_original_replay_intake.py'
+      - 'tests/test_original_replay_intake.py'
+      - 'research/replay-readiness/**'
+      - 'research/phone_queue/language-graph006-replay-intake.json'
+      - '.github/workflows/original-replay-intake.yml'
+permissions:
+  contents: read
+jobs:
+  engineering-and-readiness:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Engineering fixtures only
+        run: python -m pytest -q tests/test_original_replay_intake.py tests/test_research_execution_levels.py
+      - name: Record compute routing before readiness inspection
+        run: |
+          mkdir -p intake-results
+          python scripts/phone_lab.py plan research/phone_queue/language-graph006-replay-intake.json > intake-results/COMPUTE_DECISION.json
+          cmp intake-results/COMPUTE_DECISION.json research/replay-readiness/language_graph006/COMPUTE_DECISION.json
+      - name: Preserve the actual missing-originals blocker
+        run: |
+          set +e
+          python scripts/check_original_replay_intake.py --contract research/replay-readiness/language_graph006/CONTRACT.json --output intake-results/READINESS.json
+          intake_exit=$?
+          set -e
+          test "$intake_exit" -eq 2
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('intake-results/READINESS.json').read_text())
+          assert r['state']=='BLOCKED' and r['REPO_REPLAY']=='BLOCKED'
+          assert r['model_executions']==0 and r['protected_TEST'] is False
+          assert r==json.loads(Path('research/replay-readiness/language_graph006/READINESS.json').read_text())
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('Engineering fixtures pass; **original language cold replay BLOCKED**. No dataset/model execution.\n\n'+ '\n'.join('- '+x for x in r['missing']))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-language-replay-intake
+          path: intake-results/
