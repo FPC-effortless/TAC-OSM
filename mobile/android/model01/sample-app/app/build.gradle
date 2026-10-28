@@ -23,4 +23,24 @@ tasks.register('copyPinnedModel', Copy) {
     from("$rootDir/../Model01OfflinePredictor.java")
     into("$buildDir/generated/source/model01/java/org/tacosm/mobile/model01")
 }
-tasks.named('preBuild') { dependsOn('copyPinnedModel') }
+tasks.named('preBuild') { dependsOn('copyPinnedModel', 'verifyFrozenTacOnnx') }
+
+dependencies {
+    // Included as an APK-native local CPU runtime. Never fetched on user devices.
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.23.2'
+}
+
+// Shipping an APK without the EXACT frozen trained TAC graph must fail the build.
+tasks.register('verifyFrozenTacOnnx') {
+    doLast {
+        File asset = file('src/main/assets/tac_me111.onnx')
+        if (!asset.isFile()) throw new GradleException(
+            'frozen ME111 ONNX asset missing: run pinned no-fit exporter first')
+        String sha = java.security.MessageDigest.getInstance('SHA-256')
+            .digest(asset.bytes).encodeHex().toString()
+        if (sha != 'dd65519a9e4f3388966538af53119b56e9292b46a9209d63ad4927b87f0a176b')
+            throw new GradleException('frozen ME111 ONNX asset hash mismatch')
+        println('ME111_ORIGINAL_ONNX_ASSET=SHA256_PASS (not device qualification)')
+    }
+}
+
