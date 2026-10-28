@@ -1,0 +1,47 @@
+name: LANGBASE024 authentic CPython byte next-symbol reference
+on:
+  push:
+    branches:
+      - research/langbase024-byte-complete-next-byte-reference-2026-10-28
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langbase024/**'
+      - '.github/workflows/langbase024-byte-next-reference.yml'
+      - 'research/source-bundles/LANGUAGE-SOURCE023/**'
+      - 'research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json'
+      - 'research/mathematical-engineering/language_source023/UTF8_SUPPLEMENT_RECEIPT.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-source-internal-dev-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Check registered source-only software controls
+        working-directory: research/mathematical-engineering/langbase024
+        run: |
+          python -m py_compile byte_next_reference.py test_byte_next_reference.py
+          python -m unittest -v test_byte_next_reference.py
+      - name: Evaluate authentic original publisher byte labels on previously exposed DEV
+        run: |
+          python research/mathematical-engineering/langbase024/byte_next_reference.py \
+            --repo . \
+            --output LANGBASE024_REAL_EXPOSED_DEV_RECEIPT.json
+          python -m json.tool LANGBASE024_REAL_EXPOSED_DEV_RECEIPT.json >/dev/null
+      - name: Preserve original-source metric receipt, never checkpoints
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGBASE024-authentic-publisher-byte-reference
+          path: LANGBASE024_REAL_EXPOSED_DEV_RECEIPT.json
+          retention-days: 30
+          if-no-files-found: error
+      - name: Record evidence boundary
+        run: |
+          echo "This workflow fits classical count references on original authenticated PSF FIT bytes only."
+          echo "DEV is previously exposed; not TEST, not independent evidence, no neural training."
+          echo "Original TAC Git checkpoint replay remains blocked; 499978-parameter byte TAC remains untrained."
