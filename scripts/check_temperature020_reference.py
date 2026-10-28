@@ -15,6 +15,16 @@ from tac_osm.scalar_calibration import LogitBatch,loss_derivatives
 
 def main():
     link=json.loads((ROOT/'research/mathematical-engineering/temperature020/PNDS_MATH_LINK.json').read_text())
+    if hashlib.sha256((ROOT/'src/tac_osm/scalar_calibration.py').read_bytes()).hexdigest()!=link['tac_source_sha256']:
+        raise ValueError('actual TAC scalar source differs')
+    base=f"https://raw.githubusercontent.com/FPC-effortless/pnds-lean/{link['pnds_commit']}/"
+    for name,key in [('PNDS/ScalarCalibration020.lean','lean_sha256'),('foundation/v1/temperature020.json','record_sha256')]:
+        with urllib.request.urlopen(base+name,timeout=30) as response:content=response.read()
+        if hashlib.sha256(content).hexdigest()!=link[key]:raise ValueError('paired PNDS source differs')
+        if key=='record_sha256':
+            record=json.loads(content)
+            if record['tac_source_sha256']!=link['tac_source_sha256'] or record['tac_commit']!=link['tac_commit']:
+                raise ValueError('reciprocal source pin differs')
     url=f"https://raw.githubusercontent.com/FPC-effortless/pnds-lean/{link['pnds_commit']}/foundation/v1/temperature020.py"
     with urllib.request.urlopen(url,timeout=30) as response:raw=response.read()
     if hashlib.sha256(raw).hexdigest()!=link['python_sha256']:
