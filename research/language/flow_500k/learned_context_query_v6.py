@@ -133,8 +133,12 @@ class LearnedContextQuery(nn.Module):
                 "training_queries":int(B*(N-1)),
                 "nonexact_miss_queries":int((~exact[:,:-1]).sum()),
                 "positive_evidence_queries":0}
-        all_score=torch.logsumexp(scores.masked_fill(~possible,float("-inf")),dim=-1)
-        pos_score=torch.logsumexp(scores.masked_fill(~positives,float("-inf")),dim=-1)
+        # Avoid NaN backward on unsupported rows: logsumexp(all -inf)
+        # has undefined derivatives, even when those rows are not used in
+        # the final loss. A finite sentinel plus explicit eligible masking
+        # makes positive-evidence training numerically fail-closed.
+        all_score=torch.logsumexp(scores.masked_fill(~possible,-1e9),dim=-1)
+        pos_score=torch.logsumexp(scores.masked_fill(~positives,-1e9),dim=-1)
         loss=(all_score-pos_score)[eligible].mean()
         if not bool(torch.isfinite(loss)):
             raise ValueError("nonfinite positive-evidence ranking loss")
