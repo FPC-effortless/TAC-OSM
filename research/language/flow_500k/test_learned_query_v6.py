@@ -51,6 +51,26 @@ class LearnedQueryContracts(unittest.TestCase):
         g=torch.autograd.grad(loss,self.q.embedding.weight)[0]
         self.assertLess(float(g.norm()),1e-8)
 
+    def test_positive_evidence_contrastive_loss_has_both_gradients(self):
+        # Repeat enough observed labels that same-continuation positives
+        # exist outside exact trigram matches; targets only in training loss.
+        x=torch.randint(0,9,(3,101),dtype=torch.long)
+        loss,stats=self.q.contrastive_window_loss(x)
+        self.assertGreater(stats["positive_evidence_queries"],0)
+        self.assertGreater(stats["nonexact_miss_queries"],0)
+        self.assertTrue(bool(torch.isfinite(loss)))
+        g=torch.autograd.grad(loss,(self.q.embedding.weight,self.q.project.weight))
+        self.assertGreater(float(g[0].norm()),1e-8)
+        self.assertGreater(float(g[1].norm()),1e-8)
+
+    def test_zero_positive_evidence_is_transparently_skipped(self):
+        # A different retrieved label cannot supply an actual source match.
+        unique=(torch.arange(43).reshape(1,-1)*7%127).long()
+        loss,stats=self.q.contrastive_window_loss(unique)
+        self.assertEqual(stats["positive_evidence_queries"],0)
+        self.assertTrue(bool(torch.isfinite(loss)))
+        self.assertEqual(float(loss),0.0)
+
     def test_chunk_parity_global_ordinal_owner_and_bounded_state(self):
         x=torch.randint(0,8,(2,89),dtype=torch.long)
         self.q.eval()
