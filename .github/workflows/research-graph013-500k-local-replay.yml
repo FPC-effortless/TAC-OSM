@@ -1,0 +1,33 @@
+name: GRAPH013 original 500K TAC replay contracts (archive NOT in CI)
+on:
+  push:
+    branches: [research/graph013-original-500k-checkpoint-replay-2026-10-28]
+  pull_request:
+    paths:
+      - 'research/language/flow_500k/graph013_500k_archive_replay.py'
+      - 'research/language/flow_500k/test_graph013_archive_replay.py'
+      - '.github/workflows/research-graph013-500k-local-replay.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-only-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install CPU PyTorch and NumPy
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install numpy==2.3.5
+      - name: Verify no-training source contracts (NOT original checkpoint replay)
+        working-directory: research/language/flow_500k
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile graph013_500k_archive_replay.py test_graph013_archive_replay.py
+          python -m unittest -v test_graph013_archive_replay.py
