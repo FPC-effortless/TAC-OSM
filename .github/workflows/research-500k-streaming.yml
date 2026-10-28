@@ -1,7 +1,7 @@
 name: TAC 500K stream state numerical qualification
 on:
   push:
-    branches: [research/scale-500k-wave-language-2026-10-28]
+    branches: [research/scale-500k-wave-language-2026-10-28, research/500k-graph-stream-math-fix-2026-10-28]
   pull_request:
   workflow_dispatch:
 jobs:
@@ -18,5 +18,8 @@ jobs:
           python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
       - name: Verify full versus carried state, gradients, masks and causal prefix
         run: |
+          python -m py_compile research/language/flow_500k/tac_wave_ced_500k_v2.py research/language/flow_500k/historical_500k_v2.py research/language/flow_500k/test_graph_stream_math_v2.py
+          OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python -m unittest discover -s research/language/flow_500k -p 'test_wave_500k.py' -v
           OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python -m unittest discover -s research/language/flow_500k -p 'test_streaming_v2.py' -v
           OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python -m unittest discover -s research/language/flow_500k -p 'test_historical_500k.py' -v
+          OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python -m unittest discover -s research/language/flow_500k -p 'test_graph_stream_math_v2.py' -v
