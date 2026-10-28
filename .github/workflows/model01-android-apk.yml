@@ -76,6 +76,8 @@ jobs:
           gradle-version: '8.11.1'
       - name: Compile Android APK with real ONNX Runtime AAR and frozen TAC bytes
         run: gradle -p mobile/android/model01/sample-app :app:assembleDebug --no-daemon
+      - name: Compile Android instrumentation APK before starting emulator
+        run: gradle -p mobile/android/model01/sample-app :app:assembleDebugAndroidTest --no-daemon
       - name: Verify merged Android permissions and packaged native graph/runtime
         run: |
           APK=mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
@@ -104,6 +106,16 @@ jobs:
           path: mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 7
+      - name: Enable KVM acceleration on GitHub Linux runner
+        run: |
+          if [ ! -c /dev/kvm ]; then
+            echo 'ANDROID_EMULATOR_KVM=BLOCKED_DEVICE_MISSING'
+            exit 2
+          fi
+          sudo chmod a+rw /dev/kvm
+          test -r /dev/kvm && test -w /dev/kvm
+          "$ANDROID_HOME/emulator/emulator" -accel-check
+          echo 'ANDROID_EMULATOR_KVM=ENABLED_HOST_ONLY_NOT_MODEL_EVIDENCE'
       - name: Exercise actual Android ONNX JNI and local state on emulator only
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -112,9 +124,19 @@ jobs:
           target: google_apis
           profile: pixel_2
           disable-animations: true
-          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -memory 2048
           # Emulator tests only; physical benchmark class requires real hardware.
           script: gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111LocalRuntimeAndroidTest
+      - name: Preserve Android instrumentation and emulator diagnostic evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: me111-android-emulator-jni-test-evidence
+          path: |
+            mobile/android/model01/sample-app/app/build/outputs/androidTest-results/connected/**
+            mobile/android/model01/sample-app/app/build/reports/androidTests/connected/**
+          if-no-files-found: warn
+          retention-days: 14
       - name: Truthful hardware/science gate
         if: always()
         run: |
