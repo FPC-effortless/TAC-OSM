@@ -1,0 +1,38 @@
+name: GRAPH019 source-only 500K protected-horizon math (NO real training in CI)
+on:
+  push:
+    branches: [research/graph019-primary-guard-horizon-fit-2026-10-28]
+  pull_request:
+    paths:
+      - 'research/language/flow_500k/graph019_*'
+      - 'research/language/flow_500k/GRAPH019_*'
+      - '.github/workflows/research-graph019-protected-horizon.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  no-training-math:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install CPU Torch and NumPy
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install numpy==2.3.5
+      - name: Run first-order math and future-head software contracts (NO original source access)
+        working-directory: research/language/flow_500k
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile graph019_train_native_protected.py
+          python -m unittest -v test_graph017_native_horizon.py test_graph018_primary_protected_gradients.py
+      - name: Truth labels
+        run: |
+          echo "GRAPH019 five authentic previously exposed DEV NLLs failed qualification."
+          echo "Constructed numerical CI cannot prove original checkpoint replay."
+          echo "INDEPENDENT_TEST=NOT_RUN; REPO_REPLAY=BLOCKED; NEW_SKILL=NOT_ESTABLISHED."
