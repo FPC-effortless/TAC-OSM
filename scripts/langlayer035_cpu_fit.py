@@ -36,7 +36,7 @@ def parameter_count(model):
     return {"trainable":sum(p.numel() for p in model.parameters() if p.requires_grad),
             "deployed":sum(p.numel() for p in model.parameters())}
 from scripts.langlayer035_sampling import fit_sources,iter_batches,schedule_receipt
-from train_byte_native import windows, score_model
+from train_byte_native import windows as authentic_dev_windows, score_model
 def authentic_dev_metrics(model, dev_windows):
     return score_model(model, dev_windows)["aggregate"]
 from scripts.validate_research_parity import check_manifest
@@ -190,7 +190,7 @@ def run(arm,seed,steps,bdh_source,out):
     # The exposed DEV set is visited ONCE, only after frozen checkpoint created,
     # using identical exact original 4x8 129-byte windows. No TEST access.
     _,dev,_=original_source(ROOT)
-    dev_windows=windows(dev)
+    dev_windows=authentic_dev_windows(dev)
     score=authentic_dev_metrics(model,dev_windows)
     cold=authentic_dev_metrics(restored,dev_windows)
     for key in ("nll","brier","top1","top5"):
