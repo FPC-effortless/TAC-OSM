@@ -6,6 +6,7 @@ on:
     paths:
       - 'mobile/android/model01/**'
       - 'tests/test_me111_android_contract.py'
+      - 'tests/test_me111_android_state_codec.py'
       - 'scripts/create_me111_android_host_fixture.py'
       - 'scripts/verify_me111_256step_cpu.py'
       - 'scripts/create_me111_android_256step_fixture.py'
@@ -14,6 +15,7 @@ on:
     paths:
       - 'mobile/android/model01/**'
       - 'tests/test_me111_android_contract.py'
+      - 'tests/test_me111_android_state_codec.py'
       - '.github/workflows/model01-android-apk.yml'
   workflow_dispatch:
 # Cancel obsolete same-branch emulator builds to avoid repeated paid/CI CPU usage.
@@ -83,8 +85,8 @@ jobs:
           python scripts/create_me111_android_256step_fixture.py \
             --source-root pinned-me111 \
             --output mobile/android/model01/sample-app/app/src/androidTest/assets/me111_256_reference_vectors.json
-      - name: Verify pure-Java typed source and recurrent-state guards
-        run: python -m unittest discover -s tests -p test_me111_android_contract.py -v
+      - name: Verify host JVM input/state guards and SHA256 state codec negatives
+        run: python -m unittest discover -s tests -p 'test_me111_android*.py' -v
       - name: Verify preinstalled Android SDK
         run: |
           test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
