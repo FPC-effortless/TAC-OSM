@@ -1,0 +1,36 @@
+name: GRAPH018 primary-protected multi-horizon gradients (math only)
+on:
+  push:
+    branches: [research/graph018-primary-protected-aux-gradients-2026-10-28]
+  pull_request:
+    paths:
+      - 'research/language/flow_500k/graph018_*'
+      - 'research/language/flow_500k/test_graph018_*'
+      - 'research/language/flow_500k/GRAPH018_*'
+      - '.github/workflows/research-graph018-primary-protected-gradients.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  first-order-math-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install CPU PyTorch
+        run: python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+      - name: Numerical direction contracts; no model training/replay in CI
+        working-directory: research/language/flow_500k
+        env:
+          OMP_NUM_THREADS: '2'
+        run: |
+          python -m py_compile graph018_primary_protected_gradients.py test_graph018_primary_protected_gradients.py
+          python -m unittest -v test_graph018_primary_protected_gradients.py
+      - name: Scientific truth flags
+        run: |
+          echo "GRAPH018 source-only mathematical checks, NOT real model skill."
+          echo "GRAPH017 actual native prediction and future forecasting gates FAILED."
+          echo "NO AdamW finite-step proof; TRAINED=NOT_RUN; REPO_REPLAY=BLOCKED."
