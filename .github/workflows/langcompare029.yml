@@ -59,6 +59,26 @@ jobs:
           pins=json.load(open("langcompare029-results/OFFICIAL_SOURCE_IDENTITIES.json"))
           assert pins["status"]=="OFFICIAL_SOURCE_IDENTITIES_VERIFIED_NO_FIT"
           PY
+      - name: Authentic FIT label backward probe on official BDH (no optimizer)
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import torch
+          from torch.nn import functional as F
+          from scripts.langcompare029_preflight import load_bdh
+          from scripts.langcompare029_sampling import fit_sources,iter_batches
+          torch.manual_seed(1701)
+          model=load_bdh(Path("/tmp/langcompare029_bdh.py")).train()
+          _, batch=next(iter_batches(fit_sources(),1701,steps=1))
+          tokens=torch.tensor([list(batch[0][2][:13])],dtype=torch.long)
+          logits,_=model(tokens[:,:-1])
+          loss=F.cross_entropy(logits.reshape(-1,256),tokens[:,1:].reshape(-1))
+          loss.backward()
+          grad=[p.grad for p in model.parameters() if p.requires_grad]
+          assert all(g is not None and torch.isfinite(g).all() for g in grad)
+          assert torch.isfinite(loss) and sum(float(g.abs().sum()) for g in grad)>0
+          print("BDH genuine FIT source forward/backward finite; NO optimizer steps")
+
       - name: Upload no-fit evidence (not prediction metrics)
         if: always()
         uses: actions/upload-artifact@v4
