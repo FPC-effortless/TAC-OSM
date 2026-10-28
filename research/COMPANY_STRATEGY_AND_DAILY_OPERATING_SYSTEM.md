@@ -1,4 +1,15 @@
 # Company strategy and daily operating system
+
+
+## 2026-10-28 prospective policy supersession — user-controlled offline customer inference
+
+**Latest owner directive:** The 2026-10-27 "dual deployment" choice that follows is **historical/superseded for customer inference**. All company-built customer TAC-OSM and specialist model predictions must execute wholly on user-controlled devices, network-disconnected, including source preprocessing, embeddings/perception, recurrent memory, prediction, uncertainty and abstention. No customer hosted inference/cloud speech/cloud state or invisible fallback. The six TAC-OSM families remain unchanged; archival model evidence must remain intact. See the [binding draft offline contract](offline_customer_inference_contract_2026_10_28.md) and [master plan's dated override](MASTER_RESEARCH_PLAN.md). This branch is a reviewed proposal until merged and does not assert hardware capability.
+
+**Permitted cloud work:** dataset/source rights, training, CI, independent original checkpoint replay and verification, Forge/TrainLab developer tools, signed model/artifact delivery and research benchmarking are allowed remotely. These are not customer per-inference paths. Woyengi remains authoritative for actions; TAC produces bounded advisory outputs. Model artifacts, local SDKs, offline deployment/optimization support, training tooling and qualified integration support are candidate commercial offerings; no customer revenue or adoption is implied.
+
+**Product gate:** start with exact reproducible local Android/CPU model, then iOS and embedded. No model can be called customer-ready without source-authorized authentic utility, physical airplane-mode/no-network test, local-state continuity, exact checkpoint/export and device RAM/energy/p50/p95 evidence. Never promote a debug APK or emulator pass into physical deployment qualification. Historical 2026-10-27 fast-cloud measurements remain research-history context only, not a customer deployment decision.
+
+---
 **Adopted:** 2026-10-25. **Status:** binding research/product prioritization guidance, not an experimental result, deployment claim, or authorization to merge or spend money. **Authority:** [Unified Master Research Plan](MASTER_RESEARCH_PLAN.md), all existing research/evidence rules, and original immutable experimental artifacts take precedence over this strategy where technical gates differ.
 
 
