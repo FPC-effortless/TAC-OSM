@@ -1,0 +1,68 @@
+name: LANGBLEND032 frozen TAC vs FIT-only P3 probability mixture (no-fit CPU)
+on:
+  pull_request:
+    paths:
+      - "scripts/langblend032_fixed_p3.py"
+      - "research/mathematical-engineering/langblend032/**"
+      - ".github/workflows/langblend032.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  no-fit-authentic-source-5-seed-mixture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      CUDA_VISIBLE_DEVICES: ""
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: FPC-effortless/TAC-OSM
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install CPU-only immutable torch and NumPy
+        run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Source-safe pure probability geometry tests
+        run: |
+          PYTHONPATH=src:. python scripts/langblend032_fixed_p3.py --self-test
+      - name: Fetch EXACT original trained TAC checkpoint artifacts, five seeds
+        run: |
+          set -euo pipefail
+          for seed in 1701 1702 1703 1704 1705; do
+            gh run download 40780215655 \
+              --repo FPC-effortless/TAC-OSM \
+              --name "LANGCOMPARE031-CPU-FIT-tac_context026-seed$seed" \
+              --dir "langblend032-checkpoints/seed$seed"
+          done
+          test "$(find langblend032-checkpoints -name '*.pt' | wc -l)" -eq 5
+      - name: Score original TAC + original P3 with frozen lambda grid, no fits
+        run: |
+          PYTHONPATH=src:. python scripts/langblend032_fixed_p3.py \
+            --input-dir langblend032-checkpoints \
+            --output langblend032-results/FROZEN_P3_MIXTURE_EXPOSED_DEV.json
+      - name: Check no-fit status and all fixed lambda results
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('langblend032-results/FROZEN_P3_MIXTURE_EXPOSED_DEV.json'))
+          assert x['status']=='NO_FIT_INTERNAL_EXPOSED_DEV_FIXED_GRID'
+          assert x['training_updates_during_study']==0
+          assert x['protected_TEST']=='NOT_ACCESSED' and x['GPU_minutes']==0
+          assert len(x['results_per_seed'])==5 and len(x['means_by_lambda'])==9
+          assert all(x['results_per_seed'][str(i)]['lambda_results']['1.0']['n']==4096 for i in range(1701,1706))
+          assert x['DEV_lambda_selection']=='NONE_PREDEFINED_GRID_ALL_RESULTS_REPORTED'
+          PY
+      - name: Preserve actual five-seed immutable research receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGBLEND032-fixed-grid-five-seed-FIT-P3-no-fit
+          path: langblend032-results/
+          if-no-files-found: warn
