@@ -1,0 +1,86 @@
+name: LANGLAYER035 authentic language TAC depth 320x5 CPU fits
+on:
+  pull_request:
+    paths:
+      - "scripts/langlayer035_cpu_fit.py"
+      - "scripts/langlayer035_sampling.py"
+      - "research/mathematical-engineering/langlayer035/**"
+      - "research/phone_queue/langlayer035.json"
+      - ".github/workflows/langlayer035-cpu.yml"
+      - "scripts/validate_research_parity.py"
+permissions:
+  contents: read
+jobs:
+  cpu-authentic-layered-fit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [tac_context026, tac_layer2, tac_layer3]
+        seed: [1701, 1702, 1703, 1704, 1705]
+    env:
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      CUDA_VISIBLE_DEVICES: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install pinned CPU-only runtime
+        run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Original signed-content source, frozen no-TEST plan and internal prefit checks
+        run: |
+          set -eo pipefail
+          mkdir -p langlayer035-results
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langlayer035.json | tee langlayer035-results/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langlayer035/FAIR_COMPARISON.json --phase preflight | tee langlayer035-results/PREFLIGHT.json
+          PYTHONPATH=src:. python - <<'PY'
+          import json
+          from scripts.langlayer035_sampling import fit_sources,schedule_receipt
+          f=fit_sources()
+          assert len(f)==14
+          r=schedule_receipt(f,1701,steps=320)
+          assert r["examples_seen"]==2560 and r["next_byte_targets_seen"]==327680
+          p=json.load(open("research/mathematical-engineering/langlayer035/FAIR_COMPARISON.json"))
+          assert p["study_id"]=="LANGLAYER035" and p["study_type"]=="single_model_training"
+          assert p["no_architecture_superiority_claim"] is True
+          assert len(p["models"])==15
+          PY
+      - name: Actual source-verified 320-step CPU fit and already-exposed DEV score
+        run: |
+          PYTHONPATH=src:. python scripts/langlayer035_cpu_fit.py \
+            --arm ${{ matrix.arm }} \
+            --seed ${{ matrix.seed }} --steps 320 \
+            --out langlayer035-results/${{ matrix.arm }}_seed${{ matrix.seed }}
+      - name: Validate original checkpoint/optimizer/RNG/DEV replay and hashes
+        run: |
+          PYTHONPATH=src:. python - <<'PY'
+          import glob,json,hashlib
+          rpaths=glob.glob("langlayer035-results/*/FIT_AND_EXPOSED_DEV_RECEIPT.json")
+          assert len(rpaths)==1
+          r=json.load(open(rpaths[0]))
+          assert r["study"]=="LANGLAYER035"
+          assert r["updates"]==320 and r["target_bytes_seen"]==327680
+          assert r["parameters"]["trainable"]==r["parameters"]["deployed"]
+          assert r["checkpoint_reloaded_identical_scored_DEV"] is True
+          assert r["DEV_EXPOSED_4096_ONLY"]["n"]==4096
+          assert r["GPU_minutes"]==0 and r["protected_TEST"]=="NOT_ACCESSED"
+          assert r["matched_training_FLOPs"]=="NOT_VERIFIED"
+          paths=glob.glob("langlayer035-results/*/*.pt")
+          assert len(paths)==1
+          assert hashlib.sha256(open(paths[0],"rb").read()).hexdigest()==r["checkpoint_sha256"]
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER035-CPU-${{ matrix.arm }}-seed${{ matrix.seed }}
+          path: langlayer035-results/
+          retention-days: 90
+          if-no-files-found: warn

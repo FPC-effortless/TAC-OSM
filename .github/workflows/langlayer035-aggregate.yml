@@ -1,0 +1,55 @@
+name: LANGLAYER035 summarize 15 immutable CPU checkpoint receipts
+on:
+  pull_request:
+    paths:
+      - "scripts/langlayer035_aggregate.py"
+      - ".github/workflows/langlayer035-aggregate.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify-and-summarize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Await frozen separately registered 15-job original text training cohort
+        run: |
+          gh run watch 40785939365 -R FPC-effortless/TAC-OSM --exit-status || true
+      - name: Download immutable authentic training receipts and model checkpoints
+        run: |
+          mkdir -p langlayer035-input langlayer035-aggregate
+          gh run download 40785939365 -R FPC-effortless/TAC-OSM --pattern 'LANGLAYER035-CPU-*' --dir langlayer035-input
+      - name: Strict full-cohort source/hash/sample and numerical aggregate
+        run: |
+          set -o pipefail
+          python scripts/langlayer035_aggregate.py --results langlayer035-input --output langlayer035-aggregate/RESULTS.json | tee langlayer035-aggregate/RESULTS.log
+      - name: Publish full 15-seed table only after complete verified cohort
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("langlayer035-aggregate/RESULTS.json"))
+          with open(__import__("os").environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              print("# LANGLAYER035 original-source CPU benchmark",file=f)
+              print("Five frozen seeds × 320 updates × original CPython FIT; **already-exposed DEV**. Not matched training FLOPs or protected TEST.",file=f)
+              print("| Arm | Params | Mean NLL ↓ | PPL ↓ | Top1 ↑ | Brier ↓ | Mean CPU s |",file=f)
+              print("|---|---:|---:|---:|---:|---:|---:|",file=f)
+              for name,row in r["models"].items():
+                  print(f'| {name} | {row["parameters"]} | {row["nll_mean"]:.6f} | {row["perplexity_mean_of_seeds"]:.3f} | {100*row["top1_mean"]:.2f}% | {row["brier_mean"]:.6f} | {row["cpu_process_seconds_mean"]:.1f} |',file=f)
+              print("\nP3 previously exposed DEV reference: NLL **1.877306112**; unmatched count-based method.",file=f)
+              print("\n**No claim of architecture superiority or independent generalization.**",file=f)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER035-verified-full-cohort-summary
+          path: langlayer035-aggregate/
+          retention-days: 90
