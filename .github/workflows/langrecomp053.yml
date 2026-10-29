@@ -1,0 +1,64 @@
+name: LANGRECOMP053 original trained TAC source-gradient recomputation parity CPU
+on:
+  pull_request:
+    paths:
+      - 'scripts/langrecomp053_training_parity.py'
+      - 'tests/test_langrecomp053_training_parity.py'
+      - 'research/mathematical-engineering/langrecomp053/**'
+      - 'research/phone_queue/langrecomp053.json'
+      - '.github/workflows/langrecomp053.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-trained-source-gradients:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Publisher source receipt, CPU plan, original graph fixture gradient tests
+        run: |
+          mkdir -p langrecomp053-evidence
+          python scripts/phone_lab.py plan research/phone_queue/langrecomp053.json > langrecomp053-evidence/PLAN.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langrecomp053/FAIR_COMPARISON.json --phase preflight > langrecomp053-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langrecomp053_training_parity.py
+      - name: Download immutable trained TAC original checkpoint and original receipts
+        run: |
+          gh run download 40797105091 --repo FPC-effortless/TAC-OSM --name LANGLAYER040-CPU-state48_no_graph-seed1701 --dir langrecomp053-original/tac
+      - name: Fail closed on original trained graph complete forward/backward parity and RNG
+        run: |
+          PYTHONPATH=src:. python scripts/langrecomp053_training_parity.py --original-dir langrecomp053-original/tac --output langrecomp053-evidence/RESULTS.json
+          python - <<'PY'
+          import json
+          x=json.load(open('langrecomp053-evidence/RESULTS.json'))
+          assert x['training_updates']==0 and x['gpu_minutes']==0 and x['protected_TEST']=='NOT_ACCESSED'
+          assert x['verification']['whole_model_peak_cuda_vram']=='NOT_MEASURED_NO_GPU'
+          assert len(x['rows'])==2 and x['trained_original_parameters']==499623
+          for row in x['rows']:
+              assert row['parity']['gradient_element_count']>0
+              assert row['parity']['max_gradient_abs']<3e-5
+              assert row['identical_cpu_rng_after_backward']
+          PY
+      - name: Archive original genuine FIT measurements or fail-closed receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGRECOMP053-original-trained-CPU-gradients
+          path: langrecomp053-evidence/
+          retention-days: 90
+          if-no-files-found: warn
