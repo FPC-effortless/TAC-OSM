@@ -1,0 +1,59 @@
+{
+  "study_id": "LANGMEMORY042-BOUNDED-AUTORESEARCH-CLOCK-DIAGNOSIS",
+  "execution_level": "internal_research",
+  "source_commit": "a64be83073fd4b2aa70c39c084f9e1e980db2d82",
+  "hypothesis": "Part of longer-prefix regression is extrapolation of the seven learned positional features beyond trained positions0..127, rather than useful-history loss alone. Test two fixed no-weight-update position-feature transformations before adding dual memory.",
+  "no_new_model_fits": true,
+  "original_model": "LANGLAYER040 state48_no_graph499623p, five frozen seeds1701..1705, trainingrun40797105091",
+  "modes": [
+    "native",
+    "cap_log",
+    "cap_all"
+  ],
+  "max_candidate_trials": 2,
+  "allowed_change": "Only the input to original self.pos linear projection. Do NOT change native/aligned ordinal identities, source time, basis mean denominator, source bytes, model weights, decoder, targets, evaluation or masks. cap_log clips first positional feature to log128; cap_all replaces seven features by phi127 iff log feature exceeds log128. Both identity in trained clock range.",
+  "FIT_selection": {
+    "eligible": "all original FIT owners with >=1282 bytes, sorted; four evenly spaced target offsets from1024 tolen-2; require >=8 owners",
+    "context": 512,
+    "metric": "mean five-seed NLL; BPB=NLL/ln2",
+    "rule": "choose lowest-NLL candidate only if improves baseline >=.005 nat and wins >=4/5 seed means. Ties prefer cap_log; otherwise native. Freeze selection receipt before any DEV inference."
+  },
+  "DEV_confirmation": {
+    "cohort": "exact old041 source owners and32 target offsets, unchanged",
+    "contexts": [
+      128,
+      256,
+      512
+    ],
+    "conditions": [
+      "genuine",
+      "same-owner earlier donor with last64 retained"
+    ],
+    "models": "native and FIT-selected mode only; identical original checkpoint eachseed",
+    "no_selection_on_DEV": true,
+    "limits": "already exposed32 labels repeated acrossseed; no fresh generalization or long-memory proof; clock/time and history still jointly affect representations"
+  },
+  "mandatory_checks": [
+    "all original archive/receipt/checkpoint/source hashes",
+    "original320-step FIT schedule identities and optimizer/RNG",
+    "native replay on same128 byte cases",
+    "bitwise logit identity at128 in allthree modes",
+    "future-prefix invariance and pure hook removal",
+    "unchanged model parameter tensors/checkpoint files",
+    "all seeds complete and finite; retain failed rows",
+    "inclusive accounting of weights/state/retained source/cache when claiming memory efficiency"
+  ],
+  "metrics": [
+    "NLL",
+    "bits_per_raw_byte",
+    "top1",
+    "donor-minus-genuineNLL",
+    "CPU process time measured separately",
+    "weight tensor bytes and nominal state separate from full RAM"
+  ],
+  "budget": "GitHub CPU20min; zeroGPU; fixed checkpoint/zero optimizer steps; no unbounded loop",
+  "protected_TEST": false,
+  "checkpoint_promotion": false,
+  "independently_qualified": false,
+  "autores_style_adaptation": "small candidate-only edit surface, frozen harness, bounded trials, append-only ledger, no git reset deleting failures, no arbitrary shell or quotas, no inferred fair compute from equal runtime"
+}
