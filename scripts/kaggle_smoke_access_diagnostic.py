@@ -110,7 +110,11 @@ def main(argv=None) -> int:
     if not ok:
         report = {"schema": "tac-osm.kaggle-no-fit-receipt-audit.v1",
                   "status": "INCOMPLETE_NOT_VERIFIED",
-                  **summary}
+                  **summary,
+                  "remote_execution_verified": False,
+                  "self_reported_two_worker_execution": False,
+                  "independent_remote_attestation": False,
+                  "scientific_qualification": "NONE"}
         args.report.parent.mkdir(exist_ok=True, parents=True)
         args.report.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
         print(json.dumps(report, sort_keys=True))
