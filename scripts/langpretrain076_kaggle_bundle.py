@@ -85,7 +85,7 @@ def bootstrap_source(encoded: str, payload_hash: str, file_hashes: dict[str, str
     # Static loader verifies entire package AND each extracted member before
     # launching the already-audited dual-T4 runtime. No network or subprocess
     # execution at packaging time. All archive members have fixed paths.
-    return ('"""LANGPRETRAIN076 offline original-FIT dual-T4 Kaggle runner.\\n'
+    assembled = ('"""LANGPRETRAIN076 offline original-FIT dual-T4 Kaggle runner.\\n'
             'Generated and SHA-verified by scripts/langpretrain076_kaggle_bundle.py.\\n'
             '"""\\n'
             'import base64, hashlib, io, json, pathlib, runpy, zipfile, zlib\\n'
@@ -117,6 +117,7 @@ def bootstrap_source(encoded: str, payload_hash: str, file_hashes: dict[str, str
             '    runpy.run_path(str(root / "launcher.py"), run_name="__main__")\\n'
             'if __name__ == "__main__": main()\\n')
 
+    return assembled.replace(r"\\n", "\\n".encode("ascii").decode("unicode_escape"))
 
 def build(root: Path, destination: Path, username: str) -> dict:
     if (not isinstance(username, str) or not 2 <= len(username) <= 39
@@ -124,6 +125,7 @@ def build(root: Path, destination: Path, username: str) -> dict:
         raise BundleError("valid existing Kaggle username required")
     if destination.exists():
         raise BundleError("refuse overwriting an existing staged notebook")
+    sys.path.insert(0, str(root / "src"))
     from scripts.validate_research_parity import check_manifest
     from scripts.langpretrain076_fit_only import fit_sources
     fit = fit_sources(root)
