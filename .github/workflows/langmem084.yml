@@ -42,6 +42,10 @@ jobs:
           PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem084.json > factor084-evidence/PLAN.json
           PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmem084/FAIR_COMPARISON.json --phase preflight > factor084-evidence/PREFLIGHT.json
           PYTHONPATH=src:. python -m pytest -q tests/test_langmem084.py tests/test_research_probe_agnostic.py
+      - name: Pinned partial PNDS operator source parity
+        run: |
+          curl --fail --silent --show-error --location https://raw.githubusercontent.com/FPC-effortless/pnds-lean/6a7d4566458ca6cc71d4cc920391f08eb6aed5e2/foundation/v1/langmem084_write_read.py --output /tmp/langmem084_write_read.py
+          PYTHONPATH=src:. python scripts/langmem084_math_parity.py --reference /tmp/langmem084_write_read.py > factor084-evidence/PNDS_OPERATOR_PARITY.json
       - name: Original trained checkpoints and source receipts read only
         run: |
           mkdir -p original-dual-ckpt original078-verified
