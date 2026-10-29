@@ -1,0 +1,23 @@
+# LANGSCALE075 — native associative memory geometry 8→12→16 at ~500K learned parameters
+
+## Mechanistic source finding
+The original 500K `CONTEXT026` language model labels two MLP outputs `fast` and `slow`, but these are **not independently carried states**. They are computed from the current observed byte plus the already-carried associative/wave/concept summaries. The model actually carries 8×8 native matrix, two aligned 16×8 matrices, 8×2 wave, 6×16 concept recurrence and cumulative basis, plus separate upper48 in incremental 043. Thus inflating the MLP fast/slow output dimensions without adding recurrence is NOT a test of persistent memory scaling. 074 varied upper48 separately and lost.
+
+## Falsifiable new native capacity intervention
+Copy the *exact* original first-stage `ContextTransition026.forward` and substitute only native/aligned key dimension k. The active **native k×k block** sits in source 16×k three-bank affine scan; k value entries emitted by the native value encoder (the remaining 16-k rows are zeros), then a learned k→8 projection restores the original fast/slow input dimension for k>8. Two aligned banks become 16×k, source ordinal keys' original 8 source phases are projected through 8×k learned rotation. k8 retains identity readout and source-exact original 8×8 formulas and 499623 live learned weights. Original FFN455, upper48, fast/slow88/88 MLP output dims, wave and six concepts **fixed** across all arms.
+
+| Arm | Native active matrix | Aligned matrix each | Active params | Extra per-bank native 16×k scan floats |
+|---|---|---|---:|---:|
+| m8 original 070 | 8×8 | 16×8 | 499623 | 128 |
+| m12 new | 12×12 | 16×12 | 500175 | 192 |
+| m16 new | 16×16 | 16×16 | 500663 | 256 |
+
+All model learned parameter differences <0.21%, no inactive dummy weights; **training FLOPs not matched** as larger scan matrices incur additional work, and extra k→8 learned projection plus aligned address expansion make this a *joint native+aligned memory-capacity* intervention. It is not a pure native-matrix lesion, not a recurrent fast/slow update, and all models train on 128-byte reset windows only.
+
+### Source / training pre-registration before first fit
+- Original SHA-validated, licensed PSF CPython3.13.0 genuine owner-separated 14 FIT documents incl UTF8 supplement, frozen four already EXPOSED DEV docs, original model source SHA. Original 070 per-seed sampler, exactly 160 AdamW updates, batch8×128 true original next-byte labels, seeds1701,1702,1703 (163840 authentic FIT targets per new model), same original full 070 h48 m8 exposed 4096 target DEV scores. Source owners never cross; t+1 target is *never* observed as input before prediction.
+- For k8, constructed fresh model with same random initialization must have exact original `ScaledRecurrenceTAC070('p500k')` state_dict and bitwise logits for masks, prefixes, gradients and trace. k12/k16 causal prefix proof-by-test, shape, native read/actual key, aligned, gradients through new coordinates and all active weights. Fail closed on source copy drift and any unintended non-memory module change.
+- Train only six new original m12/m16 × three-seed fits on GitHub CPU using unchanged original FIT source sample order, AdamW and 160 updates; immediately cold-reload actual model/optimizer/Python+NumPy+Torch RNG checkpoint and same real exposed DEV scores. Original source SHA/weights/CPU runtimes/param count and memory trace shapes included in receipts; baseline m8 original 070 not retrained.
+- Hypothesis to falsify: native matrix expansion at approximately fixed learned weights improves source next-byte quality or enables useful longer carried memory in a later source-matched state test. **This 075 resets each 128-byte sample** and does NOT by itself demonstrate long-term retained info. If quality degrades or does not improve across seeds, preserve negative outcome and do not promote.
+- This **narrow** owner-directed exception in model-size validator authorizes only named LANGSCALE075 new arms m12/m16 with counts 500175/500663; global prospective100K target and earlier scale-waiver rules intact. Training counts and fair original source must pass before optimizer work. Training optimizer FLOPs across different k NOT matched by design; measured CPU time efficiency only.
+- No protected TEST, independent qualification, new corpus, Kaggle GPU, cloud promotion or merge. Any synthetic tests are construction/diagnosis, not real success. Companion PNDS only partial shape/parameter math until complete source-accurate IEEE forward/backward & true incremental carries are independently checked. Native matrices k12/k16 have **no released incremental state schema**; do not advertise fixed 3904B or real device compatibility for scaled models.

@@ -1,0 +1,169 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGSCALE075",
+  "study_type": "single_model_training",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "parameter_budget_contract": "owner-2026-10-29-native-associative-capacity",
+  "scientific_purpose": "Real publisher-source 500K TAC native matrix memory capacity pilot. Original k8 model from original 070 h48 checkpoint; new k12,k16 enlarge actual native matrix active k×k, native value & key to k, aligned address width from8 to k, add learned native readout k->8. Native first-stage fast/slow projections, 48D upper recurrence, FFN width455, 6 CED slots, wave dimensions kept fixed. Compare same source schedule, seeds1701-3 and 160 updates; no new carrier streaming decoder for k12/16 yet. No claim long-history benefit or architecture superiority.",
+  "no_architecture_superiority_claim": true,
+  "study_lane": "NATIVE_KEY_VALUE_8_TO_12_TO_16_FIXED_500K_FFN455_AND_UPPER48",
+  "real_world_source": {
+    "name": "PSF CPython 3.13.0 tutorial original publisher bytes",
+    "observed_real_outcomes": true,
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF License Version 2; code examples 0BSD",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "597dde0eb3ff98c798ccb3657b1ac02074a8cdb929189f3cc68612877e45f13e",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ]
+  },
+  "causal_protocol": "Original licensed PSF CPython3.13 authentic 14 FIT owners 13+UTF8; source SHA v3.13.0 pinned. 160 AdamW steps batch8×128 labels, per-seed exact 070 source sample order, 6 new model fits m12/m16, compare read-only original 070 p500k k8 same 3 seeds. Same exposed original DEV 4096 labels, no protected TEST and no changes to original checkpoints. Native k8 copied source exact forward & same original constructor initialization. New native 12×12 /16×16 active matrix and aligned16×k keys, combined read adapter; all learned active weights receive gradients. No real streaming or memory recall claim from these reset-window fits.",
+  "checkpoint_policy": "Six new original source model+optimizer/Torch+NumPy+Python RNG/source sample SHA checkpoints and cold source DEV replay; old 070 k8 seed1701-3 original frozen source/checkpoint receipts unchanged. No protected TEST.",
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "original_training_source_commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+  "budget": {
+    "training_updates": 160,
+    "batch_size": 8,
+    "context_bytes": 128,
+    "targets_per_seed": 163840,
+    "seeds": [
+      1701,
+      1702,
+      1703
+    ],
+    "optimizer": "AdamW lr=0.001 grad_norm_clip=1.0 fixed",
+    "cpu_runner": "GitHub ubuntu24.04 2 intraop CPU, 0 GPU",
+    "max_job_minutes": 70,
+    "tuning_trials": 0,
+    "training_FLOP_equality": "NOT_MATCHED_NATIVE_K_AFFECTS_SCAN_WORK"
+  },
+  "original_dev": {
+    "status": "PREVIOUSLY_EXPOSED",
+    "docs": 4,
+    "target_bytes_per_run": 4096,
+    "interpretation": "Fitted only on original genuine FIT; development corpus already exposed, no independent generalization."
+  },
+  "models": [
+    {
+      "name": "m12",
+      "seed": 1701,
+      "trainable_parameters": 500175,
+      "deployed_parameters": 500175
+    },
+    {
+      "name": "m16",
+      "seed": 1701,
+      "trainable_parameters": 500663,
+      "deployed_parameters": 500663
+    },
+    {
+      "name": "m12",
+      "seed": 1702,
+      "trainable_parameters": 500175,
+      "deployed_parameters": 500175
+    },
+    {
+      "name": "m16",
+      "seed": 1702,
+      "trainable_parameters": 500663,
+      "deployed_parameters": 500663
+    },
+    {
+      "name": "m12",
+      "seed": 1703,
+      "trainable_parameters": 500175,
+      "deployed_parameters": 500175
+    },
+    {
+      "name": "m16",
+      "seed": 1703,
+      "trainable_parameters": 500663,
+      "deployed_parameters": 500663
+    }
+  ],
+  "parent": "LANGSCALE070 original h48 FFN455 k8 trained checkpoints as same-source reference; 074 negative upper reallocation remains unchanged",
+  "pnds": "LANGSCALE075 partial PNDS Lean+Python geometry and matrix shape algebra, full forward/backward IEEE/AD and source streaming state OPEN",
+  "source_model_sha256": "CONTEXT026 original c88f3f7c1b628cb733a4a58dcd168a75411d8bb3d80e382068593713e887510a; fresh scaling Git blob pinned in scripts/langscale070_cpu_fit.py",
+  "owner_training_authorization": "Owner explicitly authorized continuing native associative memory scaling after 074. Narrow 075 six-model original publisher FIT pilot only.",
+  "training_gates": {
+    "genuine_publisher_source": true,
+    "source_hash_validation": true,
+    "same_seed_label_order": true,
+    "trainable_deployed_counts": "exact",
+    "parameter_gap": "<1%",
+    "matched_training_FLOPs": "NOT_MATCHED_K_MEMORY_SCAN_COMPLEXITY",
+    "causal_prefix": true,
+    "no_future_label": true,
+    "real_carried_state_recall": "NOT_YET_TESTED",
+    "mathematical_whole_source": "OPEN",
+    "protected_TEST": "NOT_ACCESSED"
+  },
+  "scale_axis": "NATIVE_ASSOCIATIVE_KEY_VALUE_AND_ALIGNED_ADDRESS",
+  "original_070_reference": {
+    "training_run": 40871491842,
+    "aggregate_artifact": 12896077841,
+    "tier": "p500k",
+    "native_address_dim": 8,
+    "parameters": 499623,
+    "ffn_width": 455,
+    "upper_recurrent_width": 48
+  },
+  "memory_geometry": {
+    "m8": {
+      "matrix": [
+        8,
+        8
+      ],
+      "aligned": [
+        16,
+        8
+      ],
+      "params": 499623
+    },
+    "m12": {
+      "matrix": [
+        12,
+        12
+      ],
+      "aligned": [
+        16,
+        12
+      ],
+      "params": 500175
+    },
+    "m16": {
+      "matrix": [
+        16,
+        16
+      ],
+      "aligned": [
+        16,
+        16
+      ],
+      "params": 500663
+    },
+    "other_dimensions": "unchanged native fast/slow88, upper48, FFN455, wave8x2, concepts6x16",
+    "read_adapter": "linear k->8 for k>8, identity for k8",
+    "precision": "FP32 train",
+    "original_070_m8_equivalence": "pre-fit constructor source + exact fp32 forward required",
+    "native_streaming_state_schema": "OPEN for m12/m16; not part of 075"
+  }
+}
