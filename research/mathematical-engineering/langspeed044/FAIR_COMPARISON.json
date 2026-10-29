@@ -1,0 +1,53 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGSPEED044-CACHED-CPU",
+  "study_type": "noncomparative_diagnostic",
+  "execution_level": "internal_research",
+  "scientific_purpose": "No-fit source-faithful cached inference CPU profiling of two frozen original models; no architecture superiority claim.",
+  "new_neural_training": false,
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "real_world_source": {
+    "name": "PSF CPython3.13.0 publisher original FIT bytes",
+    "observed_real_outcomes": true,
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF License Version 2",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "597dde0eb3ff98c798ccb3657b1ac02074a8cdb929189f3cc68612877e45f13e",
+    "partitions": [
+      "FIT"
+    ]
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "checkpoint_policy": "Two unchanged original trained seed1701 checkpoints with optimizer/RNG/source order and binary SHA verification before cache parity.",
+  "frozen_model_matrix": [
+    "state48_no_graph(499623)",
+    "causal_transformer(496960)"
+  ],
+  "seeds": [
+    1701
+  ],
+  "histories": [
+    128,
+    512
+  ],
+  "targets_per_checkpoint": 0,
+  "resource_type": "CPU-only no fit",
+  "gpu_minutes": 0,
+  "protected_TEST": "NOT_ACCESSED",
+  "causal_protocol": "Use real earlier bytes only; growing-prefix exact-token cache parities before runtime; no generated labels/DEV.",
+  "interpretation": "Same-host implementation cost; training FLOPs not controlled, BDH/SSM cached not run, no prediction or memory improvements claimed."
+}
