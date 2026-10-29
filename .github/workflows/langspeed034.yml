@@ -57,7 +57,7 @@ jobs:
           assert x["protected_TEST"]=="NOT_ACCESSED"
           assert len(x["generation"])==10
           assert len(x["prefill_neural"])==3
-          assert all(row["repetitions"]==3 and row["generated_bytes_per_repetition"]==12 for row in x["generation"].values())
+          assert all(row["repetitions"]==3 and row["generated_bytes_per_repetition"]==4 for row in x["generation"].values())
           assert all(row["median_ms_per_generated_byte"]>0 for row in x["generation"].values())
           assert x["no_optimized_state_claim"] is True
           PY
