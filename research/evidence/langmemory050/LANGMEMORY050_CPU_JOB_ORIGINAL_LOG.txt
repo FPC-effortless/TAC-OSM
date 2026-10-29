@@ -1,0 +1,299 @@
+# Original successful LANGMEMORY050 GitHub CPU job log
+Run: https://github.com/FPC-effortless/TAC-OSM/actions/runs/40827506769
+Job: 123293818783
+
+﻿2026-10-29T06:09:22.2357603Z Current runner version: '2.338.0'
+2026-10-29T06:09:22.2384790Z ##[group]Runner Image Provisioner
+2026-10-29T06:09:22.2386072Z Hosted Compute Agent
+2026-10-29T06:09:22.2386677Z Version: 20261021.618
+2026-10-29T06:09:22.2387398Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-29T06:09:22.2388128Z Build Date: 2026-10-21T00:45:21Z
+2026-10-29T06:09:22.2388864Z Worker ID: {05380b22-9b63-4844-baff-7718fa1d8d75}
+2026-10-29T06:09:22.2389637Z Region: eastus2
+2026-10-29T06:09:22.2390186Z Cloud: Azure
+2026-10-29T06:09:22.2390765Z ##[endgroup]
+2026-10-29T06:09:22.2392317Z ##[group]Operating System
+2026-10-29T06:09:22.2393499Z Ubuntu
+2026-10-29T06:09:22.2394084Z 24.04.5
+2026-10-29T06:09:22.2394597Z LTS
+2026-10-29T06:09:22.2395166Z ##[endgroup]
+2026-10-29T06:09:22.2395945Z ##[group]Runner Image
+2026-10-29T06:09:22.2396551Z Image: ubuntu-24.04
+2026-10-29T06:09:22.2397301Z Version: 20261025.353.1
+2026-10-29T06:09:22.2398655Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-29T06:09:22.2400346Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-10-29T06:09:22.2401343Z ##[endgroup]
+2026-10-29T06:09:22.2402543Z ##[group]GITHUB_TOKEN Permissions
+2026-10-29T06:09:22.2404936Z Contents: read
+2026-10-29T06:09:22.2406126Z Metadata: read
+2026-10-29T06:09:22.2406746Z ##[endgroup]
+2026-10-29T06:09:22.2409059Z Secret source: Actions
+2026-10-29T06:09:22.2410001Z Cache mode: write
+2026-10-29T06:09:22.2411445Z Prepare workflow directory
+2026-10-29T06:09:22.2806706Z Prepare all required actions
+2026-10-29T06:09:22.2856112Z Getting action download info
+2026-10-29T06:09:22.5176392Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-29T06:09:22.6227980Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-29T06:09:22.7033057Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-29T06:09:22.9111484Z Complete job name: authentic-multicandidate-research
+2026-10-29T06:09:23.0071587Z ##[group]Run actions/checkout@v4
+2026-10-29T06:09:23.0072499Z with:
+2026-10-29T06:09:23.0072955Z   persist-credentials: false
+2026-10-29T06:09:23.0073530Z   repository: FPC-effortless/TAC-OSM
+2026-10-29T06:09:23.0077663Z   token: ***
+2026-10-29T06:09:23.0078094Z   ssh-strict: true
+2026-10-29T06:09:23.0078524Z   ssh-user: git
+2026-10-29T06:09:23.0078948Z   clean: true
+2026-10-29T06:09:23.0079386Z   sparse-checkout-cone-mode: true
+2026-10-29T06:09:23.0079916Z   fetch-depth: 1
+2026-10-29T06:09:23.0080344Z   fetch-tags: false
+2026-10-29T06:09:23.0080787Z   show-progress: true
+2026-10-29T06:09:23.0081227Z   lfs: false
+2026-10-29T06:09:23.0081684Z   submodules: false
+2026-10-29T06:09:23.0082134Z   set-safe-directory: true
+2026-10-29T06:09:23.0082638Z   allow-unsafe-pr-checkout: false
+2026-10-29T06:09:23.0083405Z env:
+2026-10-29T06:09:23.0083816Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:09:23.0084321Z   OMP_NUM_THREADS: 2
+2026-10-29T06:09:23.0084758Z ##[endgroup]
+2026-10-29T06:09:23.3557096Z Syncing repository: FPC-effortless/TAC-OSM
+2026-10-29T06:09:23.3560367Z ##[group]Getting Git version info
+2026-10-29T06:09:23.3561443Z Working directory is '/home/runner/work/TAC-OSM/TAC-OSM'
+2026-10-29T06:09:23.3562618Z [command]/usr/bin/git version
+2026-10-29T06:09:23.3691026Z git version 2.56.0
+2026-10-29T06:09:23.3716716Z ##[endgroup]
+2026-10-29T06:09:23.3734025Z Temporarily overriding HOME='/home/runner/work/_temp/251a0823-4788-45e2-92be-dfc0853ee9de' before making global git config changes
+2026-10-29T06:09:23.3737385Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T06:09:23.3740528Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T06:09:23.3819421Z Deleting the contents of '/home/runner/work/TAC-OSM/TAC-OSM'
+2026-10-29T06:09:23.3823710Z ##[group]Initializing the repository
+2026-10-29T06:09:23.3825407Z [command]/usr/bin/git init /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T06:09:23.3961777Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-29T06:09:23.3963747Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-29T06:09:23.3965732Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-29T06:09:23.3967173Z hint: call:
+2026-10-29T06:09:23.3967949Z hint:
+2026-10-29T06:09:23.3968907Z hint: 	git config --global init.defaultBranch <name>
+2026-10-29T06:09:23.3970067Z hint:
+2026-10-29T06:09:23.3971135Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-29T06:09:23.3972902Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-29T06:09:23.3974324Z hint:
+2026-10-29T06:09:23.3975060Z hint: 	git branch -m <name>
+2026-10-29T06:09:23.3976108Z hint:
+2026-10-29T06:09:23.3977262Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-29T06:09:23.3979145Z Initialized empty Git repository in /home/runner/work/TAC-OSM/TAC-OSM/.git/
+2026-10-29T06:09:23.3995968Z [command]/usr/bin/git remote add origin https://github.com/FPC-effortless/TAC-OSM
+2026-10-29T06:09:23.4044591Z ##[endgroup]
+2026-10-29T06:09:23.4045837Z ##[group]Disabling automatic garbage collection
+2026-10-29T06:09:23.4050385Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-29T06:09:23.4092225Z ##[endgroup]
+2026-10-29T06:09:23.4093129Z ##[group]Setting up auth
+2026-10-29T06:09:23.4103284Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T06:09:23.4151640Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T06:09:23.4614943Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T06:09:23.4661520Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T06:09:23.4914320Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T06:09:23.4961986Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T06:09:23.5210610Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-29T06:09:23.5263301Z ##[endgroup]
+2026-10-29T06:09:23.5264243Z ##[group]Fetching the repository
+2026-10-29T06:09:23.5277372Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f7add130abd0b1b980a5157462ae8d34cd1de1e2:refs/remotes/pull/581/merge
+2026-10-29T06:09:24.2747589Z From https://github.com/FPC-effortless/TAC-OSM
+2026-10-29T06:09:24.2750653Z  * [new ref]         f7add130abd0b1b980a5157462ae8d34cd1de1e2 -> pull/581/merge
+2026-10-29T06:09:24.2756536Z ##[endgroup]
+2026-10-29T06:09:24.2757840Z ##[group]Determining the checkout info
+2026-10-29T06:09:24.2759368Z ##[endgroup]
+2026-10-29T06:09:24.2768891Z [command]/usr/bin/git sparse-checkout disable
+2026-10-29T06:09:24.2837110Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-29T06:09:24.2880980Z ##[group]Checking out the ref
+2026-10-29T06:09:24.2882389Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/581/merge
+2026-10-29T06:09:24.5181422Z Note: switching to 'refs/remotes/pull/581/merge'.
+2026-10-29T06:09:24.5182731Z 
+2026-10-29T06:09:24.5183797Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-29T06:09:24.5186627Z changes and commit them, and you can discard any commits you make in this
+2026-10-29T06:09:24.5189218Z state without impacting any branches by switching back to a branch.
+2026-10-29T06:09:24.5190643Z 
+2026-10-29T06:09:24.5192070Z If you want to create a new branch to retain commits you create, you may
+2026-10-29T06:09:24.5194398Z do so (now or later) by using -c with the switch command. Example:
+2026-10-29T06:09:24.5195992Z 
+2026-10-29T06:09:24.5196702Z   git switch -c <new-branch-name>
+2026-10-29T06:09:24.5197841Z 
+2026-10-29T06:09:24.5198622Z Or undo this operation with:
+2026-10-29T06:09:24.5199708Z 
+2026-10-29T06:09:24.5200400Z   git switch -
+2026-10-29T06:09:24.5201275Z 
+2026-10-29T06:09:24.5202716Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-29T06:09:24.5204300Z 
+2026-10-29T06:09:24.5206120Z HEAD is now at f7add13 Merge b470cfb4a0ab4c032101efd8142e0ceecf918547 into cbc859725723ba5d0f3e807e289c4aa62cc753ed
+2026-10-29T06:09:24.5212290Z ##[endgroup]
+2026-10-29T06:09:24.5271336Z [command]/usr/bin/git log -1 --format=%H
+2026-10-29T06:09:24.5306711Z f7add130abd0b1b980a5157462ae8d34cd1de1e2
+2026-10-29T06:09:24.5318348Z ##[group]Removing auth
+2026-10-29T06:09:24.5321804Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T06:09:24.5362443Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T06:09:24.5606583Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T06:09:24.5644752Z http.https://github.com/.extraheader
+2026-10-29T06:09:24.5654582Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-29T06:09:24.5698952Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T06:09:24.5947329Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T06:09:24.6049899Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T06:09:24.6251493Z ##[endgroup]
+2026-10-29T06:09:24.6581531Z ##[group]Run actions/setup-python@v5
+2026-10-29T06:09:24.6582503Z with:
+2026-10-29T06:09:24.6583298Z   python-version: 3.13
+2026-10-29T06:09:24.6584132Z   check-latest: false
+2026-10-29T06:09:24.6587945Z   token: ***
+2026-10-29T06:09:24.6588773Z   update-environment: true
+2026-10-29T06:09:24.6589674Z   allow-prereleases: false
+2026-10-29T06:09:24.6590515Z   freethreaded: false
+2026-10-29T06:09:24.6591341Z env:
+2026-10-29T06:09:24.6592118Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:09:24.6592948Z   OMP_NUM_THREADS: 2
+2026-10-29T06:09:24.6593749Z ##[endgroup]
+2026-10-29T06:09:24.8001554Z ##[group]Installed versions
+2026-10-29T06:09:24.8129729Z (node:2466) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T06:09:24.8132014Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T06:09:24.8133919Z Successfully set up CPython (3.13.17)
+2026-10-29T06:09:24.8136568Z ##[endgroup]
+2026-10-29T06:09:24.8363996Z ##[group]Run python -m pip install numpy==2.3.5 pytest==8.4.2
+2026-10-29T06:09:24.8366413Z [36;1mpython -m pip install numpy==2.3.5 pytest==8.4.2[0m
+2026-10-29T06:09:24.8601561Z shell: /usr/bin/bash -e {0}
+2026-10-29T06:09:24.8602477Z env:
+2026-10-29T06:09:24.8603334Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:09:24.8604174Z   OMP_NUM_THREADS: 2
+2026-10-29T06:09:24.8605096Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:24.8606750Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T06:09:24.8607885Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:24.8608941Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:24.8609974Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:24.8611014Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T06:09:24.8612307Z ##[endgroup]
+2026-10-29T06:09:29.6407480Z Collecting numpy==2.3.5
+2026-10-29T06:09:29.7171269Z   Downloading numpy-2.3.5-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+2026-10-29T06:09:29.7698500Z Collecting pytest==8.4.2
+2026-10-29T06:09:29.7771465Z   Downloading pytest-8.4.2-py3-none-any.whl.metadata (7.7 kB)
+2026-10-29T06:09:29.7935690Z Collecting iniconfig>=1 (from pytest==8.4.2)
+2026-10-29T06:09:29.8006232Z   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+2026-10-29T06:09:29.8192189Z Collecting packaging>=20 (from pytest==8.4.2)
+2026-10-29T06:09:29.8263852Z   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+2026-10-29T06:09:29.8419291Z Collecting pluggy<2,>=1.5 (from pytest==8.4.2)
+2026-10-29T06:09:29.8489484Z   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+2026-10-29T06:09:29.8712879Z Collecting pygments>=2.7.2 (from pytest==8.4.2)
+2026-10-29T06:09:29.8783800Z   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+2026-10-29T06:09:29.8896570Z Downloading numpy-2.3.5-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+2026-10-29T06:09:30.2084217Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 55.4 MB/s  0:00:00
+2026-10-29T06:09:30.2154300Z Downloading pytest-8.4.2-py3-none-any.whl (365 kB)
+2026-10-29T06:09:30.2277305Z Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+2026-10-29T06:09:30.2365161Z Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-10-29T06:09:30.2453286Z Downloading packaging-26.3-py3-none-any.whl (129 kB)
+2026-10-29T06:09:30.2550891Z Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+2026-10-29T06:09:30.2673923Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 107.9 MB/s  0:00:00
+2026-10-29T06:09:30.6329184Z Installing collected packages: pygments, pluggy, packaging, numpy, iniconfig, pytest
+2026-10-29T06:09:33.6903870Z 
+2026-10-29T06:09:33.6920158Z Successfully installed iniconfig-2.3.1 numpy-2.3.5 packaging-26.3 pluggy-1.7.0 pygments-2.21.0 pytest-8.4.2
+2026-10-29T06:09:33.7575909Z ##[group]Run mkdir -p langmemory050-evidence
+2026-10-29T06:09:33.7576346Z [36;1mmkdir -p langmemory050-evidence[0m
+2026-10-29T06:09:33.7576920Z [36;1mpython scripts/phone_lab.py plan research/phone_queue/langmemory050.json > langmemory050-evidence/PLAN.json[0m
+2026-10-29T06:09:33.7578020Z [36;1mpython scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmemory050/FAIR_COMPARISON.json --phase preflight > langmemory050-evidence/PREFLIGHT.json[0m
+2026-10-29T06:09:33.7578963Z [36;1mPYTHONPATH=src:. python -m pytest -q tests/test_langmemory050_multivalue.py[0m
+2026-10-29T06:09:33.7600676Z shell: /usr/bin/bash -e {0}
+2026-10-29T06:09:33.7600928Z env:
+2026-10-29T06:09:33.7601126Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:09:33.7601365Z   OMP_NUM_THREADS: 2
+2026-10-29T06:09:33.7601660Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:33.7602104Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T06:09:33.7602577Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:33.7602957Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:33.7603342Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:33.7603723Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T06:09:33.7604047Z ##[endgroup]
+2026-10-29T06:09:33.8517490Z <!-- tac-osm-phone-lab-status -->
+2026-10-29T06:09:33.8518068Z ### TAC-OSM research lab status
+2026-10-29T06:09:33.8518333Z 
+2026-10-29T06:09:33.8518990Z **Run:** langmemory050-multivalue-exact-key-source · **Model:** System 1
+2026-10-29T06:09:33.8519501Z 
+2026-10-29T06:09:33.8519872Z **Compute decision:** GitHub Actions CPU · **Stage:** source_audit
+2026-10-29T06:09:33.8520357Z 
+2026-10-29T06:09:33.8520512Z **Progress:** READY_NO_FIT
+2026-10-29T06:09:33.8520733Z 
+2026-10-29T06:09:33.8520990Z - [ ] No planning blockers; normal source/gate checks still apply
+2026-10-29T06:09:33.8521761Z 
+2026-10-29T06:09:33.8522136Z *This is a planning receipt, not model training approval or scientific validation.*
+2026-10-29T06:09:33.8522651Z 
+2026-10-29T06:09:36.3868371Z ...............                                                          [100%]
+2026-10-29T06:09:36.3869114Z 15 passed in 1.64s
+2026-10-29T06:09:36.4176392Z ##[group]Run PYTHONPATH=src:. python scripts/langmemory050_multivalue.py --output langmemory050-evidence/RESULTS.json
+2026-10-29T06:09:36.4177305Z [36;1mPYTHONPATH=src:. python scripts/langmemory050_multivalue.py --output langmemory050-evidence/RESULTS.json[0m
+2026-10-29T06:09:36.4177852Z [36;1mpython - <<'PY'[0m
+2026-10-29T06:09:36.4178085Z [36;1mimport json[0m
+2026-10-29T06:09:36.4178388Z [36;1mr=json.load(open('langmemory050-evidence/RESULTS.json'))[0m
+2026-10-29T06:09:36.4178941Z [36;1massert r['training_updates']==0 and r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'[0m
+2026-10-29T06:09:36.4179407Z [36;1massert len(r['cohorts'])==3[0m
+2026-10-29T06:09:36.4179698Z [36;1mfor x in r['cohorts'].values():[0m
+2026-10-29T06:09:36.4179987Z [36;1m    for owner in x['source_owners']:[0m
+2026-10-29T06:09:36.4180324Z [36;1m        for k in owner['multi_diagnostics'].values():[0m
+2026-10-29T06:09:36.4180742Z [36;1m            assert k['total_payload_bytes'] in (1344,4096)[0m
+2026-10-29T06:09:36.4181182Z [36;1m        assert all(a['queries']==owner['cases'] for a in owner['arms'].values())[0m
+2026-10-29T06:09:36.4181567Z [36;1mPY[0m
+2026-10-29T06:09:36.4201981Z shell: /usr/bin/bash -e {0}
+2026-10-29T06:09:36.4202241Z env:
+2026-10-29T06:09:36.4202439Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:09:36.4202682Z   OMP_NUM_THREADS: 2
+2026-10-29T06:09:36.4202970Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:36.4203409Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T06:09:36.4203841Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:36.4204222Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:36.4204610Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:09:36.4204993Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T06:09:36.4205341Z ##[endgroup]
+2026-10-29T06:11:08.5303456Z {"status": "INTERNAL_AUTHENTIC_SOURCE_BOUNDED_MULTI_CONTINUATION_DIAGNOSTIC", "study": "LANGMEMORY050", "summaries": {"anchor1536": {"arms": {"exact_unbounded": {"correct": 1465, "coverage": 0.502637987012987, "covered": 2477, "far_coverage": 1.0, "far_success_all_far_positions": 0.5875831485587583, "long_correct": 1325, "long_covered": 2255, "queries": 4928, "success_all_positions": 0.29728084415584416, "total_lookup_ms": 7.216728, "total_update_ms": 50.30417, "work": 4928}, "legacy_a_plus_b": {"correct": 933, "coverage": 0.6245941558441559, "covered": 3078, "far_coverage": 0.7135254988913525, "far_success_all_far_positions": 0.3237250554323725, "long_correct": 730, "long_covered": 1609, "queries": 4928, "success_all_positions": 0.1893262987012987, "total_lookup_ms": 52.982198, "total_update_ms": 33.242193, "work": 4928}, "mg2_way1_1344": {"correct": 558, "coverage": 0.18770292207792208, "covered": 925, "far_coverage": 0.31352549889135256, "far_success_all_far_positions": 0.18758314855875832, "long_correct": 423, "long_covered": 707, "queries": 4928, "success_all_positions": 0.11323051948051949, "total_lookup_ms": 253.099195, "total_update_ms": 203.276671, "work": 9856}, "mg2_way1_4096": {"correct": 899, "coverage": 0.304788961038961, "covered": 1502, "far_coverage": 0.5689578713968958, "far_success_all_far_positions": 0.3374722838137472, "long_correct": 761, "long_covered": 1283, "queries": 4928, "success_all_positions": 0.18242694805194806, "total_lookup_ms": 249.448074, "total_update_ms": 173.487947, "work": 9856}, "mg2_way2_1344": {"correct": 545, "coverage": 0.18019480519480519, "covered": 888, "far_coverage": 0.2966740576496674, "far_success_all_far_positions": 0.18137472283813746, "long_correct": 409, "long_covered": 669, "queries": 4928, "success_all_positions": 0.11059253246753246, "total_lookup_ms": 250.919611, "total_update_ms": 210.009378, "work": 19712}, "mg2_way2_4096": {"correct": 957, "coverage": 0.32386363636363635, "covered": 1596, "far_coverage": 0.61019955654102, "far_success_all_far_positions": 0.3631929046563193, "long_correct": 819, "long_covered": 1376, "queries": 4928, "success_all_positions": 0.19419642857142858, "total_lookup_ms": 250.572998, "total_update_ms": 184.451004, "work": 19712}, "mg3_way1_1344": {"correct": 504, "coverage": 0.1702516233766234, "covered": 839, "far_coverage": 0.27405764966740576, "far_success_all_far_positions": 0.1623059866962306, "long_correct": 366, "long_covered": 618, "queries": 4928, "success_all_positions": 0.10227272727272728, "total_lookup_ms": 247.623483, "total_update_ms": 184.559945, "work": 14784}, "mg3_way1_4096": {"correct": 826, "coverage": 0.28145292207792205, "covered": 1387, "far_coverage": 0.5175166297117516, "far_success_all_far_positions": 0.30509977827051, "long_correct": 688, "long_covered": 1167, "queries": 4928, "success_all_positions": 0.16761363636363635, "total_lookup_ms": 248.930853, "total_update_ms": 172.055678, "work": 14784}, "mg3_way2_1344": {"correct": 489, "coverage": 0.16396103896103897, "covered": 808, "far_coverage": 0.26031042128603105, "far_success_all_far_positions": 0.1556541019955654, "long_correct": 351, "long_covered": 587, "queries": 4928, "success_all_positions": 0.0992288961038961, "total_lookup_ms": 248.634865, "total_update_ms": 201.090417, "work": 29568}, "mg3_way2_4096": {"correct": 881, "coverage": 0.2974837662337662, "covered": 1466, "far_coverage": 0.5516629711751663, "far_success_all_far_positions": 0.32904656319290465, "long_correct": 742, "long_covered": 1244, "queries": 4928, "success_all_positions": 0.17877435064935066, "total_lookup_ms": 250.482485, "total_update_ms": 185.734705, "work": 29568}, "old_table2_1344": {"correct": 781, "coverage": 0.2508116883116883, "covered": 1236, "far_coverage": 0.4501108647450111, "far_success_all_far_positions": 0.2851441241685144, "long_correct": 643, "long_covered": 1015, "queries": 4928, "success_all_positions": 0.15848214285714285, "total_lookup_ms": 249.076891, "total_update_ms": 178.578201, "work": 9856}, "old_table2_4096": {"correct": 1169, "coverage": 0.37337662337662336, "covered": 1840, "far_coverage": 0.7179600886917961, "far_success_all_far_positions": 0.4567627494456763, "long_correct": 1030, "long_covered": 1619, "queries": 4928, "success_all_positions": 0.2372159090909091, "total_lookup_ms": 243.368229, "total_update_ms": 144.754753, "work": 9856}, "raw_ring_1344": {"correct": 1461, "coverage": 0.5014204545454546, "covered": 2471, "far_coverage": 0.9973392461197339, "far_success_all_far_positions": 0.5858093126385809, "long_correct": 1321, "long_covered": 2249, "queries": 4928, "success_all_positions": 0.29646915584415584, "total_lookup_ms": 2803.426077, "total_update_ms": 14.197139, "work": 4012288}, "raw_ring_4096": {"correct": 1465, "coverage": 0.502637987012987, "covered": 2477, "far_coverage": 1.0, "far_success_all_far_positions": 0.5875831485587583, "long_correct": 1325, "long_covered": 2255, "queries": 4928, "success_all_positions": 0.29728084415584416, "total_lookup_ms": 2856.278288, "total_update_ms": 11.890731, "work": 4075456}, "recent64": {"correct": 386, "coverage": 0.12926136363636365, "covered": 637, "far_coverage": 0.18713968957871396, "far_success_all_far_positions": 0.11175166297117517, "long_correct": 252, "long_covered": 422, "queries": 4928, "success_all_positions": 0.07832792207792208, "total_lookup_ms": 230.687358, "total_update_ms": 10.496678, "work": 300608}}, "cases": 4928, "genuine_far_context_cases": 2255, "multi_diagnostics": {"mg2_way1_1344": {"hash_evictions": 16852, "key_hits": 742, "key_misses": 4186, "misra_gries_decrement_events": 106, "read_slot_probes": 4928, "source_observation_updates": 21462, "update_slot_probes": 21462}, "mg2_way1_4096": {"hash_evictions": 11642, "key_hits": 1474, "key_misses": 3454, "misra_gries_decrement_events": 432, "read_slot_probes": 4928, "source_observation_updates": 21462, "update_slot_probes": 21462}, "mg2_way2_1344": {"hash_evictions": 16664, "key_hits": 788, "key_misses": 4140, "misra_gries_decrement_events": 132, "read_slot_probes": 9469, "source_observation_updates": 21462, "update_slot_probes": 41054}, "mg2_way2_4096": {"hash_evictions": 10900, "key_hits": 1607, "key_misses": 3321, "misra_gries_decrement_events": 472, "read_slot_probes": 9007, "source_observation_updates": 21462, "update_slot_probes": 39045}, "mg3_way1_1344": {"hash_evictions": 17569, "key_hits": 633, "key_misses": 4295, "misra_gries_decrement_events": 21, "read_slot_probes": 4928, "source_observation_updates": 21462, "update_slot_probes": 21462}, "mg3_way1_4096": {"hash_evictions": 12974, "key_hits": 1308, "key_misses": 3620, "misra_gries_decrement_events": 91, "read_slot_probes": 4928, "source_observation_updates": 21462, "update_slot_probes": 21462}, "mg3_way2_1344": {"hash_evictions": 17341, "key_hits": 660, "key_misses": 4268, "misra_gries_decrement_events": 24, "read_slot_probes": 9509, "source_observation_updates": 21462, "update_slot_probes": 41092}, "mg3_way2_4096": {"hash_evictions": 12250, "key_hits": 1450, "key_misses": 3478, "misra_gries_decrement_events": 129, "read_slot_probes": 9096, "source_observation_updates": 21462, "update_slot_probes": 39450}}}, "extension4096": {"arms": {"exact_unbounded": {"correct": 4943, "coverage": 0.6346545866364666, "covered": 8406, "far_coverage": 1.0, "far_success_all_far_positions": 0.5829271341082365, "long_correct": 4664, "long_covered": 8001, "queries": 13245, "success_all_positions": 0.3731974329935825, "total_lookup_ms": 24.065161, "total_update_ms": 132.942377, "work": 13245}, "legacy_a_plus_b": {"correct": 2858, "coverage": 0.6823707059267649, "covered": 9038, "far_coverage": 0.7302837145356831, "far_success_all_far_positions": 0.30308711411073613, "long_correct": 2425, "long_covered": 5843, "queries": 13245, "success_all_positions": 0.21577953944884862, "total_lookup_ms": 144.98625, "total_update_ms": 88.106136, "work": 13245}, "mg2_way1_1344": {"correct": 1647, "coverage": 0.1984144960362401, "covered": 2628, "far_coverage": 0.27846519185101865, "far_success_all_far_positions": 0.17172853393325835, "long_correct": 1374, "long_covered": 2228, "queries": 13245, "success_all_positions": 0.12434881087202718, "total_lookup_ms": 690.037545, "total_update_ms": 520.829664, "work": 26490}, "mg2_way1_4096": {"correct": 2646, "coverage": 0.3269913174782937, "covered": 4331, "far_coverage": 0.4911886014248219, "far_success_all_far_positions": 0.2962129733783277, "long_correct": 2370, "long_covered": 3930, "queries": 13245, "success_all_positions": 0.19977349943374859, "total_lookup_ms": 679.911969, "total_update_ms": 449.137018, "work": 26490}, "mg2_way2_1344": {"correct": 1598, "coverage": 0.1919214798036995, "covered": 2542, "far_coverage": 0.267591551056118, "far_success_all_far_positions": 0.16535433070866143, "long_correct": 1323, "long_covered": 2141, "queries": 13245, "success_all_positions": 0.12064930162325406, "total_lookup_ms": 682.425836, "total_update_ms": 540.243955, "work": 52980}, "mg2_way2_4096": {"correct": 2851, "coverage": 0.348961872404681, "covered": 4622, "far_coverage": 0.5274340707411573, "far_success_all_far_positions": 0.3218347706536683, "long_correct": 2575, "long_covered": 4220, "queries": 13245, "success_all_positions": 0.21525103812759533, "total_lookup_ms": 682.937111, "total_update_ms": 480.0233, "work": 52980}, "mg3_way1_1344": {"correct": 1465, "coverage": 0.1784824462061155, "covered": 2364, "far_coverage": 0.24509436320459943, "far_success_all_far_positions": 0.14860642419697537, "long_correct": 1189, "long_covered": 1961, "queries": 13245, "success_all_positions": 0.1106077765194413, "total_lookup_ms": 673.238204, "total_update_ms": 473.302091, "work": 39735}, "mg3_way1_4096": {"correct": 2441, "coverage": 0.29943374858437144, "covered": 3966, "far_coverage": 0.44556930383702037, "far_success_all_far_positions": 0.27046619172603426, "long_correct": 2164, "long_covered": 3565, "queries": 13245, "success_all_positions": 0.18429596073990184, "total_lookup_ms": 677.632186, "total_update_ms": 443.912283, "work": 39735}, "mg3_way2_1344": {"correct": 1437, "coverage": 0.1725934314835787, "covered": 2286, "far_coverage": 0.23534558180227472, "far_success_all_far_positions": 0.14510686164229472, "long_correct": 1161, "long_covered": 1883, "queries": 13245, "success_all_positions": 0.10849377123442809, "total_lookup_ms": 676.4007, "total_update_ms": 516.668616, "work": 79470}, "mg3_way2_4096": {"correct": 2568, "coverage": 0.31370328425821065, "covered": 4155, "far_coverage": 0.4688163979502562, "far_success_all_far_positions": 0.2862142232220972, "long_correct": 2290, "long_covered": 3751, "queries": 13245, "success_all_positions": 0.19388448471121178, "total_lookup_ms": 682.155145, "total_update_ms": 481.823661, "work": 79470}, "old_table2_1344": {"correct": 2262, "coverage": 0.26885617214043034, "covered": 3561, "far_coverage": 0.39457567804024496, "far_success_all_far_positions": 0.24809398825146856, "long_correct": 1985, "long_covered": 3157, "queries": 13245, "success_all_positions": 0.17078142695356738, "total_lookup_ms": 679.255061, "total_update_ms": 461.89208, "work": 26490}, "old_table2_4096": {"correct": 3524, "coverage": 0.4159305398263496, "covered": 5509, "far_coverage": 0.6381702287214098, "far_success_all_far_positions": 0.40582427196600424, "long_correct": 3247, "long_covered": 5106, "queries": 13245, "success_all_positions": 0.2660626651566629, "total_lookup_ms": 662.04096, "total_update_ms": 379.886575, "work": 26490}, "raw_ring_1344": {"correct": 4503, "coverage": 0.5736504341260853, "covered": 7598, "far_coverage": 0.8990126234220722, "far_success_all_far_positions": 0.5279340082489689, "long_correct": 4224, "long_covered": 7193, "queries": 13245, "success_all_positions": 0.33997734994337486, "total_lookup_ms": 10922.126997, "total_update_ms": 36.667274, "work": 15165385}, "raw_ring_4096": {"correct": 4943, "coverage": 0.6346545866364666, "covered": 8406, "far_coverage": 1.0, "far_success_all_far_positions": 0.5829271341082365, "long_correct": 4664, "long_covered": 8001, "queries": 13245, "success_all_positions": 0.3731974329935825, "total_lookup_ms": 19387.915484, "total_update_ms": 30.273648, "work": 27082977}, "recent64": {"correct": 1137, "coverage": 0.13816534541336353, "covered": 1830, "far_coverage": 0.17947756530433695, "far_success_all_far_positions": 0.10823647044119485, "long_correct": 866, "long_covered": 1436, "queries": 13245, "success_all_positions": 0.08584371460928653, "total_lookup_ms": 627.166873, "total_update_ms": 27.106678, "work": 807945}}, "cases": 13245, "genuine_far_context_cases": 8001, "multi_diagnostics": {"mg2_way1_1344": {"hash_evictions": 44667, "key_hits": 2104, "key_misses": 11141, "misra_gries_decrement_events": 346, "read_slot_probes": 13245, "source_observation_updates": 54724, "update_slot_probes": 54724}, "mg2_way1_4096": {"hash_evictions": 33508, "key_hits": 4254, "key_misses": 8991, "misra_gries_decrement_events": 1295, "read_slot_probes": 13245, "source_observation_updates": 54724, "update_slot_probes": 54724}, "mg2_way2_1344": {"hash_evictions": 44093, "key_hits": 2235, "key_misses": 11010, "misra_gries_decrement_events": 423, "read_slot_probes": 25387, "source_observation_updates": 54724, "update_slot_probes": 104659}, "mg2_way2_4096": {"hash_evictions": 31921, "key_hits": 4651, "key_misses": 8594, "misra_gries_decrement_events": 1445, "read_slot_probes": 24098, "source_observation_updates": 54724, "update_slot_probes": 99340}, "mg3_way1_1344": {"hash_evictions": 46388, "key_hits": 1722, "key_misses": 11523, "misra_gries_decrement_events": 47, "read_slot_probes": 13245, "source_observation_updates": 54724, "update_slot_probes": 54724}, "mg3_way1_4096": {"hash_evictions": 36365, "key_hits": 3758, "key_misses": 9487, "misra_gries_decrement_events": 315, "read_slot_probes": 13245, "source_observation_updates": 54724, "update_slot_probes": 54724}, "mg3_way2_1344": {"hash_evictions": 45803, "key_hits": 1844, "key_misses": 11401, "misra_gries_decrement_events": 66, "read_slot_probes": 25616, "source_observation_updates": 54724, "update_slot_probes": 105379}, "mg3_way2_4096": {"hash_evictions": 34751, "key_hits": 4107, "key_misses": 9138, "misra_gries_decrement_events": 383, "read_slot_probes": 24408, "source_observation_updates": 54724, "update_slot_probes": 100673}}}, "horizon8192": {"arms": {"exact_unbounded": {"correct": 4861, "coverage": 0.6995078071961982, "covered": 8243, "far_coverage": 1.0, "far_success_all_far_positions": 0.5853535987941213, "long_correct": 4660, "long_covered": 7961, "queries": 11784, "success_all_positions": 0.41250848608282414, "total_lookup_ms": 24.730412, "total_update_ms": 229.537032, "work": 11784}, "legacy_a_plus_b": {"correct": 2710, "coverage": 0.7045145960624576, "covered": 8302, "far_coverage": 0.7380982288657204, "far_success_all_far_positions": 0.3009672151739731, "long_correct": 2396, "long_covered": 5876, "queries": 11784, "success_all_positions": 0.22997284453496267, "total_lookup_ms": 131.233048, "total_update_ms": 152.221254, "work": 11784}, "mg2_way1_1344": {"correct": 1586, "coverage": 0.21096401900882553, "covered": 2486, "far_coverage": 0.2771008667252858, "far_success_all_far_positions": 0.17422434367541767, "long_correct": 1387, "long_covered": 2206, "queries": 11784, "success_all_positions": 0.13458927359131026, "total_lookup_ms": 617.647789, "total_update_ms": 907.6952, "work": 23568}, "mg2_way1_4096": {"correct": 2521, "coverage": 0.34088594704684316, "covered": 4017, "far_coverage": 0.4696646149981158, "far_success_all_far_positions": 0.2916719005150107, "long_correct": 2322, "long_covered": 3739, "queries": 11784, "success_all_positions": 0.21393414799728444, "total_lookup_ms": 607.589173, "total_update_ms": 790.829226, "work": 23568}, "mg2_way2_1344": {"correct": 1564, "coverage": 0.2044297352342159, "covered": 2409, "far_coverage": 0.26730310262529833, "far_success_all_far_positions": 0.17133525938952393, "long_correct": 1364, "long_covered": 2128, "queries": 11784, "success_all_positions": 0.1327223353699932, "total_lookup_ms": 610.370679, "total_update_ms": 946.774725, "work": 47136}, "mg2_way2_4096": {"correct": 2703, "coverage": 0.3604887983706721, "covered": 4248, "far_coverage": 0.49855545785705313, "far_success_all_far_positions": 0.314533350081648, "long_correct": 2504, "long_covered": 3969, "queries": 11784, "success_all_positions": 0.22937881873727087, "total_lookup_ms": 610.600769, "total_update_ms": 845.376572, "work": 47136}, "mg3_way1_1344": {"correct": 1438, "coverage": 0.18890020366598778, "covered": 2226, "far_coverage": 0.24444165305866097, "far_success_all_far_positions": 0.15550810199723653, "long_correct": 1238, "long_covered": 1946, "queries": 11784, "success_all_positions": 0.12202987101154107, "total_lookup_ms": 601.467237, "total_update_ms": 831.283337, "work": 35352}, "mg3_way1_4096": {"correct": 2299, "coverage": 0.30846911065852, "covered": 3635, "far_coverage": 0.4216806933802286, "far_success_all_far_positions": 0.2636603441778671, "long_correct": 2099, "long_covered": 3357, "queries": 11784, "success_all_positions": 0.19509504412763068, "total_lookup_ms": 605.230524, "total_update_ms": 780.329674, "work": 35352}, "mg3_way2_1344": {"correct": 1432, "coverage": 0.18669382213170402, "covered": 2200, "far_coverage": 0.2411757316919985, "far_success_all_far_positions": 0.15475442783569904, "long_correct": 1232, "long_covered": 1920, "queries": 11784, "success_all_positions": 0.12152070604209098, "total_lookup_ms": 604.530894, "total_update_ms": 906.950397, "work": 70704}, "mg3_way2_4096": {"correct": 2454, "coverage": 0.32713849287169044, "covered": 3855, "far_coverage": 0.4489385755558347, "far_success_all_far_positions": 0.28300464765732947, "long_correct": 2253, "long_covered": 3574, "queries": 11784, "success_all_positions": 0.20824847250509165, "total_lookup_ms": 609.656987, "total_update_ms": 848.80922, "work": 70704}, "old_table2_1344": {"correct": 2148, "coverage": 0.27978615071283097, "covered": 3297, "far_coverage": 0.37884687853284765, "far_success_all_far_positions": 0.24469287777917348, "long_correct": 1948, "long_covered": 3016, "queries": 11784, "success_all_positions": 0.18228105906313646, "total_lookup_ms": 606.950981, "total_update_ms": 800.124148, "work": 23568}, "old_table2_4096": {"correct": 3343, "coverage": 0.4371181262729124, "covered": 5151, "far_coverage": 0.6118578068081899, "far_success_all_far_positions": 0.39479964828539127, "long_correct": 3143, "long_covered": 4871, "queries": 11784, "success_all_positions": 0.2836897488119484, "total_lookup_ms": 591.211252, "total_update_ms": 667.0988, "work": 23568}, "raw_ring_1344": {"correct": 4152, "coverage": 0.5887644263408011, "covered": 6938, "far_coverage": 0.8360758698655948, "far_success_all_far_positions": 0.49629443537244067, "long_correct": 3951, "long_covered": 6656, "queries": 11784, "success_all_positions": 0.35234215885947046, "total_lookup_ms": 10550.357545, "total_update_ms": 64.922622, "work": 14500008}, "raw_ring_4096": {"correct": 4742, "coverage": 0.6832993890020367, "covered": 8052, "far_coverage": 0.9760080391910564, "far_success_all_far_positions": 0.5704057279236276, "long_correct": 4541, "long_covered": 7770, "queries": 11784, "success_all_positions": 0.40241004752206383, "total_lookup_ms": 25186.04882, "total_update_ms": 53.876631, "work": 34653424}, "recent64": {"correct": 1139, "coverage": 0.14977936184657162, "covered": 1765, "far_coverage": 0.18728802914206757, "far_success_all_far_positions": 0.11832684336138675, "long_correct": 942, "long_covered": 1491, "queries": 11784, "success_all_positions": 0.09665648336727767, "total_lookup_ms": 559.970125, "total_update_ms": 46.771931, "work": 718824}}, "cases": 11784, "genuine_far_context_cases": 7961, "multi_diagnostics": {"mg2_way1_1344": {"hash_evictions": 78370, "key_hits": 1952, "key_misses": 9832, "misra_gries_decrement_events": 653, "read_slot_probes": 11784, "source_observation_updates": 95996, "update_slot_probes": 95996}, "mg2_way1_4096": {"hash_evictions": 60136, "key_hits": 3930, "key_misses": 7854, "misra_gries_decrement_events": 2357, "read_slot_probes": 11784, "source_observation_updates": 95996, "update_slot_probes": 95996}, "mg2_way2_1344": {"hash_evictions": 77107, "key_hits": 2086, "key_misses": 9698, "misra_gries_decrement_events": 813, "read_slot_probes": 22520, "source_observation_updates": 95996, "update_slot_probes": 183023}, "mg2_way2_4096": {"hash_evictions": 57219, "key_hits": 4274, "key_misses": 7510, "misra_gries_decrement_events": 2655, "read_slot_probes": 21405, "source_observation_updates": 95996, "update_slot_probes": 173985}, "mg3_way1_1344": {"hash_evictions": 81440, "key_hits": 1588, "key_misses": 10196, "misra_gries_decrement_events": 100, "read_slot_probes": 11784, "source_observation_updates": 95996, "update_slot_probes": 95996}, "mg3_way1_4096": {"hash_evictions": 64545, "key_hits": 3436, "key_misses": 8348, "misra_gries_decrement_events": 612, "read_slot_probes": 11784, "source_observation_updates": 95996, "update_slot_probes": 95996}, "mg3_way2_1344": {"hash_evictions": 80278, "key_hits": 1752, "key_misses": 10032, "misra_gries_decrement_events": 129, "read_slot_probes": 22699, "source_observation_updates": 95996, "update_slot_probes": 184434}, "mg3_way2_4096": {"hash_evictions": 61610, "key_hits": 3809, "key_misses": 7975, "misra_gries_decrement_events": 740, "read_slot_probes": 21624, "source_observation_updates": 95996, "update_slot_probes": 176154}}}}}
+2026-10-29T06:11:08.5722570Z ##[group]Run actions/upload-artifact@v4
+2026-10-29T06:11:08.5722882Z with:
+2026-10-29T06:11:08.5723134Z   name: LANGMEMORY050-real-source-multivalue-counts
+2026-10-29T06:11:08.5723471Z   path: langmemory050-evidence/
+2026-10-29T06:11:08.5723746Z   retention-days: 90
+2026-10-29T06:11:08.5723967Z   if-no-files-found: warn
+2026-10-29T06:11:08.5724200Z   compression-level: 6
+2026-10-29T06:11:08.5724415Z   overwrite: false
+2026-10-29T06:11:08.5724629Z   include-hidden-files: false
+2026-10-29T06:11:08.5724862Z env:
+2026-10-29T06:11:08.5725047Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:11:08.5725264Z   OMP_NUM_THREADS: 2
+2026-10-29T06:11:08.5726019Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:11:08.5726465Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T06:11:08.5726921Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:11:08.5727300Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:11:08.5727708Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:11:08.5728097Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T06:11:08.5728417Z ##[endgroup]
+2026-10-29T06:11:08.7510535Z (node:2530) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T06:11:08.7511606Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T06:11:08.7609453Z With the provided path, there will be 3 files uploaded
+2026-10-29T06:11:08.7610918Z Artifact name is valid!
+2026-10-29T06:11:08.7611389Z Root directory input is valid!
+2026-10-29T06:11:09.0257781Z Beginning upload of artifact content to blob storage
+2026-10-29T06:11:09.0653722Z (node:2530) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-29T06:11:09.1205954Z Uploaded bytes 42246
+2026-10-29T06:11:09.1439812Z Finished uploading artifact content to blob storage!
+2026-10-29T06:11:09.1441112Z SHA256 digest of uploaded artifact zip is c48fe8b4bbcbf3524d297d3b7f1c970a001e12c6697bf7754d9f650b3ebf084e
+2026-10-29T06:11:09.1443287Z Finalizing artifact upload
+2026-10-29T06:11:09.6302742Z Artifact LANGMEMORY050-real-source-multivalue-counts.zip successfully finalized. Artifact ID 12876384110
+2026-10-29T06:11:09.6304341Z Artifact LANGMEMORY050-real-source-multivalue-counts has been successfully uploaded! Final size is 42246 bytes. Artifact ID is 12876384110
+2026-10-29T06:11:09.6310085Z Artifact download URL: https://github.com/FPC-effortless/TAC-OSM/actions/runs/40827506769/artifacts/12876384110
+2026-10-29T06:11:09.6513332Z Post job cleanup.
+2026-10-29T06:11:09.7765068Z (node:2544) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T06:11:09.7766252Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T06:11:09.7987746Z Post job cleanup.
+2026-10-29T06:11:09.8986603Z [command]/usr/bin/git version
+2026-10-29T06:11:09.9036472Z git version 2.56.0
+2026-10-29T06:11:09.9089119Z Temporarily overriding HOME='/home/runner/work/_temp/4c6cec70-f50e-4895-a39c-8cf055f2be18' before making global git config changes
+2026-10-29T06:11:09.9089899Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T06:11:09.9090515Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T06:11:09.9147996Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T06:11:09.9189460Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T06:11:09.9526130Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T06:11:09.9588615Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T06:11:09.9977679Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T06:11:10.0066975Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T06:11:10.0483818Z Cleaning up orphan processes
+2026-10-29T06:11:10.0856951Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
