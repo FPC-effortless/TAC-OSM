@@ -220,7 +220,7 @@ def study_owner(raw,owner,max_clock=MAX_PRIMARY,return_predictions=False):
         recent_ring.observe(raw[t])
         recent_ns=time.perf_counter_ns()-tick
         stats["recent64"]["update_ns"]+=recent_ns
-        for (budget,ways),ring in raw_rings.items():
+        for budget,ring in raw_rings.items():
             tick=time.perf_counter_ns()
             ring.observe(raw[t])
             stats[f"ring_{budget}"]["update_ns"]+=time.perf_counter_ns()-tick
