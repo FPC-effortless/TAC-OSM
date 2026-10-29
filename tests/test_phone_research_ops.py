@@ -156,6 +156,7 @@ def test_gpu_staging_is_private_has_no_internet_and_enforces_t4_pair(tmp_path):
     assert meta["enable_internet"] == "false"
     assert meta["is_private"] == "true"
     assert meta["enable_gpu"] == "true"
+    assert meta["title"].lower().replace(" ", "-") == meta["id"].split("/")[1]
     assert cfg["seeds"] == [101, 102]
     assert "real_t4_pair" in (output / "entrypoint.py").read_text()
     assert p["outcome_qualified"] is False
