@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""LANGSCALE075 source, checkpoint, seed-paired h24/h48/h96/h128 evidence.
+"""LANGSCALE075 source, checkpoint, seed-paired m8/m12/m16 evidence.
 
-Nine NEW genuine original-source 074 trained 500K checkpoints; h48 reused
+Six NEW native width12/16 original-source 075 fits; original m8 reused
 from original verified LANGSCALE070 result artifact and never retrained.
 Training FLOPs across different upper state/FFN geometry are NOT matched.
 """
@@ -28,7 +28,7 @@ def collect(root:Path,original_070_summary:Path):
         raise ValueError("not original SHA-validated nine 070 checkpoints aggregate")
     old=previous["metrics"]["p500k"]
     if old["trainable_parameters"]!=COUNTS["m8"] or old["ffn_width"]!=FFN["m8"]:
-        raise ValueError("original 070 h48 trained source geometry mismatch")
+        raise ValueError("original 070 m8 trained source geometry mismatch")
     rows={}
     originals=list(root.rglob("FIT_AND_EXPOSED_DEV_RECEIPT.json"))
     for path in originals:
@@ -121,10 +121,10 @@ def collect(root:Path,original_070_summary:Path):
             "training_FLOP_parity":"NOT_MATCHED",
             "trained_update_count_each":160,
             "dev_target_count_per_seed":4096,
-            "metrics":per_tier,"paired_against_h48":paired,
+            "metrics":per_tier,"paired_against_m8":paired,
             "protected_TEST":"NOT_ACCESSED","gpu_minutes":0,
             "independently_qualified":False,
-            "limits":["historical original 070 h48 reference same original source samples and 160 steps, replay SHA from prior run",
+            "limits":["historical original 070 m8 reference same original source samples and 160 steps, replay SHA from prior run",
                       "native key/value/readout and aligned address geometry change; not pure native-matrix-only lesion",
                       "training FLOPs not measured/matched across new geometries",
                       "native and aligned address capacity varies; upper48, fast/slow88/88 and FFN455 unchanged",
@@ -147,7 +147,7 @@ def main():
         "metrics":{k:{n:v[n] for n in ("mean_DEV_nll","mean_DEV_top1",
               "mean_cpu_process_seconds","trainable_parameters","upper_hidden_width","ffn_width")}
               for k,v in result["metrics"].items()},
-        "paired":result["paired_against_h48"],
+        "paired":result["paired_against_m8"],
     },sort_keys=True))
 
 
