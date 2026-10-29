@@ -1,0 +1,145 @@
+name: LANGLAYER040 authentic recurrence-only TAC real text 320 x five-seed
+on:
+  pull_request:
+    paths:
+      - "scripts/langlayer040_cpu_fit.py"
+      - "scripts/langlayer040_aggregate.py"
+      - "research/mathematical-engineering/langlayer040/**"
+      - "research/phone_queue/langlayer040.json"
+      - ".github/workflows/langlayer040.yml"
+      - "scripts/validate_research_parity.py"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authentic-fit:
+    if: github.head_ref == 'research/langlayer040-real-text-fit-2026-10-29'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [state48_no_graph, state59_full_graph]
+        seed: [1701,1702,1703,1704,1705]
+    env:
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      CUDA_VISIBLE_DEVICES: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Pinned numpy and CPU-only PyTorch
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Scoped owner authorization, original publisher source, and causal prefit
+        run: |
+          set -eo pipefail
+          mkdir -p langlayer040-results
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langlayer040.json | tee langlayer040-results/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langlayer040/FAIR_COMPARISON.json --phase preflight | tee langlayer040-results/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langlayer040.py
+          PYTHONPATH=src:. python - <<'PY'
+          import json
+          from scripts.langlayer035_sampling import fit_sources,schedule_receipt
+          from scripts.langlayer040_cpu_fit import model_source_preflight,model_for
+          model_source_preflight()
+          assert model_for("state48_no_graph").parameter_count()==499623
+          assert model_for("state59_full_graph").parameter_count()==499848
+          fit=fit_sources()
+          assert len(fit)==14
+          reg=json.load(open("research/mathematical-engineering/langlayer040/FAIR_COMPARISON.json"))
+          assert reg["study_id"]=="LANGLAYER040" and len(reg["models"])==10
+          assert reg["no_architecture_superiority_claim"] and reg["study_type"]=="single_model_training"
+          for seed in [1701,1702,1703,1704,1705]:
+              record=schedule_receipt(fit,seed,steps=320)
+              assert record["examples_seen"]==2560 and record["next_byte_targets_seen"]==327680
+          PY
+      - name: 320 original CPython target updates across two extra 2x2 factorial arms and five seeds
+        run: |
+          PYTHONPATH=src:. python scripts/langlayer040_cpu_fit.py \
+            --arm ${{ matrix.arm }} --seed ${{ matrix.seed }} --steps 320 \
+            --out "langlayer040-results/${{ matrix.arm }}_seed${{ matrix.seed }}"
+      - name: Check original checkpoint SHA256, optimizer/RNG and numerical DEV cold replay
+        run: |
+          PYTHONPATH=src:. python - <<'PY'
+          import glob,json,hashlib
+          receipts=glob.glob("langlayer040-results/*/FIT_AND_EXPOSED_DEV_RECEIPT.json")
+          assert len(receipts)==1
+          r=json.load(open(receipts[0]))
+          assert r["study"]=="LANGLAYER040" and r["arm"] in ("state48_no_graph","state59_full_graph") and r["updates"]==320
+          assert r["target_bytes_seen"]==327680
+          assert r["parameters"]=={"trainable":{"state48_no_graph":499623,"state59_full_graph":499848}[r["arm"]],"deployed":{"state48_no_graph":499623,"state59_full_graph":499848}[r["arm"]]}
+          assert r["checkpoint_reloaded_identical_scored_DEV"] is True
+          assert r["DEV_EXPOSED_4096_ONLY"]["n"]==4096
+          assert r["matched_training_FLOPs"]=="NOT_VERIFIED"
+          assert r["GPU_minutes"]==0 and r["protected_TEST"]=="NOT_ACCESSED"
+          checkpoints=glob.glob("langlayer040-results/*/*.pt")
+          assert len(checkpoints)==1
+          assert hashlib.sha256(open(checkpoints[0],"rb").read()).hexdigest()==r["checkpoint_sha256"]
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER040-CPU-${{ matrix.arm }}-seed${{ matrix.seed }}
+          path: langlayer040-results/
+          retention-days: 90
+          if-no-files-found: warn
+  verified-paired-full-cohort:
+    needs: authentic-fit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install numpy==2.3.5
+      - name: Retrieve only actual new 039 original checkpoints and verified old 035/037 cohort artifacts
+        run: |
+          set -euo pipefail
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM --pattern "LANGLAYER040-CPU-*" --dir new-results
+          gh run download 40786118546 -R FPC-effortless/TAC-OSM --name "LANGLAYER035-verified-full-cohort-summary" --dir old035
+          gh run download 40795790808 -R FPC-effortless/TAC-OSM --name "LANGLAYER039-complete-five-seed-source-audit" --dir old039
+          mapfile -t a < <(find old035 -name RESULTS.json -type f)
+          mapfile -t b < <(find old039 -name RESULTS.json -type f)
+          test "${#a[@]}" -eq 1
+          test "${#b[@]}" -eq 1
+          echo "ORIGINAL035=${a[0]}" >> "$GITHUB_ENV"
+          echo "ORIGINAL039=${b[0]}" >> "$GITHUB_ENV"
+      - name: Independently score full 10-checkpoint/source and paired reference integrity
+        run: |
+          PYTHONPATH=src:. python scripts/langlayer040_aggregate.py \
+            --results new-results --old035 "$ORIGINAL035" --old039 "$ORIGINAL039" \
+            --output langlayer040-summary/RESULTS.json
+      - name: Publish 2x2 original-source five-seed factorial with decoder-width caveat
+        run: |
+          python - <<'PY'
+          import json,os
+          r=json.load(open("langlayer040-summary/RESULTS.json"))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              print("# LANGLAYER040 two new factorial controls × five authentic FIT seeds",file=f)
+              print("Upper graph × recurrence state-width at ~500K. FFN width varies and training FLOPs are unmatched.",file=f)
+              print("| Factorial corner | Mean original exposed DEV NLL |",file=f)
+              print("|---|---:|",file=f)
+              for name,value in r["factorial_mean_nll"].items():
+                  print(f"| {name} | {value:.6f} |",file=f)
+              for name,eff in r["factor_effects"].items():
+                  print(f'- {name}: ΔNLL {eff["mean_delta_nll"]:+.6f}, paired CI {eff["descriptive_95pct_t_interval"]}',file=f)
+              print("No TEST / external generalization / fixed-head factor causality claims.",file=f)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER040-complete-five-seed-source-audit
+          path: langlayer040-summary/
+          retention-days: 90
