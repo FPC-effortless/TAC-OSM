@@ -20,6 +20,10 @@ def aggregate(directory):
         'independently_qualified':False,'no_new_fits':True,'gpu_minutes':0,'protected_TEST':'NOT_ACCESSED',
         'history_metrics':{age:{key:sum(r['history_metrics'][age][key] for r in records)/3 for key in records[0]['history_metrics'][age]} for age in ('8','32','128','256')},
         'future_metrics':{key:sum(r['future_metrics'][key] for r in records)/3 for key in records[0]['future_metrics']},
+        'paired_event_metrics':{age:{
+            'pairs_per_seed':[sum(x['age']==int(age) and x['wrong_content_donor'] is not None for x in r['history_rows']) for r in records],
+            **{key:sum(sum(x[key] for x in r['history_rows'] if x['age']==int(age) and x['wrong_content_donor'] is not None)/sum(x['age']==int(age) and x['wrong_content_donor'] is not None for x in r['history_rows']) for r in records)/3 for key in ('matrix_correct','norm_matched_wrong_event_correct','event_removed_correct','wrong_event_minus_full_nextbyte_nll')}
+        } for age in ('8','32','128','256')},
         'per_seed':[{k:r[k] for k in ('seed','checkpoint_sha256','history_metrics','future_metrics','timing','cpu_process_seconds')} for r in records],
         'limits':records[0]['limits']+['Repeated same source targets across ages/seeds are not independent examples; no confidence interval over cells.']}
 

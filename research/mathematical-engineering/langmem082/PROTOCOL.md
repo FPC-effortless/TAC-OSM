@@ -74,3 +74,9 @@ No novelty claim for associative recovery, ring storage, or these controls.
 Whole source IEEE/AD equivalence, trained semantic recovery and untouched
 independent DEV generalization remain OPEN. Companion PNDS partial formulation
 covers read linearity, norm-preserving permutation and packed-ring bounds only.
+
+Source-pinned reciprocal bridge: `PNDS_SOURCE_BRIDGE.json`, companion draft
+PNDS#79. Legacy canonical17-variant index remains unchanged; coordinated
+canonical merge OPEN. `scripts/langmem082_math_parity.py` compares actual read,
+wrong-event construction and packed-ring bounds with pinned PNDS Python in
+Float64 at1e-12 tolerance. This checks three operators, not full source/AD.

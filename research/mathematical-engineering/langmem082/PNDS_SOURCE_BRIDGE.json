@@ -1,0 +1,37 @@
+{
+  "schema": "tac-pnds.source-bridge.v1",
+  "study": "LANGMEM082",
+  "type": "NOFIT_COMPRESSED_VALUE_RECOVERABILITY",
+  "ancestry": [
+    "LANGMEM078",
+    "LANGMEM079",
+    "LANGMEM080",
+    "LANGMEM081"
+  ],
+  "tac": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "source_commit": "dc39eaaa7f7cb3209173f7117bab7daa503f84b7",
+    "pull_request": 624,
+    "source_paths": [
+      "scripts/langmem082_recover.py",
+      "scripts/langmem082_aggregate.py",
+      "research/mathematical-engineering/langmem079/dual_streaming.py"
+    ],
+    "checkpoint_train_run_id": 40890642312
+  },
+  "pnds": {
+    "repository": "FPC-effortless/pnds-lean",
+    "proof_commit": "a87501db300d43a4eef63d170ba1e6f5b472d5bf",
+    "pull_request": 79,
+    "lean_path": "PNDS/LangMem082CompressedRead.lean",
+    "lean_symbol": "PNDS.LangMem082.read_add",
+    "python_path": "foundation/v1/langmem082_compressed.py",
+    "python_symbol": "read"
+  },
+  "exact_source_contract": "M_t=M_(t-1)P_t+Q_t; read M_t q. Tagged old Q and supplied writer keys are evaluator-only. Wrong event replaces historical value using source earlier distinct byte, preserving key/time/transport/norm. Packed ring totals256/4160B include16B metadata. No future byte enters predictor.",
+  "mathematical_status": "PARTIAL_EXACT_REAL_READ_RING_AND_PYTHON_REFERENCE",
+  "source_PyTorch_IEEE_AD_equivalence": "OPEN",
+  "model_retrieved_historical_content_verified": false,
+  "independently_qualified": false,
+  "two_repository_canonical_index_status": "OPEN_COORDINATED_MERGE_REQUIRED_LEGACY_INDEX_UNCHANGED"
+}
