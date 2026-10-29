@@ -60,7 +60,7 @@ def package(proposal_path: Path, *, kaggle_user: str, destination: Path) -> dict
     # and the title-derived slug consistent for ALL future submissions.
     # Do not resubmit or rename historical private kernels during a status check.
     metadata = {
-        "id": handle, "title": "TACOSM " + proposal["run_id"],
+        "id": handle, "title": "TACOSM " + identifier[len("tacosm-"):],
         "code_file": "entrypoint.py", "language": "python", "kernel_type": "script",
         "is_private": "true", "enable_gpu": "true", "enable_internet": "false",
         "machine_shape": "NvidiaTeslaT4",
