@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from scripts.langpretrain076_verify_t4 import verify,ReceiptError,SHA
+from scripts.langpretrain076_verify_t4 import verify,ReceiptError,SHA,EXPECTED_RUN_ID,WORKLOAD_PATH
 
 
 class ReceiptTests(unittest.TestCase):
@@ -16,6 +16,8 @@ class ReceiptTests(unittest.TestCase):
         runtime={
           "schema":"tac-osm.kaggle-t4x2-runtime.v1",
           "requested_accelerator":"NvidiaTeslaT4",
+          "run_id": EXPECTED_RUN_ID,
+          "workload_sha256": hashlib.sha256(WORKLOAD_PATH.read_bytes()).hexdigest(),
           "status":"COMPLETED_UNQUALIFIED_REQUIRES_INDEPENDENT_EVALUATION",
           "seeds":[1701,1702],"strategy":"seed_shard",
           "observed":{"count":2,"accelerator":"NvidiaTeslaT4","names":["Tesla T4","Tesla T4"]},
