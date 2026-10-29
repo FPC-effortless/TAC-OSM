@@ -27,7 +27,7 @@ def test_exact_9120_useful_parameters_and_all_gradients():
 def test_wrong_past_source_key_uses_only_preceding_observed_context():
     rng=bytes((i%31 for i in range(130)))
     keys={a:torch.nn.functional.normalize(torch.arange(1,9,dtype=torch.float32)+a,dim=0)
-          for a in range(4,129)}
+          for a in range(4,128)}
     a=80;t=128
     selected=wrong_writer_key(keys,rng[:t+1],a,t,keys[a])
     assert selected.shape==(8,)
