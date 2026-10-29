@@ -1,0 +1,135 @@
+name: LANGMEM080 original publisher event write survival and read attribution
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmem080/**'
+      - 'research/phone_queue/langmem080.json'
+      - 'scripts/langmem080_event_trace.py'
+      - 'scripts/langmem080_aggregate.py'
+      - 'tests/test_langmem080.py'
+      - '.github/workflows/langmem080.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-event-trace:
+    if: github.head_ref == 'research/langmem080-event-survival-read-attribution-2026-10-29'
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install original pinned genuine-source CPU dependencies
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Frozen source/source-label parity and original event source algebra
+        run: |
+          mkdir -p event080-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem080.json > event080-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langmem080/FAIR_COMPARISON.json --phase preflight \
+            > event080-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmem080.py tests/test_langmem079.py
+      - name: Restore original 078 publisher-trained checkpoint, model/optimizer RNG and source SHA
+        run: |
+          mkdir -p original078-checkpoint original078-verification
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name "LANGMEM078-FIT-dual-seed${{ matrix.seed }}" --dir original078-checkpoint
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name LANGMEM078-SOURCE-PAIRED-AGGREGATE --dir original078-verification
+      - name: Trace actual original native fast/slow historical write tags and attribution to source next-byte
+        run: |
+          PYTHONPATH=src:. python scripts/langmem080_event_trace.py \
+            --seed ${{ matrix.seed }} \
+            --checkpoint-dir original078-checkpoint \
+            --original-aggregate original078-verification/RESULTS.json \
+            --output event080-evidence/EVENT_RESULTS.json
+          python - <<'PY'
+          import json,math
+          r=json.load(open('event080-evidence/EVENT_RESULTS.json'))
+          assert r['study']=='LANGMEM080' and r['no_new_fits'] is True
+          assert r['parameters']==499627 and r['state_fp32_bytes_per_owner']==4160
+          assert r['registered_source_pairs_per_owner']==27
+          assert r['source_target_pairs_with_both_lanes']==216
+          assert r['zero_negative_control_bitwise_count']==8
+          assert r['original_stream_steps_verified']==1280
+          assert len(r['rows'])==216
+          assert r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          for name in ('max_original_source_affine_update_abs_error',
+                       'max_original_source_event_transport_abs_error',
+                       'max_original_source_read_projection_abs_error'):
+              assert math.isfinite(r[name]) and r[name]<=1e-5,(name,r[name])
+          PY
+      - name: Preserve all actual publisher original event/label results and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM080-ORIGINAL-EVENT-seed${{ matrix.seed }}
+          path: event080-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  three-seed-original-source-aggregate:
+    needs: original-source-event-trace
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download all three source-trained original immutable event-trace artifacts
+        run: |
+          mkdir -p event-raw event-aggregate
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGMEM080-ORIGINAL-EVENT-seed*' --dir event-raw
+      - name: Strict exact original source owner/query/anchor/target/seed SHA paired aggregation
+        run: |
+          PYTHONPATH=src:. python scripts/langmem080_aggregate.py \
+            --results event-raw --output event-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('event-aggregate/RESULTS.json'))
+          assert r['study']=='LANGMEM080' and r['model_seed_count']==3
+          assert r['all_original_source_trace_and_sham_checks_pass']
+          assert r['total_source_pair_event_lane_records']==648
+          assert r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGMEM080 source-derived historical Q-write survival/read trace',file=f)
+              print('Source-conditioned, label-blind history anchor selection; real PSF source, previously EXPOSED DEV. Latent write event is not directly readable content.',file=f)
+              print('| Lag | Fast survival | Slow survival | Fast event mean ΔNLL after erase | Slow event mean ΔNLL after erase |',file=f)
+              print('|---|---:|---:|---:|---:|',file=f)
+              for lag in ('1','8','32','64','128','192'):
+                  fast=r['metrics']['fast']['by_lag'][lag]
+                  slow=r['metrics']['slow']['by_lag'][lag]
+                  print(f"| {lag} | {fast['mean_write_survival_norm_ratio']:.6g} | {slow['mean_write_survival_norm_ratio']:.6g} | {fast['mean_without_event_minus_full_nll']:+.6g} | {slow['mean_without_event_minus_full_nll']:+.6g} |",file=f)
+              print('A causal one-query read-contribution attribution only; no full historical replay, no fact/byte reconstruction, training or protected TEST. Numeric FP32 floor on very old fast writes.',file=f)
+          PY
+      - name: Archive all original source-derived event evidence including negative effects
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM080-SOURCE-EVENT-AGGREGATE
+          path: event-aggregate/
+          retention-days: 90
+          if-no-files-found: warn

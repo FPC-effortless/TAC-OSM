@@ -1,0 +1,48 @@
+{
+  "schema": "tac-pnds.source-bridge.v1",
+  "study": "LANGMEM080",
+  "lane": "language",
+  "type": "NOFIT_SOURCE_EVENT_ATTRIBUTION",
+  "ancestry": [
+    "LANGMEM077",
+    "LANGMEM078",
+    "LANGMEM079"
+  ],
+  "tac": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "original_source_commit": "ebb5a6c0ec4be90cd2df4259e392a799c7897d95",
+    "pull_request": 622,
+    "source_paths": [
+      "scripts/langmem080_event_trace.py",
+      "scripts/langmem080_aggregate.py",
+      "research/mathematical-engineering/langmem079/dual_streaming.py",
+      "research/mathematical-engineering/langmem078/dual_native.py"
+    ],
+    "original_trained_checkpoint_runs": [
+      40890642312
+    ],
+    "empirical_no_fit_run": 40955157801
+  },
+  "pnds": {
+    "repository": "FPC-effortless/pnds-lean",
+    "formulation_commit": "66d572a1eec9c0e593d9f7f1a7ef13637b60d722",
+    "pull_request": 77,
+    "lean_path": "PNDS/LangMem080Historical.lean",
+    "lean_symbol": "PNDS.LangMem080.one_source_write_additive",
+    "python_path": "foundation/v1/langmem080_source_event.py",
+    "python_symbol": "tag_step"
+  },
+  "exact_real_operator": "N_next=N_old P+Q; historical C_a(a)=Q_a; C_a(t+1)=C_a(t) P_(t+1); observed event write Q_a is source-conditioned, NOT historical content label reconstruction",
+  "sourcedata": "Original licensed PSF CPython3.13 four previously exposed DEV owners; 3 frozen original trained 078 seeds; protected TEST unopened",
+  "formalization_status": "PARTIAL_SCALAR_LEAN_AND_PYTHON_MATRIX_REFERENCE_ONLY",
+  "lean_full_graph_proved": false,
+  "python_source_equivalence_verified": false,
+  "real_world_capability_inferred": false,
+  "source_pytorch_fp32_pointwise_checked_in_CI": true,
+  "whole_graph_IEEE_AD_equivalence": "OPEN",
+  "same_source_owner_nextbyte_label_and_checkpoint_sha_checked": true,
+  "main_canonical_variant_index_sync": "OPEN_REQUIRES_COORDINATED_MERGE_BOTH_REPOSITORIES",
+  "limitations": [
+    "No independent new DEV, query/write cosine not factual recovery, per-event same-clock matrix subtraction is not full counterfactual history, additional slow lane had unequal training FLOPs versus original fast-only."
+  ]
+}
