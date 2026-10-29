@@ -18,6 +18,9 @@ import subprocess
 import sys
 
 EXPECTED_SLUG = "tacosm-dual-t4-readiness"
+# The historical notebook title is "TAC-OSM dual-t4-readiness", which
+# Kaggle may expose under a title-derived slug different from metadata.id.
+TITLE_DERIVED_SLUG = "tac-osm-dual-t4-readiness"
 SMOKE_PATTERN = r"(^|/)(phone-research-runtime|seed-101|seed-102)\.json$"
 OWNER = re.compile(r"^[a-z0-9][a-z0-9_-]{0,39}$")
 HANDLE = re.compile(r"^[a-z0-9][a-z0-9_-]{0,39}/[a-z0-9][a-z0-9_-]{0,90}$")
@@ -38,6 +41,7 @@ def listing_indicators(stdout: str, owner: str, expected: str) -> dict:
     """Only share flags, never private notebook names or CSV from the account."""
     exact = False
     similar = False
+    title_derived = False
     for row in csv.reader(io.StringIO(stdout)):
         valid_refs = [cell.strip().lower() for cell in row
                       if HANDLE.fullmatch(cell.strip().lower())]
@@ -46,9 +50,14 @@ def listing_indicators(stdout: str, owner: str, expected: str) -> dict:
                 continue
             if ref == expected:
                 exact = True
+            elif ref == owner + "/" + TITLE_DERIVED_SLUG:
+                title_derived = True
+                similar = True
             elif "tacosm" in ref or "dual-t4-readiness" in ref:
                 similar = True
-    return {"expected_handle_listed": exact, "similar_handle_listed": similar}
+    return {"expected_handle_listed": exact,
+            "title_derived_handle_listed": title_derived,
+            "similar_handle_listed": similar}
 
 
 def inspect(username: str, directory: Path, runner=subprocess.run) -> tuple[bool, dict]:
@@ -71,10 +80,12 @@ def inspect(username: str, directory: Path, runner=subprocess.run) -> tuple[bool
                       "saved_receipts_still_require_offline_audit": True}
     classification = (classify_error(result.stderr) if result is not None
                       else "KAGGLE_CLI_FAILED_OR_TIMED_OUT")
-    listed = {"expected_handle_listed": None, "similar_handle_listed": None}
+    listed = {"expected_handle_listed": None,
+              "title_derived_handle_listed": None,
+              "similar_handle_listed": None}
     try:
         res = runner(["kaggle", "kernels", "list", "--mine", "--csv",
-                      "--page-size", "100"],
+                      "--page-size", "100", "--sort-by", "dateRun"],
                      capture_output=True, text=True, timeout=30)
         if res.returncode == 0:
             listed = listing_indicators(res.stdout, username, handle)
@@ -83,8 +94,33 @@ def inspect(username: str, directory: Path, runner=subprocess.run) -> tuple[bool
             listing_state = "LIST_QUERY_FAILED"
     except (OSError, subprocess.TimeoutExpired):
         listing_state = "LIST_QUERY_FAILED_OR_TIMED_OUT"
+
+    # Only inspect the historically known title-derived identifier if
+    # the authenticated account listing confirms that exact owned handle.
+    # This is a SECOND READ of existing output, never a new Kaggle version.
+    if listed["title_derived_handle_listed"] is True:
+        alternate = username + "/" + TITLE_DERIVED_SLUG
+        try:
+            second = runner([
+                "kaggle", "kernels", "output", alternate, "-p", str(directory),
+                "--file-pattern", SMOKE_PATTERN, "--quiet"],
+                capture_output=True, text=True, timeout=65)
+        except (OSError, subprocess.TimeoutExpired):
+            second = None
+        if second is not None and second.returncode == 0:
+            return True, {
+                "state": "TITLE_DERIVED_OUTPUT_DOWNLOAD_SUCCEEDED",
+                "resolved_via_title_derived_slug": True,
+                "saved_receipts_still_require_offline_audit": True,
+            }
+        alternate_state = (classify_error(second.stderr) if second is not None
+                           else "KAGGLE_CLI_FAILED_OR_TIMED_OUT")
+    else:
+        alternate_state = "NOT_ATTEMPTED_NO_CONFIRMED_ALTERNATE_HANDLE"
+
     return False, {
         "state": classification, "kaggle_listing_state": listing_state,
+        "title_derived_access_state": alternate_state,
         **listed, "saved_receipts_still_require_offline_audit": True,
         "remote_execution_verified": False,
         "self_reported_two_worker_execution": False,

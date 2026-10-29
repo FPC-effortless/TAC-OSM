@@ -177,8 +177,16 @@ could be downloaded. The later missing-file error was *consequential*, not
 independent evidence of a failed GPU execution. The repaired workflow
 classifies that API error, and checks `kaggle kernels list --mine --csv` for
 an exact or similar notebook reference without exposing private titles,
-retrying submissions, or fetching unknown notebooks. Successful listing
-does **not** prove the notebook ran. If API access remains denied, inspect
+retrying submissions, or fetching unknown notebooks. There is also a
+historical Kaggle metadata naming mismatch: the requested identifier was
+`tacosm-dual-t4-readiness` while the visible title was
+`TAC-OSM dual-t4-readiness`, which could produce the distinct URL slug
+`tac-osm-dual-t4-readiness`. If the authenticated account listing contains
+that exact title-derived handle, the read-only workflow attempts to retrieve
+*only the same three smoke output files* there. No other candidate handles
+are followed automatically; no GPU run is started. New staging metadata uses
+a title whose normalized spelling matches the stable requested identifier.
+Successful listing does **not** prove the notebook ran. If API access remains denied, inspect
 the authenticated Kaggle **Your Work → notebook → Versions** page to verify
 the exact URL and whether a saved execution/version exists. `Draft saved`
 is not a completed saved execution; `Save & Run All` launches a new run
