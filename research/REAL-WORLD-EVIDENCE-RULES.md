@@ -386,3 +386,26 @@ performance differences are engineering observations, not certified proof of
 architectural superiority. Failed runs, entire seed cohort, replay evidence,
 source integrity, lack of external eligibility and complete negative evidence
 must remain in the research ledger.
+
+## Narrow 500K language-model fit exception — LANGLAYER039, 2026-10-29
+
+Owner explicitly requested training and benchmarking the already built
+LANGLAYER038 recurrence-only upper TAC model. Study LANGLAYER039 only
+may train at 475,000–525,000 actual trainable AND deployed learned
+parameters under the existing owner 500K language program contract.
+The prospective global 95K–105K rule stays unchanged for other studies;
+old LANGLAYER035/037 exceptions and original runs remain frozen.
+
+This is five internal-research CPU fits at 499,901 actual parameters on
+original verified publisher CPython 3.13.0 FIT bytes: five fixed seeds,
+320 updates, B8, 128 next-target bytes/sequence, original deterministic
+window source order, disjoint previously exposed DEV for descriptive
+metrics. No hyperparameter tuning, GPU, protected TEST or external signer
+is required for ordinary internal source-verified FIT/DEV training.
+Mathematics is scoped PNDS #64 only; complete composition and IEEE/AD
+are openly UNPROVED. Training FLOPs are NOT matched to earlier baselines
+and no architecture superiority/independent qualification may be
+claimed from this run. Mandatory checkpoint hashes, model+optimizer+RNG,
+source-order receipts, numerical cold replay, all five seeds, complete
+negative evidence and all training failures must be retained. No promotion,
+merge, release or TEST access follows automatically.
