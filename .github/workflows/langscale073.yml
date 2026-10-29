@@ -1,0 +1,134 @@
+name: LANGSCALE073 nine original models native vs capped 256 position source
+on:
+  pull_request:
+    paths:
+      - 'scripts/langscale073_replay_cap.py'
+      - 'scripts/langscale073_aggregate.py'
+      - 'tests/test_langscale073.py'
+      - 'research/mathematical-engineering/langscale073/**'
+      - 'research/phone_queue/langscale073.json'
+      - '.github/workflows/langscale073.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-checkpoint-position-falsifier:
+    if: github.head_ref == 'research/langscale073-replay-tolerance-2026-10-29'
+    strategy:
+      fail-fast: false
+      matrix:
+        tier: [p250k,p500k,p1000k]
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Frozen PyTorch source CPU runtime
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: No-fit preregistration, source causal negative control and compute planner
+        run: |
+          mkdir -p langscale073-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langscale073.json > langscale073-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langscale073/FAIR_COMPARISON.json --phase preflight > langscale073-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langscale072.py tests/test_langscale071.py
+      - name: Restore immutable original 070 weights and exact 071 source target positions
+        run: |
+          mkdir -p original070 original070-aggregate original071
+          gh run download 40871491842 -R FPC-effortless/TAC-OSM \
+             --name "LANGSCALE070-FIT-${{ matrix.tier }}-seed${{ matrix.seed }}" \
+             --dir original070
+          gh run download 40871491842 -R FPC-effortless/TAC-OSM \
+             --name LANGSCALE070-SOURCE-VERIFIED-SCALING-SUMMARY \
+             --dir original070-aggregate
+          gh run download 40872684271 -R FPC-effortless/TAC-OSM \
+             --name "LANGSCALE071-CONTEXT-${{ matrix.tier }}-seed${{ matrix.seed }}" \
+             --dir original071
+      - name: Source-locked original L128 control and L256 native vs capped positional differential
+        run: |
+          PYTHONPATH=src:. python scripts/langscale073_replay_cap.py \
+            --tier ${{ matrix.tier }} --seed ${{ matrix.seed }} \
+            --checkpoint-dir original070 \
+            --original-aggregate original070-aggregate/RESULTS.json \
+            --previous-context original071/CONTEXT_RESULTS.json \
+            --output langscale073-evidence/POSITION_RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('langscale073-evidence/POSITION_RESULTS.json'))
+          assert r['study']=='LANGSCALE073' and r['training_updates']==0
+          assert r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          assert r['same_targets']==256 and r['hook_removed_and_model_weights_original']
+          assert r['cross_host_replay_abs_tolerance']==1e-6
+          assert r['prior_LANGSCALE072_exact_replay_status']=='FAILED_4_OF_9'
+          assert all(q['abs_nll']<=1e-6 and q['abs_brier']<=1e-6 and q['source_input_sha_identical'] and q['top1_identical'] for q in r['cross_host_replay_errors'].values())
+          assert r['original_position_128']['nll']==r['cap_position_128_negative_control']['nll']
+          assert r['original_position_256']['n']==r['cap_position_256']['n']==256
+          PY
+      - name: Archive all original source negative or positive cap intervention outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSCALE073-POSITION-${{ matrix.tier }}-seed${{ matrix.seed }}
+          path: langscale073-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  nine-source-verified-position-aggregate:
+    needs: original-checkpoint-position-falsifier
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download all original no-fit source-matched results
+        run: |
+          mkdir -p position-raw position-aggregate
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGSCALE073-POSITION-*' --dir position-raw
+      - name: Fail closed if model/source changed; report all nine capped vs native findings
+        run: |
+          PYTHONPATH=src:. python scripts/langscale073_aggregate.py \
+            --results position-raw --output position-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('position-aggregate/RESULTS.json'))
+          assert r['model_source_checkpoints']==9
+          assert r['prior_LANGSCALE072_exact_replay_status']=='FAILED_4_OF_9' and r['cross_host_replay_abs_tolerance']==1e-6
+          assert r['cap128_noop_controls_pass'] and r['model_weights_unchanged']
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['new_training_updates']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGSCALE073 original trained positional extrapolation diagnostic',file=f)
+              print('New study AFTER old 072 replay failures. Prior 072 FAIL 4/9; frozen 1e-6 cross-run tolerance, exact same-host cap128. Post-exposed DEV, NO independent generalization.',file=f)
+              print('| Size | Native128 | Native256 | Cap256 | Cap-Native ΔNLL |',file=f)
+              print('|---|---:|---:|---:|---:|',file=f)
+              for tier,v in r['metrics'].items():
+                  print(f"| {tier} | {v['native128_mean']:.5f} | {v['native256_mean']:.5f} | {v['cap256_mean']:.5f} | {v['cap_minus_native256_mean']:+.5f} |",file=f)
+              print('L128 control cap is exact no-op. Not a trained/persistent source quality fix.',file=f)
+          PY
+      - name: Preserve every original outcome and failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSCALE073-POSITION-AGGREGATE
+          path: position-aggregate/
+          retention-days: 90
+          if-no-files-found: warn
