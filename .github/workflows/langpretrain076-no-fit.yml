@@ -1,0 +1,39 @@
+name: LANGPRETRAIN076 original 500K T4 throughput design tests (NO GPU)
+on:
+  pull_request:
+    paths:
+      - 'scripts/langpretrain076_t4_measure.py'
+      - 'tests/test_langpretrain076.py'
+      - 'research/langpretrain076/**'
+      - '.github/workflows/langpretrain076-no-fit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  test-without-training:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: No-fit timing arithmetic, replay contract and source guards
+        run: |
+          python -m unittest discover -s tests -p test_langpretrain076.py -v
+      - name: Verify no GPU or protected data job is dispatched
+        run: |
+          python - <<'PY'
+          import pathlib
+          s=pathlib.Path('scripts/langpretrain076_t4_measure.py').read_text()
+          assert 'torch.optim.AdamW' in s
+          assert 'torch.cuda.synchronize' in s
+          assert 'preflight_source(ROOT)' in s
+          assert 'weights_only=True' in s
+          assert 'NvidiaTeslaT4' not in s or 'T4' in s
+          PY
