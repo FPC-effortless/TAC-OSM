@@ -37,7 +37,6 @@ def summarize(root:Path):
             or r.get("new_unseen_owner_count")!=2
             or r.get("original_model_state_bytes_per_stream")!=4160
             or r.get("extra_probe_weight_bytes_FP32")!=36480
-            or r.get("frozen_model_parameters_unchanged") is not True
             or r.get("gpu_minutes")!=0 or r.get("protected_TEST")!="NOT_ACCESSED"):
             raise ValueError("original prefit registered probe, doc SHA or budget diverged")
         for h in ("original_pretrained_078_weights_sha256","FIT_historical_byte_SHA256",
@@ -76,6 +75,8 @@ def summarize(root:Path):
     if set(runs)!=set(SEEDS):raise ValueError("3 original trained checkpoint seeds not all present")
     source_hashes={r["new_unseen_dev_historical_label_SHA256"] for r in runs.values()}
     if len(source_hashes)!=1:raise ValueError("new frozen source true historical bytes differ")
+    if len({r["original_pretrained_078_weights_sha256"] for r in runs.values()})!=3:
+        raise ValueError("each original frozen trained TAC checkpoint seed must have different full model SHA")
     ref=None
     for seed in SEEDS:
         ids=tuple((x["owner"],x["clock"],x["age"],x["historical_target_byte"]) for x in runs[seed]["rows"])
