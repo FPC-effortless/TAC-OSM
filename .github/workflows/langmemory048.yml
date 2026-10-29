@@ -1,0 +1,57 @@
+name: LANGMEMORY048 original-source fixed raw-ring plus verified cyclic locator
+on:
+  pull_request:
+    paths:
+      - 'scripts/langmemory048_verified_ring_index.py'
+      - 'tests/test_langmemory048_verified_index.py'
+      - 'research/mathematical-engineering/langmemory048/**'
+      - 'research/phone_queue/langmemory048.json'
+      - '.github/workflows/langmemory048.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  nofit-source-verified-locator:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install numpy==2.3.5 pytest==8.4.2
+      - name: Source license, no-fit CPU routing and chronological constructed tests
+        run: |
+          mkdir -p langmemory048-evidence
+          python scripts/phone_lab.py plan research/phone_queue/langmemory048.json > langmemory048-evidence/PLAN.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmemory048/FAIR_COMPARISON.json --phase preflight > langmemory048-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmemory048_verified_index.py
+      - name: Authentic publisher FIT 1536 / 4096 / 8192 original prefix cost and retrieval study
+        run: |
+          PYTHONPATH=src:. python scripts/langmemory048_verified_ring_index.py --output langmemory048-evidence/RESULTS.json
+          python - <<'PY'
+          import json
+          x=json.load(open('langmemory048-evidence/RESULTS.json'))
+          assert x['training_updates']==0 and x['gpu_minutes']==0 and x['protected_TEST']=='NOT_ACCESSED'
+          assert x['cohorts']['anchor1536']['summary']['positions']==4928
+          assert x['cohorts']['extension4096']['summary']['positions']==13245
+          for cohort in x['cohorts'].values():
+              for owner in cohort['owners']:
+                  for b in (1344,4096):
+                      for w in (1,2):
+                          assert owner['locators'][f'locator{w}_{b}']['bytes']==b
+                  assert all(a['queries']==owner['positions'] for a in owner['stats'].values())
+          PY
+      - name: Preserve successful or failed source provenance and actual metric artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEMORY048-original-source-verified-cyclic-index
+          path: langmemory048-evidence/
+          retention-days: 90
+          if-no-files-found: warn
