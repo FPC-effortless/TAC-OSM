@@ -1,0 +1,54 @@
+name: GRADCOVERAGE055 complete declared gradient audit
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/research_gradient_coverage.py'
+      - 'scripts/gradcoverage055_audit.py'
+      - 'tests/test_research_gradient_coverage.py'
+      - 'research/mathematical-engineering/gradcoverage055/**'
+      - 'research/phone_queue/gradcoverage055.json'
+      - '.github/workflows/gradcoverage055.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-complete-gradient-coverage:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == '2ac0f6a22ab01cf2fdeb0e83d6c972fe651116ca'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Preregistered no-fit CPU gate and coverage falsifiers
+        run: |
+          mkdir -p gradcoverage055-evidence
+          python scripts/phone_lab.py plan research/phone_queue/gradcoverage055.json > gradcoverage055-evidence/COMPUTE_DECISION.txt
+          cmp gradcoverage055-evidence/COMPUTE_DECISION.txt research/mathematical-engineering/gradcoverage055/COMPUTE_DECISION.txt
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/gradcoverage055/FAIR_COMPARISON.json --phase preflight > gradcoverage055-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_research_gradient_coverage.py tests/test_langrecomp053_training_parity.py tests/test_langrecomp054_warmed_scoped.py tests/test_research_probe_agnostic.py
+      - name: Original frozen checkpoint
+        run: gh run download 40797105091 --repo FPC-effortless/TAC-OSM --name LANGLAYER040-CPU-state48_no_graph-seed1701 --dir gradcoverage055-original
+      - name: Actual original source coverage before any parity acceptance
+        run: |
+          set -o pipefail
+          PYTHONPATH=src:. python scripts/gradcoverage055_audit.py --original-dir gradcoverage055-original --output gradcoverage055-evidence/RESULTS.json | tee gradcoverage055-evidence/AUDIT.log
+          git diff --exit-code -- scripts/langrecomp053_training_parity.py scripts/langrecomp054_warmed_scoped.py research/source-bundles research/replay-bundles
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: GRADCOVERAGE055-original-complete-gradient-audit
+          path: gradcoverage055-evidence/
+          retention-days: 90

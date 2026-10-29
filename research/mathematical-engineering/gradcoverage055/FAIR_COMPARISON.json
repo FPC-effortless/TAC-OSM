@@ -1,0 +1,51 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "GRADCOVERAGE055-COMPLETE-TRAINABLE-GRADIENT-AUDIT",
+  "study_type": "noncomparative_diagnostic",
+  "execution_level": "internal_research",
+  "scientific_purpose": "Close identical-missing-gradient parity loophole with an independently captured live parameter contract; unchanged historical trained checkpoint, no optimizer update",
+  "new_neural_training": false,
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "real_world_source": {
+    "name": "PSF CPython3.13.0 publisher original text bytes",
+    "observed_real_outcomes": true,
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF License Version 2",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "597dde0eb3ff98c798ccb3657b1ac02074a8cdb929189f3cc68612877e45f13e",
+    "partitions": [
+      "FIT"
+    ]
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "checkpoint_policy": "Load original verified trained source checkpoint read-only, normal forward/backward vs scoped/full nonreentrant checkpoint; never write/update weights",
+  "frozen_model_matrix": [],
+  "seeds": [
+    1701
+  ],
+  "histories": [
+    32,
+    64
+  ],
+  "targets_per_checkpoint": 0,
+  "resource_type": "CPU-only source/no fit",
+  "gpu_minutes": 0,
+  "protected_TEST": "NOT_ACCESSED",
+  "causal_protocol": "FIT-only identical original source B1x32/B2x64; capture trainable schema BEFORE backward, reject disconnected/nonfinite/wrong-shape/dtype gradients, compare three original execution policies",
+  "interpretation": "Gradient coverage and replay only; no new prediction, resource superiority, safety or promotion claim"
+}
