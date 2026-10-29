@@ -89,8 +89,8 @@ def test_protected_workflow_is_read_only_and_does_not_request_gpu():
     yml = (ROOT / ".github/workflows/phone-kaggle-smoke-audit.yml").read_text()
     assert "workflow_dispatch:" in yml
     assert "environment: kaggle-research" in yml
-    assert "kaggle kernels output" in yml
-    assert "--file-pattern" in yml
+    assert "scripts/kaggle_smoke_access_diagnostic.py" in yml
+    assert "if: steps.retrieve.outcome == 'success'" in yml
     assert "kaggle kernels push" not in yml
     assert "GPU_EXECUTION_ENABLED" not in yml
     assert "--accelerator" not in yml
