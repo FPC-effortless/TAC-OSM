@@ -1,0 +1,143 @@
+name: LANGLAYER039 authentic recurrence-only TAC real text 320 x five-seed
+on:
+  pull_request:
+    paths:
+      - "scripts/langlayer039_cpu_fit.py"
+      - "scripts/langlayer039_aggregate.py"
+      - "research/mathematical-engineering/langlayer039/**"
+      - "research/phone_queue/langlayer039.json"
+      - ".github/workflows/langlayer039.yml"
+      - "scripts/validate_research_parity.py"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authentic-fit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [1701,1702,1703,1704,1705]
+    env:
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      CUDA_VISIBLE_DEVICES: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Pinned numpy and CPU-only PyTorch
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Scoped owner authorization, original publisher source, and causal prefit
+        run: |
+          set -eo pipefail
+          mkdir -p langlayer039-results
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langlayer039.json | tee langlayer039-results/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langlayer039/FAIR_COMPARISON.json --phase preflight | tee langlayer039-results/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langlayer038.py
+          PYTHONPATH=src:. python - <<'PY'
+          import json
+          from scripts.langlayer035_sampling import fit_sources,schedule_receipt
+          from scripts.langlayer039_cpu_fit import model_source_preflight,model_for
+          model_source_preflight()
+          assert model_for("tac_recuronly038").parameter_count()==499901
+          fit=fit_sources()
+          assert len(fit)==14
+          reg=json.load(open("research/mathematical-engineering/langlayer039/FAIR_COMPARISON.json"))
+          assert reg["study_id"]=="LANGLAYER039" and len(reg["models"])==5
+          assert reg["no_architecture_superiority_claim"] and reg["study_type"]=="single_model_training"
+          for seed in [1701,1702,1703,1704,1705]:
+              record=schedule_receipt(fit,seed,steps=320)
+              assert record["examples_seen"]==2560 and record["next_byte_targets_seen"]==327680
+          PY
+      - name: 320 genuine CPython byte-target AdamW updates (5 seeds only)
+        run: |
+          PYTHONPATH=src:. python scripts/langlayer039_cpu_fit.py \
+            --arm tac_recuronly038 --seed ${{ matrix.seed }} --steps 320 \
+            --out "langlayer039-results/tac_recuronly038_seed${{ matrix.seed }}"
+      - name: Check original checkpoint SHA256, optimizer/RNG and numerical DEV cold replay
+        run: |
+          PYTHONPATH=src:. python - <<'PY'
+          import glob,json,hashlib
+          receipts=glob.glob("langlayer039-results/*/FIT_AND_EXPOSED_DEV_RECEIPT.json")
+          assert len(receipts)==1
+          r=json.load(open(receipts[0]))
+          assert r["study"]=="LANGLAYER039" and r["arm"]=="tac_recuronly038" and r["updates"]==320
+          assert r["target_bytes_seen"]==327680
+          assert r["parameters"]=={"trainable":499901,"deployed":499901}
+          assert r["checkpoint_reloaded_identical_scored_DEV"] is True
+          assert r["DEV_EXPOSED_4096_ONLY"]["n"]==4096
+          assert r["matched_training_FLOPs"]=="NOT_VERIFIED"
+          assert r["GPU_minutes"]==0 and r["protected_TEST"]=="NOT_ACCESSED"
+          checkpoints=glob.glob("langlayer039-results/*/*.pt")
+          assert len(checkpoints)==1
+          assert hashlib.sha256(open(checkpoints[0],"rb").read()).hexdigest()==r["checkpoint_sha256"]
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER039-CPU-seed${{ matrix.seed }}
+          path: langlayer039-results/
+          retention-days: 90
+          if-no-files-found: warn
+  verified-paired-full-cohort:
+    needs: authentic-fit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install numpy==2.3.5
+      - name: Retrieve only actual new 039 original checkpoints and verified old 035/037 cohort artifacts
+        run: |
+          set -euo pipefail
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM --pattern "LANGLAYER039-CPU-*" --dir new-results
+          gh run download 40786118546 -R FPC-effortless/TAC-OSM --name "LANGLAYER035-verified-full-cohort-summary" --dir old035
+          gh run download 40788869823 -R FPC-effortless/TAC-OSM --name "LANGLAYER037-original-source-full-cohort" --dir old037
+          mapfile -t a < <(find old035 -name RESULTS.json -type f)
+          mapfile -t b < <(find old037 -name RESULTS.json -type f)
+          test "${#a[@]}" -eq 1
+          test "${#b[@]}" -eq 1
+          echo "ORIGINAL035=${a[0]}" >> "$GITHUB_ENV"
+          echo "ORIGINAL037=${b[0]}" >> "$GITHUB_ENV"
+      - name: Independently score full five-seed checkpoint/source and paired reference integrity
+        run: |
+          PYTHONPATH=src:. python scripts/langlayer039_aggregate.py \
+            --results new-results --original035 "$ORIGINAL035" --original037 "$ORIGINAL037" \
+            --output langlayer039-summary/RESULTS.json
+      - name: Publish complete exploratory seed-matched comparisons
+        run: |
+          python - <<'PY'
+          import json,os
+          r=json.load(open("langlayer039-summary/RESULTS.json"))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              print("# LANGLAYER039: 5 verified authentic-publisher recurrence-only fits",file=f)
+              x=r["model_summary"]
+              print(f'New model NLL: **{x["nll_mean"]:.6f}** (5-seed SD {x["nll_sd"]:.6f}), top1 **{100*x["top1_mean"]:.2f}%**, PPL **{x["perplexity_mean"]:.3f}**, CPU **{x["cpu_process_seconds_mean"]:.2f}s**.',file=f)
+              print("| Original archived reference | Mean NEW minus old NLL | New wins | Descriptive 95% paired t interval |",file=f)
+              print("|---|---:|---:|---|",file=f)
+              for name,x in r["matched_seed_differences"].items():
+                  q=x["paired_95pct_t_interval_descriptive"]
+                  print(f'| {name} | {x["mean_new_minus_old_nll"]:+.6f} | {x["new_wins"]}/5 | [{q[0]:+.6f}, {q[1]:+.6f}] |',file=f)
+              print(f'Historical P3 lexical reference NLL: {r["p3_historical_unmatched_exposed_dev_nll"]:.6f} (NOT neural-param/FLOP matched).',file=f)
+              print("Original 035/037 checkpoints not retrained. Genuine FIT, previously exposed DEV, no TEST/GPU/promotion; training FLOPs not matched.",file=f)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER039-complete-five-seed-source-audit
+          path: langlayer039-summary/
+          retention-days: 90
