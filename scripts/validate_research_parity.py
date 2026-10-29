@@ -128,6 +128,25 @@ def check_langscale074_model(model,label):
            model.get("deployed_parameters")==expected,
            label+": source-registered 500K upper-state count mismatch")
 
+# Explicit owner's 2026-10-29 $0 dual-T4 500K throughput-only waiver.
+# Not permission to expand size elsewhere, compare architectures or open TEST.
+LANGPRETRAIN076_CONTRACT = "owner-2026-10-29-500k-t4-throughput-only"
+def checked_langpretrain076(m):
+    return (m.get("study_id") == "LANGPRETRAIN076"
+            and m.get("study_type") == "single_model_training"
+            and m.get("parameter_budget_contract") == LANGPRETRAIN076_CONTRACT
+            and m.get("execution_level") == "internal_research"
+            and m.get("no_architecture_superiority_claim") is True
+            and m.get("model_tier") == "h48"
+            and m.get("study_lane") == "FREE_DUAL_T4_ORIGINAL_FIT_40_STEP_THROUGHPUT_ONLY")
+
+def check_langpretrain076_model(model,label):
+    demand(model.get("name") == "h48"
+           and model.get("seed") in (1701,1702)
+           and model.get("trainable_parameters") == 499623
+           and model.get("deployed_parameters") == 499623,
+           label + ": 076 fixed original h48 499623-p parameter/seed waiver failed")
+
 class ParityError(ValueError): pass
 
 def demand(condition, message):
@@ -184,7 +203,9 @@ def _check_manifest_parity_only(m,phase="preflight"):
                "single-model training requires >=1 declared model/seed")
         for i,model in enumerate(models):
             demand(isinstance(model,dict),f"models[{i}] must be an object")
-            if checked_langscale074(m):
+            if checked_langpretrain076(m):
+                check_langpretrain076_model(model,f"models[{i}]")
+            elif checked_langscale074(m):
                 check_langscale074_model(model,f"models[{i}]")
             elif checked_langscale070(m):
                 check_langscale070_model(model,f"models[{i}]")
@@ -201,7 +222,12 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 receipt=model.get("measured")
                 demand(isinstance(receipt,dict),
                        f"models[{i}] final actual measurement receipt required")
-                if checked_langscale074(m):
+                if checked_langpretrain076(m):
+                    check_langpretrain076_model({**model,
+                        "trainable_parameters":receipt.get("trainable_parameters"),
+                        "deployed_parameters":receipt.get("deployed_parameters")},
+                        f"models[{i}].measured")
+                elif checked_langscale074(m):
                     check_langscale074_model({**model,
                         "trainable_parameters":receipt.get("trainable_parameters"),
                         "deployed_parameters":receipt.get("deployed_parameters")},
