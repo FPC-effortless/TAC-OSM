@@ -39,9 +39,9 @@ NEURAL=tuple(CHECKSUMS)
 ALL=NEURAL+("p3_fit_counts","tac_p3_75_fixed")
 SEED=1701
 LENGTHS=(16,64,128)
-GENERATE=12
+GENERATE=4
 REPEATS=3
-PREFILL_REPEATS=7
+PREFILL_REPEATS=3
 
 def original_path(folder,arm):
     found=list(folder.rglob(f"{arm}_seed{SEED}_fit320.pt"))
@@ -100,7 +100,7 @@ def prefill_bench(models,prompt):
             r=[]
             for length in LENGTHS:
                 x=torch.tensor([list(prompt[:length])],dtype=torch.long)
-                for _ in range(2):m(x)
+                for _ in range(1):m(x)
                 times=[]
                 for _ in range(PREFILL_REPEATS):
                     t0=time.perf_counter_ns()
