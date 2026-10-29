@@ -1,0 +1,170 @@
+name: LANGMEM083 frozen TAC historical-value learned readout on newly unseen PSF publisher docs
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmem083/**'
+      - 'research/phone_queue/langmem083.json'
+      - 'scripts/langmem083_fit_eval.py'
+      - 'scripts/langmem083_aggregate.py'
+      - 'scripts/validate_research_parity.py'
+      - 'tests/test_langmem083.py'
+      - '.github/workflows/langmem083.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-frozen-probe-trained-before-unseen-dev:
+    if: github.head_ref == 'research/langmem083-frozen-memory-learned-readout-2026-10-29'
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact original no-GPU train/replay dependencies
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Preregistered original source, strict 9120p narrow training exception and constructed anti-leakage tests
+        run: |
+          mkdir -p probe083-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem083.json > probe083-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langmem083/FAIR_COMPARISON.json --phase preflight \
+            > probe083-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmem083.py
+      - name: Fetch original 078 immutable trained checkpoint and original FIT source SHA
+        run: |
+          mkdir -p original078-ckpt original078-aggregate
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name "LANGMEM078-FIT-dual-seed${{ matrix.seed }}" --dir original078-ckpt
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name LANGMEM078-SOURCE-PAIRED-AGGREGATE --dir original078-aggregate
+      - name: FIT ONLY - freeze original TAC, train three matched 9120p readout arms, save optimizer/RNG and SHA checkpoints
+        run: |
+          PYTHONPATH=src:. python scripts/langmem083_fit_eval.py train \
+            --seed ${{ matrix.seed }} \
+            --original-checkpoint-dir original078-ckpt \
+            --original-aggregate original078-aggregate/RESULTS.json \
+            --trained-dir probe083-evidence/TRAINED
+          python - <<'PY'
+          import json,hashlib,pathlib
+          path=pathlib.Path('probe083-evidence/TRAINED/FIT_RECEIPT.json')
+          r=json.loads(path.read_text())
+          assert r['study']=='LANGMEM083' and r['trained_updates_per_arm']==120
+          assert r['batch_size_per_arm']==128 and r['num_original_fit_owners']==14
+          assert r['probe_learned_parameters_per_arm']==9120
+          assert r['deployed_total_parameters_with_frozen_original']==508747
+          assert r['original_encoder_weights_sha256_before']==r['original_encoder_weights_sha256_after']
+          assert r['unseen_DEV_accessed_before_probes_frozen'] is False
+          assert set(r['checkpoint_receipts'])=={'correct','address_only','wrong_key'}
+          for z in r['checkpoint_receipts'].values():
+              p=path.parent/z['name']
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==z['checkpoint_sha256']
+              assert z['cold_replay_logits_bitwise'] is True and z['training_updates']==120
+          print('TRAINING_RECEIPTS_AND_ALL_THREE_PROBES_CHECKPOINTED_BEFORE_ANY_DEV_READ')
+          PY
+      - name: AFTER fit/checkpoint SHA sealing only - acquire two new genuine licensed publisher DEV documents
+        run: |
+          mkdir -p unseen083
+          curl --fail --silent --show-error --location --retry 2 \
+            https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Doc/howto/regex.rst \
+            --output unseen083/regex.rst
+          curl --fail --silent --show-error --location --retry 2 \
+            https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Doc/howto/argparse.rst \
+            --output unseen083/argparse.rst
+          echo '69fd30034444ac74f456b3e9c14e852b6f127f08c9620bf703915450457c729b  unseen083/regex.rst' | sha256sum --check --status
+          echo 'b961e5773d40f6643588c62a8cbb767faae24896ffb23e778123bc3a25e8d3a4  unseen083/argparse.rst' | sha256sum --check --status
+      - name: FIRST unseen original-source evaluation after all original source probe fits frozen
+        run: |
+          PYTHONPATH=src:. python scripts/langmem083_fit_eval.py evaluate \
+            --seed ${{ matrix.seed }} \
+            --original-checkpoint-dir original078-ckpt \
+            --original-aggregate original078-aggregate/RESULTS.json \
+            --trained-dir probe083-evidence/TRAINED \
+            --unseen-dir unseen083 \
+            --output probe083-evidence/EVAL_RECEIPT.json
+          python - <<'PY'
+          import json
+          r=json.load(open('probe083-evidence/EVAL_RECEIPT.json'))
+          assert r['study']=='LANGMEM083'
+          assert r['original_model_parameters_frozen']==499627
+          assert r['trainable_probe_parameters_per_arm']==9120
+          assert r['all_three_probe_checkpoint_hashes_frozen_before_DEV'] is True
+          assert r['new_unseen_owner_count']==2
+          assert r['new_unseen_historical_label_count']>=900
+          assert r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          assert set(r['metrics'])=={'8','32','128','256'}
+          PY
+      - name: Preserve FIT-only original probe weight/optimizer/RNG checkpoints and genuine new DEV results even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM083-FROZEN-PROBE-seed${{ matrix.seed }}
+          path: probe083-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  require-three-original-source-paired-aggregates:
+    needs: source-frozen-probe-trained-before-unseen-dev
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Acquire original three source FIT-only frozen-head checkpoint/DEV results
+        run: |
+          mkdir -p probe-raw probe-aggregate
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGMEM083-FROZEN-PROBE-seed*' --dir probe-raw
+      - name: Reject missing/unpinned original publisher source and mismatched source labels; summarize by genuine age
+        run: |
+          python scripts/langmem083_aggregate.py \
+            --results probe-raw --output probe-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('probe-aggregate/RESULTS.json'))
+          assert r['full_original_078_model_seeds']==3
+          assert r['new_unseen_same_publisher_dev_owners']==2
+          assert r['evaluation_done_after_checkpoints_SHA_sealed'] is True
+          assert r['trained_auxiliary_readout_parameters_each']==9120
+          assert r['probe_fitted_comparator_arms']==['correct','address_only','wrong_key']
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGMEM083 frozen actual slow-matrix historical byte decoder: first new publisher DEV',file=f)
+              print('Two SHA-verified source-publisher docs were never used in original 078 FIT/DEV or 083 probe FIT. SAME PSF publisher/domain. Original 499627p model frozen. Evaluator SUPPLIES historical key.',file=f)
+              print('| History age (bytes) | Correct matrix read accuracy | Address-only accuracy | Wrong-key accuracy | FIT byte-prior accuracy | Correct minus address-only NLL |',file=f)
+              print('|---|---:|---:|---:|---:|---:|',file=f)
+              for age in ('8','32','128','256'):
+                  v=r['metrics'][age]
+                  print(f"| {age} | {v['correct']['accuracy']:.3%} | {v['address_only']['accuracy']:.3%} | {v['wrong_key']['accuracy']:.3%} | {v['fit_prior']['accuracy']:.3%} | {v['correct_minus_address_only_nll']:+.6f} |",file=f)
+              print('This is historical-byte supplied-key probe, NOT autonomous retrieval or next-byte language architecture improvement. Two source owners and repeated target cells; no protected TEST or independent domain.',file=f)
+          PY
+      - name: Archive original full SOURCE SHA-verified unpromoted model probe results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM083-NEW-PUBLISHER-SOURCE-AGGREGATE
+          path: probe-aggregate/
+          retention-days: 90
+          if-no-files-found: warn
