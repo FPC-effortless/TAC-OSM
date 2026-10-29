@@ -76,7 +76,7 @@ def check_model_parameter_target(trainable_parameters, deployed_parameters=None,
 # Owner's 2026-10-28 NEW language-model scale (old studies unchanged).
 # Explicit, narrow contract: no global relaxation of the historical 100K gate.
 def checked_new_scale(m):
-    if (m.get("study_id") in ("LANGTRAIN025", "LANGLAYER035", "LANGLAYER037") and
+    if (m.get("study_id") in ("LANGTRAIN025", "LANGLAYER035", "LANGLAYER037", "LANGLAYER039") and
             m.get("parameter_budget_contract") == "owner-2026-10-28-500k"):
         return True
     return False
