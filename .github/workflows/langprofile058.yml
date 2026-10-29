@@ -1,0 +1,74 @@
+name: LANGPROFILE058 frozen TAC decoder original CPU operator profile
+on:
+  pull_request:
+    paths:
+      - 'scripts/langprofile058_ops.py'
+      - 'tests/test_langprofile058_ops.py'
+      - 'research/mathematical-engineering/langprofile058/**'
+      - 'research/phone_queue/langprofile058.json'
+      - '.github/workflows/langprofile058.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  profile-original-trained-decoder:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install frozen CPU benchmark dependencies
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Frozen CPU source and compute prerequisites plus constructed CPU profiler checks
+        run: |
+          mkdir -p langprofile058-evidence
+          python scripts/phone_lab.py plan research/phone_queue/langprofile058.json > langprofile058-evidence/PLAN.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langprofile058/FAIR_COMPARISON.json --phase preflight > langprofile058-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langprofile058_ops.py tests/test_langdecode057_validation.py tests/test_langstream043.py
+      - name: Download immutable original trained checkpoint with source receipt
+        run: |
+          gh run download 40797105091 --repo FPC-effortless/TAC-OSM --name LANGLAYER040-CPU-state48_no_graph-seed1701 --dir langprofile058-original/tac
+      - name: ATen CPU operator accounting with frozen original checkpoint and exact replay
+        run: |
+          PYTHONPATH=src:. python scripts/langprofile058_ops.py --tac-dir langprofile058-original/tac --output langprofile058-evidence/RESULTS.json
+          python - <<'PY'
+          import json, math
+          r=json.load(open('langprofile058-evidence/RESULTS.json'))
+          assert r['new_training_updates']==0 and r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          assert r['unchanged_original_transition'] and len(r['results'])==2
+          assert {x['prompt_bytes'] for x in r['results']}=={128,512}
+          for x in r['results']:
+              assert x['persistent_state_bytes']==3904 and x['step_transition_bitwise_equal']
+              assert x['original_comparison']['bitwise_original_incremental_logits_and_all_states']
+              assert x['original_comparison']['snapshot_bidirectional_bitwise_continuation']
+              assert x['original_comparison']['state_tensor_bytes']==3904
+              assert set(x['stages'])=={'step_with_guards','transition_only','validate_only'}
+              for name,stage in x['stages'].items():
+                  p=stage['operator_profile']
+                  assert p['aten_self_cpu_us']>0 and p['profile_calls']==12
+                  assert math.isclose(sum(v['share_of_aten_self_cpu'] for v in p['category_self_cpu_share'].values()),1,abs_tol=1e-8)
+                  assert stage['wall_clock']['repeats']==112
+          PY
+      - name: Retain authentic no-fit operator profile and failed checks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGPROFILE058-original-trained-CPU-ATen-operator-evidence
+          path: langprofile058-evidence/
+          retention-days: 90
+          if-no-files-found: warn
