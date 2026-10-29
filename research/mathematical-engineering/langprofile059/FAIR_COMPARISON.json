@@ -1,0 +1,49 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGPROFILE059-SOURCE-ATEN-CALLSITES",
+  "study_type": "noncomparative_diagnostic",
+  "execution_level": "internal_research",
+  "scientific_purpose": "No-fit original-checkpoint PyTorch profiler Python stack attribution from actual unchanged IncrementalTAC043._advance, with missing Python callstacks explicitly un-attributed. No new neural graph or model ranking.",
+  "new_neural_training": false,
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "real_world_source": {
+    "name": "PSF CPython3.13.0 publisher original text bytes",
+    "observed_real_outcomes": true,
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF License Version 2",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "597dde0eb3ff98c798ccb3657b1ac02074a8cdb929189f3cc68612877e45f13e",
+    "partitions": [
+      "FIT"
+    ]
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "checkpoint_policy": "Load sha-pinned original trained TAC checkpoint and optimizer/RNG/source metadata ONLY for inference; never write weights or train",
+  "frozen_model_matrix": [],
+  "seeds": [],
+  "histories": [
+    128,
+    512
+  ],
+  "targets_per_checkpoint": 0,
+  "resource_type": "CPU-only no fit",
+  "gpu_minutes": 0,
+  "protected_TEST": "NOT_ACCESSED",
+  "causal_protocol": "Original previously-exposed PSF CPython3.13.0 FIT prefixes128/512, same verified original trained checkpoint; reproduce original incremental and full-prefix parity before profiling same historical state/token; no target/future bytes, no training/TEST access.",
+  "interpretation": "Python profiler with_stack=True only; source attribution is optional and may be absent by build. Unknown stacks are reported honestly; op self CPU is instrumented and not interchangeable with unprofiled wall latency."
+}
