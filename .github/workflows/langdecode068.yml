@@ -1,0 +1,129 @@
+name: LANGDECODE068 independent three-host guarded-cache CPU repeatability
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langdecode068/**'
+      - 'research/phone_queue/langdecode068.json'
+      - '.github/workflows/langdecode068.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  repeated-original-checkpoint:
+    strategy:
+      fail-fast: false
+      matrix:
+        repeat: [1, 2, 3]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Original source/compute preregistration, no fit, exactness regression
+        run: |
+          mkdir -p langdecode068-evidence
+          python scripts/phone_lab.py plan research/phone_queue/langdecode068.json > langdecode068-evidence/PLAN.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langdecode068/FAIR_COMPARISON.json --phase preflight > langdecode068-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langdecode067_cache_guard.py tests/test_langdecode064_cached_cap.py tests/test_langdecode057_validation.py tests/test_langstream043.py
+      - name: Restore same original frozen trained source-bound checkpoint
+        run: |
+          gh run download 40797105091 --repo FPC-effortless/TAC-OSM --name LANGLAYER040-CPU-state48_no_graph-seed1701 --dir langdecode068-original/tac
+      - name: Original-versus-guarded-cache full growing-sequence decode unmodified
+        run: |
+          PYTHONPATH=src:. python scripts/langdecode067_benchmark.py --tac-dir langdecode068-original/tac --output langdecode068-evidence/RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('langdecode068-evidence/RESULTS.json'))
+          assert r['new_training_updates']==0 and r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          assert r['trained_parameters']==499623 and r['persistent_state_bytes_per_owner']==3904
+          assert {x['prompt_bytes'] for x in r['results']}=={128,512}
+          for row in r['results']:
+              q=row['original_equivalence']
+              assert q['bitwise_original_incremental_logits_and_all_states']
+              assert q['snapshot_bidirectional_bitwise_continuation']
+              assert q['state_tensor_bytes']==3904
+              assert q['full_prefix_max_abs_error']<=3e-5
+              assert set(row['arms'])=={'original','guarded_cap'}
+          PY
+      - name: Archive EVERY independent result including failures and raw distributions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGDECODE068-cpu-repeat-${{ matrix.repeat }}
+          path: langdecode068-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  replication-acceptance-report:
+    needs: repeated-original-checkpoint
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: LANGDECODE068-cpu-repeat-*
+          path: repeat-artifacts
+          merge-multiple: false
+      - name: All three complete original-checkpoint results must pass individually
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          paths=sorted(Path("repeat-artifacts").glob("LANGDECODE068-cpu-repeat-*/RESULTS.json"))
+          status="REPLICATION_PASS_ON_GITHUB_CPU_ONLY" if len(paths)==3 else "REPLICATION_INCONCLUSIVE_MISSING_ARTIFACTS"
+          rows=[]
+          for p in paths:
+              try:
+                  r=json.loads(p.read_text())
+                  assert r['new_training_updates']==0 and r['gpu_minutes']==0
+                  assert r['protected_TEST']=='NOT_ACCESSED'
+                  assert r['trained_parameters']==499623 and r['persistent_state_bytes_per_owner']==3904
+                  prompt_rows=r['results']
+                  assert {x['prompt_bytes'] for x in prompt_rows}=={128,512}
+                  for x in prompt_rows:
+                      q=x['original_equivalence']
+                      assert q['bitwise_original_incremental_logits_and_all_states']
+                      assert q['snapshot_bidirectional_bitwise_continuation']
+                      assert q['state_tensor_bytes']==3904
+                      assert q['full_prefix_max_abs_error']<=3e-5
+                  passed=bool(r['all_latency_gates_pass']) and all(
+                      x['median_reduction_fraction'] >= .05 and x['p95_ratio'] <= 1.10 for x in prompt_rows)
+                  rows.append({'artifact':str(p),'acceptance':passed,
+                               'prompts':[{'bytes':x['prompt_bytes'],
+                                           'median_reduction':x['median_reduction_fraction'],
+                                           'p95_ratio':x['p95_ratio']} for x in prompt_rows]})
+                  if not passed and status.startswith("REPLICATION_PASS"):
+                      status="REPLICATION_SPEED_GATE_FAILED"
+              except (KeyError, ValueError, AssertionError, TypeError) as e:
+                  rows.append({'artifact':str(p),'acceptance':False,'error':str(e)})
+                  status="REPLICATION_INCONCLUSIVE_INVALID_RESULTS"
+          if len(rows)==3 and not all(x['acceptance'] for x in rows) and status=="REPLICATION_PASS_ON_GITHUB_CPU_ONLY":
+              status="REPLICATION_SPEED_GATE_FAILED"
+          summary={'study':'LANGDECODE068','status':status,'found_original_results':len(paths),
+                   'results':rows,'promotion_allowed':False,'pnds_full_source_bridge':'OPEN',
+                   'protected_TEST':'NOT_ACCESSED'}
+          Path('REPLICATION_SUMMARY.json').write_text(json.dumps(summary,sort_keys=True,indent=2)+'\n')
+          print(json.dumps(summary,sort_keys=True))
+          PY
+      - name: Preserve aggregate rejection or partial results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGDECODE068-aggregate-acceptance
+          path: REPLICATION_SUMMARY.json
+          retention-days: 90
+          if-no-files-found: warn
