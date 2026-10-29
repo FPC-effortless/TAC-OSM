@@ -24,7 +24,7 @@ from context_transition import affine_scan,scalar_affine_scan,last_write_memory,
 from scaled_recurrence import ScaledRecurrenceTAC070
 
 WIDTHS={"m8":8,"m12":12,"m16":16}
-COUNTS={"m8":499623,"m12":500183,"m16":500671}
+COUNTS={"m8":499623,"m12":500175,"m16":500663}
 
 def model_parameters(k):
     if type(k) is not int or k not in (8,12,16):
