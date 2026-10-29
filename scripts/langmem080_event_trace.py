@@ -151,16 +151,16 @@ def evaluate(seed,ckpt_dir,verified):
             # Transport all previously observed event *writes* with current
             # exact original P_t. No current Q_t can enter an older anchor.
             next_contrib={}
-            for (anchor,lane),(c,origin,retention_bound) in active.items():
+            for (anchor,lane),(c,origin,retention_bound,source_writer) in active.items():
                 now=c@factors[lane]["p"]
                 next_contrib[(anchor,lane)]=(now,origin,
-                     retention_bound*factors[lane]["retention_bound"])
+                     retention_bound*factors[lane]["retention_bound"],source_writer)
             if t in ANCHORS:
                 for lane in LANES:
                     q=factors[lane]["q"].clone()
                     initial=norm(q)
                     if initial<=1e-12:raise ValueError("original event did not make a source-native write")
-                    next_contrib[(t,lane)]=(q,initial,1.)
+                    next_contrib[(t,lane)]=(q,initial,1.,factors["write_key"].clone())
                 source_anchor_sha.update(owner.encode()+b":"+str(t).encode()+b":"+
                     bytes([raw[t-1],raw[t]])+b";")
             # For all registered a<t, the event was present in prestate.
@@ -171,8 +171,8 @@ def evaluate(seed,ckpt_dir,verified):
                 for lane,name in (("fast","native"),("slow","slow_native")):
                     if (a,lane) not in active or (a,lane) not in next_contrib:
                         raise ValueError("missing causal historical original write")
-                    before,origin,_=active[a,lane]
-                    after,_,bound=next_contrib[a,lane]
+                    before,origin,_,source_writer=active[a,lane]
+                    after,_,bound,_=next_contrib[a,lane]
                     survival=norm(after)/origin
                     if survival>bound+1e-4:
                         raise ValueError("old single-write contribution norm exceeds original affine contraction bound")
@@ -215,6 +215,8 @@ def evaluate(seed,ckpt_dir,verified):
                         "historical_predecessor_source_byte":event_prev_byte,
                         "source_next_byte_target":y,
                         "origin_write_frobenius":origin,
+                        "historical_write_key_norm":float(torch.linalg.vector_norm(source_writer.double()).item()),
+                        "source_query_historical_write_cosine":float((factors["query"]*source_writer).sum().item()),
                         "surviving_write_frobenius_ratio":survival,
                         "survival_source_alpha_bound":bound,
                         "direct_old_event_read_l2":float(torch.linalg.vector_norm(read_direct.double()).item()),
