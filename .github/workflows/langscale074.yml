@@ -1,0 +1,148 @@
+name: LANGSCALE074 authentic language TAC 500K upper state reallocation
+on:
+  pull_request:
+    paths:
+      - 'scripts/langscale074_cpu_fit.py'
+      - 'scripts/langscale074_aggregate.py'
+      - 'research/mathematical-engineering/langscale074/**'
+      - 'research/phone_queue/langscale074.json'
+      - 'scripts/validate_research_parity.py'
+      - 'tests/test_langscale074.py'
+      - '.github/workflows/langscale074.yml'
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  authentic-source-fits:
+    if: github.head_ref == 'research/langscale074-upper-state-reallocation-2026-10-29'
+    strategy:
+      fail-fast: false
+      matrix:
+        tier: [h24,h96,h128]
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Pinned CPU torch numpy pytest
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Hard source/size/compute planner and preregistration gate
+        run: |
+          mkdir -p langscale074-results
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langscale074.json > langscale074-results/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langscale074/FAIR_COMPARISON.json --phase preflight > langscale074-results/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langscale074.py
+          PYTHONPATH=src:. python - <<'PY'
+          from scripts.langscale074_cpu_fit import model_source_preflight, model_for, ARMS
+          from scripts.langlayer035_sampling import fit_sources,schedule_receipt
+          from scripts.validate_research_parity import check_model_parameter_target,ParityError
+          model_source_preflight()
+          assert tuple(sorted(ARMS.values()))==(499537,499625,499631)
+          for tier,count in ARMS.items():
+              m=model_for(tier)
+              assert m.parameter_count()==count
+          try: check_model_parameter_target(499623,499623)
+          except ParityError: pass
+          else: raise AssertionError('global model budget accidentally relaxed')
+          fit=fit_sources()
+          assert len(fit)==14
+          for seed in (1701,1702,1703):
+              r=schedule_receipt(fit,seed,steps=160)
+              assert r['examples_seen']==1280 and r['next_byte_targets_seen']==163840
+          PY
+      - name: 160 real publisher FIT updates, original full optimizer and RNG checkpoint
+        run: |
+          PYTHONPATH=src:. python scripts/langscale074_cpu_fit.py \
+            --arm ${{ matrix.tier }} --seed ${{ matrix.seed }} --steps 160 \
+            --out "langscale074-results/${{ matrix.tier }}_seed${{ matrix.seed }}"
+      - name: Check source receipt and immutable trained checkpoint full cold replay
+        run: |
+          python - <<'PY'
+          import glob,json,hashlib
+          p=glob.glob('langscale074-results/*/FIT_AND_EXPOSED_DEV_RECEIPT.json')
+          assert len(p)==1
+          r=json.load(open(p[0]))
+          counts={'h24':499625,'h96':499537,'h128':499631}
+          assert r['study']=='LANGSCALE074' and r['arm'] in counts and r['seed'] in (1701,1702,1703)
+          assert r['updates']==160 and r['target_bytes_seen']==163840
+          assert r['parameters']=={'trainable':counts[r['arm']],'deployed':counts[r['arm']]}
+          assert r['checkpoint_reloaded_identical_scored_DEV'] is True
+          assert r['DEV_EXPOSED_4096_ONLY']['n']==4096
+          assert r['scale_axis']=='UPPER_RECURRENT_STATE_VS_FFN_REALLOCATION' and r['upper_state_width'] in (24,96,128)
+          assert r['base_native_state_unchanged'] is True
+          assert r['matched_training_FLOPs']=='NOT_MATCHED_DIFFERENT_UPPER_RECURRENCE_WIDTH'
+          assert r['GPU_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          cp=glob.glob('langscale074-results/*/*.pt')
+          assert len(cp)==1 and hashlib.sha256(open(cp[0],'rb').read()).hexdigest()==r['checkpoint_sha256']
+          PY
+      - name: Archive each fitted model checkpoint, optimizer, RNG and original source receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSCALE074-FIT-${{ matrix.tier }}-seed${{ matrix.seed }}
+          path: langscale074-results/
+          retention-days: 90
+          if-no-files-found: warn
+
+  all-seed-source-verified-summary:
+    needs: authentic-source-fits
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Retrieve all nine authentic training receipts, preserve incompletes
+        run: |
+          mkdir -p scaling-raw scaling-aggregate old070
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGSCALE074-FIT-*' --dir scaling-raw
+          gh run download 40871491842 -R FPC-effortless/TAC-OSM \
+            --name LANGSCALE070-SOURCE-VERIFIED-SCALING-SUMMARY --dir old070
+      - name: Verify all checkpoints and source schedules; show only honest exploratory metrics
+        run: |
+          PYTHONPATH=src:. python scripts/langscale074_aggregate.py \
+            --results scaling-raw --reference old070/RESULTS.json --output scaling-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('scaling-aggregate/RESULTS.json'))
+          assert r['new_checkpoints_verified']==9 and r['original_070_reference_checkpoints']==3 and r['source_paired']
+          assert r['training_FLOP_parity']=='NOT_MATCHED'
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGSCALE074 authentic source upper recurrent state reallocation, ~500K',file=f)
+              print('Upper recurrent h24/48/96/128, FFN compensation, ~500K parity, old h48 weights reused. Training FLOPs NOT matched.',file=f)
+              print('| Upper state | FFN | Params | Exposed DEV NLL | Top1 | CPU process seconds |',file=f)
+              print('|---|---:|---:|---:|---:|---:|',file=f)
+              for key,v in r['metrics'].items():
+                  print(f"| {v['upper_hidden_width']} | {v['ffn_width']} | {v['trainable_parameters']} | {v['mean_DEV_nll']:.6f} | {v['mean_DEV_top1']:.4%} | {v['mean_cpu_process_seconds']:.1f} |",file=f)
+              print('Parameter reallocation NOT pure memory scaling: native 8x8 fixed, upper width+FFN change, training FLOPs unmatched. No TEST, whole math proof or release.',file=f)
+          PY
+      - name: Save full positive, negative or missing run evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSCALE074-SOURCE-VERIFIED-SCALING-SUMMARY
+          path: scaling-aggregate/
+          retention-days: 90
+          if-no-files-found: warn
