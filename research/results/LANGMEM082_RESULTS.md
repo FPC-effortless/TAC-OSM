@@ -13,10 +13,17 @@ Original complete aggregate retained verbatim semantically in
 `LANGMEM082_AGGREGATE.json`; subsequent equal-denominator paired reaggregation
 of the SAME three original artifacts in `LANGMEM082_PAIRED_AGGREGATE.json`.
 No results replaced, no fits or checkpoint changes.
+Final source replay [40963357959](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40963357959)
+on **a6601b6e720a97c659980d2d56e4dfcb0e27a96b** passed all three
+model jobs, CI-pinned PNDS operator parity and equal-denominator paired
+aggregation. All byte-recovery accuracies and source target SHA are identical to the
+first run. Aggregate floating-point NLL values differ by at most2.17e-9;
+this is not bitwise replay identity. See `LANGMEM082_REPLAY_CHECK.json`. Current PNDS bridge head also passed in
+[40962992755](https://github.com/FPC-effortless/pnds-lean/actions/runs/40962992755).
 
 ## Frozen genuine-source cohort and decoder
 
-Same immutable original LANGMEM078499627-parameter three checkpoints from
+Same three immutable original LANGMEM078 checkpoints with 499,627 parameters from
 run40890642312, full optimizer/RNG/source-order receipts, original079 causal
 4160B carried state, same four genuine licensed PSF CPython3.13 already-exposed
 DEV owners raw0..319. Original trained model NLL **2.1202219517** matches081.
