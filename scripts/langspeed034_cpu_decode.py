@@ -38,10 +38,10 @@ COUNTS={"tac_context026":500122,"bdh_official":501504,"causal_transformer":49696
 NEURAL=tuple(CHECKSUMS)
 ALL=NEURAL
 SEED=1701
-LENGTHS=(16,64,128)
-GENERATE=4
-REPEATS=3
-PREFILL_REPEATS=3
+LENGTHS=(32,128)
+GENERATE=2
+REPEATS=2
+PREFILL_REPEATS=1
 
 def original_path(folder,arm):
     found=list(folder.rglob(f"{arm}_seed{SEED}_fit320.pt"))
@@ -179,7 +179,7 @@ def main():
     # Do not construct the P3 counts model in this neural-only latency comparison.
     # Building source-wide counts is unrelated work and stalled earlier runners.
     p3=None
-    warmup(models,p3,prompt)
+    # Separate warmups inside prefill_bench; no extra model initialization forwards.
     prefill=prefill_bench(models,prompt)
     gen=generation_bench(models,p3,prompt)
     result={"study":"LANGSPEED034","status":"ACTUAL_FROZEN_TRAINED_CPU_DECODE_BENCH",
