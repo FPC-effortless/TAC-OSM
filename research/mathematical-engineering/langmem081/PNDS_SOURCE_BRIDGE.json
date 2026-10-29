@@ -1,0 +1,42 @@
+{
+  "schema": "tac-pnds.source-bridge.v1",
+  "study": "LANGMEM081",
+  "type": "NOFIT_REAL_SOURCE_CONTEXT_ADDRESS_DIAGNOSTIC",
+  "ancestry": [
+    "LANGMEM077",
+    "LANGMEM078",
+    "LANGMEM079",
+    "LANGMEM080"
+  ],
+  "tac": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "source_commit": "ee335ad7b0c65d2828035c4f775aaa3a0666d803",
+    "pull_request": 623,
+    "source_paths": [
+      "scripts/langmem081_context_address.py",
+      "scripts/langmem081_aggregate.py",
+      "research/mathematical-engineering/langmem079/dual_streaming.py"
+    ],
+    "empirical_ci_run_id": 40960891828,
+    "checkpoint_train_run_id": 40890642312
+  },
+  "pnds": {
+    "repository": "FPC-effortless/pnds-lean",
+    "proof_commit": "8aa6bcc15cdd618dddb6eb819ddcda76c2dc3309",
+    "pull_request": 78,
+    "lean_path": "PNDS/LangMem081CausalHistory.lean",
+    "lean_symbol": "PNDS.LangMem081.same_observed_prefix_target_blind",
+    "python_path": "foundation/v1/langmem081_context.py",
+    "python_symbol": "matching_indices"
+  },
+  "exact_source_contract": "Prior source writer clock a<t; source query last L observed bytes0..t matches earlier original context raw[a-L:a]. Actual future raw[t+1] is excluded from both selector and old writer key; real target used only in scoring.",
+  "historical_side_table": "NOT_TAC_NATIVE_CONSTANT_MEMORY; source past exact byte history is an external diagnostic data store",
+  "mathematical_status": "PARTIAL_LEAN_PREFIX_CAUSALITY_AND_REFERENCE_ONLY",
+  "source_PyTorch_IEEE_AD_equivalence": "OPEN",
+  "model_retrieved_historical_content_verified": false,
+  "independently_qualified": false,
+  "two_repository_canonical_index_status": "OPEN_COORDINATED_MERGE_REQUIRED",
+  "limitations": [
+    "Original publisher DEV already exposed, four-byte match often guaranteed identical deterministic native key, exact-history continuation may disagree with true future, raw past side-table not included in native 4160B state, no new model training or TEST."
+  ]
+}

@@ -1,0 +1,138 @@
+name: LANGMEM081 original genuine-source learned writer address versus exact history controls
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmem081/**'
+      - 'research/phone_queue/langmem081.json'
+      - 'scripts/langmem081_context_address.py'
+      - 'scripts/langmem081_aggregate.py'
+      - 'tests/test_langmem081.py'
+      - '.github/workflows/langmem081.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-source-causal-history:
+    if: github.head_ref == 'research/langmem081-real-context-address-retrieval-2026-10-29'
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install original CPU PyTorch and pinned research dependencies
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Registered actual licensed source, label-blind writer rank and negative-control gate
+        run: |
+          mkdir -p context081-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem081.json > context081-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langmem081/FAIR_COMPARISON.json --phase preflight \
+            > context081-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmem081.py
+      - name: Read only original 078 model, optimizer RNG and publisher sample SHA
+        run: |
+          mkdir -p original-dual-ckpt original078-verified
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name "LANGMEM078-FIT-dual-seed${{ matrix.seed }}" --dir original-dual-ckpt
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name LANGMEM078-SOURCE-PAIRED-AGGREGATE --dir original078-verified
+      - name: Trace original source past matching next-byte writers and wrong-history controls
+        run: |
+          PYTHONPATH=src:. python scripts/langmem081_context_address.py \
+            --seed ${{ matrix.seed }} \
+            --checkpoint-dir original-dual-ckpt \
+            --original-aggregate original078-verified/RESULTS.json \
+            --output context081-evidence/CONTEXT_RESULTS.json
+          python - <<'PY'
+          import json,math
+          r=json.load(open('context081-evidence/CONTEXT_RESULTS.json'))
+          assert r['study']=='LANGMEM081' and r['original_model_no_new_fit'] is True
+          assert r['trained_original_parameters']==499627
+          assert r['native_state_fp32_bytes_per_owner']==4160
+          assert r['source_context_lengths']==[2,3,4]
+          assert r['source_history_caps']==[32,128,256]
+          assert r['source_observed_nextbyte_targets_per_seed']==768
+          assert r['source_observed_cohort_cells']==6912
+          assert len(r['rows'])==6912
+          assert r['history_side_table']=='NOT_PART_OF_4160BYTE_PERSISTENT_MODEL_STATE'
+          assert r['original_graph_128_prefix_max_abs_logit_error']<=3e-5
+          assert r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          PY
+      - name: Save original genuine source cohort including no-positive and negative results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM081-ORIGINAL-CONTEXT-seed${{ matrix.seed }}
+          path: context081-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  source-verified-three-seed-aggregate:
+    needs: real-source-causal-history
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download all 3 trained model original publisher context diagnoses
+        run: |
+          mkdir -p context-raw context-aggregate
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGMEM081-ORIGINAL-CONTEXT-seed*' --dir context-raw
+      - name: Require exact same actual publisher owner/clock/context/target SHA and write source rank
+        run: |
+          python scripts/langmem081_aggregate.py \
+            --results context-raw --output context-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('context-aggregate/RESULTS.json'))
+          assert r['study']=='LANGMEM081' and r['source_matched_three_original_model_seed_checkpoints']==3
+          assert r['source_unique_actual_nextbyte_targets_per_seed']==768
+          assert r['source_repeated_LH_query_cells_per_seed']==6912
+          assert r['all_real_source_context_cohorts_and_target_SHA_identical'] is True
+          assert r['history_side_table_in_model_persistent_bytes'] is False
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGMEM081 — genuine publisher past-context vs trained native address',file=f)
+              print('All historical label choices use past original observed source bytes ONLY. Original DEV previously EXPOSED. Side-table NOT 4160B model state.',file=f)
+              print('| Observed context length | Past history bytes | Positive source coverage | Native writer top1 context hit (when positive) | Exact-history last continuation correct (when positive) |',file=f)
+              print('|---|---:|---:|---:|---:|',file=f)
+              for L in (2,3,4):
+                  for H in (32,128,256):
+                      d=r['metrics'][f'L{L}_H{H}']
+                      def pct(x):
+                          return 'N/A (no source positives)' if x is None else f'{100*x:.2f}%'
+                      print(f"| {L} | {H} | {pct(d['source_positive_coverage'])} | {pct(d['learned_query_top1_correct_context_when_positive'])} | {pct(d['exact_history_recent_matching_continuation_accuracy_when_match'])} |",file=f)
+              print('No new training, no protected TEST, no independent generalization, model key rank not direct byte content readout; original expert exact-history uses an external side table.',file=f)
+          PY
+      - name: Archive real source context and original checkpoint negative evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM081-SOURCE-VERIFIED-AGGREGATE
+          path: context-aggregate/
+          retention-days: 90
+          if-no-files-found: warn
