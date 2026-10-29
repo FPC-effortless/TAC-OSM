@@ -2,9 +2,10 @@
 
 Completed 2026-10-29. **Internally measured, not independently qualified.**
 
-**Preregistered engineering acceptance: PASS.** Batching finite-state checks reduced
-per-byte median decode latency by >=5% at both original prompt lengths and p95
-also improved. This changes validation execution only; original neural graph,
+**Initial preregistered run: PASS; repeat latency evidence is MIXED.** The first
+two CPU runs passed the latency thresholds; the third failed the 128-byte p95
+guard. All correctness checks passed in all three runs. Median decode latency
+improved in every run, but tail-latency consistency is not established. This changes validation execution only; original neural graph,
 checkpoint and 3904-byte per-owner FP32 persistent-state payload are unchanged.
 
 [Draft PR #596](https://github.com/FPC-effortless/TAC-OSM/pull/596) ·
@@ -79,5 +80,34 @@ reported 1442 passed, 3 skipped and one failure: the baseline documentation
 still listed 1413 tests after these 33 new cases brought collection to 1446.
 Ran the canonical `scripts/sync_test_count.py`, changing only the explicitly
 mutable current count (frozen count 327 preserved); the targeted integrity
-regression then passed locally. The decoder experiment was already successful
-and was not repeated or retuned for this documentation change.
+regression then passed locally. The original measurement remains the primary preregistered observation. GitHub
+automatically repeated the unchanged protocol on subsequent PR pushes; these
+replications are preserved below, including the failed latency threshold. No
+implementation, threshold, source cohort or timing policy was retuned.
+
+## Automatic unchanged-protocol replications and final decision
+
+| Run | Reduction at 128 / 512 | p95 ratio at 128 / 512 | Latency gate |
+|---|---:|---:|---|
+| [40855792865](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40855792865) | 6.43% / 7.48% | 0.934 / 0.950 | PASS |
+| [40856159080](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40856159080) | 7.74% / 6.08% | 0.937 / 0.948 | PASS |
+| [40856297980](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40856297980) | 6.34% / 7.09% | **1.388** / 0.775 | **FAIL: 128-byte p95** |
+
+The third run exceeded the frozen maximum p95 ratio 1.10 despite improved
+medians. Do not discard that observation, claim consistently improved p95 or
+accept production integration on the first positive run alone. Same wrapper,
+model and probe source in all three runs; differing GitHub hosts/scheduling
+were not controlled. It is not established whether the tail regression comes
+from this implementation or hosted CPU noise. No further reruns were chosen
+to chase acceptance. Keep the PR draft and unmerged, pending a separately
+reviewed repeatability protocol if this optimization is pursued.
+
+All three original ZIPs and extracted raw receipts/results are committed under
+`research/evidence/langdecode057/`, with a digest ledger. Successful workflow
+completion means the diagnostic ran, not that its latency gate passed: the
+boolean `acceptance_gate` is preserved in each original RESULTS.json.
+
+After the documented-count fix, [full-suite run 40856297864](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40856297864)
+passed: **1443 passed, 3 skipped**, including the new 33 cases. The original
+checkpoint parity, full-prefix tolerance/argmax, state size and snapshot
+continuation checks remained PASS across all three CPU runs.
