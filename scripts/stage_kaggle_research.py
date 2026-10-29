@@ -56,8 +56,11 @@ def package(proposal_path: Path, *, kaggle_user: str, destination: Path) -> dict
         "workload_sha256": digest, "decision_digest": decision["source_contract_fingerprint"],
         "scientific_qualification": "NONE_PRE_AND_POST_INDEPENDENT_GATES_REQUIRED",
     }
+    # Kaggle links each kernel's URL slug to its title. Keep metadata.id
+    # and the title-derived slug consistent for ALL future submissions.
+    # Do not resubmit or rename historical private kernels during a status check.
     metadata = {
-        "id": handle, "title": "TAC-OSM " + proposal["run_id"],
+        "id": handle, "title": "TACOSM " + proposal["run_id"],
         "code_file": "entrypoint.py", "language": "python", "kernel_type": "script",
         "is_private": "true", "enable_gpu": "true", "enable_internet": "false",
         "machine_shape": "NvidiaTeslaT4",
