@@ -1,0 +1,136 @@
+name: LANGMEM077 source-verified native retention vs directional erase diagnosis
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmem077/**'
+      - 'research/phone_queue/langmem077.json'
+      - 'scripts/langmem077_retention_probe.py'
+      - 'scripts/langmem077_aggregate.py'
+      - 'tests/test_langmem077.py'
+      - '.github/workflows/langmem077.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authentic-native-retention:
+    if: github.head_ref == 'research/langmem077-retention-gate-decay-2026-10-29'
+    strategy:
+      fail-fast: false
+      matrix:
+        tier: [m8,m12,m16]
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Frozen original CPU Torch and source verifier packages
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Frozen nofit preregistration, compute planner, and native source algebra checks
+        run: |
+          mkdir -p retention077-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem077.json > retention077-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+             --manifest research/mathematical-engineering/langmem077/FAIR_COMPARISON.json --phase preflight \
+             > retention077-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmem077.py tests/test_langstream076.py
+      - name: Restore unmodified source and original trained checkpoint SHA
+        run: |
+          mkdir -p original-ckpt original075-summary
+          gh run download 40881916911 -R FPC-effortless/TAC-OSM \
+            --name LANGSCALE075-ORIGINAL-RESULTS-READONLY-RECOVERY --dir original075-summary
+          if [ "${{ matrix.tier }}" = 'm8' ]; then
+            gh run download 40871491842 -R FPC-effortless/TAC-OSM \
+              --name "LANGSCALE070-FIT-p500k-seed${{ matrix.seed }}" --dir original-ckpt
+          else
+            gh run download 40881468228 -R FPC-effortless/TAC-OSM \
+              --name "LANGSCALE075-FIT-${{ matrix.tier }}-seed${{ matrix.seed }}" --dir original-ckpt
+          fi
+      - name: Trace native Delta P, alpha decay, directional erase, real publisher original source
+        run: |
+          PYTHONPATH=src:. python scripts/langmem077_retention_probe.py \
+             --tier ${{ matrix.tier }} --seed ${{ matrix.seed }} \
+             --checkpoint-dir original-ckpt \
+             --original-aggregate original075-summary/RESULTS.json \
+             --output retention077-evidence/RETENTION_RESULTS.json
+          python - <<'PY'
+          import json,math
+          r=json.load(open('retention077-evidence/RETENTION_RESULTS.json'))
+          assert r['study']=='LANGMEM077' and r['no_fits'] and r['no_optimizer_steps']
+          assert r['original_target_count']==768 and r['clock_end_exclusive']==320
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          assert len(r['original_source_owners'])==4
+          assert set(r['selected_age_summary'])=={'1','2','4','8','16','32','64','128','160'}
+          assert r['metrics']['max_source_native_delta_update_abs_error']<=1e-4
+          assert all(v['mean_actual_native_difference_ratio']<=v['mean_retention_upper_bound']+1e-4
+                     for v in r['selected_age_summary'].values())
+          PY
+      - name: Preserve all per-owner original source and negative outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM077-NATIVE-${{ matrix.tier }}-seed${{ matrix.seed }}
+          path: retention077-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  original-source-nine-arm-aggregate:
+    needs: authentic-native-retention
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download nine original trained state source diagnostic artifacts
+        run: |
+          mkdir -p retention-raw retention-aggregate
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGMEM077-NATIVE-*' --dir retention-raw
+      - name: Require all source owner next-byte labels match and native equations pass
+        run: |
+          PYTHONPATH=src:. python scripts/langmem077_aggregate.py \
+            --results retention-raw --output retention-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('retention-aggregate/RESULTS.json'))
+          assert r['original_trained_checkpoint_results']==9
+          assert r['all_source_delta_equations_pass'] and r['all_source_retention_bounds_pass']
+          assert r['source_targets_per_checkpoint']==768 and r['no_fits']
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGMEM077 — learned native state retention mechanism',file=f)
+              print('Original 070/075 checkpoints; exact same source clock/owner/next-byte labels; previously EXPOSED DEV; no original training.',file=f)
+              print('| Native matrix | Mean retention gate alpha | Theoretical contribution upper-half-life (tokens) | Native state at age16 relative norm | Product alpha upper bound age16 |',file=f)
+              print('|---|---:|---:|---:|---:|',file=f)
+              for tier in ('m8','m12','m16'):
+                  m=r['metrics'][tier];a=m['retention_by_age']['16']
+                  print(f"| {tier} | {m['mean_source_native_alpha']:.5f} | {m['mean_source_retention_half_life_upper_bound_tokens']:.2f} | {a['mean_actual_native_difference_ratio']:.8f} | {a['mean_retention_upper_bound']:.8f} |",file=f)
+              print('Bound applies only to initial clock128 native state, not total memory/history; source conditioned on previously exposed DEV. IEEE whole source and new model quality OPEN.',file=f)
+          PY
+      - name: Archive original complete negative/positive mechanism measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM077-NATIVE-RETENTION-AGGREGATE
+          path: retention-aggregate/
+          retention-days: 90
+          if-no-files-found: warn
