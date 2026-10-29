@@ -14,6 +14,8 @@ from pathlib import Path
 
 SHA = "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e"
 SEEDS = (1701,1702)
+EXPECTED_RUN_ID = "langpretrain076-h48-free-t4"
+WORKLOAD_PATH = Path(__file__).resolve().parents[1] / "scripts/langpretrain076_t4_measure.py"
 TIMED_BYTES = 32768
 TOTAL_BYTES = 40960
 PARAMS = 499623
@@ -34,6 +36,8 @@ def verify(directory: Path) -> dict:
         raise ReceiptError("Kaggle did not provide actual two-T4 runtime evidence")
     runtime=json.loads(runtime_file.read_text())
     if (runtime.get("schema")!="tac-osm.kaggle-t4x2-runtime.v1"
+        or runtime.get("run_id") != EXPECTED_RUN_ID
+        or runtime.get("workload_sha256") != sha(WORKLOAD_PATH)
         or runtime.get("requested_accelerator")!="NvidiaTeslaT4"
         or runtime.get("status")!="COMPLETED_UNQUALIFIED_REQUIRES_INDEPENDENT_EVALUATION"
         or runtime.get("seeds")!=list(SEEDS) or runtime.get("strategy")!="seed_shard"):
@@ -59,6 +63,7 @@ def verify(directory: Path) -> dict:
             or d.get("study")!="LANGPRETRAIN076"
             or d.get("seed")!=seed or d.get("physical_slot")!=slot
             or "T4" not in str(d.get("device_name","")).upper()
+            or d.get("device_name") != obs["names"][slot]
             or d.get("source_sha256")!=SHA
             or d.get("trainable_parameters")!=PARAMS
             or d.get("deployed_parameters")!=PARAMS
