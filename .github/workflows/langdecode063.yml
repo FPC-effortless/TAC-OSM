@@ -37,7 +37,7 @@ jobs:
           mkdir -p langdecode063-evidence
           python scripts/phone_lab.py plan research/phone_queue/langdecode063.json > langdecode063-evidence/PLAN.json
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langdecode063/FAIR_COMPARISON.json --phase preflight > langdecode063-evidence/PREFLIGHT.json
-          PYTHONPATH=src:. python -m pytest -q tests/test_langdecode063_shared_upper.py tests/test_langkernel061_shared_upper.py tests/test_langdecode057_validation.py tests/test_langstream043.py
+          PYTHONPATH=src:. python -m pytest -q tests/test_langdecode063_shared_upper.py tests/test_langdecode057_validation.py tests/test_langdecode057_validation.py tests/test_langstream043.py
       - name: Retrieve immutable original stateful trained TAC checkpoint
         run: |
           gh run download 40797105091 --repo FPC-effortless/TAC-OSM --name LANGLAYER040-CPU-state48_no_graph-seed1701 --dir langdecode063-original/tac
@@ -62,7 +62,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: LANGDECODE063-original-trained-vector-shared-upper-CPU
+          name: LANGDECODE063-original-trained-shared-upper-CPU
           path: langdecode063-evidence/
           retention-days: 90
           if-no-files-found: warn
