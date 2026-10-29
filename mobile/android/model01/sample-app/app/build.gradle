@@ -11,6 +11,14 @@ android {
         versionCode 1
         versionName '0.1-dev'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        // The full multi-ABI debug APK is retained for emulator/replay tests.
+        // For direct user-phone installation, build a single ARM64 APK.
+        // This is a packaging-only change; the trained ONNX graph is identical.
+        if (project.hasProperty('me111Arm64Phone')) {
+            ndk {
+                abiFilters 'arm64-v8a'
+            }
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
