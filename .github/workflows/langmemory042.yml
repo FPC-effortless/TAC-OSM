@@ -1,0 +1,55 @@
+name: LANGMEMORY042 bounded FIT-selected frozen-clock autoresearch
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmemory042/**'
+      - 'research/phone_queue/langmemory042.json'
+      - 'scripts/autoresearch_memory042.py'
+      - 'tests/test_langmemory042.py'
+      - '.github/workflows/langmemory042.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  frozen-bounded-trials:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Router, immutable evaluator, feature controls and original source replay
+        run: |
+          set -o pipefail
+          mkdir -p langmemory042-evidence
+          python scripts/phone_lab.py plan research/phone_queue/langmemory042.json > langmemory042-evidence/PLAN.txt
+          cmp langmemory042-evidence/PLAN.txt research/mathematical-engineering/langmemory042/COMPUTE_DECISION.txt
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmemory042/FAIR_COMPARISON.json --phase preflight > langmemory042-evidence/PREFLIGHT.json
+          PYTHONPATH=src python -m pytest -q tests/test_langmemory042.py tests/test_research_probe_agnostic.py
+          PYTHONPATH=src:. python scripts/autoresearch_memory042.py --output-dir langmemory042-work | tee langmemory042-evidence/EXECUTION.log
+          cp langmemory042-work/RESULTS.json langmemory042-work/SELECTION_BEFORE_DEV.json langmemory042-work/results.jsonl langmemory042-work/events.jsonl langmemory042-evidence/
+          git diff --exit-code -- research/source-bundles research/replay-bundles research/mathematical-engineering/context026 research/mathematical-engineering/langlayer040 scripts/langlayer041_real_context_probe.py
+      - name: Retain partial failures without republishing original binary weights
+        if: always()
+        run: |
+          mkdir -p langmemory042-evidence
+          for item in SELECTION_BEFORE_DEV.json events.jsonl results.jsonl RESULTS.json; do
+            if test -f "langmemory042-work/$item"; then cp "langmemory042-work/$item" langmemory042-evidence/; fi
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGMEMORY042-bounded-original-checkpoint-evidence
+          path: langmemory042-evidence/
+          retention-days: 90
