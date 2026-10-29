@@ -199,13 +199,20 @@ PNDS Python operator comparison passes for256 byte codes and64 randomized
 Float64 operator pairs, max error8.89e-16 at1e-12 tolerance. No global pipeline
 or source IEEE/AD proof is inferred from these scoped checks.
 
-Initial PNDS Lean run40968873496 failed because signed-bit injectivity left
+Initial PNDS Lean runs40968873496 and40969055889 failed because signed-bit injectivity left
 the arithmetic contradictions -1=1 and1=-1 unfinished; this failure is
 preserved. The repair changes proof tactics only. Lean kernel build, Python
 reference tests, historical reciprocal-index checks and explicit axiom audit
 passed in [40969135827](https://github.com/FPC-effortless/pnds-lean/actions/runs/40969135827)
 at proof **4f24b054b413efb2564892215401398c5c339e6f**. No `sorryAx` counts as a
-proved theorem. Formulations cover exact-real overwrite/read, unit-key latest
+proved theorem. Current bridge head also passed in
+[40969555828](https://github.com/FPC-effortless/pnds-lean/actions/runs/40969555828).
+Read-only structural audit/reaggregation CI passed in
+[40970032497](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40970032497),
+with no neural code, source document read or new predictions. A later unchanged
+source/bridge replay also passed in
+[40969558910](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40969558910).
+Formulations cover exact-real overwrite/read, unit-key latest
 write, orthogonal-read preservation and unscaled signed-bit injectivity only.
 SHA/Float32, full model AD, autonomous address selection, integrated deployment,
 independent-domain evidence and coordinated canonical registry merge remain OPEN.
