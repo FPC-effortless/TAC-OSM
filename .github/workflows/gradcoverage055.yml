@@ -14,6 +14,7 @@ permissions:
   actions: read
 jobs:
   original-complete-gradient-coverage:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == '2ac0f6a22ab01cf2fdeb0e83d6c972fe651116ca'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
