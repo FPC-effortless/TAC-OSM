@@ -1,0 +1,130 @@
+{
+  "study_id": "LANGSTREAM043-INCREMENTAL-STATE-PARITY",
+  "execution_level": "internal_research",
+  "source_parent_commit": "c57895d37e4f8749f66117f4fcedfa059486d602",
+  "objective": "Inference-only incremental state interface for original trained040 graph-free48D499623p TAC; eliminate repeated growing-prefix recomputation without changing learned weights/predictions within frozen tolerances.",
+  "no_new_model_fits": true,
+  "supported_model": "FactorialDepthControl040(state_width48,upper_graphFalse), original040 five checkpoints1701..1705",
+  "source": "Original licensed PSF CPython FIT; same immutable artifacts as042. No DEV/TEST metric or labels used.",
+  "semantics": "Consume one observed byte, update native/aligned/wave/concept/basis/lexical/previous-key/upper state, emit next-byte logits. Growing prefix from resetclock0; no rolling-window128 equivalence or eviction guarantee.",
+  "position_modes": [
+    "native",
+    "cap_all"
+  ],
+  "state_shapes_per_owner": {
+    "native": [
+      8,
+      8
+    ],
+    "aligned": [
+      2,
+      16,
+      8
+    ],
+    "wave": [
+      8,
+      2
+    ],
+    "concepts": [
+      6,
+      16
+    ],
+    "basis": [
+      88
+    ],
+    "lexical": [
+      3,
+      48
+    ],
+    "previous_key": [
+      8
+    ],
+    "upper": [
+      48
+    ],
+    "last_logits": [
+      256
+    ]
+  },
+  "state_budget": "720 recurrent/cache floats +256 current-logit floats=976 floats/owner, plus bounded metadata. No entire token history retained. FP32 tensor payload3904bytes/owner, weights/runtime/workspaces excluded. Clock limited int64, owners explicit.",
+  "safety_boundaries": [
+    "reject training-mode/model mutation, wrong owner/model/dtype/shape/mode, invalid token/mask/clock",
+    "pure transitions leave caller state/weights unchanged",
+    "no future token or target in step interface",
+    "safe source-bound state serialization; weights_only load, no overwrite",
+    "checkpoint model SHA and all original RNG/source records preserved"
+  ],
+  "precisions": {
+    "float64": {
+      "atol": 2e-10,
+      "rtol": 2e-08
+    },
+    "float32": {
+      "atol": 3e-05,
+      "rtol": 0.0001
+    }
+  },
+  "constructed_tests": {
+    "seed": 43043,
+    "lengths": [
+      1,
+      7,
+      17,
+      129,
+      513
+    ],
+    "batch_sizes": [
+      1,
+      2
+    ],
+    "masks": [
+      "all",
+      "alternating"
+    ],
+    "checks": [
+      "whole-prefix logit/state numerical correspondence",
+      "bulk-prefill vs serial step and chunk continuation",
+      "prefix future poison",
+      "owner isolation/reset/restart/state nonmutation",
+      "weight/source binding and invalid-state rejection"
+    ]
+  },
+  "real_checkpoint_parity": "All five original040 checkpoints: first33 raw bytes of all14 FIT documents; plus first513 bytes of first sorted FIT document, native/cap_all, all token logits compared; no probability-quality scores.",
+  "benchmark": {
+    "seed": 1701,
+    "prompt_owner": "lexicographically first authentic FIT owner",
+    "prompt_lengths": [
+      32,
+      128,
+      512
+    ],
+    "generated_bytes": 16,
+    "warmup_repeats": 2,
+    "measured_repeats": 7,
+    "cpu_threads": 2,
+    "paths": [
+      "same-weight full-growing-prefix recomputation",
+      "incremental state with bulk prefill"
+    ],
+    "metrics": [
+      "raw per-update times",
+      "median and p95 decode update latency",
+      "prefill latency",
+      "prefill+16 update total",
+      "exact greedy continuation identity",
+      "max logit error",
+      "retained tensor bytes",
+      "whole-process peakRSS scoped"
+    ],
+    "limitations": "Same-model execution benchmark; not KV-Transformer/BDH/SSM ranking or mobile qualification. Fixed first-stage weights unchanged."
+  },
+  "compute": "GitHub CPU20min, zeroGPU; all checks prior to any speed claim",
+  "scientific_limits": [
+    "no new trained capability/long-history retrieval",
+    "floating-point association changes; full IEEE/AD proof OPEN",
+    "full source/Lean equivalence OPEN",
+    "no checkpoint promotion, safety or independent qualification",
+    "no rolling-window comparison"
+  ],
+  "prior_art": "Reuse source-pinned full exact-real serial graph028 and independent Python026 plus upper038; recurrence/state caching established, not a new intelligence mechanism"
+}
