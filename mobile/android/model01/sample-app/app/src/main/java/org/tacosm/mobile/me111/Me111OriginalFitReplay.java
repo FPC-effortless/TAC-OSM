@@ -55,9 +55,20 @@ public final class Me111OriginalFitReplay {
         }
 
         public String display() {
+            return display(false);
+        }
+
+        /** Only for source-pinned historical FIT rows bundled at APK build. */
+        public String displayBundledOriginal() {
+            return display(true);
+        }
+
+        private String display(boolean bundled) {
             StringBuilder text = new StringBuilder();
             text.append("OFFLINE ORIGINAL PRSA FIT-ONLY DEMO.\n")
-                .append("USER CSV SOURCE IDENTITY: NOT HASH-VERIFIED.\n")
+                .append(bundled
+                    ? "BUNDLED HISTORICAL UCI SAMPLE FROM ORIGINAL SHA-PINNED ARCHIVE; NOT A LIVE SOURCE.\n"
+                    : "USER CSV SOURCE IDENTITY: NOT HASH-VERIFIED.\n")
                 .append("MODEL'S ORIGINAL REAL-SOURCE SCIENTIFIC GATE: FAILED/MIXED.\n")
                 .append("NO customer state saved. No live sensing or health guidance.\n")
                 .append("Publisher: Chen (2017), UCI Beijing Multi-Site Air Quality, CC BY 4.0.\n")
