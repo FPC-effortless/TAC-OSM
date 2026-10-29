@@ -82,6 +82,49 @@ public final class Me111OriginalFitReplayAndroidTest {
         }
     }
 
+    private static byte[] smallAsset(Context context, String name) throws Exception {
+        try (InputStream in = context.getAssets().open(name);
+             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            byte[] bytes = new byte[8192];
+            int n;
+            while ((n = in.read(bytes)) != -1) {
+                buffer.write(bytes, 0, n);
+                if (buffer.size() > 250_000)
+                    throw new IOException("original FIT sample unexpectedly oversized");
+            }
+            return buffer.toByteArray();
+        }
+    }
+
+    @Test public void testBundledPublisherOriginalFitAssetRunsOffline() throws Exception {
+        Context test = InstrumentationRegistry.getInstrumentation().getContext();
+        Context app = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        // The main APK must include the EXACT publisher-pinned original
+        // sample generated from the original archive for the test APK.
+        byte[] bundled = smallAsset(app, "me111-original-fit-first256.csv");
+        byte[] original = smallAsset(test, "me111-original-fit-first256.csv");
+        assertArrayEquals("bundled authentic original FIT sample changed", original, bundled);
+        JSONObject ref = reference(test);
+        Me111StateStore persistent = new Me111StateStore(app);
+        persistent.clear();
+        try (InputStream input = new ByteArrayInputStream(bundled);
+             Me111LocalEngine engine = new Me111LocalEngine(app)) {
+            Me111OriginalFitReplay.Report report = Me111OriginalFitReplay.run(input, engine);
+            assertEquals(256, report.events);
+            assertEquals(255L, report.finalHour);
+            assertEquals(ref.getLong("count"), report.observedCount);
+            close(ref.getJSONArray("log_location"), report.logLocation, "bundled forecast");
+            close(ref.getJSONArray("left_scale"), report.leftScale, "bundled left scale");
+            close(ref.getJSONArray("right_scale"), report.rightScale, "bundled right scale");
+            close(ref.getJSONArray("evidence_sum"), report.finalState.evidenceSum,
+                  "bundled evidence state");
+            assertTrue(report.displayBundledOriginal().contains("SHA-PINNED ARCHIVE"));
+            assertNull("bundled source demo must not touch persisted user state",
+                       persistent.load());
+        } finally {
+            persistent.clear();
+        }
+    }
     @Test public void testTruncatedRawArchiveFailsWithoutPersistedState() throws Exception {
         Context app=InstrumentationRegistry.getInstrumentation().getTargetContext();
         Me111StateStore persisted=new Me111StateStore(app);
