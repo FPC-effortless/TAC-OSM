@@ -59,7 +59,7 @@ def test_zero_byte_value_and_exact_key_stored_before_query():
     assert not s.contains_key(b"abc")
 
 def test_source_decomposition_identity_and_replay():
-    raw=b"aaaaabbbbbbccdddd"*90
+    raw=b"aaaaabbbbbbccdddd"*100
     x=one_owner(raw,"owner",1536,4)
     y=one_owner(raw,"owner",1536,4)
     d=x["source_analysis"]
