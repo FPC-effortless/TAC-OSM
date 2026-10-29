@@ -1,5 +1,6 @@
 name: LANGSTREAM043 original-checkpoint incremental parity and decode
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - 'research/mathematical-engineering/langstream043/**'
@@ -12,6 +13,7 @@ permissions:
   actions: read
 jobs:
   original-state-and-speed:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == '0145381abb5743538540dc35754c970f466c890a'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
