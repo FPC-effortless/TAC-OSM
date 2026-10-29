@@ -59,40 +59,61 @@ interval. Report genuine `GPU_T4_PAIR` allocation status and elapsed
 wall, including failed/partial runs. Avoid presenting bytes/s as
 tokenizer-specific language tokens/s for larger-vocabulary tokenizers.
 
-## Kaggle packaging blocker (important)
+## Kaggle deployment and the $0 operator gate
 
-The GitHub connector can write draft source files and read Actions evidence,
-but does NOT currently provide workflow-dispatch or Kaggle submission.
-The existing `scripts/stage_kaggle_research.py` packages a
-`code_file=entrypoint.py` Kaggle kernel. Kaggle's documented `kernels push`
-is not proof that arbitrary extra files in that directory, including
-`workload.py` and the original source bundle, become available inside the
-private runtime. The past no-fit smoke lacked verified output receipts.
-**DO NOT submit this worker yet.** First inspect and test a reviewed
-*single-file embedded, checksum-verified source bundle* (or a separately
-authorized private Kaggle dataset attachment) under offline execution.
-No internet access in the Kaggle notebook. Do not remove the original
-no-fit or free-quota authorization safeguards for this convenience.
+**Offline source packaging is implemented and tested (NOT executed on Kaggle).**
+`scripts/langpretrain076_fit_only.py` verifies all authentic CPython publisher
+FIT bytes and never loads exposed DEV/TEST raw documents. The deterministic
+`scripts/langpretrain076_kaggle_bundle.py` builds a single code_file
+`entrypoint.py` embedding 14 checked original FIT documents, model Python code,
+and source verifier, with complete archive and member SHA256 checking before the
+Kaggle notebook runs. No Kaggle datasets, internet, hidden developer credentials,
+training, GPU session or external files are fetched during bundle creation.
+The manifest `research/mathematical-engineering/langpretrain076/FAIR_COMPARISON.json`
+and proposal `research/phone_queue/langpretrain076.json` pin the original
+499623-weight h48 study, original publisher cohort/split, and 15-minute
+bounded requested Kaggle allocation. The `source_bundle` exception is limited
+to this exact study/workload; other studies still need their source references.
 
-A completed source and runner packaging change must include a deliberate
-`research/kaggle_workloads/` adapter, complete reviewed
-`research/mathematical-engineering/langpretrain076/FAIR_COMPARISON.json`,
-`research/phone_queue/langpretrain076.json` source and active
-Kaggle dataset references, and actual per-file/checkpoint hashes.
-The repository's protected `kaggle-research` environment must approve
-any quota-consuming submission; the current dispatch workflow must be
-reconciled with the **internal_research** vs independent-qualification
-amendment rather than bypassed by an unverified flag. Verify remaining
-free Kaggle minutes at submission, explicitly refuse pay-as-you-go and use
-no alternate GPU. If free minutes unavailable, leave BLOCKED.
+**Manual-only protected execution** is defined in
+`.github/workflows/langpretrain076-free-t4.yml`. It requires the literal
+`APPROVE_T4_X2_FREE_ONLY`, owner confirmation of remaining FREE Kaggle T4
+quota, the existing protected `kaggle-research` environment, the enabled-GPU
+secret and previously configured Kaggle credentials. It stages and verifies
+original sources, then requests exactly `NvidiaTeslaT4` with a 900-second
+remote execution cap. No paid hardware fallback, no PR-triggered automatic
+GPU run, and no unauthorized TEST access.
 
-The operator explicitly requested this **$0** T4 microbenchmark, not
-paid compute or full 10M/50M/100M pretraining. Avoid repeated smoke runs.
+**Actual external operational blockers remain:** this novel model research
+PR is still draft/unmerged, the trusted manually dispatched workflow must
+first be available on the default branch, the operator must approve the
+protected free-quota execution, and Kaggle must accept and finish the notebook.
+Connected GitHub actions used for this drafting do NOT expose workflow_dispatch
+or a direct Kaggle execution capability. We cannot bypass those controls and
+may not claim a run from staging alone. The original Kaggle smoke output was
+incomplete; that does not invalidate the genuine source-bundling CI.
+
+**Read-only evidence audit** is in
+`.github/workflows/langpretrain076-read-only-audit.yml`. It retrieves only
+the existing saved output for this exact private Kaggle kernel. The script
+`scripts/langpretrain076_verify_t4.py` rejects absent/failed remote execution,
+missing two workers, missing model checkpoints, altered SHAs, wrong original
+worker code/source/parameter counts, incorrect actual T4 device slots and
+invalid byte/s measurements. A passing digest is source-file integrity, not
+independent physical hardware attestation or model capability validation.
+Original trained checkpoint bytes remain private rather than being uploaded
+into public GitHub CI artifacts. A separate long-lived original checkpoint
+archive policy remains to be established before training beyond this pilot.
+
+The operator authorized only a **$0** bounded T4 throughput microbenchmark,
+not paid GPU or the full 10M/50M/100M campaign. If free quota is unavailable,
+the run must not start.
 
 ## Verification
 
 The included unit tests check arithmetic, fixed seeds, source digest geometry
 and fail-closed inputs on deliberately constructed no-fit fixtures. CI must
 not run `run()`, access Kaggle credentials or create a real-trained
-checkpoint. These tests are **not** GPU metrics. The actual Kaggle test remains
-pending a fully reviewed source-bundling and quota-safe execution path.
+checkpoint. These tests are **not** GPU metrics. The actual Kaggle GPU training test remains **NOT EXECUTED**. Its reviewed
+source-bundling and protected workflow are implemented, but deployment approval,
+trustworthy saved-run outputs and live free quota have not been observed here.
