@@ -1,0 +1,53 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGMEMORY051-KEY-RESIDENCY-ENTROPY",
+  "study_type": "noncomparative_diagnostic",
+  "execution_level": "internal_research",
+  "scientific_purpose": "Source-causal decompose real prior key residency, value entropy, no-key-eviction MG versus fixed actual bytearray MG and keyed source baseline; not neural architecture ranking",
+  "new_neural_training": false,
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "real_world_source": {
+    "name": "PSF CPython3.13.0 publisher original text bytes",
+    "observed_real_outcomes": true,
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF License Version 2",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "597dde0eb3ff98c798ccb3657b1ac02074a8cdb929189f3cc68612877e45f13e",
+    "partitions": [
+      "FIT"
+    ]
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "checkpoint_policy": "No original checkpoint load or modification; source lookup diagnostics only",
+  "frozen_model_matrix": [],
+  "seeds": [],
+  "histories": [
+    64,
+    128,
+    1344,
+    1536,
+    4096,
+    8192
+  ],
+  "targets_per_checkpoint": 0,
+  "resource_type": "CPU-only no fit",
+  "gpu_minutes": 0,
+  "protected_TEST": "NOT_ACCESSED",
+  "causal_protocol": "At observed t, exact previous three-byte key, only prior original source hist, source x[t] evaluated before insertion into all exact or bounded cache state; no future counts for table decisions",
+  "interpretation": "No-eviction counter is an unbounded diagnostic, not a fixed-memory comparator; every source owner was previously exposed and neural checkpoint/peak VRAM unaffected."
+}
