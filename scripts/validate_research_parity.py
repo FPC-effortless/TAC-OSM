@@ -87,6 +87,28 @@ def check_500k_model_size(trainable,deployed,label):
     demand(475000 <= trainable <= 525000 and 475000 <= deployed <= 525000 and deployed>=trainable,
            label+": owner-authorized new-scale model must be 475K..525K actual learned coordinates")
 
+# Owner 2026-10-29 explicitly requests empirical language-model scaling.
+# Exactly one prospective single-model FIT-only study, with fixed live-model
+# counts, FFN-only axis, no generic exception or architecture superiority.
+LANGSCALE070_CONTRACT="owner-2026-10-29-ffn-only-language-scaling"
+LANGSCALE070_COUNTS={"p250k":250133,"p500k":499623,"p1000k":1000239}
+
+def checked_langscale070(m):
+    return (m.get("study_id")=="LANGSCALE070"
+            and m.get("study_type")=="single_model_training"
+            and m.get("parameter_budget_contract")==LANGSCALE070_CONTRACT
+            and m.get("no_architecture_superiority_claim") is True
+            and m.get("scale_axis")=="FFN_WIDTH_ONLY"
+            and m.get("execution_level")=="internal_research")
+
+def check_langscale070_model(model,label):
+    name=model.get("name")
+    demand(name in LANGSCALE070_COUNTS,
+           label+": unsupported model scale (no global budget relaxation)")
+    n=LANGSCALE070_COUNTS[name]
+    demand(model.get("trainable_parameters")==n and model.get("deployed_parameters")==n,
+           label+": frozen original source count mismatch at "+name)
+
 class ParityError(ValueError): pass
 
 def demand(condition, message):
@@ -143,7 +165,9 @@ def _check_manifest_parity_only(m,phase="preflight"):
                "single-model training requires >=1 declared model/seed")
         for i,model in enumerate(models):
             demand(isinstance(model,dict),f"models[{i}] must be an object")
-            if checked_new_scale(m):
+            if checked_langscale070(m):
+                check_langscale070_model(model,f"models[{i}]")
+            elif checked_new_scale(m):
                 check_500k_model_size(model.get("trainable_parameters"), model.get("deployed_parameters"), f"models[{i}]")
             elif requires_100k_policy(m["study_id"]):
                 check_model_parameter_target(model.get("trainable_parameters"),
@@ -156,7 +180,12 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 receipt=model.get("measured")
                 demand(isinstance(receipt,dict),
                        f"models[{i}] final actual measurement receipt required")
-                if checked_new_scale(m):
+                if checked_langscale070(m):
+                    check_langscale070_model({**model,
+                        "trainable_parameters":receipt.get("trainable_parameters"),
+                        "deployed_parameters":receipt.get("deployed_parameters")},
+                        f"models[{i}].measured")
+                elif checked_new_scale(m):
                     check_500k_model_size(receipt.get("trainable_parameters"),receipt.get("deployed_parameters"),f"models[{i}].measured")
                 elif requires_100k_policy(m["study_id"]):
                     check_model_parameter_target(receipt.get("trainable_parameters"),
