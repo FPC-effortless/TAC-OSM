@@ -1,0 +1,374 @@
+# Original successful LANGRECOMP053 CPU gradient checkpoint source test
+GitHub Actions https://github.com/FPC-effortless/TAC-OSM/actions/runs/40830969085
+Job ID 123304849242
+
+﻿2026-10-29T06:43:54.6764174Z Current runner version: '2.338.0'
+2026-10-29T06:43:54.6804021Z ##[group]Runner Image Provisioner
+2026-10-29T06:43:54.6805575Z Hosted Compute Agent
+2026-10-29T06:43:54.6807059Z Version: 20261021.618
+2026-10-29T06:43:54.6808264Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-29T06:43:54.6809583Z Build Date: 2026-10-21T00:45:21Z
+2026-10-29T06:43:54.6810912Z Worker ID: {5c024afd-951a-453c-bc49-dfe6eb237c61}
+2026-10-29T06:43:54.6812200Z Region: southcentralus
+2026-10-29T06:43:54.6813278Z Cloud: Azure
+2026-10-29T06:43:54.6814459Z ##[endgroup]
+2026-10-29T06:43:54.6817325Z ##[group]Operating System
+2026-10-29T06:43:54.6818653Z Ubuntu
+2026-10-29T06:43:54.6819598Z 24.04.5
+2026-10-29T06:43:54.6820457Z LTS
+2026-10-29T06:43:54.6821357Z ##[endgroup]
+2026-10-29T06:43:54.6822286Z ##[group]Runner Image
+2026-10-29T06:43:54.6823270Z Image: ubuntu-24.04
+2026-10-29T06:43:54.6824190Z Version: 20261025.353.1
+2026-10-29T06:43:54.6826374Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-29T06:43:54.6829452Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-10-29T06:43:54.6831126Z ##[endgroup]
+2026-10-29T06:43:54.6833096Z ##[group]GITHUB_TOKEN Permissions
+2026-10-29T06:43:54.6836279Z Actions: read
+2026-10-29T06:43:54.6837629Z Contents: read
+2026-10-29T06:43:54.6838649Z Metadata: read
+2026-10-29T06:43:54.6839800Z ##[endgroup]
+2026-10-29T06:43:54.6843774Z Secret source: Actions
+2026-10-29T06:43:54.6845446Z Cache mode: write
+2026-10-29T06:43:54.6847287Z Prepare workflow directory
+2026-10-29T06:43:54.7486372Z Prepare all required actions
+2026-10-29T06:43:54.7559572Z Getting action download info
+2026-10-29T06:43:55.0149286Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-29T06:43:55.1393568Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-29T06:43:55.2319111Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-29T06:43:55.4716317Z Complete job name: original-trained-source-gradients
+2026-10-29T06:43:55.5634413Z ##[group]Run actions/checkout@v4
+2026-10-29T06:43:55.5635394Z with:
+2026-10-29T06:43:55.5635858Z   persist-credentials: false
+2026-10-29T06:43:55.5636400Z   repository: FPC-effortless/TAC-OSM
+2026-10-29T06:43:55.5640399Z   token: ***
+2026-10-29T06:43:55.5640839Z   ssh-strict: true
+2026-10-29T06:43:55.5641283Z   ssh-user: git
+2026-10-29T06:43:55.5641696Z   clean: true
+2026-10-29T06:43:55.5642136Z   sparse-checkout-cone-mode: true
+2026-10-29T06:43:55.5642656Z   fetch-depth: 1
+2026-10-29T06:43:55.5643094Z   fetch-tags: false
+2026-10-29T06:43:55.5643528Z   show-progress: true
+2026-10-29T06:43:55.5643980Z   lfs: false
+2026-10-29T06:43:55.5644388Z   submodules: false
+2026-10-29T06:43:55.5644829Z   set-safe-directory: true
+2026-10-29T06:43:55.5645331Z   allow-unsafe-pr-checkout: false
+2026-10-29T06:43:55.5646670Z env:
+2026-10-29T06:43:55.5650185Z   GH_TOKEN: ***
+2026-10-29T06:43:55.5650633Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:43:55.5651115Z   OMP_NUM_THREADS: 2
+2026-10-29T06:43:55.5651596Z   MKL_NUM_THREADS: 2
+2026-10-29T06:43:55.5652043Z   OPENBLAS_NUM_THREADS: 2
+2026-10-29T06:43:55.5652508Z ##[endgroup]
+2026-10-29T06:43:55.9072798Z Syncing repository: FPC-effortless/TAC-OSM
+2026-10-29T06:43:55.9075018Z ##[group]Getting Git version info
+2026-10-29T06:43:55.9075795Z Working directory is '/home/runner/work/TAC-OSM/TAC-OSM'
+2026-10-29T06:43:55.9078149Z [command]/usr/bin/git version
+2026-10-29T06:43:55.9209034Z git version 2.56.0
+2026-10-29T06:43:55.9237396Z ##[endgroup]
+2026-10-29T06:43:55.9264982Z Temporarily overriding HOME='/home/runner/work/_temp/8aa9aae5-d6d5-47be-958f-74a760532c16' before making global git config changes
+2026-10-29T06:43:55.9267842Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T06:43:55.9269381Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T06:43:55.9363262Z Deleting the contents of '/home/runner/work/TAC-OSM/TAC-OSM'
+2026-10-29T06:43:55.9367756Z ##[group]Initializing the repository
+2026-10-29T06:43:55.9373063Z [command]/usr/bin/git init /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T06:43:55.9527882Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-29T06:43:55.9529738Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-29T06:43:55.9531358Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-29T06:43:55.9532637Z hint: call:
+2026-10-29T06:43:55.9533317Z hint:
+2026-10-29T06:43:55.9534193Z hint: 	git config --global init.defaultBranch <name>
+2026-10-29T06:43:55.9535239Z hint:
+2026-10-29T06:43:55.9536213Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-29T06:43:55.9537983Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-29T06:43:55.9539244Z hint:
+2026-10-29T06:43:55.9539986Z hint: 	git branch -m <name>
+2026-10-29T06:43:55.9540786Z hint:
+2026-10-29T06:43:55.9541853Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-29T06:43:55.9560200Z Initialized empty Git repository in /home/runner/work/TAC-OSM/TAC-OSM/.git/
+2026-10-29T06:43:55.9575408Z [command]/usr/bin/git remote add origin https://github.com/FPC-effortless/TAC-OSM
+2026-10-29T06:43:55.9647913Z ##[endgroup]
+2026-10-29T06:43:55.9648906Z ##[group]Disabling automatic garbage collection
+2026-10-29T06:43:55.9652946Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-29T06:43:55.9712987Z ##[endgroup]
+2026-10-29T06:43:55.9714486Z ##[group]Setting up auth
+2026-10-29T06:43:55.9723305Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T06:43:55.9780911Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T06:43:56.0240159Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T06:43:56.0288789Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T06:43:56.0547515Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T06:43:56.0610477Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T06:43:56.0895550Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-29T06:43:56.0950025Z ##[endgroup]
+2026-10-29T06:43:56.0950904Z ##[group]Fetching the repository
+2026-10-29T06:43:56.0965406Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5de15b93c2957fecab67b1a74c032ecde27b9388:refs/remotes/pull/587/merge
+2026-10-29T06:43:57.2620912Z From https://github.com/FPC-effortless/TAC-OSM
+2026-10-29T06:43:57.2623373Z  * [new ref]         5de15b93c2957fecab67b1a74c032ecde27b9388 -> pull/587/merge
+2026-10-29T06:43:57.2628656Z ##[endgroup]
+2026-10-29T06:43:57.2630891Z ##[group]Determining the checkout info
+2026-10-29T06:43:57.2637633Z ##[endgroup]
+2026-10-29T06:43:57.2640402Z [command]/usr/bin/git sparse-checkout disable
+2026-10-29T06:43:57.2717441Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-29T06:43:57.2760306Z ##[group]Checking out the ref
+2026-10-29T06:43:57.2764953Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/587/merge
+2026-10-29T06:43:57.5089314Z Note: switching to 'refs/remotes/pull/587/merge'.
+2026-10-29T06:43:57.5090021Z 
+2026-10-29T06:43:57.5090547Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-29T06:43:57.5091745Z changes and commit them, and you can discard any commits you make in this
+2026-10-29T06:43:57.5093232Z state without impacting any branches by switching back to a branch.
+2026-10-29T06:43:57.5093910Z 
+2026-10-29T06:43:57.5094399Z If you want to create a new branch to retain commits you create, you may
+2026-10-29T06:43:57.5095387Z do so (now or later) by using -c with the switch command. Example:
+2026-10-29T06:43:57.5095961Z 
+2026-10-29T06:43:57.5096242Z   git switch -c <new-branch-name>
+2026-10-29T06:43:57.5096917Z 
+2026-10-29T06:43:57.5097189Z Or undo this operation with:
+2026-10-29T06:43:57.5097572Z 
+2026-10-29T06:43:57.5097810Z   git switch -
+2026-10-29T06:43:57.5098173Z 
+2026-10-29T06:43:57.5098637Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-29T06:43:57.5099284Z 
+2026-10-29T06:43:57.5099986Z HEAD is now at 5de15b9 Merge 4b7c202529a0d2917c04dbd2b06635590b64684f into 07617627906d51000b1d9a0932f6b598fcb81554
+2026-10-29T06:43:57.5114693Z ##[endgroup]
+2026-10-29T06:43:57.5246429Z [command]/usr/bin/git log -1 --format=%H
+2026-10-29T06:43:57.5258165Z 5de15b93c2957fecab67b1a74c032ecde27b9388
+2026-10-29T06:43:57.5260620Z ##[group]Removing auth
+2026-10-29T06:43:57.5261682Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T06:43:57.5265006Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T06:43:57.5512846Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T06:43:57.5550392Z http.https://github.com/.extraheader
+2026-10-29T06:43:57.5558835Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-29T06:43:57.5601752Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T06:43:57.5847682Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T06:43:57.5892926Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T06:43:57.6139858Z ##[endgroup]
+2026-10-29T06:43:57.6439816Z ##[group]Run actions/setup-python@v5
+2026-10-29T06:43:57.6440359Z with:
+2026-10-29T06:43:57.6440744Z   python-version: 3.13
+2026-10-29T06:43:57.6441153Z   check-latest: false
+2026-10-29T06:43:57.6443852Z   token: ***
+2026-10-29T06:43:57.6444266Z   update-environment: true
+2026-10-29T06:43:57.6444703Z   allow-prereleases: false
+2026-10-29T06:43:57.6445222Z   freethreaded: false
+2026-10-29T06:43:57.6445887Z env:
+2026-10-29T06:43:57.6448889Z   GH_TOKEN: ***
+2026-10-29T06:43:57.6449330Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:43:57.6449750Z   OMP_NUM_THREADS: 2
+2026-10-29T06:43:57.6450135Z   MKL_NUM_THREADS: 2
+2026-10-29T06:43:57.6450533Z   OPENBLAS_NUM_THREADS: 2
+2026-10-29T06:43:57.6450960Z ##[endgroup]
+2026-10-29T06:43:57.7961413Z ##[group]Installed versions
+2026-10-29T06:43:57.8091552Z (node:2393) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T06:43:57.8093445Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T06:43:57.8094122Z Successfully set up CPython (3.13.17)
+2026-10-29T06:43:57.8095213Z ##[endgroup]
+2026-10-29T06:43:57.8261862Z ##[group]Run python -m pip install numpy==2.3.5 pytest==8.4.2
+2026-10-29T06:43:57.8262637Z [36;1mpython -m pip install numpy==2.3.5 pytest==8.4.2[0m
+2026-10-29T06:43:57.8263423Z [36;1mpython -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu[0m
+2026-10-29T06:43:57.8305254Z shell: /usr/bin/bash -e {0}
+2026-10-29T06:43:57.8306055Z env:
+2026-10-29T06:43:57.8311535Z   GH_TOKEN: ***
+2026-10-29T06:43:57.8312289Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:43:57.8313053Z   OMP_NUM_THREADS: 2
+2026-10-29T06:43:57.8314089Z   MKL_NUM_THREADS: 2
+2026-10-29T06:43:57.8314769Z   OPENBLAS_NUM_THREADS: 2
+2026-10-29T06:43:57.8315594Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:43:57.8316917Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T06:43:57.8318041Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:43:57.8319060Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:43:57.8320118Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:43:57.8321139Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T06:43:57.8322028Z ##[endgroup]
+2026-10-29T06:43:59.8962914Z Collecting numpy==2.3.5
+2026-10-29T06:43:59.9761170Z   Downloading numpy-2.3.5-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+2026-10-29T06:44:00.0443728Z Collecting pytest==8.4.2
+2026-10-29T06:44:00.0573282Z   Downloading pytest-8.4.2-py3-none-any.whl.metadata (7.7 kB)
+2026-10-29T06:44:00.0822378Z Collecting iniconfig>=1 (from pytest==8.4.2)
+2026-10-29T06:44:00.0950865Z   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+2026-10-29T06:44:00.1226318Z Collecting packaging>=20 (from pytest==8.4.2)
+2026-10-29T06:44:00.1353011Z   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+2026-10-29T06:44:00.1586235Z Collecting pluggy<2,>=1.5 (from pytest==8.4.2)
+2026-10-29T06:44:00.1715208Z   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+2026-10-29T06:44:00.2026930Z Collecting pygments>=2.7.2 (from pytest==8.4.2)
+2026-10-29T06:44:00.2158473Z   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+2026-10-29T06:44:00.2341862Z Downloading numpy-2.3.5-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+2026-10-29T06:44:00.8142960Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 30.2 MB/s  0:00:00
+2026-10-29T06:44:00.8273302Z Downloading pytest-8.4.2-py3-none-any.whl (365 kB)
+2026-10-29T06:44:00.8446390Z Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+2026-10-29T06:44:00.8594788Z Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-10-29T06:44:00.8748726Z Downloading packaging-26.3-py3-none-any.whl (129 kB)
+2026-10-29T06:44:00.8901697Z Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+2026-10-29T06:44:00.9094828Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 62.0 MB/s  0:00:00
+2026-10-29T06:44:01.0560928Z Installing collected packages: pygments, pluggy, packaging, numpy, iniconfig, pytest
+2026-10-29T06:44:04.1231255Z 
+2026-10-29T06:44:04.1246338Z Successfully installed iniconfig-2.3.1 numpy-2.3.5 packaging-26.3 pluggy-1.7.0 pygments-2.21.0 pytest-8.4.2
+2026-10-29T06:44:04.5091985Z Looking in indexes: https://download.pytorch.org/whl/cpu
+2026-10-29T06:44:04.8405120Z Collecting torch==2.10.0
+2026-10-29T06:44:04.9487346Z   Downloading torch-2.10.0%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl.metadata (29 kB)
+2026-10-29T06:44:04.9923641Z Collecting filelock (from torch==2.10.0)
+2026-10-29T06:44:05.0744531Z   Downloading filelock-4.2.4-py3-none-any.whl.metadata (2.0 kB)
+2026-10-29T06:44:05.1026757Z Collecting typing-extensions>=4.10.0 (from torch==2.10.0)
+2026-10-29T06:44:05.1183425Z   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+2026-10-29T06:44:05.1395270Z Collecting setuptools (from torch==2.10.0)
+2026-10-29T06:44:05.1528166Z   Downloading setuptools-78.1.0-py3-none-any.whl.metadata (6.6 kB)
+2026-10-29T06:44:05.1845894Z Collecting sympy>=1.13.3 (from torch==2.10.0)
+2026-10-29T06:44:05.1997650Z   Downloading sympy-1.14.0-py3-none-any.whl.metadata (12 kB)
+2026-10-29T06:44:05.2413726Z Collecting networkx>=2.5.1 (from torch==2.10.0)
+2026-10-29T06:44:05.2568939Z   Downloading networkx-3.7-py3-none-any.whl.metadata (6.7 kB)
+2026-10-29T06:44:05.2811829Z Collecting jinja2 (from torch==2.10.0)
+2026-10-29T06:44:05.2946729Z   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+2026-10-29T06:44:05.3280077Z Collecting fsspec>=0.8.5 (from torch==2.10.0)
+2026-10-29T06:44:05.3433447Z   Downloading fsspec-2026.9.0-py3-none-any.whl.metadata (10 kB)
+2026-10-29T06:44:05.3873134Z Collecting mpmath<1.4,>=1.1.0 (from sympy>=1.13.3->torch==2.10.0)
+2026-10-29T06:44:05.4029526Z   Downloading mpmath-1.3.0-py3-none-any.whl.metadata (8.6 kB)
+2026-10-29T06:44:05.4362281Z Collecting MarkupSafe>=2.0 (from jinja2->torch==2.10.0)
+2026-10-29T06:44:05.4496333Z   Downloading markupsafe-3.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+2026-10-29T06:44:05.4757972Z Downloading torch-2.10.0%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl (188.9 MB)
+2026-10-29T06:44:06.4136342Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 188.9/188.9 MB 207.2 MB/s  0:00:00
+2026-10-29T06:44:06.4292837Z Downloading fsspec-2026.9.0-py3-none-any.whl (221 kB)
+2026-10-29T06:44:06.4781137Z Downloading networkx-3.7-py3-none-any.whl (2.1 MB)
+2026-10-29T06:44:06.5239202Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 58.5 MB/s  0:00:00
+2026-10-29T06:44:06.5395527Z Downloading sympy-1.14.0-py3-none-any.whl (6.3 MB)
+2026-10-29T06:44:06.5690420Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 224.1 MB/s  0:00:00
+2026-10-29T06:44:06.5846380Z Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+2026-10-29T06:44:06.5899222Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 kB 101.4 MB/s  0:00:00
+2026-10-29T06:44:06.6052426Z Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+2026-10-29T06:44:06.6229063Z Downloading filelock-4.2.4-py3-none-any.whl (162 kB)
+2026-10-29T06:44:06.6387957Z Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+2026-10-29T06:44:06.6553482Z Downloading markupsafe-3.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+2026-10-29T06:44:06.6712439Z Downloading setuptools-78.1.0-py3-none-any.whl (1.3 MB)
+2026-10-29T06:44:06.6956344Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 51.5 MB/s  0:00:00
+2026-10-29T06:44:07.0624620Z Installing collected packages: mpmath, typing-extensions, sympy, setuptools, networkx, MarkupSafe, fsspec, filelock, jinja2, torch
+2026-10-29T06:44:26.8888088Z 
+2026-10-29T06:44:26.8916476Z Successfully installed MarkupSafe-3.0.3 filelock-4.2.4 fsspec-2026.9.0 jinja2-3.1.6 mpmath-1.3.0 networkx-3.7 setuptools-78.1.0 sympy-1.14.0 torch-2.10.0+cpu typing-extensions-4.16.0
+2026-10-29T06:44:26.9808854Z ##[group]Run mkdir -p langrecomp053-evidence
+2026-10-29T06:44:26.9809290Z [36;1mmkdir -p langrecomp053-evidence[0m
+2026-10-29T06:44:26.9809917Z [36;1mpython scripts/phone_lab.py plan research/phone_queue/langrecomp053.json > langrecomp053-evidence/PLAN.json[0m
+2026-10-29T06:44:26.9811086Z [36;1mpython scripts/validate_research_parity.py --manifest research/mathematical-engineering/langrecomp053/FAIR_COMPARISON.json --phase preflight > langrecomp053-evidence/PREFLIGHT.json[0m
+2026-10-29T06:44:26.9812153Z [36;1mPYTHONPATH=src:. python -m pytest -q tests/test_langrecomp053_training_parity.py[0m
+2026-10-29T06:44:26.9833716Z shell: /usr/bin/bash -e {0}
+2026-10-29T06:44:26.9833992Z env:
+2026-10-29T06:44:26.9836941Z   GH_TOKEN: ***
+2026-10-29T06:44:26.9837206Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:44:26.9837461Z   OMP_NUM_THREADS: 2
+2026-10-29T06:44:26.9837695Z   MKL_NUM_THREADS: 2
+2026-10-29T06:44:26.9837928Z   OPENBLAS_NUM_THREADS: 2
+2026-10-29T06:44:26.9838289Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:26.9838778Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T06:44:26.9839258Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:26.9839685Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:26.9840105Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:26.9840539Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T06:44:26.9840913Z ##[endgroup]
+2026-10-29T06:44:27.0927873Z <!-- tac-osm-phone-lab-status -->
+2026-10-29T06:44:27.0928546Z ### TAC-OSM research lab status
+2026-10-29T06:44:27.0928806Z 
+2026-10-29T06:44:27.0929488Z **Run:** langrecomp053-trained-original-gradient-cpu · **Model:** System 1
+2026-10-29T06:44:27.0930332Z 
+2026-10-29T06:44:27.0930698Z **Compute decision:** GitHub Actions CPU · **Stage:** source_audit
+2026-10-29T06:44:27.0931107Z 
+2026-10-29T06:44:27.0931243Z **Progress:** READY_NO_FIT
+2026-10-29T06:44:27.0931495Z 
+2026-10-29T06:44:27.0931735Z - [ ] No planning blockers; normal source/gate checks still apply
+2026-10-29T06:44:27.0932140Z 
+2026-10-29T06:44:27.0932484Z *This is a planning receipt, not model training approval or scientific validation.*
+2026-10-29T06:44:27.0932985Z 
+2026-10-29T06:44:30.4928439Z .....                                                                    [100%]
+2026-10-29T06:44:30.4929225Z 5 passed in 2.48s
+2026-10-29T06:44:31.0079498Z ##[group]Run gh run download 40797105091 --repo FPC-effortless/TAC-OSM --name LANGLAYER040-CPU-state48_no_graph-seed1701 --dir langrecomp053-original/tac
+2026-10-29T06:44:31.0080658Z [36;1mgh run download 40797105091 --repo FPC-effortless/TAC-OSM --name LANGLAYER040-CPU-state48_no_graph-seed1701 --dir langrecomp053-original/tac[0m
+2026-10-29T06:44:31.0101479Z shell: /usr/bin/bash -e {0}
+2026-10-29T06:44:31.0101725Z env:
+2026-10-29T06:44:31.0104057Z   GH_TOKEN: ***
+2026-10-29T06:44:31.0104281Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:44:31.0104520Z   OMP_NUM_THREADS: 2
+2026-10-29T06:44:31.0104727Z   MKL_NUM_THREADS: 2
+2026-10-29T06:44:31.0104933Z   OPENBLAS_NUM_THREADS: 2
+2026-10-29T06:44:31.0105220Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:31.0105652Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T06:44:31.0106077Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:31.0106726Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:31.0107131Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:31.0107512Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T06:44:31.0107831Z ##[endgroup]
+2026-10-29T06:44:32.3166139Z ##[group]Run PYTHONPATH=src:. python scripts/langrecomp053_training_parity.py --original-dir langrecomp053-original/tac --output langrecomp053-evidence/RESULTS.json
+2026-10-29T06:44:32.3167812Z [36;1mPYTHONPATH=src:. python scripts/langrecomp053_training_parity.py --original-dir langrecomp053-original/tac --output langrecomp053-evidence/RESULTS.json[0m
+2026-10-29T06:44:32.3168526Z [36;1mpython - <<'PY'[0m
+2026-10-29T06:44:32.3168758Z [36;1mimport json[0m
+2026-10-29T06:44:32.3169061Z [36;1mx=json.load(open('langrecomp053-evidence/RESULTS.json'))[0m
+2026-10-29T06:44:32.3169613Z [36;1massert x['training_updates']==0 and x['gpu_minutes']==0 and x['protected_TEST']=='NOT_ACCESSED'[0m
+2026-10-29T06:44:32.3170210Z [36;1massert x['verification']['whole_model_peak_cuda_vram']=='NOT_MEASURED_NO_GPU'[0m
+2026-10-29T06:44:32.3170723Z [36;1massert len(x['rows'])==2 and x['trained_original_parameters']==499623[0m
+2026-10-29T06:44:32.3171103Z [36;1mfor row in x['rows']:[0m
+2026-10-29T06:44:32.3171443Z [36;1m    assert row['parity']['gradient_element_count']>0[0m
+2026-10-29T06:44:32.3171822Z [36;1m    assert row['parity']['max_gradient_abs']<3e-5[0m
+2026-10-29T06:44:32.3172204Z [36;1m    assert row['identical_cpu_rng_after_backward'][0m
+2026-10-29T06:44:32.3172515Z [36;1mPY[0m
+2026-10-29T06:44:32.3193345Z shell: /usr/bin/bash -e {0}
+2026-10-29T06:44:32.3193598Z env:
+2026-10-29T06:44:32.3195971Z   GH_TOKEN: ***
+2026-10-29T06:44:32.3196234Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:44:32.3196691Z   OMP_NUM_THREADS: 2
+2026-10-29T06:44:32.3196969Z   MKL_NUM_THREADS: 2
+2026-10-29T06:44:32.3197184Z   OPENBLAS_NUM_THREADS: 2
+2026-10-29T06:44:32.3197490Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:32.3217898Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T06:44:32.3218452Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:32.3218868Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:32.3219273Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:32.3219874Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T06:44:32.3220213Z ##[endgroup]
+2026-10-29T06:44:34.3263706Z {"rows": [{"batch": 1, "checkpoint_saved_logical_bytes": 66052, "checkpoint_wall_ms": 717.5058319999999, "gradient_count": 55, "gradient_error": 0.0, "length": 32, "logits_error": 0.0, "loss": 1.2730822563171387, "normal_saved_logical_bytes": 4026908, "normal_wall_ms": 15.029613999999999}, {"batch": 2, "checkpoint_saved_logical_bytes": 264196, "checkpoint_wall_ms": 33.606522, "gradient_count": 55, "gradient_error": 0.0, "length": 64, "logits_error": 0.0, "loss": 1.7928920984268188, "normal_saved_logical_bytes": 11120540, "normal_wall_ms": 21.167572999999997}], "status": "INTERNAL_ORIGINAL_TRAINED_MODEL_SOURCE_FIT_CPU_FORWARD_BACKWARD_PARITY", "study": "LANGRECOMP053"}
+2026-10-29T06:44:34.7629500Z ##[group]Run actions/upload-artifact@v4
+2026-10-29T06:44:34.7629808Z with:
+2026-10-29T06:44:34.7630060Z   name: LANGRECOMP053-original-trained-CPU-gradients
+2026-10-29T06:44:34.7630415Z   path: langrecomp053-evidence/
+2026-10-29T06:44:34.7630662Z   retention-days: 90
+2026-10-29T06:44:34.7630875Z   if-no-files-found: warn
+2026-10-29T06:44:34.7631105Z   compression-level: 6
+2026-10-29T06:44:34.7631313Z   overwrite: false
+2026-10-29T06:44:34.7631524Z   include-hidden-files: false
+2026-10-29T06:44:34.7631750Z env:
+2026-10-29T06:44:34.7634068Z   GH_TOKEN: ***
+2026-10-29T06:44:34.7634279Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T06:44:34.7634503Z   OMP_NUM_THREADS: 2
+2026-10-29T06:44:34.7634711Z   MKL_NUM_THREADS: 2
+2026-10-29T06:44:34.7634913Z   OPENBLAS_NUM_THREADS: 2
+2026-10-29T06:44:34.7635196Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:34.7635643Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T06:44:34.7636115Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:34.7636791Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:34.7637250Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T06:44:34.7637638Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T06:44:34.7637957Z ##[endgroup]
+2026-10-29T06:44:34.9387147Z (node:2494) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T06:44:34.9392301Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T06:44:34.9448721Z With the provided path, there will be 3 files uploaded
+2026-10-29T06:44:34.9455234Z Artifact name is valid!
+2026-10-29T06:44:34.9455879Z Root directory input is valid!
+2026-10-29T06:44:35.2864392Z Beginning upload of artifact content to blob storage
+2026-10-29T06:44:35.3100161Z (node:2494) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-29T06:44:35.4535472Z Uploaded bytes 2983
+2026-10-29T06:44:35.4937561Z Finished uploading artifact content to blob storage!
+2026-10-29T06:44:35.4938939Z SHA256 digest of uploaded artifact zip is ef268cad3d3d6c2fd8b4b1d78dc5fcba65c66fecb05805bdf041af2c95e88bc0
+2026-10-29T06:44:35.4940624Z Finalizing artifact upload
+2026-10-29T06:44:35.9976475Z Artifact LANGRECOMP053-original-trained-CPU-gradients.zip successfully finalized. Artifact ID 12878771812
+2026-10-29T06:44:35.9979189Z Artifact LANGRECOMP053-original-trained-CPU-gradients has been successfully uploaded! Final size is 2983 bytes. Artifact ID is 12878771812
+2026-10-29T06:44:35.9987638Z Artifact download URL: https://github.com/FPC-effortless/TAC-OSM/actions/runs/40830969085/artifacts/12878771812
+2026-10-29T06:44:36.0188461Z Post job cleanup.
+2026-10-29T06:44:36.1444461Z (node:2506) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T06:44:36.1445664Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T06:44:36.1619884Z Post job cleanup.
+2026-10-29T06:44:36.2671086Z [command]/usr/bin/git version
+2026-10-29T06:44:36.2738515Z git version 2.56.0
+2026-10-29T06:44:36.2803774Z Temporarily overriding HOME='/home/runner/work/_temp/5c50bb82-4073-4359-8df6-6601bd936bf0' before making global git config changes
+2026-10-29T06:44:36.2805587Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T06:44:36.2829656Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T06:44:36.2889974Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T06:44:36.2936849Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T06:44:36.3324142Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T06:44:36.3390623Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T06:44:36.3781177Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T06:44:36.3833595Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T06:44:36.4252139Z Cleaning up orphan processes
+2026-10-29T06:44:36.4672691Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
