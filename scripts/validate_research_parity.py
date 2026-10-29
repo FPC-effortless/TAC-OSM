@@ -116,6 +116,22 @@ LANGSCALE074_COUNTS={"h24":499625,"h48":499623,"h96":499537,"h128":499631}
 # Owner 2026-10-29 continuation: native associative memory address dimension.
 # Only LANGSCALE075 new original publisher source fits m12/m16. No general
 # parameter ceiling relaxation and no TEST/architecture-superiority authority.
+# Owner 2026-10-29 language two-timescale original 500K source-only exception.
+# Four useful scalar weights, no global size policy waiver.
+LANGMEM078_CONTRACT="owner-2026-10-29-dual-native-timescale-500k"
+def checked_langmem078(m):
+    return (m.get("study_id")=="LANGMEM078"
+        and m.get("study_type")=="single_model_training"
+        and m.get("parameter_budget_contract")==LANGMEM078_CONTRACT
+        and m.get("scale_axis")=="NATIVE_FAST_PLUS_SLOW_BOUNDED_AFFINE_LANE"
+        and m.get("execution_level")=="internal_research"
+        and m.get("no_architecture_superiority_claim") is True)
+def check_langmem078_model(model,label):
+    demand(model.get("name")=="dual"
+           and model.get("trainable_parameters")==499627
+           and model.get("deployed_parameters")==499627,
+           label+": registered 078 exact four-new-param model mismatch")
+
 LANGSCALE075_CONTRACT="owner-2026-10-29-native-associative-capacity"
 LANGSCALE075_COUNTS={"m12":500175,"m16":500663}
 def checked_langscale075(m):
@@ -204,7 +220,9 @@ def _check_manifest_parity_only(m,phase="preflight"):
                "single-model training requires >=1 declared model/seed")
         for i,model in enumerate(models):
             demand(isinstance(model,dict),f"models[{i}] must be an object")
-            if checked_langscale075(m):
+            if checked_langmem078(m):
+                check_langmem078_model(model,f"models[{i}]")
+            elif checked_langscale075(m):
                 check_langscale075_model(model,f"models[{i}]")
             elif checked_langscale074(m):
                 check_langscale074_model(model,f"models[{i}]")
@@ -223,7 +241,12 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 receipt=model.get("measured")
                 demand(isinstance(receipt,dict),
                        f"models[{i}] final actual measurement receipt required")
-                if checked_langscale075(m):
+                if checked_langmem078(m):
+                    check_langmem078_model({**model,
+                        "trainable_parameters":receipt.get("trainable_parameters"),
+                        "deployed_parameters":receipt.get("deployed_parameters")},
+                        f"models[{i}].measured")
+                elif checked_langscale075(m):
                     check_langscale075_model({**model,
                         "trainable_parameters":receipt.get("trainable_parameters"),
                         "deployed_parameters":receipt.get("deployed_parameters")},
