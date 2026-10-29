@@ -1,0 +1,54 @@
+name: LANGMEMORY051 causal key residence and no-eviction source decomposition
+on:
+  pull_request:
+    paths:
+      - 'scripts/langmemory051_key_residency.py'
+      - 'tests/test_langmemory051_key_residency.py'
+      - 'research/mathematical-engineering/langmemory051/**'
+      - 'research/phone_queue/langmemory051.json'
+      - '.github/workflows/langmemory051.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  genuine-original-source-identity-profile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install numpy==2.3.5 pytest==8.4.2
+      - name: License/source preflight, no-fit planner and constructed integrity
+        run: |
+          mkdir -p langmemory051-evidence
+          python scripts/phone_lab.py plan research/phone_queue/langmemory051.json > langmemory051-evidence/PLAN.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmemory051/FAIR_COMPARISON.json --phase preflight > langmemory051-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmemory051_key_residency.py
+      - name: Original source 1536 4096 8192 prior-only key entropy and value controls
+        run: |
+          PYTHONPATH=src:. python scripts/langmemory051_key_residency.py --output langmemory051-evidence/RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('langmemory051-evidence/RESULTS.json'))
+          assert r['training_updates']==0 and r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          assert len(r['cohorts'])==3
+          for co in r['cohorts'].values():
+              s=co['summary']
+              assert all(a['total']==s['source_analysis']['source_positions'] for a in s['arms'].values())
+              assert s['source_analysis']['unique_context_queries']+s['source_analysis']['repeat_context_queries']==s['source_analysis']['source_positions']
+          PY
+      - name: Preserve authentic observed-source original receipts and failed checks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEMORY051-authentic-original-source-key-residency
+          path: langmemory051-evidence/
+          retention-days: 90
+          if-no-files-found: warn
