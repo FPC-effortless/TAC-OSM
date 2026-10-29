@@ -35,8 +35,12 @@ def inspect(proposal: dict, username: str) -> dict:
         r = subprocess.run(["kaggle", "kernels", "status", handle],
                            capture_output=True, text=True, timeout=30)
         evidence = (r.stdout + "\n" + r.stderr)[-800:]
-        state = ("REMOTE_STATUS_AVAILABLE_NOT_QUALIFIED" if r.returncode == 0
-                 else "NOT_SUBMITTED_OR_STATUS_UNAVAILABLE")
+        if r.returncode == 0:
+            state = "REMOTE_STATUS_AVAILABLE_NOT_QUALIFIED"
+        elif "Permission 'kernels.get' was denied" in evidence or "403" in evidence:
+            state = "REMOTE_ACCESS_DENIED_NOT_PROOF_OF_ABSENCE"
+        else:
+            state = "REMOTE_STATUS_UNAVAILABLE_NOT_PROOF_OF_ABSENCE"
     except (OSError, subprocess.TimeoutExpired):
         evidence = "CLI missing, unavailable or exceeded query deadline"
         state = "STATUS_UNAVAILABLE"
