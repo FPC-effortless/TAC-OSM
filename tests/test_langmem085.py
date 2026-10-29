@@ -21,7 +21,8 @@ def test_selective_responds_to_residual_not_requested_target():
     book=byte_book();k=context_key(b'abcd')
     a,eta_a,_=write(torch.zeros(8,8),k,book[4],'selective',rho=.99,beta=.02,epsilon=.003)
     assert eta_a==.25
-    b,eta_b,_=write(a,k,book[4],'selective',rho=.99,beta=.02,epsilon=.003)
+    prior=.8*book[4][:,None]*k[None,:]
+    b,eta_b,_=write(prior,k,book[4],'selective',rho=.99,beta=.02,epsilon=.003)
     assert eta_b==1.
     c,clip,_=write(torch.zeros(8,8),k,book[4],'residual_clip035',rho=.99,beta=.02,epsilon=.003)
     assert clip==pytest.approx(.35,abs=1e-7)
