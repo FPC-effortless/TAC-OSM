@@ -88,9 +88,10 @@ def run(seed: int, device: str, output: Path) -> dict:
     sys.path.insert(0, str(ROOT))
     sys.path.insert(0, str(ROOT / "research/mathematical-engineering/langscale074"))
     from upper_reallocation import ReallocatedUpperTAC074
-    from scripts.langlayer035_sampling import fit_sources, iter_batches, schedule_receipt
+    from scripts.langpretrain076_fit_only import fit_sources
+    from scripts.langlayer035_sampling import iter_batches, schedule_receipt
     preflight_source(ROOT)
-    fit = fit_sources()  # original_source performs raw source, role & receipt checks
+    fit = fit_sources(ROOT)  # FIT bytes only; never load DEV or TEST source bytes
     expected = schedule_receipt(fit, seed, WARMUP_STEPS + TIMED_STEPS)
     if expected["next_byte_targets_seen"] != TRAINING_BYTES_PER_SEED:
         raise ThroughputGateError("original source exposure/sampler altered")
