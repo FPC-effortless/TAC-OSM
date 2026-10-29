@@ -32,7 +32,8 @@ def test_exact_two_owner_causal_masked_state_and_logits(dtype,mode):
             z,other=candidate.step(tokens[:,t],other,owners=owners,write_mask=mask[:,t])
             assert torch.equal(y,z)
             assert all(torch.equal(st.tensors[k],other.tensors[k]) for k in SHAPES)
-        assert st.tensor_bytes()==other.tensor_bytes()==7808
+        expected_bytes=2*976*torch.tensor([],dtype=dtype).element_size()
+        assert st.tensor_bytes()==other.tensor_bytes()==expected_bytes
 
 
 def test_original_snapshot_roundtrip_both_directions(tmp_path):
