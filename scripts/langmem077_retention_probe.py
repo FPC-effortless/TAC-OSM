@@ -26,7 +26,7 @@ import torch
 from torch.nn import functional as F
 
 ROOT=Path(__file__).resolve().parents[1]
-for name in ("langstream076","langscale075","langscale070","langbase024","langmemory042"):
+for name in ("langstream076","langscale075","langscale070","langbase024","langmemory042","context026"):
     p=str(ROOT/"research/mathematical-engineering"/name)
     if p not in sys.path: sys.path.insert(0,p)
 sys.path[:0]=[str(ROOT),str(ROOT/"src")]
