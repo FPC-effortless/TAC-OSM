@@ -101,7 +101,7 @@ jobs:
 
   all-seed-source-verified-summary:
     needs: authentic-source-fits
-    if: always()
+    if: always() && github.head_ref == 'research/langscale075-native-matrix-capacity-2026-10-29'
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
