@@ -1,0 +1,49 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGDECODE063-ORIGINAL-TRAINED-SHARED-UPPER-INPUT",
+  "study_type": "noncomparative_diagnostic",
+  "execution_level": "internal_research",
+  "scientific_purpose": "No-fit CPU original 499623-parameter seed1701 checkpoint comparison: exact original _advance vs source-matched reuse of deterministic upper input_norm+input_proj previously duplicated in read_from_prior and observe. Retain read-before-write and all other graph operations; measure original full decoder latency and state/logit exactness.",
+  "new_neural_training": false,
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "real_world_source": {
+    "name": "PSF CPython3.13.0 publisher original text bytes",
+    "observed_real_outcomes": true,
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF License Version 2",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "597dde0eb3ff98c798ccb3657b1ac02074a8cdb929189f3cc68612877e45f13e",
+    "partitions": [
+      "FIT"
+    ]
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "checkpoint_policy": "Read only strict original FIT320 trained TAC checkpoint SHA/source/optimizer/RNG receipts; no optimizer step, new fit, modification, TEST access or model promotion.",
+  "frozen_model_matrix": [],
+  "seeds": [],
+  "histories": [
+    128,
+    512
+  ],
+  "targets_per_checkpoint": 0,
+  "resource_type": "CPU-only no fit",
+  "gpu_minutes": 0,
+  "protected_TEST": "NOT_ACCESSED",
+  "causal_protocol": "Frozen publisher source FIT128/512 prefixes and same original 16 greedy next bytes; guard same owner/clock/write masks, 9 persistent state tensors, logits, full growing-prefix tolerances, snapshot both ways. Two warmups, seven paired alternated CPU timing repeats. 5% median reduction and <=1.10 p95 at both prefixes preregistered.",
+  "interpretation": "Original upper RecurrenceOnlyUpperBlock.read_from_prior and observe both execute identical input_proj(input_norm(z)).tanh() in eval/no hooks. Candidate reuses u from one application and inlines identical remaining arithmetic, preserving original operation order. Exact equivalence is experimentally falsified at checkpoint/state/owner/mask level, not claimed universally for IEEE/AD/Lean. Previous LANGDECODE062 median 4.35-4.49%, 128B p95 1.122 failed and remains negative."
+}
