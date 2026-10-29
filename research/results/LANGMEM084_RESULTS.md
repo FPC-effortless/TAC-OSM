@@ -84,6 +84,22 @@ residual overwrite changes both erase/write strength and computation versus
 source update. Factorial comparisons describe these fixed interventions,
 not an optimized equal-FLOP algorithm contest.
 
+## No standalone accuracy win over the existing FIT-only prior
+
+A read-only comparison with original083A artifact12938940382 from
+[run40967076169](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40967076169)
+confirms the **same historical target SHA**
+`6ada58bdd0d3b715be935cac5fe491004e664ac196ec84e0a5985959f9409884`.
+Its frozen FIT-only age-modal byte baseline scores12.50%,13.28%,12.20%,12.63%
+on the registered age8/32/128/256 cohorts. Every084 arm is below that baseline
+at every age: even the maximum reported correct-address score among all8 arms
+is10.55%,7.81%,11.55%,7.19%. This maximum is descriptive, not tuned model
+selection. Thus a small correct-versus-decoy channel difference does **not**
+translate to a useful standalone predictor here. No new prior fitting, source
+read or DEV/model evaluation was performed. The cohort-bound check is saved
+in `LANGMEM084_EXISTING_PRIOR_CHECK.json`; it compares the original full
+cohorts, not a differently filtered post-hoc subset.
+
 ## A narrow short-age signal, not long-history retrieval
 
 Explicit byte codes plus context-hash keys and unit overwrite score:
