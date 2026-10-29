@@ -1,0 +1,49 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGDECODE062-ORIGINAL-TRAINED-VECTORIZED-ORDINAL",
+  "study_type": "noncomparative_diagnostic",
+  "execution_level": "internal_research",
+  "scientific_purpose": "Frozen original 499623p seed1701 checkpoint no-fit original decoder paired-ordinal kernel substitution vs original 057 guarded model, exact causal/full-prefix state parity and fair CPU growing-sequence decoding speed. Experimental optimization only, no new trained model.",
+  "new_neural_training": false,
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "real_world_source": {
+    "name": "PSF CPython3.13.0 publisher original text bytes",
+    "observed_real_outcomes": true,
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF License Version 2",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "597dde0eb3ff98c798ccb3657b1ac02074a8cdb929189f3cc68612877e45f13e",
+    "partitions": [
+      "FIT"
+    ]
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "checkpoint_policy": "Read strict original trained TAC checkpoint with SHA, source schedule, optimizer/RNG receipts; no optimizer step, new model fit, checkpoint modification or promotion.",
+  "frozen_model_matrix": [],
+  "seeds": [],
+  "histories": [
+    128,
+    512
+  ],
+  "targets_per_checkpoint": 0,
+  "resource_type": "CPU-only no fit",
+  "gpu_minutes": 0,
+  "protected_TEST": "NOT_ACCESSED",
+  "causal_protocol": "Original already-exposed publisher FIT owner only (128/512 prefixes) with same original greedy16 continuation and clocks, same original write_mask, owner state and tensor bytes; check exact all nine state tensors and each incremental logit original-vs-candidate, full original growing-prefix tolerance/argmax, snapshots both ways. Timed paired 2 warmups+7 repeats alternating on same hosted CPU. Unknown real heldout capability.",
+  "interpretation": "Only two original scalar ordinal_code calls are replaced by one vectorized pair before the exact same original einsums/normalize. Torch equality proven by original kernel diagnostic LANGKERNEL061 for 8195 clocks FP32/FP64, but full decoder source parity and p95 must still be proven and repeated. PNDS exact mathematical source-equivalence obligations remain OPEN."
+}
