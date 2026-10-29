@@ -1,0 +1,136 @@
+name: LANGMEM079 original trained dual fast-slow true streaming and memory lesions
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmem079/**'
+      - 'research/phone_queue/langmem079.json'
+      - 'scripts/langmem079_carried_eval.py'
+      - 'scripts/langmem079_aggregate.py'
+      - 'tests/test_langmem079.py'
+      - '.github/workflows/langmem079.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  dual-trained-source-real-stream:
+    if: github.head_ref == 'research/langmem079-dual-streaming-audit-2026-10-29'
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact original source Torch CPU and diagnostic dependencies
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Registered nofit, 10-field source state and original model source checks
+        run: |
+          mkdir -p stream079-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem079.json > stream079-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langmem079/FAIR_COMPARISON.json --phase preflight \
+            > stream079-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmem079.py tests/test_langmem078.py
+      - name: Restore ORIGINAL 078 dual trained checkpoint/optimizer RNG and original 076 fast-only source baseline
+        run: |
+          mkdir -p original-dual-ckpt original078-summary original076-fast
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name "LANGMEM078-FIT-dual-seed${{ matrix.seed }}" --dir original-dual-ckpt
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name LANGMEM078-SOURCE-PAIRED-AGGREGATE --dir original078-summary
+          gh run download 40883211351 -R FPC-effortless/TAC-OSM \
+            --name LANGSTREAM076-SOURCE-CARRIED-AGGREGATE --dir original076-fast
+      - name: Same 256 real publisher source labels, carried slow/fast lesion and source-rho bound
+        run: |
+          PYTHONPATH=src:. python scripts/langmem079_carried_eval.py \
+            --seed ${{ matrix.seed }} \
+            --original-checkpoint-dir original-dual-ckpt \
+            --dual-verified original078-summary/RESULTS.json \
+            --original-stream-baseline original076-fast/RESULTS.json \
+            --output stream079-evidence/STREAM_RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('stream079-evidence/STREAM_RESULTS.json'))
+          assert r['study']=='LANGMEM079' and r['no_new_fits'] is True
+          assert r['trainable_parameters']==499627
+          assert r['fp32_state_bytes_per_owner']==4160
+          assert r['real_source_scored_targets']==256 and r['carried_last_clock']==320
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          assert len(r['source_rows'])==256
+          assert r['slow_old_state_delta_ratio_16']<=r['slow_old_state_retention_upper_bound_16']+1e-4
+          assert set(r['metrics'])=={'full','one_step_fast_zero','one_step_slow_zero',
+            'slow_wipe_t128_carried','fast_wipe_t128_carried'}
+          PY
+      - name: Preserve original source stream outcomes and diagnostic failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM079-ORIGINAL-STREAM-seed${{ matrix.seed }}
+          path: stream079-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  frozen-three-seed-source-aggregate:
+    needs: dual-trained-source-real-stream
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download every original fitted dual seed source stream report
+        run: |
+          mkdir -p stream-raw stream-aggregate
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGMEM079-ORIGINAL-STREAM-seed*' --dir stream-raw
+      - name: Require exact same source SHA and all three trained dual checkpoint receipts
+        run: |
+          PYTHONPATH=src:. python scripts/langmem079_aggregate.py \
+            --results stream-raw --output stream-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('stream-aggregate/RESULTS.json'))
+          assert r['model_seed_count']==3 and r['no_new_fits']
+          assert r['source_paired'] and r['parameters']==499627
+          assert r['exact_original_source_target_count']==256
+          assert r['full_native_persistent_fp32_bytes']==4160
+          assert r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGMEM079 real publisher source continuous trained fast+slow carry',file=f)
+              print('Existing original 078 fitted weights and original 076 source baseline; NO new fits. EXPOSED DEV (not independent).',file=f)
+              print('| Architecture/lesion | Mean original next-byte NLL |',file=f)
+              print('|---|---:|',file=f)
+              print(f"| Original fast only (076) | {r['mean_original_fast_stream_nll']:.6f} |",file=f)
+              for arm in ('full','one_step_slow_zero','one_step_fast_zero','slow_wipe_t128_carried','fast_wipe_t128_carried'):
+                  print(f"| Dual {arm} | {r['metrics'][arm]['nll']:.6f} |",file=f)
+              print(f"Slow trained rho {r['gates']['rho_s']:.6f}, scalar upper half-life {r['gates']['source_bound_half_life_bytes']:.2f} source bytes, original pre128 slow-state norm difference after16 {r['mean_slow_state_original_128_delta_ratio_16']:.4f}",file=f)
+              print('No trained long-context supervised recall, no independent source, original training FLOPs unequal; do not claim generalized advantage.',file=f)
+          PY
+      - name: Archive original complete source verified results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM079-SOURCE-CARRIED-AGGREGATE
+          path: stream-aggregate/
+          retention-days: 90
+          if-no-files-found: warn
