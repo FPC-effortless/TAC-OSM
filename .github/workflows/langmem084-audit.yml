@@ -1,0 +1,51 @@
+name: LANGMEM084 read-only historical target decoy-context audit
+on:
+  pull_request:
+    paths:
+      - 'scripts/audit_langmem084_controls.py'
+      - 'tests/test_langmem084_control_audit.py'
+      - '.github/workflows/langmem084-audit.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-artifact-only-audit:
+    if: github.head_ref == 'research/langmem084-value-key-interference-2026-10-29'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Compute plan and structural boundary fixture
+        run: |
+          mkdir -p audit084-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem084.json > audit084-evidence/PLAN.json
+          python -m unittest discover -s tests -p test_langmem084_control_audit.py -v
+      - name: Read only original successful084 artifacts - no neural code, fit or DEV access
+        run: |
+          gh run download 40968863964 -R FPC-effortless/TAC-OSM --pattern 'LANGMEM084-FACTORIAL-seed*' --dir original084-artifacts
+          python scripts/langmem084_aggregate.py --results original084-artifacts --output audit084-evidence/ORIGINAL_SOURCE_REAGGREGATION.json > audit084-evidence/original-reaggregate.log
+          python scripts/audit_langmem084_controls.py --results original084-artifacts --output audit084-evidence/CONTROL_AUDIT.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('audit084-evidence/CONTROL_AUDIT.json'))
+          assert r['new_model_evaluations']==0 and r['new_fits']==0 and r['new_DEV_reads']==0
+          assert r['preregistered_primary_results_replaced'] is False
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# Post-hoc structural audit of existing084 predictions',file=f)
+              print('All original results retained. Paired exclusion if old target index a occurs in either wrong key context[b-4:b]. No new predictions or DEV reads.',file=f)
+              for arm in ('native_native_source','bytebits_native_source','bytebits_context_hash_overwrite'):
+                  print(arm, str(r['means'][arm]),file=f)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGMEM084-ORIGINAL-ARTIFACT-CONTROL-AUDIT
+          path: audit084-evidence/
+          retention-days: 90
