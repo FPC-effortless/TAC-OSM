@@ -17,7 +17,8 @@ import random
 import sys
 import time
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = (Path(__file__).resolve().parent if Path(__file__).name == "workload.py"
+        else Path(__file__).resolve().parents[1])
 STUDY = "LANGPRETRAIN076"
 SOURCE = "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7"
 SOURCE_SHA = "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e"
