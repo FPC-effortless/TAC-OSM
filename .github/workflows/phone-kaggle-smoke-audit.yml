@@ -1,0 +1,51 @@
+name: Phone Research Lab • read-only Kaggle dual-T4 smoke evidence
+
+# This job reads existing private Kaggle output, never pushes code or runs GPU.
+# Operator must approve the protected environment. It is NOT a training runner.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kaggle-phone-smoke-audit
+  cancel-in-progress: false
+
+jobs:
+  verify-smoke:
+    environment: kaggle-research
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download only saved no-fit smoke JSON receipts
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+        run: |
+          test -n "$KAGGLE_API_TOKEN" || { echo "Kaggle credential unavailable"; exit 2; }
+          test -n "$KAGGLE_USERNAME" || { echo "Kaggle account unavailable"; exit 2; }
+          python -m pip install --quiet kaggle
+          mkdir -p ci-artifacts/kaggle-smoke/raw
+          # READ ONLY: no kernels push, no accelerator request or GPU quota.
+          kaggle kernels output "$KAGGLE_USERNAME/tacosm-dual-t4-readiness" \
+            -p ci-artifacts/kaggle-smoke/raw --file-pattern '(^|/)(phone-research-runtime|seed-101|seed-102)\.json$' \
+            --quiet
+      - name: Audit self-reported worker receipt consistency
+        if: always()
+        run: |
+          python scripts/verify_kaggle_dual_t4_smoke.py \
+            --output-dir ci-artifacts/kaggle-smoke/raw \
+            --report ci-artifacts/kaggle-smoke/verification.json
+      - name: Upload only compact nonsecret audit result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaggle-dual-t4-receipt-audit
+          path: ci-artifacts/kaggle-smoke/verification.json
+          if-no-files-found: error
+          retention-days: 14
