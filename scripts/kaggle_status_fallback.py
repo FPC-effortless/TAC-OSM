@@ -12,7 +12,9 @@ import os
 from pathlib import Path
 import sys
 
-from phone_lab import github_request, update_issue
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from phone_lab import github_request, update_issue  # noqa: E402
 
 
 def accepted_submission(repo: str, token: str) -> dict | None:
@@ -51,22 +53,22 @@ def render(submission: dict | None) -> tuple[dict, str]:
     }
     latest = (
         f"**Last accepted GitHub submission:** [run {submission['run_id']}]"
-        f"({submission['url']}) ({submission['created_at']}).\\n\\n"
+        f"({submission['url']}) ({submission['created_at']}).\n\n"
         if submission else
-        "**No successful dispatch in the last 25 checked workflow runs.**\\n\\n"
+        "**No successful dispatch in the last 25 checked workflow runs.**\n\n"
     )
     body = (
-        "<!-- tac-osm-phone-lab-status -->\\n"
-        "### Kaggle dual-T4 research status\\n\\n"
-        "**Monitor credential: UNAVAILABLE TO THIS SCHEDULED JOB.**\\n\\n"
+        "<!-- tac-osm-phone-lab-status -->\n"
+        "### Kaggle dual-T4 research status\n\n"
+        "**Monitor credential: UNAVAILABLE TO THIS SCHEDULED JOB.**\n\n"
         + latest
         + "**Kaggle remote execution: UNVERIFIED.** This is not evidence that "
-        "the private notebook is absent or that the two T4 workers ran.\\n\\n"
+        "the private notebook is absent or that the two T4 workers ran.\n\n"
         "GitHub environment-scoped secrets are not exposed to jobs outside "
         "that environment. To enable unattended remote status polling, the "
         "owner may configure a repository-scoped `KAGGLE_API_TOKEN` "
         "(wider permission scope). Otherwise inspect Kaggle manually. "
-        "No GPU work was submitted or quota consumed by this monitor.\\n"
+        "No GPU work was submitted or quota consumed by this monitor.\n"
     )
     return report, body
 
