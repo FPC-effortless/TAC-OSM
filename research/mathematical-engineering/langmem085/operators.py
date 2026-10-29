@@ -84,8 +84,8 @@ def fixed_fit_prior(fit):
     if len(fit)!=14:raise ValueError("original original FIT owners not 14")
     counts=torch.zeros((4,256),dtype=torch.int64)
     for _,raw in sorted(fit.items()):
-        if not isinstance(raw,bytes) or len(raw)<640:raise ValueError("original FIT source not genuine bytes")
-        for t in range(128,640,4):
+        if not isinstance(raw,bytes) or len(raw)<128:raise ValueError("original FIT source not genuine bytes")
+        for t in range(128,min(640,len(raw)),4):
             for i,age in enumerate(AGES):
                 a=t-age
                 if a>=4:counts[i,raw[a]]+=1
