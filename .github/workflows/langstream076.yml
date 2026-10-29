@@ -1,0 +1,135 @@
+name: LANGSTREAM076 authentic original carried native state and same-clock lesions
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langstream076/**'
+      - 'research/phone_queue/langstream076.json'
+      - 'tests/test_langstream076.py'
+      - 'scripts/langstream076_carried_source_eval.py'
+      - 'scripts/langstream076_aggregate.py'
+      - '.github/workflows/langstream076.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-trained-native-stream:
+    if: github.head_ref == 'research/langstream076-native-carried-memory-2026-10-29'
+    strategy:
+      fail-fast: false
+      matrix:
+        tier: [m8,m12,m16]
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned original CPU PyTorch and source/causal checker
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Registered nofit publisher source and native carried equivalence
+        run: |
+          mkdir -p stream076-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langstream076.json > stream076-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langstream076/FAIR_COMPARISON.json --phase preflight \
+            > stream076-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langstream076.py
+      - name: Restore exact original source-bound model/optimizer RNG checkpoint
+        run: |
+          mkdir -p original-ckpt original075-summary
+          gh run download 40881916911 -R FPC-effortless/TAC-OSM \
+            --name LANGSCALE075-ORIGINAL-RESULTS-READONLY-RECOVERY --dir original075-summary
+          if [ "${{ matrix.tier }}" = 'm8' ]; then
+            gh run download 40871491842 -R FPC-effortless/TAC-OSM \
+              --name "LANGSCALE070-FIT-p500k-seed${{ matrix.seed }}" --dir original-ckpt
+          else
+            gh run download 40881468228 -R FPC-effortless/TAC-OSM \
+              --name "LANGSCALE075-FIT-${{ matrix.tier }}-seed${{ matrix.seed }}" --dir original-ckpt
+          fi
+      - name: Same-owner real publisher byte-stream, true native carry and lesions
+        run: |
+          PYTHONPATH=src:. python scripts/langstream076_carried_source_eval.py \
+            --tier ${{ matrix.tier }} --seed ${{ matrix.seed }} \
+            --checkpoint-dir original-ckpt \
+            --original-aggregate original075-summary/RESULTS.json \
+            --output stream076-evidence/STREAM_RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('stream076-evidence/STREAM_RESULTS.json'))
+          sizes={'m8':3904,'m12':4752,'m16':5728}
+          assert r['study']=='LANGSTREAM076' and r['no_new_training'] is True
+          assert r['source_target_count']==256 and r['carried_history_last_clock']==320
+          assert r['state_bytes_FP32_per_stream']==sizes[r['tier']]
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          assert set(r['mean_metrics'])=={'full','early_native_clear_at_128','one_step_native_zero'}
+          assert len(r['source_rows'])==256
+          PY
+      - name: Archive all observed original state and source outcomes incl negatives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSTREAM076-SOURCE-${{ matrix.tier }}-seed${{ matrix.seed }}
+          path: stream076-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  nine-original-source-streams:
+    needs: original-trained-native-stream
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download all nine source-bound streaming state diagnostics
+        run: |
+          mkdir -p stream-raw stream-aggregate
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGSTREAM076-SOURCE-*' --dir stream-raw
+      - name: Fail-closed source+state comparison and fully paired NLL report
+        run: |
+          PYTHONPATH=src:. python scripts/langstream076_aggregate.py \
+            --results stream-raw --output stream-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('stream-aggregate/RESULTS.json'))
+          assert r['model_seed_results']==9 and r['no_new_training'] is True
+          assert r['same_original_observed_next_byte_targets']==256
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGSTREAM076 true carried source native memory diagnostic',file=f)
+              print('Original source DEV already exposed; cap_all selected after 073. Causal lesion probes are not long-history fact-recall proof.',file=f)
+              print('| Native matrix | Full carry NLL | Native erased once at t128 NLL | One-step native zero NLL | State FP32 bytes |',file=f)
+              print('|---|---:|---:|---:|---:|',file=f)
+              for tier in ('m8','m12','m16'):
+                  row=r['metrics'][tier]
+                  score=row['metrics']
+                  print(f"| {tier} | {score['full']['nll']:.6f} | {score['early_native_clear_at_128']['nll']:.6f} | {score['one_step_native_zero']['nll']:.6f} | {row['persistent_FP32_bytes_per_owner']} |",file=f)
+              print('0 retraining, 0 GPU, no TEST. Original native+aligned matrix geometry changed in 075; training FLOPs not matched.',file=f)
+          PY
+      - name: Archive source-checked full aggregate including negative/failed cases
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSTREAM076-SOURCE-CARRIED-AGGREGATE
+          path: stream-aggregate/
+          retention-days: 90
+          if-no-files-found: warn
