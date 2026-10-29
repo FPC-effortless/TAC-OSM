@@ -1,0 +1,43 @@
+name: LANGLAYER038 no-fit recurrence-only source and serial readiness
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langlayer038/**'
+      - 'research/phone_queue/langlayer038.json'
+      - 'scripts/audit_langlayer038.py'
+      - 'tests/test_langlayer038.py'
+      - '.github/workflows/langlayer038.yml'
+permissions:
+  contents: read
+jobs:
+  source-and-upper-math:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Preregistered CPU plan, source boundaries and independent no-fit reference
+        run: |
+          mkdir -p langlayer038-results
+          python scripts/phone_lab.py plan research/phone_queue/langlayer038.json > langlayer038-results/PLAN.txt
+          cmp langlayer038-results/PLAN.txt research/mathematical-engineering/langlayer038/COMPUTE_DECISION.txt
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langlayer038/FAIR_COMPARISON.json --phase preflight > langlayer038-results/PREFLIGHT.json
+          PYTHONPATH=src python -m pytest -q tests/test_langlayer038.py tests/test_research_probe_agnostic.py
+          python scripts/audit_langlayer038.py --output langlayer038-results/SOURCE_UPPER_MATH.json
+          git diff --exit-code -- research/source-bundles research/replay-bundles research/mathematical-engineering/context026/context_transition.py research/mathematical-engineering/langlayer034 research/mathematical-engineering/langlayer037
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER038-no-fit-source-upper-readiness
+          path: langlayer038-results/
