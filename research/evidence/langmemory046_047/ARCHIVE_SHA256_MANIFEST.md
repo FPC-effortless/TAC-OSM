@@ -29,3 +29,15 @@ Saved 2026-10-29 at the user's direction; retains original ZIP bytes in persiste
 - Result report: research/results/LANGMEMORY047_RESULTS.md on the same lineage.
 
 Original negative/failed preflight attempts remain in Actions history and were not silently relabeled as a PASS. An archived CI success does not independently qualify model intelligence or protected TEST evaluation. Source hashes here identify exact original contents; the durable ChatGPT Library files preserve ZIP original bytes (not only summaries).
+
+## LANGMEMORY048 (same long-lived archive folder)
+- Original draft PR: https://github.com/FPC-effortless/TAC-OSM/pull/579
+- Original CPU Actions run: https://github.com/FPC-effortless/TAC-OSM/actions/runs/40826044659 (SUCCESS)
+- Original successful job: 123289200591; original Actions artifact: 12876806909
+- Persistent Library ZIP: /TAC-OSM/Research Archives/LANGMEMORY046-047/LANGMEMORY048-run40826044659-raw-evidence.zip
+- Original artifact ZIP 31059 bytes; SHA256 74436f9c5c5bc1e03fc9ecbd250fc02f0f195a6a517e37d7111574adae3283c1
+- Internal original RESULTS.json 316291 bytes SHA256 3b2866a433807d10cab582b4e185f410710304368e6054b1c37caa2c7f9d2568
+- Internal original PREFLIGHT.json 513 bytes SHA256 35df2a46e67542cc0a33fa13d238029f6e7de9fe2da0fe652bc76154015a3d14
+- Internal original PLAN.json 687 bytes SHA256 018d514eb9fdc870489b4f1c1e6abe572f1cfca08ebbabaf7c07e2040ea39b97
+- Full successful original CI log: research/evidence/langmemory046_047/LANGMEMORY048_CPU_JOB_ORIGINAL_LOG.txt
+- Original negative source-only result report: research/results/LANGMEMORY048_RESULTS.md
