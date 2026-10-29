@@ -1,0 +1,11 @@
+# LANGPROFILE059 — immutable source-line attribution, original trained decoder
+
+Pre-registered on branch before CPU measurement, 2026-10-29. No GPU, model fit, graph/code change to `incremental.py`, TEST, checkpoint promotion or new language quality.
+
+## Research question
+Do PyTorch `torch.profiler.profile(with_stack=True)` Python callsite stacks identify which original `IncrementalTAC043._advance` source lines launch repeated expensive small tensor operations `_to_copy`, `copy_`, `unsqueeze`, `as_strided`, `mul`, `addmm`, `matmul` or `empty_strided`? Previous LANGPROFILE058 reported instrumented self-CPU concentrations, NOT wall fractions; these callsites determine which source-level expressions deserve a separate mathematical engineering experiment.
+
+## Frozen protocol
+Original already-exposed licensed CPython3.13.0 FIT owner prefixes128/512, unchanged original seed1701 499623-parameter FIT320 checkpoint with strict SHA256, RNG/optimizer/split receipts. First pass all bitwise incremental logits, all nine state tensors, prefix-source full-logit tolerance, original snapshot interoperability. Then compare guarded `step` and raw `_advance` bitwise; use the original fixed state/token 12 times inside CPU profiler with stacks, no model/source modifications. Attribute `aten::` *self CPU* costs ONLY when explicit `incremental.py` Python frame line is within the actual `_advance` source line range. Missing/stale/other frames are **UNATTRIBUTED**, not guessed from op name. Include attributable/unattributable share, raw operator counts and top source callsites. Ensure no input-state or weight mutation. No inference speed winner/benchmark is claimed because profiling distorts real CPU wall performance.
+
+**Falsifier:** if stacked Python frames are unavailable or top costs diffuse across lines, report inconclusive, do not assert one specific hotspot or select a kernel optimization. If repeatable source lines appear across both contexts, prioritize one minimum scope equivalence-preserving operation in a *separately reviewed* graph/PNDS+CPU parity candidate. Review LANGDECODE057's p95 failure before any merge. Original source pin and partial PNDS Lean/Python formulations inherited; source/IEEE/AD proof remains OPEN.
