@@ -2,11 +2,11 @@
 import math
 import pytest
 import torch
-from context_transition import ordinal_code, PERIODS
 from scripts.langkernel061_vector_ordinal import (
     vectorized_ordinal, original_pair, vectorized_pair, vectorized_two_calls,
     ARMS, PROMPTS, CALLS, TRIALS
 )
+from context_transition import ordinal_code, PERIODS
 
 
 @pytest.mark.parametrize("dtype",[torch.float32,torch.float64])
