@@ -61,6 +61,9 @@ def collect(root:Path):
                 not 0<=x["source_next_byte_target"]<=255 or
                 not math.isfinite(x["without_event_minus_full_nll"]) or
                 not math.isfinite(x["direct_old_event_read_l2"]) or
+                not 0<=x["historical_write_key_norm"]<=1.00001 or
+                not math.isfinite(x["source_query_historical_write_cosine"]) or
+                not -1.00001<=x["source_query_historical_write_cosine"]<=1.00001 or
                 not 0<=x["surviving_write_frobenius_ratio"]<=x["survival_source_alpha_bound"]+1e-4):
                 raise ValueError("real original source observed event or measured event contribution illegal")
         sign=tuple((x["owner"],x["anchor_clock"],x["query_clock"],x["lane"],
@@ -90,6 +93,9 @@ def collect(root:Path):
                "mean_write_survival_norm_ratio":avg("surviving_write_frobenius_ratio"),
                "mean_alpha_product_upper_bound":avg("survival_source_alpha_bound"),
                "mean_direct_historical_read_l2":avg("direct_old_event_read_l2"),
+               "mean_source_query_writer_cosine":avg("source_query_historical_write_cosine"),
+               "mean_abs_source_query_writer_cosine":statistics.mean(abs(x["source_query_historical_write_cosine"]) for x in rows),
+               "fraction_source_query_writer_cosine_abs_ge_0_9":sum(abs(x["source_query_historical_write_cosine"])>=.9 for x in rows)/count,
                "mean_without_event_minus_full_nll":avg("without_event_minus_full_nll"),
                "event_read_helpful_fraction":sum(x["without_event_minus_full_nll"]>1e-9 for x in rows)/count,
                "event_read_harmful_fraction":sum(x["without_event_minus_full_nll"]< -1e-9 for x in rows)/count,
@@ -133,6 +139,8 @@ def main():
       "metrics":{lane:{lag:{
         "survival":v["mean_write_survival_norm_ratio"],
         "read_l2":v["mean_direct_historical_read_l2"],
+        "mean_abs_query_writer_cos":v["mean_abs_source_query_writer_cosine"],
+        "cos_abs_ge_0_9":v["fraction_source_query_writer_cosine_abs_ge_0_9"],
         "nll_effect":v["mean_without_event_minus_full_nll"],
         "help_fraction":v["event_read_helpful_fraction"],
         "resolved_fraction":v["numerically_resolved_fraction"]}
