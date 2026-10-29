@@ -1,0 +1,307 @@
+# Original GitHub Actions job log — LANGMEMORY046
+Source: https://github.com/FPC-effortless/TAC-OSM/actions/runs/40823493340
+Job: 123281109421
+Preserved original log follows; source names/timestamps retained.
+
+﻿2026-10-29T05:27:26.2250592Z Current runner version: '2.338.0'
+2026-10-29T05:27:26.2271757Z ##[group]Runner Image Provisioner
+2026-10-29T05:27:26.2272723Z Hosted Compute Agent
+2026-10-29T05:27:26.2273275Z Version: 20261021.618
+2026-10-29T05:27:26.2273838Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-29T05:27:26.2274437Z Build Date: 2026-10-21T00:45:21Z
+2026-10-29T05:27:26.2275052Z Worker ID: {c7dfb1f4-579e-49f6-82da-02b15bfacf53}
+2026-10-29T05:27:26.2275667Z Region: westus3
+2026-10-29T05:27:26.2276115Z Cloud: Azure
+2026-10-29T05:27:26.2276631Z ##[endgroup]
+2026-10-29T05:27:26.2277855Z ##[group]Operating System
+2026-10-29T05:27:26.2278463Z Ubuntu
+2026-10-29T05:27:26.2278914Z 24.04.5
+2026-10-29T05:27:26.2279337Z LTS
+2026-10-29T05:27:26.2279836Z ##[endgroup]
+2026-10-29T05:27:26.2280312Z ##[group]Runner Image
+2026-10-29T05:27:26.2280846Z Image: ubuntu-24.04
+2026-10-29T05:27:26.2281374Z Version: 20261025.353.1
+2026-10-29T05:27:26.2282598Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-29T05:27:26.2283830Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-10-29T05:27:26.2284637Z ##[endgroup]
+2026-10-29T05:27:26.2285635Z ##[group]GITHUB_TOKEN Permissions
+2026-10-29T05:27:26.2287214Z Contents: read
+2026-10-29T05:27:26.2287738Z Metadata: read
+2026-10-29T05:27:26.2288245Z ##[endgroup]
+2026-10-29T05:27:26.2290078Z Secret source: Actions
+2026-10-29T05:27:26.2290846Z Cache mode: write
+2026-10-29T05:27:26.2291503Z Prepare workflow directory
+2026-10-29T05:27:26.2638243Z Prepare all required actions
+2026-10-29T05:27:26.2676756Z Getting action download info
+2026-10-29T05:27:26.5513900Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-29T05:27:26.6380504Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-29T05:27:26.7315600Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-29T05:27:26.9596618Z Complete job name: source-verifier-falsification
+2026-10-29T05:27:27.0276364Z ##[group]Run actions/checkout@v4
+2026-10-29T05:27:27.0277027Z with:
+2026-10-29T05:27:27.0277392Z   persist-credentials: false
+2026-10-29T05:27:27.0277827Z   repository: FPC-effortless/TAC-OSM
+2026-10-29T05:27:27.0281121Z   token: ***
+2026-10-29T05:27:27.0281477Z   ssh-strict: true
+2026-10-29T05:27:27.0281832Z   ssh-user: git
+2026-10-29T05:27:27.0282173Z   clean: true
+2026-10-29T05:27:27.0282668Z   sparse-checkout-cone-mode: true
+2026-10-29T05:27:27.0283117Z   fetch-depth: 1
+2026-10-29T05:27:27.0283454Z   fetch-tags: false
+2026-10-29T05:27:27.0283797Z   show-progress: true
+2026-10-29T05:27:27.0284153Z   lfs: false
+2026-10-29T05:27:27.0284480Z   submodules: false
+2026-10-29T05:27:27.0284834Z   set-safe-directory: true
+2026-10-29T05:27:27.0285227Z   allow-unsafe-pr-checkout: false
+2026-10-29T05:27:27.0285776Z env:
+2026-10-29T05:27:27.0286094Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:27:27.0286493Z   OMP_NUM_THREADS: 2
+2026-10-29T05:27:27.0286842Z   MKL_NUM_THREADS: 2
+2026-10-29T05:27:27.0287208Z ##[endgroup]
+2026-10-29T05:27:27.2793083Z Syncing repository: FPC-effortless/TAC-OSM
+2026-10-29T05:27:27.2795459Z ##[group]Getting Git version info
+2026-10-29T05:27:27.2796532Z Working directory is '/home/runner/work/TAC-OSM/TAC-OSM'
+2026-10-29T05:27:27.2797961Z [command]/usr/bin/git version
+2026-10-29T05:27:27.2884226Z git version 2.56.0
+2026-10-29T05:27:27.2914857Z ##[endgroup]
+2026-10-29T05:27:27.2945804Z Temporarily overriding HOME='/home/runner/work/_temp/6b9decbb-ee4c-43cf-b9a3-151abe4bfc50' before making global git config changes
+2026-10-29T05:27:27.2948599Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T05:27:27.2950694Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T05:27:27.3018058Z Deleting the contents of '/home/runner/work/TAC-OSM/TAC-OSM'
+2026-10-29T05:27:27.3027661Z ##[group]Initializing the repository
+2026-10-29T05:27:27.3031904Z [command]/usr/bin/git init /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T05:27:27.3150051Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-29T05:27:27.3152301Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-29T05:27:27.3154033Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-29T05:27:27.3155057Z hint: call:
+2026-10-29T05:27:27.3155643Z hint:
+2026-10-29T05:27:27.3156408Z hint: 	git config --global init.defaultBranch <name>
+2026-10-29T05:27:27.3157307Z hint:
+2026-10-29T05:27:27.3158167Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-29T05:27:27.3159559Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-29T05:27:27.3160747Z hint:
+2026-10-29T05:27:27.3161355Z hint: 	git branch -m <name>
+2026-10-29T05:27:27.3162048Z hint:
+2026-10-29T05:27:27.3182717Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-29T05:27:27.3184109Z Initialized empty Git repository in /home/runner/work/TAC-OSM/TAC-OSM/.git/
+2026-10-29T05:27:27.3188103Z [command]/usr/bin/git remote add origin https://github.com/FPC-effortless/TAC-OSM
+2026-10-29T05:27:27.3238238Z ##[endgroup]
+2026-10-29T05:27:27.3239422Z ##[group]Disabling automatic garbage collection
+2026-10-29T05:27:27.3243134Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-29T05:27:27.3289109Z ##[endgroup]
+2026-10-29T05:27:27.3290177Z ##[group]Setting up auth
+2026-10-29T05:27:27.3294263Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T05:27:27.3335401Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T05:27:27.3703206Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T05:27:27.3739737Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T05:27:27.3945354Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T05:27:27.3985511Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T05:27:27.4193941Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-29T05:27:27.4236937Z ##[endgroup]
+2026-10-29T05:27:27.4238124Z ##[group]Fetching the repository
+2026-10-29T05:27:27.4249162Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +bc75ac34bdb94610c64e3cb79b53887d45db8432:refs/remotes/pull/576/merge
+2026-10-29T05:27:28.7412072Z From https://github.com/FPC-effortless/TAC-OSM
+2026-10-29T05:27:28.7413431Z  * [new ref]         bc75ac34bdb94610c64e3cb79b53887d45db8432 -> pull/576/merge
+2026-10-29T05:27:28.7414786Z ##[endgroup]
+2026-10-29T05:27:28.7415164Z ##[group]Determining the checkout info
+2026-10-29T05:27:28.7415569Z ##[endgroup]
+2026-10-29T05:27:28.7417405Z [command]/usr/bin/git sparse-checkout disable
+2026-10-29T05:27:28.7470793Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-29T05:27:28.7504652Z ##[group]Checking out the ref
+2026-10-29T05:27:28.7507622Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/576/merge
+2026-10-29T05:27:28.9429252Z Note: switching to 'refs/remotes/pull/576/merge'.
+2026-10-29T05:27:28.9429568Z 
+2026-10-29T05:27:28.9429788Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-29T05:27:28.9430331Z changes and commit them, and you can discard any commits you make in this
+2026-10-29T05:27:28.9430798Z state without impacting any branches by switching back to a branch.
+2026-10-29T05:27:28.9431506Z 
+2026-10-29T05:27:28.9431725Z If you want to create a new branch to retain commits you create, you may
+2026-10-29T05:27:28.9432144Z do so (now or later) by using -c with the switch command. Example:
+2026-10-29T05:27:28.9432582Z 
+2026-10-29T05:27:28.9432748Z   git switch -c <new-branch-name>
+2026-10-29T05:27:28.9432990Z 
+2026-10-29T05:27:28.9433116Z Or undo this operation with:
+2026-10-29T05:27:28.9433270Z 
+2026-10-29T05:27:28.9433411Z   git switch -
+2026-10-29T05:27:28.9433554Z 
+2026-10-29T05:27:28.9433808Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-29T05:27:28.9434144Z 
+2026-10-29T05:27:28.9434448Z HEAD is now at bc75ac3 Merge ac57262d39120f31bdd8901da78640c43e7de984 into 9d30327ed11554f92ac94838c12b198947cf5fe3
+2026-10-29T05:27:28.9449475Z ##[endgroup]
+2026-10-29T05:27:28.9497318Z [command]/usr/bin/git log -1 --format=%H
+2026-10-29T05:27:28.9527347Z bc75ac34bdb94610c64e3cb79b53887d45db8432
+2026-10-29T05:27:28.9535475Z ##[group]Removing auth
+2026-10-29T05:27:28.9538610Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T05:27:28.9572532Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T05:27:28.9776505Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T05:27:28.9807498Z http.https://github.com/.extraheader
+2026-10-29T05:27:28.9813479Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-29T05:27:28.9848782Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T05:27:29.0050127Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T05:27:29.0161117Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T05:27:29.0295463Z ##[endgroup]
+2026-10-29T05:27:29.0533343Z ##[group]Run actions/setup-python@v5
+2026-10-29T05:27:29.0533649Z with:
+2026-10-29T05:27:29.0533867Z   python-version: 3.13
+2026-10-29T05:27:29.0534114Z   check-latest: false
+2026-10-29T05:27:29.0536620Z   token: ***
+2026-10-29T05:27:29.0536857Z   update-environment: true
+2026-10-29T05:27:29.0537118Z   allow-prereleases: false
+2026-10-29T05:27:29.0537363Z   freethreaded: false
+2026-10-29T05:27:29.0537587Z env:
+2026-10-29T05:27:29.0537799Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:27:29.0538040Z   OMP_NUM_THREADS: 2
+2026-10-29T05:27:29.0538265Z   MKL_NUM_THREADS: 2
+2026-10-29T05:27:29.0538484Z ##[endgroup]
+2026-10-29T05:27:29.1705783Z ##[group]Installed versions
+2026-10-29T05:27:29.1794472Z (node:2183) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T05:27:29.1795429Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T05:27:29.1795908Z Successfully set up CPython (3.13.17)
+2026-10-29T05:27:29.1796494Z ##[endgroup]
+2026-10-29T05:27:29.1953911Z ##[group]Run python -m pip install numpy==2.3.5 pytest==8.4.2
+2026-10-29T05:27:29.1954618Z [36;1mpython -m pip install numpy==2.3.5 pytest==8.4.2[0m
+2026-10-29T05:27:29.1995036Z shell: /usr/bin/bash -e {0}
+2026-10-29T05:27:29.1995433Z env:
+2026-10-29T05:27:29.1995750Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:27:29.1996094Z   OMP_NUM_THREADS: 2
+2026-10-29T05:27:29.1996408Z   MKL_NUM_THREADS: 2
+2026-10-29T05:27:29.1996868Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:29.1997574Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T05:27:29.1998235Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:29.1998778Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:29.1999602Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:29.2000157Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T05:27:29.2000637Z ##[endgroup]
+2026-10-29T05:27:30.1076541Z Collecting numpy==2.3.5
+2026-10-29T05:27:30.1471022Z   Downloading numpy-2.3.5-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+2026-10-29T05:27:30.1844566Z Collecting pytest==8.4.2
+2026-10-29T05:27:30.1887878Z   Downloading pytest-8.4.2-py3-none-any.whl.metadata (7.7 kB)
+2026-10-29T05:27:30.1991990Z Collecting iniconfig>=1 (from pytest==8.4.2)
+2026-10-29T05:27:30.2024637Z   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+2026-10-29T05:27:30.2142863Z Collecting packaging>=20 (from pytest==8.4.2)
+2026-10-29T05:27:30.2180254Z   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+2026-10-29T05:27:30.2275772Z Collecting pluggy<2,>=1.5 (from pytest==8.4.2)
+2026-10-29T05:27:30.2305781Z   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+2026-10-29T05:27:30.2438191Z Collecting pygments>=2.7.2 (from pytest==8.4.2)
+2026-10-29T05:27:30.2468889Z   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+2026-10-29T05:27:30.2531475Z Downloading numpy-2.3.5-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+2026-10-29T05:27:30.4285709Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 95.4 MB/s  0:00:00
+2026-10-29T05:27:30.4325473Z Downloading pytest-8.4.2-py3-none-any.whl (365 kB)
+2026-10-29T05:27:30.4386554Z Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+2026-10-29T05:27:30.4432857Z Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-10-29T05:27:30.4479561Z Downloading packaging-26.3-py3-none-any.whl (129 kB)
+2026-10-29T05:27:30.4530460Z Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+2026-10-29T05:27:30.4598316Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 204.2 MB/s  0:00:00
+2026-10-29T05:27:30.5355446Z Installing collected packages: pygments, pluggy, packaging, numpy, iniconfig, pytest
+2026-10-29T05:27:32.9773931Z 
+2026-10-29T05:27:32.9786509Z Successfully installed iniconfig-2.3.1 numpy-2.3.5 packaging-26.3 pluggy-1.7.0 pygments-2.21.0 pytest-8.4.2
+2026-10-29T05:27:33.0379046Z ##[group]Run mkdir -p langmemory046-evidence
+2026-10-29T05:27:33.0379387Z [36;1mmkdir -p langmemory046-evidence[0m
+2026-10-29T05:27:33.0379834Z [36;1mpython scripts/phone_lab.py plan research/phone_queue/langmemory046.json > langmemory046-evidence/PLAN.json[0m
+2026-10-29T05:27:33.0380682Z [36;1mpython scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmemory046/FAIR_COMPARISON.json --phase preflight > langmemory046-evidence/PREFLIGHT.json[0m
+2026-10-29T05:27:33.0381367Z [36;1mPYTHONPATH=src:. python -m pytest -q tests/test_langmemory046.py[0m
+2026-10-29T05:27:33.0400243Z shell: /usr/bin/bash -e {0}
+2026-10-29T05:27:33.0400451Z env:
+2026-10-29T05:27:33.0400630Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:27:33.0400829Z   OMP_NUM_THREADS: 2
+2026-10-29T05:27:33.0401003Z   MKL_NUM_THREADS: 2
+2026-10-29T05:27:33.0401243Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:33.0401627Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T05:27:33.0401967Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:33.0402262Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:33.0402892Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:33.0403197Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T05:27:33.0403451Z ##[endgroup]
+2026-10-29T05:27:33.1136331Z <!-- tac-osm-phone-lab-status -->
+2026-10-29T05:27:33.1136745Z ### TAC-OSM research lab status
+2026-10-29T05:27:33.1136950Z 
+2026-10-29T05:27:33.1137571Z **Run:** langmemory046-matched-verifier-index-source · **Model:** System 1
+2026-10-29T05:27:33.1137977Z 
+2026-10-29T05:27:33.1138282Z **Compute decision:** GitHub Actions CPU · **Stage:** source_audit
+2026-10-29T05:27:33.1138684Z 
+2026-10-29T05:27:33.1139113Z **Progress:** READY_NO_FIT
+2026-10-29T05:27:33.1139306Z 
+2026-10-29T05:27:33.1139533Z - [ ] No planning blockers; normal source/gate checks still apply
+2026-10-29T05:27:33.1139871Z 
+2026-10-29T05:27:33.1140164Z *This is a planning receipt, not model training approval or scientific validation.*
+2026-10-29T05:27:33.1140568Z 
+2026-10-29T05:27:33.8152564Z .......                                                                  [100%]
+2026-10-29T05:27:33.8153037Z 7 passed in 0.35s
+2026-10-29T05:27:33.8423703Z ##[group]Run PYTHONPATH=src:. python scripts/langmemory046_verification_controls.py --output langmemory046-evidence/RESULTS.json
+2026-10-29T05:27:33.8424438Z [36;1mPYTHONPATH=src:. python scripts/langmemory046_verification_controls.py --output langmemory046-evidence/RESULTS.json[0m
+2026-10-29T05:27:33.8424882Z [36;1mpython - <<'PY'[0m
+2026-10-29T05:27:33.8425069Z [36;1mimport json[0m
+2026-10-29T05:27:33.8425307Z [36;1mr=json.load(open('langmemory046-evidence/RESULTS.json'))[0m
+2026-10-29T05:27:33.8425637Z [36;1massert r['documents']==14 and r['cases']==4928[0m
+2026-10-29T05:27:33.8425892Z [36;1massert len(r['random_seeds'])==5[0m
+2026-10-29T05:27:33.8426250Z [36;1massert r['training_updates']==0 and r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0[0m
+2026-10-29T05:27:33.8426611Z [36;1mfor seed in r['random_seeds']:[0m
+2026-10-29T05:27:33.8426843Z [36;1m    s=r['runs'][str(seed)]['summary'][0m
+2026-10-29T05:27:33.8427179Z [36;1m    assert s['select_scan']['correct']==s['select_index']['correct'][0m
+2026-10-29T05:27:33.8427512Z [36;1m    for name in ('random_all','random_uncertain'):[0m
+2026-10-29T05:27:33.8427859Z [36;1m        assert s[name]['verification_calls']==s['select_scan']['verification_calls'][0m
+2026-10-29T05:27:33.8428168Z [36;1mPY[0m
+2026-10-29T05:27:33.8446132Z shell: /usr/bin/bash -e {0}
+2026-10-29T05:27:33.8446341Z env:
+2026-10-29T05:27:33.8446515Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:27:33.8446724Z   OMP_NUM_THREADS: 2
+2026-10-29T05:27:33.8446908Z   MKL_NUM_THREADS: 2
+2026-10-29T05:27:33.8447133Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:33.8447472Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T05:27:33.8447803Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:33.8448096Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:33.8448396Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:33.8448698Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T05:27:33.8448959Z ##[endgroup]
+2026-10-29T05:27:34.9937687Z {"cases": 4928, "index_costs": {"actual_index_lookup_timed_ms_all_queried": 3.261891, "actual_index_update_timed_ms": 24.797234, "actual_naive_full_history_scan_timed_ms_all_queried": 859.205697, "exact_index_total_lower_bound_bytes": 103279, "exact_index_total_python_heap_bytes": 3540408, "original_source_prefix_bytes_total": 21504, "timing_note": "Python per-query wall time, all 4928 queries, includes measurement overhead, not same-host paired model latency or production RAM"}, "main_seed_summary": {"always_index": {"accuracy_given_coverage": 0.4103114930182599, "answered": 3724, "calls_fraction": 1.0, "correct": 1528, "coverage": 0.7556818181818182, "gain_from_cheap": 595, "index_lookups": 4928, "long_answered": 2255, "long_correct": 1325, "long_coverage": 1.0, "regressions": 41, "repairs": 636, "scan_positions": 0, "success_per_all_positions": 0.31006493506493504, "verification_calls": 4928}, "cheap": {"accuracy_given_coverage": 0.3031189083820663, "answered": 3078, "calls_fraction": 0.0, "correct": 933, "coverage": 0.6245941558441559, "gain_from_cheap": 0, "index_lookups": 0, "long_answered": 1609, "long_correct": 730, "long_coverage": 0.7135254988913525, "regressions": 0, "repairs": 0, "scan_positions": 0, "success_per_all_positions": 0.1893262987012987, "verification_calls": 0}, "periodic": {"accuracy_given_coverage": 0.32699501246882795, "answered": 3208, "calls_fraction": 0.19886363636363635, "correct": 1049, "coverage": 0.650974025974026, "gain_from_cheap": 116, "index_lookups": 0, "long_answered": 1739, "long_correct": 846, "long_coverage": 0.7711751662971175, "regressions": 7, "repairs": 123, "scan_positions": 810460, "success_per_all_positions": 0.21286525974025974, "verification_calls": 980}, "random_all": {"accuracy_given_coverage": 0.32646048109965636, "answered": 3201, "calls_fraction": 0.17958603896103897, "correct": 1045, "coverage": 0.6495535714285714, "gain_from_cheap": 112, "index_lookups": 0, "long_answered": 1732, "long_correct": 842, "long_coverage": 0.7680709534368071, "regressions": 11, "repairs": 123, "scan_positions": 731909, "success_per_all_positions": 0.21205357142857142, "verification_calls": 885}, "random_uncertain": {"accuracy_given_coverage": 0.32888198757763976, "answered": 3220, "calls_fraction": 0.17958603896103897, "correct": 1059, "coverage": 0.6534090909090909, "gain_from_cheap": 126, "index_lookups": 0, "long_answered": 1751, "long_correct": 856, "long_coverage": 0.7764966740576497, "regressions": 11, "repairs": 137, "scan_positions": 742833, "success_per_all_positions": 0.2148944805194805, "verification_calls": 885}, "select_index": {"accuracy_given_coverage": 0.3273067331670823, "answered": 3208, "calls_fraction": 0.17958603896103897, "correct": 1050, "coverage": 0.650974025974026, "gain_from_cheap": 117, "index_lookups": 885, "long_answered": 1739, "long_correct": 847, "long_coverage": 0.7711751662971175, "regressions": 4, "repairs": 121, "scan_positions": 0, "success_per_all_positions": 0.21306818181818182, "verification_calls": 885}, "select_scan": {"accuracy_given_coverage": 0.3273067331670823, "answered": 3208, "calls_fraction": 0.17958603896103897, "correct": 1050, "coverage": 0.650974025974026, "gain_from_cheap": 117, "index_lookups": 0, "long_answered": 1739, "long_correct": 847, "long_coverage": 0.7711751662971175, "regressions": 4, "repairs": 121, "scan_positions": 737845, "success_per_all_positions": 0.21306818181818182, "verification_calls": 885}}, "random_seeds": [11, 29, 47, 83, 131], "status": "MEASURED_GENUINE_FIT_SOURCE_MATCHED_CALL_VERIFIER_CONTROLS", "study": "LANGMEMORY046"}
+2026-10-29T05:27:35.0335897Z ##[group]Run actions/upload-artifact@v4
+2026-10-29T05:27:35.0336127Z with:
+2026-10-29T05:27:35.0336366Z   name: LANGMEMORY046-FIT-matched-random-and-index-controls
+2026-10-29T05:27:35.0336654Z   path: langmemory046-evidence/
+2026-10-29T05:27:35.0336852Z   retention-days: 90
+2026-10-29T05:27:35.0337029Z   if-no-files-found: warn
+2026-10-29T05:27:35.0337215Z   compression-level: 6
+2026-10-29T05:27:35.0337392Z   overwrite: false
+2026-10-29T05:27:35.0337569Z   include-hidden-files: false
+2026-10-29T05:27:35.0337757Z env:
+2026-10-29T05:27:35.0337914Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:27:35.0338097Z   OMP_NUM_THREADS: 2
+2026-10-29T05:27:35.0338265Z   MKL_NUM_THREADS: 2
+2026-10-29T05:27:35.0338486Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:35.0338817Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T05:27:35.0339161Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:35.0339485Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:35.0339772Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:27:35.0340064Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T05:27:35.0340314Z ##[endgroup]
+2026-10-29T05:27:35.1697467Z (node:2229) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T05:27:35.1698048Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T05:27:35.1769581Z With the provided path, there will be 3 files uploaded
+2026-10-29T05:27:35.1770351Z Artifact name is valid!
+2026-10-29T05:27:35.1770703Z Root directory input is valid!
+2026-10-29T05:27:35.5248319Z Beginning upload of artifact content to blob storage
+2026-10-29T05:27:35.5516267Z (node:2229) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-29T05:27:35.8261303Z Uploaded bytes 29008
+2026-10-29T05:27:35.8918463Z Finished uploading artifact content to blob storage!
+2026-10-29T05:27:35.8919251Z SHA256 digest of uploaded artifact zip is 4e340294c61003faa7e940151b8afae7a55f6fe5cceeebe9b58e74814bc63cea
+2026-10-29T05:27:35.8920158Z Finalizing artifact upload
+2026-10-29T05:27:36.3559664Z Artifact LANGMEMORY046-FIT-matched-random-and-index-controls.zip successfully finalized. Artifact ID 12876000667
+2026-10-29T05:27:36.3560583Z Artifact LANGMEMORY046-FIT-matched-random-and-index-controls has been successfully uploaded! Final size is 29008 bytes. Artifact ID is 12876000667
+2026-10-29T05:27:36.3566689Z Artifact download URL: https://github.com/FPC-effortless/TAC-OSM/actions/runs/40823493340/artifacts/12876000667
+2026-10-29T05:27:36.3739674Z Post job cleanup.
+2026-10-29T05:27:36.4724344Z (node:2241) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T05:27:36.4724937Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T05:27:36.4924615Z Post job cleanup.
+2026-10-29T05:27:36.5709265Z [command]/usr/bin/git version
+2026-10-29T05:27:36.5733197Z git version 2.56.0
+2026-10-29T05:27:36.5777154Z Temporarily overriding HOME='/home/runner/work/_temp/04d8486e-431e-4dc8-afe1-e07766e8bc98' before making global git config changes
+2026-10-29T05:27:36.5780019Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T05:27:36.5781015Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T05:27:36.5828363Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T05:27:36.5883879Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T05:27:36.6200354Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T05:27:36.6239839Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T05:27:36.6557077Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T05:27:36.6599774Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T05:27:36.6966458Z Cleaning up orphan processes
+2026-10-29T05:27:36.7269794Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
