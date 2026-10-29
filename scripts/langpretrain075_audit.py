@@ -156,20 +156,20 @@ def cost_plan(exposure_bytes: int, gpu_aggregate_bytes_per_second: float | None,
         raise AuditError("nonnegative finite per-GPU-hour rate and exactly 2 T4 devices required")
     cpu_rate = CPU_REFERENCE["training_targets"] / CPU_REFERENCE["cpu_process_seconds"]
     gpu_seconds = (None if gpu_aggregate_bytes_per_second is None else
-                   exposure_bytes / gpu_aggregate_bytes_per_second)
+                   (exposure_bytes * gpu_count) / gpu_aggregate_bytes_per_second)
     return {
         "schema": "tac-osm.byte-pretrain-cost.v1",
         "exposure_bytes_per_seed": exposure_bytes,
         "cpu_reference": CPU_REFERENCE,
         "cpu_extrapolated_hours_PER_SEED_NOT_FORECAST": exposure_bytes / cpu_rate / 3600,
         "gpu_aggregate_bytes_per_second": gpu_aggregate_bytes_per_second,
-        "gpu_wall_hours_PER_SEED": None if gpu_seconds is None else gpu_seconds / 3600,
+        "gpu_wall_hours_TWO_CONCURRENT_SEEDS": None if gpu_seconds is None else gpu_seconds / 3600,
         "gpu_count": gpu_count, "gpu_type": "NvidiaTeslaT4",
         "usd_per_gpu_hour_USER_INPUT_NOT_QUOTE": usd_per_gpu_hour,
-        "estimated_paid_compute_per_seed_usd": (
+        "estimated_paid_compute_two_seeds_usd": (
             None if gpu_seconds is None else gpu_seconds / 3600 * usd_per_gpu_hour * gpu_count
         ),
-        "two_seed_concurrency": "separate frozen seed shards, each T4 independently measured",
+        "two_seed_concurrency": "two identical byte exposures, one per T4, aggregate throughput includes both",
         "warning": "GPU rate unknown until measured on actual TAC training; CPU process average "
                    "is exploratory, does not predict long-fit speed or future model sizes",
         "approved_to_spend": False,
