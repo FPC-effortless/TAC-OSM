@@ -1,0 +1,128 @@
+name: LANGSCALE071 9 original scaling checkpoints five reset context lengths
+on:
+  pull_request:
+    paths:
+      - 'scripts/langscale071_context_eval.py'
+      - 'scripts/langscale071_aggregate.py'
+      - 'tests/test_langscale071.py'
+      - 'research/mathematical-engineering/langscale071/**'
+      - 'research/phone_queue/langscale071.json'
+      - '.github/workflows/langscale071.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  context-source-no-fit:
+    if: github.head_ref == 'research/langscale071-context-length-2026-10-29'
+    strategy:
+      fail-fast: false
+      matrix:
+        tier: [p250k,p500k,p1000k]
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned source CPU runtime
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Frozen source preflight and no-fit same-owner causal tests
+        run: |
+          mkdir -p langscale071-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langscale071.json > langscale071-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langscale071/FAIR_COMPARISON.json --phase preflight > langscale071-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langscale071.py tests/test_langscale070.py
+      - name: Retrieve unmodified original 070 trained weights and verified 9-checkpoint aggregate
+        run: |
+          mkdir -p frozen-original frozen-source-summary
+          gh run download 40871491842 -R FPC-effortless/TAC-OSM \
+             --name "LANGSCALE070-FIT-${{ matrix.tier }}-seed${{ matrix.seed }}" \
+             --dir frozen-original
+          gh run download 40871491842 -R FPC-effortless/TAC-OSM \
+             --name LANGSCALE070-SOURCE-VERIFIED-SCALING-SUMMARY \
+             --dir frozen-source-summary
+      - name: Evaluate identical original next-byte targets with 16/32/64/128/256 reset contexts
+        run: |
+          PYTHONPATH=src:. python scripts/langscale071_context_eval.py \
+            --tier ${{ matrix.tier }} --seed ${{ matrix.seed }} \
+            --checkpoint-dir frozen-original --original-aggregate frozen-source-summary/RESULTS.json \
+            --output langscale071-evidence/CONTEXT_RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('langscale071-evidence/CONTEXT_RESULTS.json'))
+          assert r['study']=='LANGSCALE071' and r['training_updates']==0
+          assert r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          assert r['context_target_count']==256
+          assert [x['context'] for x in r['lengths']]==[16,32,64,128,256]
+          assert all(x['n']==256 for x in r['lengths'])
+          assert abs(r['original_full_DEV_replay_nll']-r['trained_checkpoint']['original_DEV_NLL'])<=1e-6
+          PY
+      - name: Preserve original no-fit scores and any failed-source evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSCALE071-CONTEXT-${{ matrix.tier }}-seed${{ matrix.seed }}
+          path: langscale071-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  verified-nine-context-aggregate:
+    needs: context-source-no-fit
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Collect all original checkpoint no-fit context evidence
+        run: |
+          mkdir -p context-raw context-aggregate
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGSCALE071-CONTEXT-*' --dir context-raw
+      - name: Verify nine exact source targets and evaluate all context regimes without cherry-picking
+        run: |
+          PYTHONPATH=src:. python scripts/langscale071_aggregate.py \
+            --results context-raw --output context-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('context-aggregate/RESULTS.json'))
+          assert r['models_evaluated']==9 and r['new_neural_fits']==0
+          assert r['all_original_source_cohorts_and_context_inputs_identical']
+          assert r['same_targets_per_model_per_context']==256
+          assert r['protected_TEST']=='NOT_ACCESSED'
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGSCALE071 original same-target reset-context scaling (no fit)',file=f)
+              print('All original contexts RESET. This is NOT persistent or streaming history.',file=f)
+              print('| Size | 16 NLL | 32 NLL | 64 NLL | 128 NLL | 256 NLL |',file=f)
+              print('|---|---:|---:|---:|---:|---:|',file=f)
+              for tier,d in r['quality_by_tier_context'].items():
+                  nums=[d[str(k)]['nll_mean'] for k in r['context_lengths']]
+                  print(f"| {tier} | "+' | '.join(f'{v:.5f}' for v in nums)+' |',file=f)
+              print('Only 256 original exposed DEV target positions, per checkpoint. 256-context is beyond original 128-training window.',file=f)
+          PY
+      - name: Archive all results including negative or missing runs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSCALE071-ORIGINAL-NINE-CONTEXT-AGGREGATE
+          path: context-aggregate/
+          retention-days: 90
+          if-no-files-found: warn
