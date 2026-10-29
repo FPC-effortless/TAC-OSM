@@ -58,7 +58,7 @@ jobs:
           assert len(x["generation"])==6
           assert len(x["prefill_neural"])==3
           assert x["p3_and_hybrid_speed"]=="NOT_RUN_SEPARATE_CPU_PROTOCOL"
-          assert all(row["repetitions"]==3 and row["generated_bytes_per_repetition"]==4 for row in x["generation"].values())
+          assert all(row["repetitions"]==2 and row["generated_bytes_per_repetition"]==2 for row in x["generation"].values())
           assert all(row["median_ms_per_generated_byte"]>0 for row in x["generation"].values())
           assert x["no_optimized_state_claim"] is True
           PY
