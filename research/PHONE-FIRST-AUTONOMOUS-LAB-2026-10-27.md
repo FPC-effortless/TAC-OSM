@@ -170,8 +170,20 @@ T4 device names, arithmetic and the explicit no-fit/no-science flags.
 
 If any output is missing or cannot be read (including private notebook
 access-denied), the audit **FAILS** and archives only an incomplete status
-report; do not attempt to resolve that by rerunning a GPU job. If the
-receipts pass, status is **SELF_REPORTED_TWO_WORKER_RECEIPTS_CONSISTENT**,
+report; do not attempt to resolve that by rerunning a GPU job. The
+2026-10-29 read-only attempt [#40846645451](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40846645451)
+returned Kaggle `Permission 'kernels.get' was denied` before any receipt
+could be downloaded. The later missing-file error was *consequential*, not
+independent evidence of a failed GPU execution. The repaired workflow
+classifies that API error, and checks `kaggle kernels list --mine --csv` for
+an exact or similar notebook reference without exposing private titles,
+retrying submissions, or fetching unknown notebooks. Successful listing
+does **not** prove the notebook ran. If API access remains denied, inspect
+the authenticated Kaggle **Your Work → notebook → Versions** page to verify
+the exact URL and whether a saved execution/version exists. `Draft saved`
+is not a completed saved execution; `Save & Run All` launches a new run
+and may consume GPU quota, so it is not part of the read-only repair.
+If the receipts pass, status is **SELF_REPORTED_TWO_WORKER_RECEIPTS_CONSISTENT**,
 not independent device attestation: Kaggle execution version provenance,
 trusted independent device observability, and any model capability claim
 remain distinct. The source-controlled report archive is nonsecret; raw
