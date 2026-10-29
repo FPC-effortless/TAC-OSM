@@ -42,7 +42,7 @@ jobs:
           curl --fail --silent --show-error --location --retry 3 \
             https://raw.githubusercontent.com/pathwaycom/bdh/2b0d7a45b058d4309c84a10e0768d541fe18bdc2/bdh.py \
             -o /tmp/langspeed034-pinned-official-bdh.py
-      - name: CPU timed real inference, SAME RUNNER AND THREADS for all five predictors
+      - name: CPU timed real inference, SAME RUNNER AND THREADS for three neural predictors
         run: |
           PYTHONPATH=src:. python scripts/langspeed034_cpu_decode.py \
             --checkpoints langspeed034-checkpoints \
@@ -55,8 +55,9 @@ jobs:
           x=json.load(open("langspeed034-results/REAL_TRAINED_CPU_PREFILL_AND_GREEDY_DECODE.json"))
           assert x["no_training"] is True and x["gpu_minutes"]==0
           assert x["protected_TEST"]=="NOT_ACCESSED"
-          assert len(x["generation"])==10
+          assert len(x["generation"])==6
           assert len(x["prefill_neural"])==3
+          assert x["p3_and_hybrid_speed"]=="NOT_RUN_SEPARATE_CPU_PROTOCOL"
           assert all(row["repetitions"]==3 and row["generated_bytes_per_repetition"]==4 for row in x["generation"].values())
           assert all(row["median_ms_per_generated_byte"]>0 for row in x["generation"].values())
           assert x["no_optimized_state_claim"] is True
