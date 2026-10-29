@@ -409,3 +409,7 @@ claimed from this run. Mandatory checkpoint hashes, model+optimizer+RNG,
 source-order receipts, numerical cold replay, all five seeds, complete
 negative evidence and all training failures must be retained. No promotion,
 merge, release or TEST access follows automatically.
+
+## Narrow owner-directed LANGLAYER040 factorial research — 2026-10-29
+
+The owner directed a genuine-source ~500K upper graph × state-width factorial after LANGLAYER039. Only LANGLAYER040's two missing arms at 499623 and 499848 active/deployed learned parameters are newly authorized under the 500K language scale. The global 100K policy remains. Original five-seed 035/039 checkpoints are frozen; the new arms use identical 14 publisher CPython FIT document owners, seeds 1701–1705, 320 AdamW updates, batch8 and 128 next-byte targets per example. Four previously exposed DEV docs only. Protected TEST/GPU/production/independent certification remain closed. All 10 real trained checkpoints, optimizer/RNG/source hash and cold replay must be complete before aggregation; no failures are dropped. Decoder width varies to conserve the parameter budget; this factorial measures allocation, not pure fixed-decoder causal changes. Training FLOPs are NOT matched. Complete composed Lean, IEEE and formal AD remain open.
