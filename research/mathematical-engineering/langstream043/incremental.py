@@ -29,6 +29,7 @@ class InferenceState:
     clock:int
     weights_sha256:str
     position_mode:str
+    implementation_sha256:str
     tensors:dict[str,torch.Tensor]
 
     def tensor_bytes(self):
@@ -42,6 +43,10 @@ class IncrementalTAC043:
         if position_mode not in ('native','cap_all'): raise ValueError('unregistered position mode')
         if model.embedding.weight.dtype not in (torch.float32,torch.float64): raise ValueError('unqualified precision')
         self.model=model;self.position_mode=position_mode
+        source=hashlib.sha256(str(torch.__version__).encode())
+        for relative in ('langstream043/incremental.py','context026/context_transition.py','langlayer040/factorial_depth.py','langlayer038/recurrence_only.py','langmemory042/candidate.py'):
+            source.update(relative.encode());source.update((P/relative).read_bytes())
+        self.implementation_sha256=source.hexdigest()
         self._binding=self._signature();self.weights_sha256=self._weight_hash()
         self._check_model()
 
@@ -58,7 +63,7 @@ class IncrementalTAC043:
     def _check_model(self):
         if any(m.training for m in self.model.modules()): raise ValueError('eval mode required')
         if self._signature()!=self._binding: raise ValueError('model weights/dtype/device changed; reset engine')
-        if self.model.pos._forward_pre_hooks: raise ValueError('unregistered positional hook')
+        if any(m._forward_pre_hooks or m._forward_hooks for m in self.model.modules()): raise ValueError('unregistered model hook')
 
     @staticmethod
     def _owners(owners):
@@ -70,12 +75,12 @@ class IncrementalTAC043:
     def start(self,owners):
         self._check_model();owners=self._owners(owners);w=self.model.embedding.weight
         tensors={name:w.new_zeros((len(owners),*shape)) for name,shape in SHAPES.items()}
-        return InferenceState(owners,0,self.weights_sha256,self.position_mode,tensors)
+        return InferenceState(owners,0,self.weights_sha256,self.position_mode,self.implementation_sha256,tensors)
 
     def validate(self,state,owners):
         self._check_model();owners=self._owners(owners)
         if type(state) is not InferenceState or state.owners!=owners: raise ValueError('state owner mismatch')
-        if state.weights_sha256!=self.weights_sha256 or state.position_mode!=self.position_mode: raise ValueError('state model/mode mismatch')
+        if state.weights_sha256!=self.weights_sha256 or state.position_mode!=self.position_mode or state.implementation_sha256!=self.implementation_sha256: raise ValueError('state model/mode mismatch')
         if type(state.clock) is not int or not 0<=state.clock<MAX_CLOCK: raise ValueError('invalid state clock')
         if set(state.tensors)!=set(SHAPES): raise ValueError('state schema mismatch')
         w=self.model.embedding.weight
@@ -139,7 +144,7 @@ class IncrementalTAC043:
                  'basis':s['basis']+m.basis(e).tanh(),
                  'lexical':torch.stack((lex,s['lexical'][:,0],s['lexical'][:,1]),1),
                  'previous_key':key,'upper':next_upper,'last_logits':logits.clone()}
-        return logits,InferenceState(state.owners,t+1,self.weights_sha256,self.position_mode,tensors)
+        return logits,InferenceState(state.owners,t+1,self.weights_sha256,self.position_mode,self.implementation_sha256,tensors)
 
     @torch.no_grad()
     def prefill(self,tokens,*,owners,write_mask=None):
@@ -192,7 +197,7 @@ class IncrementalTAC043:
     def save_state(self,state,path):
         self.validate(state,state.owners);path=Path(path)
         payload={'schema':'langstream043.v1','owners':state.owners,'clock':state.clock,
-                 'weights_sha256':state.weights_sha256,'position_mode':state.position_mode,
+                 'weights_sha256':state.weights_sha256,'position_mode':state.position_mode,'implementation_sha256':state.implementation_sha256,
                  'tensors':{n:x.detach().cpu().clone() for n,x in state.tensors.items()}}
         payload['digest']=self._snapshot_digest(payload)
         with path.open('xb') as handle: torch.save(payload,handle)
@@ -201,9 +206,9 @@ class IncrementalTAC043:
         path=Path(path)
         if path.stat().st_size>1024**2: raise ValueError('oversize state snapshot')
         payload=torch.load(path,map_location='cpu',weights_only=True)
-        if not isinstance(payload,dict) or set(payload)!={'schema','owners','clock','weights_sha256','position_mode','tensors','digest'} or payload['schema']!='langstream043.v1' or self._snapshot_digest(payload)!=payload['digest']:
+        if not isinstance(payload,dict) or set(payload)!={'schema','owners','clock','weights_sha256','position_mode','implementation_sha256','tensors','digest'} or payload['schema']!='langstream043.v1' or self._snapshot_digest(payload)!=payload['digest']:
             raise ValueError('state snapshot schema/integrity failure')
         device=self.model.embedding.weight.device
-        state=InferenceState(tuple(payload['owners']),payload['clock'],payload['weights_sha256'],payload['position_mode'],{n:v.to(device) for n,v in payload['tensors'].items()})
+        state=InferenceState(tuple(payload['owners']),payload['clock'],payload['weights_sha256'],payload['position_mode'],payload['implementation_sha256'],{n:v.to(device) for n,v in payload['tensors'].items()})
         self.validate(state,owners)
         return state
