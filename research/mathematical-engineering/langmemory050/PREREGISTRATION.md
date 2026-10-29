@@ -1,0 +1,27 @@
+# LANGMEMORY050 — prospective mathematically bounded multi-continuation source diagnostic
+
+**Original-source preregistration before any actual publisher FIT measurement, 29 October 2026.** Extends original #579 negative latest-offset verifier. No model retraining, checkpoint loads, protected TEST, GPU, model release or new neural architecture claim. Companion objective: source-continuation distributions, not query selection.
+
+## Falsifiable hypothesis
+
+Keeping K=2 or K=3 candidate continuation bytes *with explicit approximate counts per exact 3-byte key* may reduce the severe latest-only content loss in LANGMEMORY048 and improve the read/write/accuracy Pareto frontier of equal-stored-byte memory against simple raw rings and original 8B keyed majority records. If capacity consumed by count memory reduces key residence enough to lose, preserve failure.
+
+## Actual memory geometry
+
+Two registered total payload budgets: 1344B and 4096B **per original owner**. Each includes an independent 64B actually allocated raw recent ring plus a fixed-size bytearray index (1280B or4032B). Candidate exact key 3B and valid flag 1B; candidate continuation count K=2 or3, stored as K pairs of (one continuation byte, uint16 approximate vote count). Last-write absolute clock uint16, and padding: 16B/record for K2, 20B/record for K3. Hash FNV32 on **full original exact key**. 1-way or2-way set associativity. Source byte values zero to255, clock limited to below65535; source prefixes <=8192; no counter saturation expected on this source scope. Unused partial record bytes still occupy allocated bytearray. State excludes Python wrapper/clock objects and original source loader; disclose this explicitly.
+
+Read: on exact-key match, select the surviving value with maximal stored count, ties choose numerically lowest byte. No registered key or positive vote => abstain, except independent last64 exact ring takes priority. Write: for an existing exact key, increase matching counter; fill empty counter if one exists; else decrement all K counters by1 on a new distinct continuation (Misra–Gries). A new key occupies a free local slot or evicts oldest in the same hashed set and resets its candidate counts. Count key evictions and candidate-decrement events as information loss. This is not an exact original continuation histogram after eviction/decrement.
+
+## Ideal theory and numerical limits
+
+Suppose an *isolated fixed key with no hash-table eviction or counter overflow* appears n times in a stream of continuations. Unit decrement-all K-candidate Misra–Gries has the standard property that any continuation whose true frequency exceeds n/(K+1) remains represented. The stored count is a lower bound for its original count. However (a) a hash table with evictions can drop entire keys, and (b) counters saturating at 65535 break the ideal theorem, so no global source-memory guarantee or exact most-frequent prediction follows. In this experiment n<=8192 and no saturation should occur. This statement is a mathematical design hypothesis, not a verified Lean proof; PNDS source-pinned Lean/Python mathematical derivation is OPEN.
+
+## Original-source experiment and baseline controls
+
+Authentic original licensed CPython3.13.0 14 FIT source owners, all observed source bytes original, all key updates only AFTER scoring x[t]. Same source cohort **previously used** for 045–048, so this is internal mechanical engineering only and no untouched generalization. Fixed three evaluation cohorts: 1536 bytes/owner stride4 => 4928 source targets, original legacy A+B=933, 1344B exact raw ring=1461, prior 1344B two-way table=781. Extended<=4096 stride4 => 13245 source targets, raw1344=4503; genuine <=8192 stride8 => 11784 source targets, raw1344=4152. No changing these targets after results. Any missing source owner or mismatched anchor FAILS.
+
+Arms: K2 andK3 count-approximate exact-key models, both 1/2-way at 1344 and4096; original existing source exact 8B one-value keyed majority table (2-way), legacy nominal sketch A+B, genuine raw ring1344 and4096, exact64 source ring, and unbounded original exact-context Counter as **unmatched storage upper reference**. All same-source owner/position/time; no false inference of equal read/write work, no key-only oracle; model data budgets compare bytearray payload only.
+
+Collect raw correct out of ALL original eligible positions, coverage, correct conditioned on coverage, genuine earlier context occurrence older than64, hash eviction, Misra–Gries decrements, exact-key hits/misses, read/write slot probes, actual bytearray bytes and Python heap excluded, measured CPU lookup and update wall time. Source-grounded acceptance criterion: must at minimum improve source-continuation recovery over former equal-budget 8B keyed table; to argue Pareto improvement must also offer an accuracy/work frontier competitive with equal-byte raw ring. If not, record clear negative and stop. No neural NLL from source retrieval.
+
+Tests: exact bytearray budget, 2/3-value count transitions, forced hash collisions without wrong-key returns, future-poison prevention, owner separation, source and split receipts, original 045/047/048 frozen anchors. CI enforces phone/no-fit research planner and original publisher license scientific parity. Store per-owner results, complete original log hashes and failures for replay. Do not merge drafts or promote weights. Next proof/architecture decision only after measured and independently authenticated new publisher owner-disjoint evidence.
