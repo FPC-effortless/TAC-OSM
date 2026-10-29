@@ -142,10 +142,10 @@ def main():
     result=collect(a.results,a.reference)
     a.output.parent.mkdir(parents=True,exist_ok=True)
     a.output.write_text(json.dumps(result,sort_keys=True,indent=2,allow_nan=False)+"\n")
-    print("UPPER_REALLOCATION_AGGREGATE "+json.dumps({
+    print("NATIVE_MATRIX_AGGREGATE "+json.dumps({
         "source_paired":result["source_paired"],
         "metrics":{k:{n:v[n] for n in ("mean_DEV_nll","mean_DEV_top1",
-              "mean_cpu_process_seconds","trainable_parameters","upper_hidden_width","ffn_width")}
+              "mean_cpu_process_seconds","trainable_parameters","native_associative_dimension","ffn_width")}
               for k,v in result["metrics"].items()},
         "paired":result["paired_against_m8"],
     },sort_keys=True))
