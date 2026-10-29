@@ -111,6 +111,10 @@ public final class Me111Activity extends Activity {
         benchmark.setText("Measure TAC locally on THIS phone (Airplane Mode required)");
         panel.addView(benchmark);
         benchmark.setOnClickListener((View v) -> runOfflineDeviceSelfTest());
+        Button bundledDemo = new Button(this);
+        bundledDemo.setText("Run bundled original FIT sample offline (one-tap research demo)");
+        panel.addView(bundledDemo);
+        bundledDemo.setOnClickListener((View v) -> runBundledFitDemo());
         Button replay = new Button(this);
         replay.setText("Replay 256 original PRSA FIT CSV rows offline (research only)");
         panel.addView(replay);
@@ -168,6 +172,34 @@ public final class Me111Activity extends Activity {
         return result;
     }
 
+    private void runBundledFitDemo() {
+        // This sample was copied from the exact SHA-verified original UCI
+        // archive during CI. Unlike a document provider it needs no file
+        // picker, storage permissions, cloud access or source-state writes.
+        if (!localSourceReplayRunning.compareAndSet(false, true)) return;
+        result.setText("Running bundled 2013 original training-period FIT data entirely "
+            + "on this device; software demo ONLY, not a forecast-accuracy test.");
+        new Thread(() -> {
+            String output;
+            try (InputStream input = getAssets().open("me111-original-fit-first256.csv");
+                 Me111LocalEngine isolated =
+                     new Me111LocalEngine(getApplicationContext())) {
+                Me111OriginalFitReplay.Report report =
+                    Me111OriginalFitReplay.run(input, isolated);
+                output = report.displayBundledOriginal();
+            } catch (Exception error) {
+                output = "BUNDLED ORIGINAL FIT REPLAY FAILED/ABSTAINED: "
+                    + error.getClass().getSimpleName() + ": " + error.getMessage()
+                    + ". No persisted source/model state was used or modified.";
+            } finally {
+                localSourceReplayRunning.set(false);
+            }
+            final String shown = output;
+            runOnUiThread(() -> {
+                if (!isFinishing() && !isDestroyed()) result.setText(shown);
+            });
+        }, "me111-bundled-original-fit-cpu-replay").start();
+    }
     private void chooseOriginalFitCsv() {
         // The system document provider may be backed by a network service.
         // Require the phone airplane-mode setting before invoking that provider
