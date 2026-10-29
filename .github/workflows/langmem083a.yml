@@ -1,0 +1,77 @@
+name: LANGMEM083A READ-ONLY original 3 successful source FIT/DEV artifacts recovery
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmem083a/**'
+      - 'research/phone_queue/langmem083a.json'
+      - 'scripts/langmem083a_aggregate.py'
+      - '.github/workflows/langmem083a.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  strict-original-source-aggregate-without-fit:
+    if: github.head_ref == 'research/langmem083a-original-artifact-aggregate-2026-10-29'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Preregister CPU read-only existing evidence and source sha constraints
+        run: |
+          mkdir -p recovered083a
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem083a.json > recovered083a/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langmem083a/FAIR_COMPARISON.json --phase preflight \
+            > recovered083a/PREFLIGHT.json
+      - name: Recover EXACT original three successful full 083 FIT plus unseen DEV result artifacts, no optimizer
+        run: |
+          mkdir -p original-receipts
+          for seed in 1701 1702 1703; do
+            mkdir -p "original-receipts/seed${seed}"
+            gh run download 40966465979 -R FPC-effortless/TAC-OSM \
+              --name "LANGMEM083-FROZEN-PROBE-seed${seed}" \
+              --dir "original-receipts/seed${seed}"
+          done
+          find original-receipts -name EVAL_RECEIPT.json -print
+          find original-receipts -name FIT_RECEIPT.json -print
+      - name: Original 3 model SHA, exact source bytes, real age cohorts, and learned-readout negative/positive results
+        run: |
+          python scripts/langmem083a_aggregate.py \
+            --results original-receipts --output recovered083a/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('recovered083a/RESULTS.json'))
+          assert r['study']=='LANGMEM083A' and r['original_study']=='LANGMEM083'
+          assert r['original_source_fit_and_unseen_DEV_run_id']==40966465979
+          assert r['no_fits_or_dev_reruns'] is True
+          assert r['full_original_078_model_seeds']==3
+          assert r['new_unseen_same_publisher_dev_owners']==2
+          assert r['evaluation_done_after_checkpoints_SHA_sealed'] is True
+          assert r['trained_auxiliary_readout_parameters_each']==9120
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGMEM083A — untouched source FIT-only trained probes first new unseen original PSF DEV',file=f)
+              print('This is the read-only recovery of original successful #40966465979 3 seed jobs; original 083 aggregation FAILED for nonexistent alias. No refit, no model inference reruns, new publisher DEV untouched.',file=f)
+              print('| Observed historical-byte age | Correct matrix read accuracy | Address-only | Wrong-key | FIT historical-byte prior | Correct minus address-only NLL |',file=f)
+              print('|---|---:|---:|---:|---:|---:|',file=f)
+              for age in ('8','32','128','256'):
+                  m=r['metrics'][age]
+                  print(f"| {age} | {m['correct']['accuracy']:.2%} | {m['address_only']['accuracy']:.2%} | {m['wrong_key']['accuracy']:.2%} | {m['fit_prior']['accuracy']:.2%} | {m['correct_minus_address_only_nll']:+.6f} |",file=f)
+              print('Historic correct old address SUPPLIED by evaluator, full original TAC 499627p FROZEN; aux head 9120p. New source documents from SAME publisher, not new domain or factual recall.',file=f)
+          PY
+      - name: Preserve all original source-selected never-retuned metrics and any failure status
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM083A-READONLY-ORIGINAL-ARTIFACT-AGGREGATE
+          path: recovered083a/
+          retention-days: 90
+          if-no-files-found: warn
