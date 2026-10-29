@@ -1,0 +1,62 @@
+{
+  "study_id": "LANGLAYER038-RECURRENCE-ONLY-READINESS",
+  "execution_level": "internal_research",
+  "parent_prs": [
+    563,
+    564,
+    565
+  ],
+  "parent_commit": "e07556d99b8493a1a514edebf1183c8423ad8a1a",
+  "objective": "Build one recurrence-only depth2 upper block motivated by frozen036/037 evidence, removing only upper concept graph/history and reallocating capacity to recurrent state/readout. No new fit or predictive score.",
+  "no_new_model_fits": true,
+  "candidate": {
+    "depth": 2,
+    "width": 280,
+    "upper_state_width": 59,
+    "ffn_width": 442,
+    "expected_parameters": 499901,
+    "reference_recurrent2_parameters": 499725,
+    "reference_ffn2_parameters": 499661,
+    "original_parameters": 500122,
+    "allocation_reason": "Keep original recurrent2 final FFN442 fixed. Closest integer state width to old upper-block parameter count uses59; actual recurrence block 4h^2+564h+841=48041 vs old47865. No DEV-driven width selection."
+  },
+  "information_boundary": "Observed original source bytes through t only; logits predict next byte. Independent upper state resets per document window. Upper block reads prewrite state; current-byte offer becomes available next position. No label/owner-ID/absolute source-offset feature in upper block. Native first-stage clocks/masks inherited.",
+  "engineering_seed": 38038,
+  "constructed_lengths": [
+    1,
+    7,
+    17
+  ],
+  "batch": 2,
+  "precisions": {
+    "float64": {
+      "atol": 1e-11,
+      "rtol": 1e-09
+    },
+    "float32": {
+      "atol": 1e-05,
+      "rtol": 0.001
+    }
+  },
+  "independent_reference": "PNDS full chronological upper block; no TAC imports/helpers/source traces. Forward, state/prior/gate, and every parameter VJP on fixed sine-weighted output objective. PyTorch shared primitives/AD limit explicit.",
+  "source_checks": "All14 original public PSF CPython FIT owners, first33 observed bytes only; exact publisher/license/source hashes; future suffix XOR from17 and owner poison. No DEV labels/NLL.",
+  "checks": [
+    "exact live active/deployed count and <1% gaps",
+    "no upper concept parameters/solve/state",
+    "whole-predictor prefix invariance",
+    "prewrite chronology and reset/owner isolation",
+    "finite nonzero parameter gradients on constructed real graph",
+    "independent serial state/output/VJP correspondence",
+    "source-checkpoint history unchanged"
+  ],
+  "training": "NOT AUTHORIZED BY THIS NO-FIT REGISTRATION. Applicable scale, data/training-compute, source/math and honest checkpoint gates still required before any new fit. Do not copy older study-specific exceptions or external attestations.",
+  "not_claimed": [
+    "trained skill",
+    "long-context retention",
+    "improvement over old recurrent/P3",
+    "full matched training FLOPs",
+    "full composed source Lean/IEEE/AD proof",
+    "independent qualification"
+  ],
+  "compute": "GitHub CPU no-fit20min; zeroGPU; TEST sealed"
+}
