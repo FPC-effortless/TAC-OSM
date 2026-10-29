@@ -7,8 +7,8 @@ and rest of graph operations remain unchanged. Not production-promoted.
 """
 import torch
 from torch.nn import functional as F
-from incremental import InferenceState, IncrementalTAC043, phi_position, transform
 from scripts.langdecode057_validation import BatchedValidationTAC057
+from incremental import InferenceState, IncrementalTAC043, phi_position, transform
 from scripts.langkernel061_vector_ordinal import vectorized_ordinal
 
 
