@@ -99,7 +99,9 @@ jobs:
 
   all-seed-source-verified-summary:
     needs: authentic-source-fits
-    if: always()
+    # The seed matrix is branch-scoped; never request absent artifacts on another PR.
+    # Keep always() on the original branch so actual training failures remain visible.
+    if: always() && github.head_ref == 'research/langscale070-ffn-capacity-2026-10-29'
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:

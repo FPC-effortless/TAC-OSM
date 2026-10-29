@@ -63,13 +63,23 @@ def decide(proposal: dict) -> dict:
                 "estimated_gpu_minutes", "gpu_strategy", "seeds", "real_source_sha256",
                 "study_manifest", "workload", "diagnostic", "dataset_sources",
                 "budget_gpu_minutes"}
-    if set(proposal) not in (required, required | {"execution_level"}):
+    if set(proposal) not in (required, required | {"execution_level"}, required | {"execution_level", "source_bundle"}):
         raise ResearchPlanError("exact proposal contract required; missing or unknown fields")
     from tac_osm.research_execution import execution_level, INTERNAL
     level = execution_level(proposal)
     run_id = proposal["run_id"]
     if not isinstance(run_id, str) or not ID.fullmatch(run_id):
         raise ResearchPlanError("unsafe run ID")
+    # Narrow owner-directed genuine FIT 500K GPU throughput study. No general
+    # Kaggle dataset bypass: a source-bundled job still needs trusted hash,
+    # preregistered parity, reviewed packaging and protected GPU approval.
+    bundled_076 = (run_id == "langpretrain076-h48-free-t4" and
+                   proposal.get("source_bundle") == "embedded_fit_sha256_v1" and
+                   proposal.get("workload") == "scripts/langpretrain076_t4_measure.py" and
+                   proposal.get("study_manifest") ==
+                   "research/mathematical-engineering/langpretrain076/FAIR_COMPARISON.json")
+    if "source_bundle" in proposal and not bundled_076:
+        raise ResearchPlanError("source bundle exception reserved to frozen 076 study")
     variant, kind = proposal["variant"], proposal["kind"]
     if variant not in FAMILIES or kind not in KINDS:
         raise ResearchPlanError("unknown family or research kind")
@@ -100,7 +110,7 @@ def decide(proposal: dict) -> dict:
         _digest(source, "real_source_sha256")
     if study is not None and (not isinstance(study, str) or not REG_PATH.fullmatch(study)):
         raise ResearchPlanError("invalid immutable fair-comparison registration path")
-    if workload is not None and (not isinstance(workload, str) or not WORKLOAD.fullmatch(workload)):
+    if workload is not None and (not isinstance(workload, str) or not (WORKLOAD.fullmatch(workload) or bundled_076)):
         raise ResearchPlanError("workload must be a dedicated, reviewed Kaggle Python script")
     if diagnostic is not None and diagnostic not in DIAGNOSTICS:
         raise ResearchPlanError("only reviewed diagnostic suites may auto-run on GitHub")
@@ -119,7 +129,7 @@ def decide(proposal: dict) -> dict:
             blockers.append("dual T4 execution strategy missing")
         if not workload:
             blockers.append("Kaggle script not source-registered")
-        if not sources and training:
+        if not sources and training and not bundled_076:
             blockers.append("independent authorized Kaggle dataset reference absent")
         if strategy == "seed_shard" and len(seeds) < 2:
             blockers.append("seed sharding requires at least two distinct seeds")

@@ -100,7 +100,9 @@ jobs:
 
   all-seed-source-verified-summary:
     needs: authentic-source-fits
-    if: always()
+    # Preserve original train/failure evidence, but avoid nonexistent artifacts
+    # for a later stacked PR which intentionally skips this study's seed matrix.
+    if: always() && github.head_ref == 'research/langscale074-upper-state-reallocation-2026-10-29'
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:

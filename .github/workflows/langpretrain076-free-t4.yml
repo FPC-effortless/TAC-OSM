@@ -1,0 +1,94 @@
+name: LANGPRETRAIN076 explicitly approved FREE Kaggle T4 x2 training throughput
+
+# Deliberately NOT pull_request-triggered: training is a quota-consuming action.
+# Not available for execution from a draft PR until the workflow is trusted.
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type APPROVE_T4_X2_FREE_ONLY (authorizes exactly one 40-step / seed throughput run)'
+        required: true
+        type: string
+      free_quota_confirmed:
+        description: 'Confirm the Kaggle account has enough FREE T4 quota and no paid tier'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+concurrency:
+  group: langpretrain076-t4x2-single-submit
+  cancel-in-progress: false
+
+jobs:
+  protected-free-t4:
+    if: inputs.confirm == 'APPROVE_T4_X2_FREE_ONLY' && inputs.free_quota_confirmed == true
+    environment: kaggle-research
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: '.:src'
+      CUDA_VISIBLE_DEVICES: ''
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+      GPU_ENABLED: ${{ secrets.PHONE_LAB_GPU_EXECUTION_ENABLED }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Fail closed if protected environment or account authentication is absent
+        run: |
+          test "$GPU_ENABLED" = "true" || { echo 'Protected environment quota approval is absent'; exit 2; }
+          test -n "$KAGGLE_API_TOKEN" || { echo 'Kaggle token absent'; exit 2; }
+          test -n "$KAGGLE_USERNAME" || { echo 'Kaggle username absent'; exit 2; }
+          python - <<'PY'
+          import os
+          assert os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch'
+          PY
+      - name: Original licensed FIT and scoped h48 500K preflight
+        run: |
+          python -m unittest discover -s tests -p 'test_langpretrain076*.py' -v
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langpretrain076/FAIR_COMPARISON.json \
+            --phase preflight
+          python scripts/phone_lab.py plan research/phone_queue/langpretrain076.json > compute-plan.json
+          python - <<'PY'
+          import json
+          d=json.load(open('compute-plan.json'))
+          assert d['state']=='READY_INTERNAL_RESEARCH_PLAN'
+          assert d['gpu_devices_required']==2 and d['gpu_budget_minutes']<=15
+          assert d['approved_to_train'] is False
+          assert d['approved_to_open_test'] is False
+          PY
+      - name: Pack offline authentic FIT files as ONE source-pinned Kaggle script
+        run: |
+          python scripts/langpretrain076_kaggle_bundle.py --kaggle-user "$KAGGLE_USERNAME" --out ci-artifacts/langpretrain076-stage
+          python - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('ci-artifacts/langpretrain076-stage')
+          d=json.loads((p/'staging-receipt.json').read_text())
+          assert d['source_owner_count']==14 and d['DEV_bytes_embedded']==0
+          assert d['TEST_bytes_embedded']==0 and d['approved_to_spend_paid'] is False
+          assert d['status']=='STAGED_UNSUBMITTED'
+          PY
+      - name: Bounded one-time private Kaggle FREE two-T4 submission
+        run: |
+          python -m pip install --quiet kaggle
+          kaggle kernels push -p ci-artifacts/langpretrain076-stage \
+            --accelerator NvidiaTeslaT4 --timeout 900
+          echo 'Kaggle push accepted; actual two-T4 training completion NOT YET VERIFIED.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Do not claim tokens/sec until both output/checkpoint receipts are downloaded and audited.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Save nonsecret staging and policy receipts (not token or source bundle)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGPRETRAIN076-SUBMISSION-RECEIPT-NO-MODEL
+          path: |
+            ci-artifacts/langpretrain076-stage/staging-receipt.json
+            compute-plan.json
+          if-no-files-found: warn
+          retention-days: 30
