@@ -1,0 +1,71 @@
+name: LANGSPEED034 trained 500K CPU prefill and greedy decoding comparison
+on:
+  pull_request:
+    paths:
+      - "scripts/langspeed034_cpu_decode.py"
+      - "research/mathematical-engineering/langspeed034/**"
+      - ".github/workflows/langspeed034.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  cpu-actual-trained-decode:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      CUDA_VISIBLE_DEVICES: ""
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install pinned eager CPU framework
+        run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Acquire only exact original trained seed-1701 checkpoint binaries
+        run: |
+          set -euo pipefail
+          for arm in tac_context026 bdh_official causal_transformer; do
+            gh run download 40780215655 \
+              --repo FPC-effortless/TAC-OSM \
+              --name "LANGCOMPARE031-CPU-FIT-${arm}-seed1701" \
+              --dir "langspeed034-checkpoints/${arm}"
+          done
+          test "$(find langspeed034-checkpoints -name '*.pt' | wc -l)" -eq 3
+          curl --fail --silent --show-error --location --retry 3 \
+            https://raw.githubusercontent.com/pathwaycom/bdh/2b0d7a45b058d4309c84a10e0768d541fe18bdc2/bdh.py \
+            -o /tmp/langspeed034-pinned-official-bdh.py
+      - name: CPU timed real inference, SAME RUNNER AND THREADS for all five predictors
+        run: |
+          PYTHONPATH=src:. python scripts/langspeed034_cpu_decode.py \
+            --checkpoints langspeed034-checkpoints \
+            --bdh-source /tmp/langspeed034-pinned-official-bdh.py \
+            --output langspeed034-results/REAL_TRAINED_CPU_PREFILL_AND_GREEDY_DECODE.json
+      - name: Check no training and complete unpooled latency receipts
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open("langspeed034-results/REAL_TRAINED_CPU_PREFILL_AND_GREEDY_DECODE.json"))
+          assert x["no_training"] is True and x["gpu_minutes"]==0
+          assert x["protected_TEST"]=="NOT_ACCESSED"
+          assert len(x["generation"])==10
+          assert len(x["prefill_neural"])==3
+          assert all(row["repetitions"]==3 and row["generated_bytes_per_repetition"]==12 for row in x["generation"].values())
+          assert all(row["median_ms_per_generated_byte"]>0 for row in x["generation"].values())
+          assert x["no_optimized_state_claim"] is True
+          PY
+      - name: Preserve original raw per-step timing data and environment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSPEED034-original-trained-CPU-batch1-comparison
+          path: langspeed034-results/
+          retention-days: 90
+          if-no-files-found: warn
