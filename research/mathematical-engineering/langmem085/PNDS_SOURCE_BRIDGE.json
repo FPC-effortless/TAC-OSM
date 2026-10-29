@@ -1,0 +1,55 @@
+{
+  "schema": "tac-pnds.source-bridge.v1",
+  "study": "LANGMEM085",
+  "type": "FIRST_NEW_RUST_PUBLISHER_CAUSAL_SELECTIVE_BYTE_WRITE_256B",
+  "ancestry": [
+    "LANGMEM078",
+    "LANGMEM079",
+    "LANGMEM082",
+    "LANGMEM083",
+    "LANGMEM084"
+  ],
+  "tac": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "source_operator_commit": "5adb4d5e1ec238379410c5277a4f70a4a118f7d9",
+    "source_eval_commit": "ba6dde89672ebde793185f851590d2edebf39336",
+    "pull_request": 628,
+    "source_paths": [
+      "research/mathematical-engineering/langmem085/operators.py",
+      "scripts/langmem085_crosspublisher.py",
+      "scripts/langmem085_aggregate.py",
+      "research/mathematical-engineering/langmem085/NEW_PUBLISHER_SOURCE.json"
+    ],
+    "original_trained_checkpoint_run_id": 40890642312,
+    "successful_original_crosspublisher_run_id": 40973988014,
+    "first_failed_import_collision_run_id": 40973801898,
+    "source_result_artifact_id": 12941173991
+  },
+  "pnds": {
+    "repository": "FPC-effortless/pnds-lean",
+    "proof_commit": "1001f2ad3fa3b0667eefdf797b5a33c3c2d916e8",
+    "pull_request": 82,
+    "lean_path": "PNDS/LangMem085Selective.lean",
+    "lean_symbol": "PNDS.LangMem085.delta_aligned_error",
+    "python_path": "foundation/v1/langmem085_selective_delta.py",
+    "successful_CI_run_id": 40974336797,
+    "first_failed_CI_run_id": 40974093281
+  },
+  "source": {
+    "publisher": "rust-lang/book",
+    "commit": "2771df165f092a4fbb9f46b5b2e7450f19010adb",
+    "documents_sha256": [
+      "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+      "873724c6862ad0cc447becf0e818eb39a324c5d4bfa26ef721286aae1941c0ba"
+    ],
+    "new_to_experiment": true
+  },
+  "math_status": "PARTIAL_LEAN_SCALAR_ALIGNED_READ_BOUND_WITH_PYTHON_8X8_TESTS",
+  "mathematical_operator": "rho M + eta(v-rho M k) kT, eta in [0,1], normalised k, value v is genuine observed byte code",
+  "main_scientific_finding": "Residual clipping at age8 correct 14.0625%, clean hard wrong5.46875%, original FIT-only prior12.109375%; age32/128 loses to prior. Selective eta threshold does not clearly help; no trained model improvement claim.",
+  "whole_PyTorch_source_IEEE_AD": "OPEN",
+  "historical_writer_key_index_in_256B": false,
+  "independently_qualified": false,
+  "full_language_model_nextbyte_quality_verified": false,
+  "two_repository_canonical_index_status": "OPEN_COORDINATED_MERGE_REQUIRED"
+}

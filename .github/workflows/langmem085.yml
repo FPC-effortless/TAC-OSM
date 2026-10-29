@@ -1,0 +1,140 @@
+name: LANGMEM085 genuine new Rust publisher selective 256B associative write source test
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmem085/**'
+      - 'research/phone_queue/langmem085.json'
+      - 'scripts/langmem085_crosspublisher.py'
+      - 'scripts/langmem085_aggregate.py'
+      - 'tests/test_langmem085.py'
+      - '.github/workflows/langmem085.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-verified-crosspublisher-no-fit:
+    if: github.head_ref == 'research/langmem085-selective-byte-memory-crosspublisher-2026-10-30'
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [1701,1702,1703]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Strict original CPU only pinned dependencies
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify frozen source/manifest and target-excluded negative-control falsifiers
+        run: |
+          mkdir -p rust085-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem085.json > rust085-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langmem085/FAIR_COMPARISON.json --phase preflight \
+            > rust085-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmem085.py
+      - name: Restore original immutable 078 pretrained trained checkpoints and original source SHA
+        run: |
+          mkdir -p original078-ckpt original078-summary
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name "LANGMEM078-FIT-dual-seed${{ matrix.seed }}" --dir original078-ckpt
+          gh run download 40890642312 -R FPC-effortless/TAC-OSM \
+            --name LANGMEM078-SOURCE-PAIRED-AGGREGATE --dir original078-summary
+      - name: Acquire first unused Rust Project source by immutable Git commit and raw source hashes
+        run: |
+          mkdir -p rust085-sources
+          curl --fail --silent --show-error --location --retry 2 \
+            https://raw.githubusercontent.com/rust-lang/book/2771df165f092a4fbb9f46b5b2e7450f19010adb/src/ch02-00-guessing-game-tutorial.md \
+            --output rust085-sources/guessing-game.md
+          curl --fail --silent --show-error --location --retry 2 \
+            https://raw.githubusercontent.com/rust-lang/book/2771df165f092a4fbb9f46b5b2e7450f19010adb/src/ch04-01-what-is-ownership.md \
+            --output rust085-sources/ownership.md
+          echo 'bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0  rust085-sources/guessing-game.md' | sha256sum --check --status
+          echo '873724c6862ad0cc447becf0e818eb39a324c5d4bfa26ef721286aae1941c0ba  rust085-sources/ownership.md' | sha256sum --check --status
+      - name: Actual genuine Rust publisher event writes, same five-bank memory, strictly no-answer-context decoys
+        run: |
+          PYTHONPATH=src:. python scripts/langmem085_crosspublisher.py \
+            --seed ${{ matrix.seed }} \
+            --checkpoint-dir original078-ckpt \
+            --original-aggregate original078-summary/RESULTS.json \
+            --rust-sources rust085-sources \
+            --output rust085-evidence/RUST_RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('rust085-evidence/RUST_RESULTS.json'))
+          assert r['study']=='LANGMEM085' and r['no_new_fits']
+          assert r['source_role']=='FIRST_NEW_RUST_PUBLISHER_DEV'
+          assert r['bank_FP32_bytes']==256 and r['original_producer_FP32_state_bytes']==4160
+          assert r['arm_rows_per_seed']==4780 and r['historical_cells_per_seed']==956
+          assert r['strict_decoy_no_overlap_count']==4780
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          assert set(r['metrics'])=={'source','overwrite','partial025','residual_clip035','selective'}
+          PY
+      - name: Archive genuine source results, original model provenance and all failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM085-RUST-source-seed${{ matrix.seed }}
+          path: rust085-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+  three-original-checkpoint-source-paired-aggregate:
+    needs: original-verified-crosspublisher-no-fit
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download three exact original publisher result artifacts
+        run: |
+          mkdir -p rust-raw rust-aggregate
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGMEM085-RUST-source-seed*' --dir rust-raw
+      - name: Fail closed original Rust SHA, paired source target, 3 frozen model receipts and strict decoy indices
+        run: |
+          PYTHONPATH=src:. python scripts/langmem085_aggregate.py \
+            --results rust-raw --output rust-aggregate/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('rust-aggregate/RESULTS.json'))
+          assert r['study']=='LANGMEM085' and r['model_seed_count']==3
+          assert r['all_clean_control_target_position_exclusions_pass']
+          assert r['first_rust_source_historical_labels_per_seed']==956
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGMEM085 original source new Rust publisher, selective 8x8 delta bank',file=f)
+              print('New Rust publisher, original 078 model frozen; all five mechanisms 256B each but external writer index NOT budgeted. No training. These are historical observed byte tests, NOT next-byte or deployment gains.',file=f)
+              print('| Arm | Age | Correct writer | Clean wrong writer | FIT modal prior | Paired correct-wrong |',file=f)
+              print('|---|---:|---:|---:|---:|---:|',file=f)
+              for arm,data in r['metrics'].items():
+                  for age,m in data.items():
+                      print(f"| {arm} | {age} | {m['correct']:.3%} | {m['hard_wrong']:.3%} | {m['FIT_prior']:.3%} | {m['paired_correct_minus_hard']:+.3%} |",file=f)
+              print('Source SHA and clean decoys checked for every row; selection has no requested historical target byte at wrong key source context. No protected TEST/GPU or model promotion.',file=f)
+          PY
+      - name: Preserve complete verified genuine Rust mechanism source results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM085-CROSSPUBLISHER-AGGREGATE
+          path: rust-aggregate/
+          retention-days: 90
+          if-no-files-found: warn
