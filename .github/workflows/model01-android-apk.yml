@@ -1,32 +1,131 @@
-name: Model01 Android APK offline-permission build (NO DEVICE)
+name: Frozen Model01 and TAC ME111 offline Android APK (NO PHYSICAL DEVICE)
 on:
   push:
     branches:
-      - product/model01-android-offline-export-20261028
+      - product/tac-neural-android-local-runtime-20261028
     paths:
       - 'mobile/android/model01/**'
+      - 'tests/test_me111_android_contract.py'
+      - 'tests/test_me111_android_state_codec.py'
+      - 'scripts/create_me111_android_host_fixture.py'
+      - 'scripts/verify_me111_256step_cpu.py'
+      - 'scripts/create_me111_android_256step_fixture.py'
+      - 'scripts/verify_me111_source_input_parity.py'
+      - 'scripts/create_me111_original_fit_android_oracle.py'
       - '.github/workflows/model01-android-apk.yml'
   pull_request:
     paths:
       - 'mobile/android/model01/**'
+      - 'tests/test_me111_android_contract.py'
+      - 'tests/test_me111_android_state_codec.py'
       - '.github/workflows/model01-android-apk.yml'
   workflow_dispatch:
+# Cancel obsolete same-branch emulator builds to avoid repeated paid/CI CPU usage.
+concurrency:
+  group: me111-android-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
-  android-debug-apk-no-internet-permission:
+  frozen-original-models-offline-apk:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+      - name: Pin original ME111 training/replay/source and validated ONNX exporter
+        uses: actions/checkout@v4
+        with:
+          ref: 3fc2fbe8e4974491349caecd8d6171e738810b54
+          path: pinned-me111
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - name: Verify preinstalled Android SDK on GitHub Ubuntu runner
+      - name: Install pinned CPU no-fit ONNX export dependencies
         run: |
-          test -d "$ANDROID_HOME" || exit 2
-          test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" || exit 2
+          pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+          pip install 'numpy==2.3.5' 'onnx==1.19.1' 'onnxruntime==1.23.2'
+      - name: Recreate frozen original 104663-parameter TAC ONNX and CPU state parity
+        run: |
+          PYTHONPATH=pinned-me111/src:pinned-me111 python pinned-me111/scripts/probe_me111_offline_onnx.py --out-dir /tmp/frozen-me111
+          test -s /tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          path=Path('/tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx')
+          digest=hashlib.sha256(path.read_bytes()).hexdigest()
+          assert digest=='dd65519a9e4f3388966538af53119b56e9292b46a9209d63ad4927b87f0a176b', digest
+          print('FROZEN_ME111_SHA256=PASS')
+          PY
+          mkdir -p mobile/android/model01/sample-app/app/src/main/assets
+          cp /tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx mobile/android/model01/sample-app/app/src/main/assets/tac_me111.onnx
+      - name: Verify 256-event original PyTorch vs ONNX state/forecast parity
+        run: |
+          python scripts/verify_me111_256step_cpu.py \
+            --source-root pinned-me111 \
+            --onnx /tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx \
+            --receipt /tmp/me111-256step-host-parity.json
+      - name: Preserve full long-stream parity evidence, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me111-256step-original-pytorch-onnx-cpu-diagnostic
+          path: /tmp/me111-256step-host-parity.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Generate original PyTorch two-step constructed reference for Android JNI parity
+        run: |
+          python scripts/create_me111_android_host_fixture.py \
+            --source-root pinned-me111 \
+            --output mobile/android/model01/sample-app/app/src/main/assets/me111_reference_vectors.json
+      - name: Generate 2-owner 256-event original PyTorch Android JNI oracle
+        run: |
+          python scripts/create_me111_android_256step_fixture.py \
+            --source-root pinned-me111 \
+            --output mobile/android/model01/sample-app/app/src/androidTest/assets/me111_256_reference_vectors.json
+      - name: Generate original FIT-source 256-step raw-to-PyTorch Android test oracle
+        run: |
+          python scripts/create_me111_original_fit_android_oracle.py \
+            --source-root pinned-me111 \
+            --csv-output mobile/android/model01/sample-app/app/src/androidTest/assets/me111-original-fit-first256.csv \
+            --reference-output mobile/android/model01/sample-app/app/src/androidTest/assets/me111_original_fit_expected.json
+      - name: Bundle original publisher-pinned first256 FIT sample for no-download offline demo
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,shutil
+          source=Path('mobile/android/model01/sample-app/app/src/androidTest/assets/me111-original-fit-first256.csv')
+          destination=Path('mobile/android/model01/sample-app/app/src/main/assets/me111-original-fit-first256.csv')
+          if not source.is_file() or source.stat().st_size < 1024:
+              raise RuntimeError('source-locked original FIT sample unavailable')
+          destination.parent.mkdir(parents=True,exist_ok=True)
+          shutil.copyfile(source,destination)
+          assert source.read_bytes()==destination.read_bytes()
+          print('ME111_BUNDLED_ORIGINAL_FIT_SAMPLE_SHA256='+hashlib.sha256(destination.read_bytes()).hexdigest())
+          print('ME111_BUNDLED_FIT_SAMPLE_ONLY_FOR_RESEARCH_NOT_MODEL_ACCURACY')
+          PY
+      - name: Verify host JVM input/state guards and SHA256 state codec negatives
+        run: python -m unittest discover -s tests -p 'test_me111_android*.py' -v
+      - name: Verify authentic original FIT source raw-to-Java feature transformation
+        run: |
+          python scripts/verify_me111_source_input_parity.py \
+            --source-root pinned-me111 \
+            --receipt /tmp/me111-source-fit-java-parity.json
+      - name: Retain FIT-only original-source preprocessing evidence even on failure
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: me111-fit-only-raw-feature-java-parity
+          path: /tmp/me111-source-fit-java-parity.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Verify preinstalled Android SDK
+        run: |
+          test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --list_installed
       - name: Install Android SDK platform/build tools (build only)
         run: |
@@ -34,30 +133,193 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
-      - name: Compile offline demo APK with locally embedded original fixed model
+      - name: Compile Android APK with real ONNX Runtime AAR and frozen TAC bytes
         run: gradle -p mobile/android/model01/sample-app :app:assembleDebug --no-daemon
-      - name: Fail if merged APK contains INTERNET permission
+      - name: Compile Android instrumentation APK before starting emulator
+        run: gradle -p mobile/android/model01/sample-app :app:assembleDebugAndroidTest --no-daemon
+      - name: Verify merged Android permissions and packaged native graph/runtime
         run: |
           APK=mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
           test -s "$APK"
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump permissions "$APK" | tee /tmp/model01-permissions.txt
-          if grep -q 'android.permission.INTERNET' /tmp/model01-permissions.txt; then
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump permissions "$APK" | tee /tmp/me111-android-permissions.txt
+          if grep -q 'android.permission.INTERNET' /tmp/me111-android-permissions.txt; then
             echo 'OFFLINE_APK_PERMISSION=FAIL'
             exit 2
           fi
-          echo 'OFFLINE_APK_PERMISSION=PASS (not physical airplane-mode evidence)'
-      - name: Debug APK artifact — not production approval
-        uses: actions/upload-artifact@v4
+          python - "$APK" <<'PY'
+          import hashlib,sys,zipfile
+          with zipfile.ZipFile(sys.argv[1]) as z:
+              graph=z.read('assets/tac_me111.onnx')
+              digest=hashlib.sha256(graph).hexdigest()
+              assert digest=='dd65519a9e4f3388966538af53119b56e9292b46a9209d63ad4927b87f0a176b',digest
+              libs=[n for n in z.namelist() if n.startswith('lib/') and n.endswith('/libonnxruntime.so')]
+              assert libs, 'native ONNX runtime CPU library not packaged'
+              print('PACKAGED_FROZEN_ONNX=SHA256_PASS; ONNX_NATIVE_ABIS='+repr(libs))
+          PY
+          echo 'APK_OFFLINE_STATIC_PACKAGE=PASS; AIRPLANE_MODE=NOT_RUN'
+      - name: Verify Android APK debug signing and SDK compatibility
+        run: |
+          APK=mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK" | tee /tmp/me111-apk-signing.txt
+          grep -q 'Verified using v2 scheme (APK Signature Scheme v2): true' /tmp/me111-apk-signing.txt
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | tee /tmp/me111-apk-badging.txt
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 "$APK"
+          cp "$APK" /tmp/me111-verified-universal-debug.apk
+          echo 'ANDROID_APK_SIGNATURE_SCHEME_V2_VERIFIED=PASS; PHONE_INSTALL=NOT_TESTED'
+      - name: Preserve installable but unqualified debug APK
         if: success()
+        uses: actions/upload-artifact@v4
         with:
-          name: model01-android-debug-unqualified-apk
+          name: tac-me111-android-local-cpu-unqualified-debug
           path: mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
           retention-days: 7
-      - name: Explicit physical gate
+      - name: Enable KVM acceleration on GitHub Linux runner
+        run: |
+          if [ ! -c /dev/kvm ]; then
+            echo 'ANDROID_EMULATOR_KVM=BLOCKED_DEVICE_MISSING'
+            exit 2
+          fi
+          sudo chmod a+rw /dev/kvm
+          test -r /dev/kvm && test -w /dev/kvm
+          ls -l /dev/kvm
+          # Emulator executable is installed LATER by android-emulator-runner;
+          # invoking it here on a fresh runner caused an exit-127 infrastructure error.
+          echo 'ANDROID_EMULATOR_KVM_DEVICE_PERMISSIONS=PASS_NOT_EMULATOR_BOOT_EVIDENCE'
+      - name: Exercise actual Android ONNX JNI and local state on emulator only
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          disable-animations: true
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -memory 2048
+          # Emulator tests only; physical benchmark class requires real hardware.
+          # Only emulator tests; physical-only benchmarking remains explicitly excluded.
+          script: |
+            # Each command is a separate shell in this emulator action; do not
+            # rely on variables or set -e surviving from a previous command.
+            gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111LocalRuntimeAndroidTest,org.tacosm.mobile.me111.Me111LongStreamAndroidTest,org.tacosm.mobile.me111.Me111OriginalFitReplayAndroidTest
+            # Use fully qualified literal component names across shell calls.
+            # connectedDebugAndroidTest may uninstall its test runner during
+            # cleanup. Reinstall both exact, just-compiled APKs before the
+            # two independent instrumentation process invocations.
+            adb install -r mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
+            adb install -r mobile/android/model01/sample-app/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb shell am instrument -w -e class org.tacosm.mobile.me111.Me111ProcessSeedAndroidTest org.tacosm.mobile.model01.demo.test/androidx.test.runner.AndroidJUnitRunner | tee /tmp/me111-process-seed.txt
+            grep -q 'OK (1 test)' /tmp/me111-process-seed.txt
+            adb shell am force-stop org.tacosm.mobile.model01.demo
+            adb shell am instrument -w -e class org.tacosm.mobile.me111.Me111ProcessRestoreAndroidTest org.tacosm.mobile.model01.demo.test/androidx.test.runner.AndroidJUnitRunner | tee /tmp/me111-process-restore.txt
+            grep -q 'OK (1 test)' /tmp/me111-process-restore.txt
+            echo 'ME111_ANDROID_PROCESS_RESTART=2_FRESH_INSTRUMENTATION_TESTS_PASS_NOT_PHYSICAL_PHONE'
+      - name: Check genuine Android 16 API36 APK install and launcher
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          disable-animations: true
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -memory 2048
+          script: |
+            adb shell getprop ro.build.version.sdk | tee /tmp/me111-android36-api.txt
+            grep -q '^36        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: me111-android-emulator-jni-test-evidence
+          path: |
+            mobile/android/model01/sample-app/app/build/outputs/androidTest-results/connected/**
+            mobile/android/model01/sample-app/app/build/reports/androidTests/connected/**
+            /tmp/me111-process-seed.txt
+            /tmp/me111-process-restore.txt
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Build small single-ABI ARM64 Samsung-compatible debug APK
+        run: |
+          gradle -p mobile/android/model01/sample-app :app:assembleDebug -Pme111Arm64Phone --no-daemon
+          cp mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk /tmp/me111-phone-arm64-debug.apk
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,zipfile
+          original=Path('/tmp/me111-verified-universal-debug.apk')
+          phone=Path('/tmp/me111-phone-arm64-debug.apk')
+          with zipfile.ZipFile(original) as a, zipfile.ZipFile(phone) as b:
+              aa={n for n in a.namelist() if n.startswith('lib/') and n.endswith('.so')}
+              bb={n for n in b.namelist() if n.startswith('lib/') and n.endswith('.so')}
+              assert aa and bb and len(bb)==2 and all(x.startswith('lib/arm64-v8a/') for x in bb),bb
+              for n in bb:
+                  assert a.read(n)==b.read(n),'CPU native ABI binary differed from full test suite'
+              for n in ('assets/tac_me111.onnx','assets/me111-original-fit-first256.csv'):
+                  assert a.read(n)==b.read(n),'neural model or publisher sample changed'
+              assert hashlib.sha256(b.read('assets/tac_me111.onnx')).hexdigest()=='dd65519a9e4f3388966538af53119b56e9292b46a9209d63ad4927b87f0a176b'
+          assert phone.stat().st_size<30_000_000, 'phone APK unexpectedly large'
+          print('ARM64_PHONE_APK_SIZE_BYTES='+str(phone.stat().st_size))
+          print('ARM64_PHONE_APK_SHA256='+hashlib.sha256(phone.read_bytes()).hexdigest())
+          print('FROZEN_MODEL_AND_NATIVE_ARM64_IDENTICAL_TO_ANDROID_TESTED_FULL_APK=PASS')
+          PY
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs /tmp/me111-phone-arm64-debug.apk | tee /tmp/me111-phone-arm64-signature.txt
+          grep -q 'Verified using v2 scheme (APK Signature Scheme v2): true' /tmp/me111-phone-arm64-signature.txt
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging /tmp/me111-phone-arm64-debug.apk | tee /tmp/me111-phone-arm64-badging.txt
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 /tmp/me111-phone-arm64-debug.apk
+          echo 'ARM64_PHONE_DEBUG_APK_SIGNATURE_AND_SOURCE_PARITY=PASS_NOT_PHYSICAL_INSTALL'
+      - name: Publish smaller ARM64-only signed phone research APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-me111-android-arm64-phone-small-debug
+          path: /tmp/me111-phone-arm64-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve Android 16 install, signature and app-metadata evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me111-android16-install-compat-receipts
+          path: |
+            /tmp/me111-apk-signing.txt
+            /tmp/me111-apk-badging.txt
+            /tmp/me111-android36-api.txt
+            /tmp/me111-android36-package.txt
+            /tmp/me111-phone-arm64-signature.txt
+            /tmp/me111-phone-arm64-badging.txt
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Truthful hardware/science gate
         if: always()
         run: |
-          echo 'APK_BUILD=CHECK_JOB_CONCLUSION'
           echo 'PHYSICAL_ANDROID=NOT_RUN'
+          echo 'ANDROID_REAL_DEVICE_ONNX_EXECUTION=NOT_RUN'
+          echo 'ANDROID_EMULATOR_JNI=CHECK_STEP_CONCLUSION_NOT_PHYSICAL'
           echo 'AIRPLANE_MODE=NOT_RUN'
-          echo 'ENERGY_RAM_P50_P95=NOT_RUN'
-          echo 'INDEPENDENT_SCIENTIFIC_QUALIFICATION=NOT_QUALIFIED'
+          echo 'P50_P95_RAM_ENERGY=NOT_RUN'
+          echo 'RESTART_ON_PHONE=NOT_RUN'
+          echo 'ME111_INDEPENDENT_SCIENTIFIC_GATE=FAIL_MIXED_TRADEOFF'
+ /tmp/me111-android36-api.txt
+            adb install -r /tmp/me111-verified-universal-debug.apk
+            adb shell pm path org.tacosm.mobile.model01.demo | tee /tmp/me111-android36-package.txt
+            grep -q 'base.apk' /tmp/me111-android36-package.txt
+            adb shell monkey -p org.tacosm.mobile.model01.demo -c android.intent.category.LAUNCHER 1
+            echo 'ME111_ANDROID16_API36_PACKAGE_INSTALL_AND_LAUNCH=PASS_EMULATOR_NOT_SAMSUNG_PHONE'
+      - name: Preserve Android instrumentation and emulator diagnostic evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: me111-android-emulator-jni-test-evidence
+          path: |
+            mobile/android/model01/sample-app/app/build/outputs/androidTest-results/connected/**
+            mobile/android/model01/sample-app/app/build/reports/androidTests/connected/**
+            /tmp/me111-process-seed.txt
+            /tmp/me111-process-restore.txt
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Truthful hardware/science gate
+        if: always()
+        run: |
+          echo 'PHYSICAL_ANDROID=NOT_RUN'
+          echo 'ANDROID_REAL_DEVICE_ONNX_EXECUTION=NOT_RUN'
+          echo 'ANDROID_EMULATOR_JNI=CHECK_STEP_CONCLUSION_NOT_PHYSICAL'
+          echo 'AIRPLANE_MODE=NOT_RUN'
+          echo 'P50_P95_RAM_ENERGY=NOT_RUN'
+          echo 'RESTART_ON_PHONE=NOT_RUN'
+          echo 'ME111_INDEPENDENT_SCIENTIFIC_GATE=FAIL_MIXED_TRADEOFF'
