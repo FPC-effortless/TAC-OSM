@@ -118,6 +118,26 @@ LANGSCALE074_COUNTS={"h24":499625,"h48":499623,"h96":499537,"h128":499631}
 # parameter ceiling relaxation and no TEST/architecture-superiority authority.
 # Owner 2026-10-29 language two-timescale original 500K source-only exception.
 # Four useful scalar weights, no global size policy waiver.
+# LANGMEM083 is ONLY a frozen-original-neural-state auxiliary decoder diagnostic.
+# 499627 original model weights are immutable, not a new original model fit.
+# Narrow registered 9120-parameter readout trained 120 updates, 3 named arms.
+# The deployed total 508747 includes original frozen 499627 parameters.
+LANGMEM083_CONTRACT="owner-2026-10-29-frozen-native-readout-probe-only"
+def checked_langmem083(m):
+    return (m.get("study_id")=="LANGMEM083"
+            and m.get("study_type")=="single_model_training"
+            and m.get("execution_level")=="internal_research"
+            and m.get("parameter_budget_contract")==LANGMEM083_CONTRACT
+            and m.get("scale_axis")=="FROZEN_NATIVE_MATRIX_AUXILIARY_READOUT_PROBE_ONLY"
+            and m.get("no_architecture_superiority_claim") is True)
+def check_langmem083_model(model,label):
+    demand(model.get("name") in ("correct","address_only","wrong_key")
+           and model.get("seed") in (1701,1702,1703)
+           and model.get("trainable_parameters")==9120
+           and model.get("deployed_parameters")==508747
+           and model.get("full_original_encoder_frozen_parameters",499627)==499627,
+           label+": this source-scoped study only trains the 9120p original frozen memory decoder")
+
 LANGMEM078_CONTRACT="owner-2026-10-29-dual-native-timescale-500k"
 def checked_langmem078(m):
     return (m.get("study_id")=="LANGMEM078"
@@ -220,7 +240,9 @@ def _check_manifest_parity_only(m,phase="preflight"):
                "single-model training requires >=1 declared model/seed")
         for i,model in enumerate(models):
             demand(isinstance(model,dict),f"models[{i}] must be an object")
-            if checked_langmem078(m):
+            if checked_langmem083(m):
+                check_langmem083_model(model,f"models[{i}]")
+            elif checked_langmem078(m):
                 check_langmem078_model(model,f"models[{i}]")
             elif checked_langscale075(m):
                 check_langscale075_model(model,f"models[{i}]")
@@ -241,7 +263,12 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 receipt=model.get("measured")
                 demand(isinstance(receipt,dict),
                        f"models[{i}] final actual measurement receipt required")
-                if checked_langmem078(m):
+                if checked_langmem083(m):
+                    check_langmem083_model({**model,
+                        "trainable_parameters":receipt.get("trainable_parameters"),
+                        "deployed_parameters":receipt.get("deployed_parameters")},
+                        f"models[{i}].measured")
+                elif checked_langmem078(m):
                     check_langmem078_model({**model,
                         "trainable_parameters":receipt.get("trainable_parameters"),
                         "deployed_parameters":receipt.get("deployed_parameters")},
