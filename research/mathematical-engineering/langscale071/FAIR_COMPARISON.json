@@ -1,0 +1,152 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGSCALE071",
+  "study_type": "noncomparative_diagnostic",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "scientific_purpose": "No-fit replay of all nine original LANGSCALE070 trained checkpoint sources: exact SAME original exposed DEV future target bytes (4 docs x64 target positions =256), test input contexts 16/32/64/128/256 on the source-boundary-respecting teacher-forced reset-window model. Measure NLL, accuracy, cost vs context and FFN tiers, no streaming/causal action/TEST claims.",
+  "no_architecture_superiority_claim": true,
+  "study_lane": "THREE_CAPACITY_TIERS_THREE_SEEDS_160_UPDATES_FFN_ONLY_LABELED_PILOT",
+  "real_world_source": {
+    "name": "PSF CPython 3.13.0 tutorial original publisher bytes",
+    "observed_real_outcomes": true,
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF License Version 2; code examples 0BSD",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "597dde0eb3ff98c798ccb3657b1ac02074a8cdb929189f3cc68612877e45f13e",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ]
+  },
+  "causal_protocol": "For each original exposed DEV doc, 64 linspace target positions from 256 to last byte (inclusive) determined before evaluating checkpoints. For every tier/seed/length predict the same original target byte using ONLY t-L:t same doc source prefix; no future byte in inputs, fresh reset for each prefix. Original 070 source/checkpoint SHA, optimizer/RNG and source sample receipt from original aggregate required. Same 256 targets across all scales and contexts. 256 context >128 trained distribution, label as out-of-trained-window; 3 seeds. No training/TEST/GPU.",
+  "checkpoint_policy": "Read-only original LANGSCALE070 GitHub CPU #40871491842 original nine sha-locked model + optimizer/RNG artifacts and full source-verified aggregate #12896077841. Verify checkpoint SHA and exact original 4096 DEV replay NLL before each new 256 fixed-position context diagnostic. No optimizer steps or checkpoint modification.",
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "original_training_source_commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+  "original_dev": {
+    "status": "PREVIOUSLY_EXPOSED",
+    "docs": 4,
+    "target_bytes_per_run": 4096,
+    "interpretation": "Internal exposed DEV only; cannot prove unseen out-of-time or held-out TEST scaling, no hyperparameter selection"
+  },
+  "parent": "Original CONTEXT026 publisher-source graph and LANGLAYER038 recurrence-only 48-state; 500K checkpoint LANGLAYER040 preserved, not reused or retrained. New fixed 48-state constructors with FFN width as only capacity axis, do not combine with LAYER040 factorial results.",
+  "pnds": "New PNDS/LangScale070FFN.lean and foundation/v1/langscale070_ffn.py mathematical capacity counts; whole source IEEE/AD and independent model source mapping remains OPEN. No formal efficacy claim.",
+  "immutable_historical_reference": {
+    "original_035_training_run": 40785939365,
+    "original_035_independent_aggregate_run": 40786118546,
+    "ffn_037_training_and_aggregate_run": 40788869823,
+    "not_retrained": [
+      "tac_context026",
+      "tac_layer2",
+      "tac_layer3",
+      "tac_ffn2",
+      "tac_ffn3"
+    ],
+    "p3_exposed_DEV_NLL": 1.877306112,
+    "p3_comparison_not_neural_parameter_or_FLOP_matched": true
+  },
+  "source_model_sha256": "CONTEXT026 original c88f3f7c1b628cb733a4a58dcd168a75411d8bb3d80e382068593713e887510a; fresh scaling Git blob pinned in scripts/langscale070_cpu_fit.py",
+  "owner_training_authorization": "Owner 2026-10-29 explicitly directed 'Proceed with the research and testing the models scaling'; this specifically registers a three-scale FFN-axis exploratory language waiver for LANGSCALE070 ONLY. All other 100K policy and old original 500K waiver remain unchanged.",
+  "training_gates": {
+    "source_original_publisher": true,
+    "source_authentic_fit": true,
+    "source_ledger": "frozen publisher original SHA",
+    "training_fLOP_parity": "NOT_MATCHED_BY_DESIGN_DIFFERENT_MODEL_SIZES",
+    "equal_train_credits": "same 160 updates, 8x128 source targets/step, per seed",
+    "independent_source_authorization": "internal_research permissible on original public licensed FIT, no protected evaluation",
+    "full_composed_math": "OPEN partial FFN/upper typed operator only; not release",
+    "no_hyperparameter_selection": true,
+    "old_results_untouched": true
+  },
+  "original_historical_branches": {
+    "h48_graph_on": "LANGLAYER035/tac_layer2",
+    "h59_graph_off": "LANGLAYER039/tac_recuronly038"
+  },
+  "upper_factorial": {
+    "new_corners": [
+      {
+        "state": 48,
+        "graph": false,
+        "ffn": 455,
+        "params": 499623
+      },
+      {
+        "state": 59,
+        "graph": true,
+        "ffn": 426,
+        "params": 499848
+      }
+    ],
+    "old_corners": [
+      {
+        "state": 48,
+        "graph": true,
+        "ffn": 442,
+        "params": 499725
+      },
+      {
+        "state": 59,
+        "graph": false,
+        "ffn": 442,
+        "params": 499901
+      }
+    ],
+    "all_trainable_parameter_gap_below_1_percent": true,
+    "fixed_decoder_across_corners": false,
+    "warning": "FFN varies to maintain active parameter parity; factorial contrasts are reallocation effects not isolated fixed-head concept graph or pure state width causal effects."
+  },
+  "scale_axis": "FFN_WIDTH_ONLY",
+  "scaling": {
+    "fixed_architecture": "same base native/aligned/wave/six concept input-only scan + upper48 graph-free recurrence",
+    "axis": "SwiGLU hidden width only",
+    "heads": [
+      {
+        "name": "p250k",
+        "ffn_width": 150,
+        "parameters": 250133
+      },
+      {
+        "name": "p500k",
+        "ffn_width": 455,
+        "parameters": 499623
+      },
+      {
+        "name": "p1000k",
+        "ffn_width": 1067,
+        "parameters": 1000239
+      }
+    ],
+    "study_scope": "within-family FFN capacity scaling; no compute optimal law or cross-architecture win",
+    "real_context_window": 128,
+    "training_FLOPs": "NOT_MATCHED_AND_EXPECTED_TO_INCREASE_WITH_WIDTH",
+    "checkpoint_replay": "optimizer+all RNG+source order SHA and cold reload DEV"
+  },
+  "no_new_model_fits": true,
+  "histories": [
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "target_cohort_size": 256,
+  "source_cohort_study": "LANGSCALE070",
+  "original_trained_checkpoint_run": 40871491842,
+  "stale_model_gate": "Any mismatch of original trained source model, actual parameters, source cohort fingerprint, checkpoint digest or frozen 070 original DEV replay causes FAIL.",
+  "interpretation": "Context reset every prefix; not carry-state, rolling-context, scan performance or long-horizon persistent memory validation. 256-byte input is beyond the original 128-trained input horizon. Same 256 previously exposed DEV targets for all models; no independent generalization or architecture superiority. May distinguish size scaling and context length sensitivity as within-family exploratory evidence."
+}
