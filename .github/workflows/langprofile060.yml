@@ -1,0 +1,66 @@
+name: LANGPROFILE060 original TAC Python source line trace CPU only
+on:
+  pull_request:
+    paths:
+      - 'scripts/langprofile060_traced_lines.py'
+      - 'tests/test_langprofile060_traced_lines.py'
+      - 'research/mathematical-engineering/langprofile060/**'
+      - 'research/phone_queue/langprofile060.json'
+      - '.github/workflows/langprofile060.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-cpu-source-line-trace:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Preregistered source/compute preflight and trace lifecycle tests
+        run: |
+          mkdir -p langprofile060-evidence
+          python scripts/phone_lab.py plan research/phone_queue/langprofile060.json > langprofile060-evidence/PLAN.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langprofile060/FAIR_COMPARISON.json --phase preflight > langprofile060-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langprofile060_traced_lines.py tests/test_langprofile059_lines.py tests/test_langdecode057_validation.py
+      - name: Restore original unchanged trained checkpoint with metadata
+        run: |
+          gh run download 40797105091 --repo FPC-effortless/TAC-OSM --name LANGLAYER040-CPU-state48_no_graph-seed1701 --dir langprofile060-original/tac
+      - name: Measure original code source line intervals with original checkpoint parity
+        run: |
+          PYTHONPATH=src:. python scripts/langprofile060_traced_lines.py --tac-dir langprofile060-original/tac --output langprofile060-evidence/RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('langprofile060-evidence/RESULTS.json'))
+          assert r['new_training_updates']==0 and r['gpu_minutes']==0 and r['protected_TEST']=='NOT_ACCESSED'
+          assert {x['prompt_bytes'] for x in r['results']}=={128,512}
+          for row in r['results']:
+              assert row['persistent_state_bytes']==3904 and row['transition_bitwise_equal']
+              assert row['parity']['bitwise_original_incremental_logits_and_all_states']
+              assert row['parity']['snapshot_bidirectional_bitwise_continuation']
+              t=row['line_trace']
+              assert t['calls']==24 and t['line_events']>0 and t['sum_line_intervals_us']>0
+              assert t['no_speedup_claim'] and t['status']=='TRACED_PYTHON_LINES_NOT_PRODUCTION_LATENCY'
+          PY
+      - name: Preserve actual CPU line tracing evidence without GPU quota
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGPROFILE060-original-trained-CPython-line-trace
+          path: langprofile060-evidence/
+          retention-days: 90
+          if-no-files-found: warn
