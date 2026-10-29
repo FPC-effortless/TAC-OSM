@@ -43,7 +43,7 @@ jobs:
           mkdir -p langscale073-evidence
           PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langscale073.json > langscale073-evidence/PLAN.json
           PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langscale073/FAIR_COMPARISON.json --phase preflight > langscale073-evidence/PREFLIGHT.json
-          PYTHONPATH=src:. python -m pytest -q tests/test_langscale072.py tests/test_langscale071.py
+          PYTHONPATH=src:. python -m pytest -q tests/test_langscale073.py tests/test_langscale072.py tests/test_langscale071.py
       - name: Restore immutable original 070 weights and exact 071 source target positions
         run: |
           mkdir -p original070 original070-aggregate original071
