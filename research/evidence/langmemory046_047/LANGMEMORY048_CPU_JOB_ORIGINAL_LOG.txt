@@ -1,0 +1,301 @@
+# Original LANGMEMORY048 successful GitHub Actions CPU job
+Run https://github.com/FPC-effortless/TAC-OSM/actions/runs/40826044659
+Job ID 123289200591
+
+﻿2026-10-29T05:54:19.2509644Z Current runner version: '2.338.0'
+2026-10-29T05:54:19.2536685Z ##[group]Runner Image Provisioner
+2026-10-29T05:54:19.2537655Z Hosted Compute Agent
+2026-10-29T05:54:19.2538178Z Version: 20261021.618
+2026-10-29T05:54:19.2538804Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-29T05:54:19.2539509Z Build Date: 2026-10-21T00:45:21Z
+2026-10-29T05:54:19.2540102Z Worker ID: {af420331-25e8-4ecf-911d-109fe5598f5e}
+2026-10-29T05:54:19.2540864Z Region: centralus
+2026-10-29T05:54:19.2541353Z Cloud: Azure
+2026-10-29T05:54:19.2541878Z ##[endgroup]
+2026-10-29T05:54:19.2543286Z ##[group]Operating System
+2026-10-29T05:54:19.2543840Z Ubuntu
+2026-10-29T05:54:19.2544455Z 24.04.5
+2026-10-29T05:54:19.2544914Z LTS
+2026-10-29T05:54:19.2545922Z ##[endgroup]
+2026-10-29T05:54:19.2546464Z ##[group]Runner Image
+2026-10-29T05:54:19.2546909Z Image: ubuntu-24.04
+2026-10-29T05:54:19.2547315Z Version: 20261025.353.1
+2026-10-29T05:54:19.2548131Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-29T05:54:19.2549068Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-10-29T05:54:19.2549677Z ##[endgroup]
+2026-10-29T05:54:19.2550414Z ##[group]GITHUB_TOKEN Permissions
+2026-10-29T05:54:19.2551908Z Contents: read
+2026-10-29T05:54:19.2552330Z Metadata: read
+2026-10-29T05:54:19.2552722Z ##[endgroup]
+2026-10-29T05:54:19.2554218Z Secret source: Actions
+2026-10-29T05:54:19.2554873Z Cache mode: write
+2026-10-29T05:54:19.2555562Z Prepare workflow directory
+2026-10-29T05:54:19.2837654Z Prepare all required actions
+2026-10-29T05:54:19.2871235Z Getting action download info
+2026-10-29T05:54:19.5329502Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-29T05:54:19.6338644Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-29T05:54:19.7285705Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-29T05:54:19.9530003Z Complete job name: nofit-source-verified-locator
+2026-10-29T05:54:20.0141349Z ##[group]Run actions/checkout@v4
+2026-10-29T05:54:20.0141800Z with:
+2026-10-29T05:54:20.0142057Z   persist-credentials: false
+2026-10-29T05:54:20.0142358Z   repository: FPC-effortless/TAC-OSM
+2026-10-29T05:54:20.0144885Z   token: ***
+2026-10-29T05:54:20.0145272Z   ssh-strict: true
+2026-10-29T05:54:20.0145519Z   ssh-user: git
+2026-10-29T05:54:20.0145754Z   clean: true
+2026-10-29T05:54:20.0146003Z   sparse-checkout-cone-mode: true
+2026-10-29T05:54:20.0146296Z   fetch-depth: 1
+2026-10-29T05:54:20.0146534Z   fetch-tags: false
+2026-10-29T05:54:20.0146785Z   show-progress: true
+2026-10-29T05:54:20.0147041Z   lfs: false
+2026-10-29T05:54:20.0147271Z   submodules: false
+2026-10-29T05:54:20.0147522Z   set-safe-directory: true
+2026-10-29T05:54:20.0147813Z   allow-unsafe-pr-checkout: false
+2026-10-29T05:54:20.0148179Z env:
+2026-10-29T05:54:20.0148410Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:54:20.0148688Z   OMP_NUM_THREADS: 2
+2026-10-29T05:54:20.0148935Z ##[endgroup]
+2026-10-29T05:54:20.2500594Z Syncing repository: FPC-effortless/TAC-OSM
+2026-10-29T05:54:20.2501765Z ##[group]Getting Git version info
+2026-10-29T05:54:20.2502131Z Working directory is '/home/runner/work/TAC-OSM/TAC-OSM'
+2026-10-29T05:54:20.2502759Z [command]/usr/bin/git version
+2026-10-29T05:54:20.2599201Z git version 2.56.0
+2026-10-29T05:54:20.2617911Z ##[endgroup]
+2026-10-29T05:54:20.2630080Z Temporarily overriding HOME='/home/runner/work/_temp/55053176-3764-4a52-8e30-32a7a516eb24' before making global git config changes
+2026-10-29T05:54:20.2631528Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T05:54:20.2634666Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T05:54:20.2699744Z Deleting the contents of '/home/runner/work/TAC-OSM/TAC-OSM'
+2026-10-29T05:54:20.2703595Z ##[group]Initializing the repository
+2026-10-29T05:54:20.2710729Z [command]/usr/bin/git init /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T05:54:20.2930007Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-29T05:54:20.2931273Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-29T05:54:20.2932317Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-29T05:54:20.2933073Z hint: call:
+2026-10-29T05:54:20.2933504Z hint:
+2026-10-29T05:54:20.2934048Z hint: 	git config --global init.defaultBranch <name>
+2026-10-29T05:54:20.2934679Z hint:
+2026-10-29T05:54:20.2935397Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-29T05:54:20.2936318Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-29T05:54:20.2937057Z hint:
+2026-10-29T05:54:20.2937492Z hint: 	git branch -m <name>
+2026-10-29T05:54:20.2937975Z hint:
+2026-10-29T05:54:20.2938607Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-29T05:54:20.2943059Z Initialized empty Git repository in /home/runner/work/TAC-OSM/TAC-OSM/.git/
+2026-10-29T05:54:20.2961791Z [command]/usr/bin/git remote add origin https://github.com/FPC-effortless/TAC-OSM
+2026-10-29T05:54:20.3030837Z ##[endgroup]
+2026-10-29T05:54:20.3031621Z ##[group]Disabling automatic garbage collection
+2026-10-29T05:54:20.3035953Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-29T05:54:20.3093890Z ##[endgroup]
+2026-10-29T05:54:20.3094694Z ##[group]Setting up auth
+2026-10-29T05:54:20.3103357Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T05:54:20.3162195Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T05:54:20.3505611Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T05:54:20.3549392Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T05:54:20.3763570Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T05:54:20.3806282Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T05:54:20.4018403Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-29T05:54:20.4069576Z ##[endgroup]
+2026-10-29T05:54:20.4070401Z ##[group]Fetching the repository
+2026-10-29T05:54:20.4081474Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +95f4b92702a9f03a4dd0dd43e75bdd43f07c479c:refs/remotes/pull/579/merge
+2026-10-29T05:54:21.3981721Z From https://github.com/FPC-effortless/TAC-OSM
+2026-10-29T05:54:21.3982869Z  * [new ref]         95f4b92702a9f03a4dd0dd43e75bdd43f07c479c -> pull/579/merge
+2026-10-29T05:54:21.3985606Z ##[endgroup]
+2026-10-29T05:54:21.3986370Z ##[group]Determining the checkout info
+2026-10-29T05:54:21.3987271Z ##[endgroup]
+2026-10-29T05:54:21.3991878Z [command]/usr/bin/git sparse-checkout disable
+2026-10-29T05:54:21.4160404Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-29T05:54:21.4206966Z ##[group]Checking out the ref
+2026-10-29T05:54:21.4210889Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/579/merge
+2026-10-29T05:54:21.5965410Z Note: switching to 'refs/remotes/pull/579/merge'.
+2026-10-29T05:54:21.5966095Z 
+2026-10-29T05:54:21.5966518Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-29T05:54:21.5967613Z changes and commit them, and you can discard any commits you make in this
+2026-10-29T05:54:21.5968702Z state without impacting any branches by switching back to a branch.
+2026-10-29T05:54:21.5969363Z 
+2026-10-29T05:54:21.5970150Z If you want to create a new branch to retain commits you create, you may
+2026-10-29T05:54:21.5971139Z do so (now or later) by using -c with the switch command. Example:
+2026-10-29T05:54:21.5971717Z 
+2026-10-29T05:54:21.5971944Z   git switch -c <new-branch-name>
+2026-10-29T05:54:21.5972336Z 
+2026-10-29T05:54:21.5972556Z Or undo this operation with:
+2026-10-29T05:54:21.5972914Z 
+2026-10-29T05:54:21.5973103Z   git switch -
+2026-10-29T05:54:21.5973391Z 
+2026-10-29T05:54:21.5973900Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-29T05:54:21.5979257Z 
+2026-10-29T05:54:21.5980290Z HEAD is now at 95f4b92 Merge dd7262c9e82055f769c94846cb9bacb5d99bdfa6 into 9036ad08ed46a86833f4c6a93a4dfed22ca9fef7
+2026-10-29T05:54:21.5984080Z ##[endgroup]
+2026-10-29T05:54:21.6036273Z [command]/usr/bin/git log -1 --format=%H
+2026-10-29T05:54:21.6070499Z 95f4b92702a9f03a4dd0dd43e75bdd43f07c479c
+2026-10-29T05:54:21.6080263Z ##[group]Removing auth
+2026-10-29T05:54:21.6084164Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T05:54:21.6209480Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T05:54:21.6336134Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T05:54:21.6374058Z http.https://github.com/.extraheader
+2026-10-29T05:54:21.6381895Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-29T05:54:21.6431339Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T05:54:21.6634608Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T05:54:21.6676253Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T05:54:21.6888340Z ##[endgroup]
+2026-10-29T05:54:21.7157915Z ##[group]Run actions/setup-python@v5
+2026-10-29T05:54:21.7158561Z with:
+2026-10-29T05:54:21.7159017Z   python-version: 3.13
+2026-10-29T05:54:21.7159532Z   check-latest: false
+2026-10-29T05:54:21.7165727Z   token: ***
+2026-10-29T05:54:21.7166251Z   update-environment: true
+2026-10-29T05:54:21.7166859Z   allow-prereleases: false
+2026-10-29T05:54:21.7167455Z   freethreaded: false
+2026-10-29T05:54:21.7167992Z env:
+2026-10-29T05:54:21.7168453Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:54:21.7169025Z   OMP_NUM_THREADS: 2
+2026-10-29T05:54:21.7169518Z ##[endgroup]
+2026-10-29T05:54:21.8196839Z ##[group]Installed versions
+2026-10-29T05:54:21.8266760Z (node:2179) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T05:54:21.8269351Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T05:54:21.8270899Z Successfully set up CPython (3.13.17)
+2026-10-29T05:54:21.8272504Z ##[endgroup]
+2026-10-29T05:54:21.8461679Z ##[group]Run python -m pip install numpy==2.3.5 pytest==8.4.2
+2026-10-29T05:54:21.8462828Z [36;1mpython -m pip install numpy==2.3.5 pytest==8.4.2[0m
+2026-10-29T05:54:21.8573432Z shell: /usr/bin/bash -e {0}
+2026-10-29T05:54:21.8574147Z env:
+2026-10-29T05:54:21.8574613Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:54:21.8575377Z   OMP_NUM_THREADS: 2
+2026-10-29T05:54:21.8576074Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:21.8577113Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T05:54:21.8578139Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:21.8579065Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:21.8579990Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:21.8581035Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T05:54:21.8582147Z ##[endgroup]
+2026-10-29T05:54:24.6995710Z Collecting numpy==2.3.5
+2026-10-29T05:54:24.7759938Z   Downloading numpy-2.3.5-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+2026-10-29T05:54:24.8320790Z Collecting pytest==8.4.2
+2026-10-29T05:54:24.8450024Z   Downloading pytest-8.4.2-py3-none-any.whl.metadata (7.7 kB)
+2026-10-29T05:54:24.8680169Z Collecting iniconfig>=1 (from pytest==8.4.2)
+2026-10-29T05:54:24.8807991Z   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+2026-10-29T05:54:24.9048008Z Collecting packaging>=20 (from pytest==8.4.2)
+2026-10-29T05:54:24.9179373Z   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+2026-10-29T05:54:24.9406465Z Collecting pluggy<2,>=1.5 (from pytest==8.4.2)
+2026-10-29T05:54:24.9535648Z   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+2026-10-29T05:54:24.9792501Z Collecting pygments>=2.7.2 (from pytest==8.4.2)
+2026-10-29T05:54:24.9922571Z   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+2026-10-29T05:54:25.0203161Z Downloading numpy-2.3.5-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+2026-10-29T05:54:25.6879888Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 25.9 MB/s  0:00:00
+2026-10-29T05:54:25.7009429Z Downloading pytest-8.4.2-py3-none-any.whl (365 kB)
+2026-10-29T05:54:25.7186213Z Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+2026-10-29T05:54:25.7332515Z Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-10-29T05:54:25.7475570Z Downloading packaging-26.3-py3-none-any.whl (129 kB)
+2026-10-29T05:54:25.7627141Z Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+2026-10-29T05:54:25.7807341Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 65.1 MB/s  0:00:00
+2026-10-29T05:54:25.9268986Z Installing collected packages: pygments, pluggy, packaging, numpy, iniconfig, pytest
+2026-10-29T05:54:28.0451944Z 
+2026-10-29T05:54:28.0462167Z Successfully installed iniconfig-2.3.1 numpy-2.3.5 packaging-26.3 pluggy-1.7.0 pygments-2.21.0 pytest-8.4.2
+2026-10-29T05:54:28.1080764Z ##[group]Run mkdir -p langmemory048-evidence
+2026-10-29T05:54:28.1081050Z [36;1mmkdir -p langmemory048-evidence[0m
+2026-10-29T05:54:28.1081398Z [36;1mpython scripts/phone_lab.py plan research/phone_queue/langmemory048.json > langmemory048-evidence/PLAN.json[0m
+2026-10-29T05:54:28.1081995Z [36;1mpython scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmemory048/FAIR_COMPARISON.json --phase preflight > langmemory048-evidence/PREFLIGHT.json[0m
+2026-10-29T05:54:28.1082516Z [36;1mPYTHONPATH=src:. python -m pytest -q tests/test_langmemory048_verified_index.py[0m
+2026-10-29T05:54:28.1100667Z shell: /usr/bin/bash -e {0}
+2026-10-29T05:54:28.1100841Z env:
+2026-10-29T05:54:28.1100968Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:54:28.1101130Z   OMP_NUM_THREADS: 2
+2026-10-29T05:54:28.1101301Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:28.1101547Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T05:54:28.1101849Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:28.1102064Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:28.1102274Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:28.1102490Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T05:54:28.1102676Z ##[endgroup]
+2026-10-29T05:54:28.1753071Z <!-- tac-osm-phone-lab-status -->
+2026-10-29T05:54:28.1753441Z ### TAC-OSM research lab status
+2026-10-29T05:54:28.1753604Z 
+2026-10-29T05:54:28.1754127Z **Run:** langmemory048-verified-ring-source-audit · **Model:** System 1
+2026-10-29T05:54:28.1754360Z 
+2026-10-29T05:54:28.1754858Z **Compute decision:** GitHub Actions CPU · **Stage:** source_audit
+2026-10-29T05:54:28.1755331Z 
+2026-10-29T05:54:28.1755427Z **Progress:** READY_NO_FIT
+2026-10-29T05:54:28.1755565Z 
+2026-10-29T05:54:28.1755709Z - [ ] No planning blockers; normal source/gate checks still apply
+2026-10-29T05:54:28.1756392Z 
+2026-10-29T05:54:28.1756623Z *This is a planning receipt, not model training approval or scientific validation.*
+2026-10-29T05:54:28.1756914Z 
+2026-10-29T05:54:32.3200797Z ........                                                                 [100%]
+2026-10-29T05:54:32.3201152Z 8 passed in 3.65s
+2026-10-29T05:54:32.3589025Z ##[group]Run PYTHONPATH=src:. python scripts/langmemory048_verified_ring_index.py --output langmemory048-evidence/RESULTS.json
+2026-10-29T05:54:32.3589590Z [36;1mPYTHONPATH=src:. python scripts/langmemory048_verified_ring_index.py --output langmemory048-evidence/RESULTS.json[0m
+2026-10-29T05:54:32.3589898Z [36;1mpython - <<'PY'[0m
+2026-10-29T05:54:32.3590028Z [36;1mimport json[0m
+2026-10-29T05:54:32.3590200Z [36;1mx=json.load(open('langmemory048-evidence/RESULTS.json'))[0m
+2026-10-29T05:54:32.3590505Z [36;1massert x['training_updates']==0 and x['gpu_minutes']==0 and x['protected_TEST']=='NOT_ACCESSED'[0m
+2026-10-29T05:54:32.3590815Z [36;1massert x['cohorts']['anchor1536']['summary']['positions']==4928[0m
+2026-10-29T05:54:32.3591084Z [36;1massert x['cohorts']['extension4096']['summary']['positions']==13245[0m
+2026-10-29T05:54:32.3591310Z [36;1mfor cohort in x['cohorts'].values():[0m
+2026-10-29T05:54:32.3591484Z [36;1m    for owner in cohort['owners']:[0m
+2026-10-29T05:54:32.3591684Z [36;1m        for b in (1344,4096):[0m
+2026-10-29T05:54:32.3591833Z [36;1m            for w in (1,2):[0m
+2026-10-29T05:54:32.3592029Z [36;1m                assert owner['locators'][f'locator{w}_{b}']['bytes']==b[0m
+2026-10-29T05:54:32.3592307Z [36;1m        assert all(a['queries']==owner['positions'] for a in owner['stats'].values())[0m
+2026-10-29T05:54:32.3592531Z [36;1mPY[0m
+2026-10-29T05:54:32.3610648Z shell: /usr/bin/bash -e {0}
+2026-10-29T05:54:32.3610807Z env:
+2026-10-29T05:54:32.3610941Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:54:32.3611078Z   OMP_NUM_THREADS: 2
+2026-10-29T05:54:32.3611253Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:32.3611524Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T05:54:32.3611775Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:32.3612004Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:32.3612231Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:54:32.3612464Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T05:54:32.3612659Z ##[endgroup]
+2026-10-29T05:55:56.6081857Z {"cohorts": {"anchor1536": {"arms": {"exact_unbounded": {"correct": 1465, "coverage": 0.502637987012987, "covered": 2477, "long_correct": 1325, "long_coverage": 1.0, "long_covered": 2255, "queries": 4928, "success_all_positions": 0.29728084415584416, "total_lookup_ms": 4.639012, "total_update_ms": 26.934188, "work_units": 4928}, "legacy_sketch": {"correct": 933, "coverage": 0.6245941558441559, "covered": 3078, "long_correct": 730, "long_coverage": 0.7135254988913525, "long_covered": 1609, "queries": 4928, "success_all_positions": 0.1893262987012987, "total_lookup_ms": 31.148881, "total_update_ms": 21.46639, "work_units": 4928}, "locator1_1344": {"correct": 284, "coverage": 0.08664772727272728, "covered": 427, "long_correct": 197, "long_coverage": 0.13170731707317074, "long_covered": 297, "queries": 4928, "success_all_positions": 0.05762987012987013, "total_lookup_ms": 20.576115, "total_update_ms": 117.926377, "work_units": 4928}, "locator1_4096": {"correct": 608, "coverage": 0.203125, "covered": 1001, "long_correct": 490, "long_coverage": 0.3614190687361419, "long_covered": 815, "queries": 4928, "success_all_positions": 0.12337662337662338, "total_lookup_ms": 17.924788, "total_update_ms": 108.396198, "work_units": 4928}, "locator2_1344": {"correct": 300, "coverage": 0.09760551948051949, "covered": 481, "long_correct": 202, "long_coverage": 0.14634146341463414, "long_covered": 330, "queries": 4928, "success_all_positions": 0.060876623376623376, "total_lookup_ms": 23.440267, "total_update_ms": 139.817952, "work_units": 9856}, "locator2_1344_scan64": {"correct": 437, "coverage": 0.14691558441558442, "covered": 724, "long_correct": 298, "long_coverage": 0.22261640798226165, "long_covered": 502, "queries": 4928, "success_all_positions": 0.08867694805194805, "total_lookup_ms": 248.282168, "total_update_ms": 139.817952, "work_units": 294464}, "locator2_4096": {"correct": 655, "coverage": 0.2177353896103896, "covered": 1073, "long_correct": 530, "long_coverage": 0.3875831485587583, "long_covered": 874, "queries": 4928, "success_all_positions": 0.13291396103896103, "total_lookup_ms": 22.706602, "total_update_ms": 133.70044, "work_units": 9856}, "locator2_4096_scan64": {"correct": 691, "coverage": 0.23214285714285715, "covered": 1144, "long_correct": 551, "long_coverage": 0.4088691796008869, "long_covered": 922, "queries": 4928, "success_all_positions": 0.14021915584415584, "total_lookup_ms": 219.54444, "total_update_ms": 133.70044, "work_units": 256576}, "raw_1344": {"correct": 1461, "coverage": 0.5014204545454546, "covered": 2471, "long_correct": 1321, "long_coverage": 0.9973392461197339, "long_covered": 2249, "queries": 4928, "success_all_positions": 0.29646915584415584, "total_lookup_ms": 1563.888981, "total_update_ms": 6.870357, "work_units": 4012288}, "raw_4096": {"correct": 1465, "coverage": 0.502637987012987, "covered": 2477, "long_correct": 1325, "long_coverage": 1.0, "long_covered": 2255, "queries": 4928, "success_all_positions": 0.29728084415584416, "total_lookup_ms": 1599.880149, "total_update_ms": 5.638817, "work_units": 4075456}, "raw_sub_1344": {"correct": 1436, "coverage": 0.4935064935064935, "covered": 2432, "long_correct": 1296, "long_coverage": 0.9800443458980045, "long_covered": 2210, "queries": 4928, "success_all_positions": 0.2913961038961039, "total_lookup_ms": 1406.357138, "total_update_ms": 5.642447, "work_units": 3620288}, "raw_sub_4096": {"correct": 1465, "coverage": 0.502637987012987, "covered": 2477, "long_correct": 1325, "long_coverage": 1.0, "long_covered": 2255, "queries": 4928, "success_all_positions": 0.29728084415584416, "total_lookup_ms": 1599.500706, "total_update_ms": 5.422951, "work_units": 4075456}, "table2_1344": {"correct": 781, "coverage": 0.2508116883116883, "covered": 1236, "long_correct": 643, "long_coverage": 0.4501108647450111, "long_covered": 1015, "queries": 4928, "success_all_positions": 0.15848214285714285, "total_lookup_ms": 132.38069, "total_update_ms": 98.475273, "work_units": 9856}, "table2_4096": {"correct": 1169, "coverage": 0.37337662337662336, "covered": 1840, "long_correct": 1030, "long_coverage": 0.7179600886917961, "long_covered": 1619, "queries": 4928, "success_all_positions": 0.2372159090909091, "total_lookup_ms": 127.117266, "total_update_ms": 81.40638, "work_units": 9856}}, "genuine_older_than64": 2255, "locator_diagnostics": {"locator1_1344": {"evictions": 18691, "exact_verified_hits": 427, "fingerprint_false_positives": 0, "hash_slot_reads": 26390, "scan_fallback_positions": 0, "stale_checked": 0, "updates": 21462}, "locator1_4096": {"evictions": 15062, "exact_verified_hits": 1001, "fingerprint_false_positives": 23, "hash_slot_reads": 26390, "scan_fallback_positions": 0, "stale_checked": 0, "updates": 21462}, "locator2_1344": {"evictions": 18509, "exact_verified_hits": 962, "fingerprint_false_positives": 0, "hash_slot_reads": 61461, "scan_fallback_positions": 284608, "stale_checked": 0, "updates": 21462}, "locator2_4096": {"evictions": 14758, "exact_verified_hits": 2146, "fingerprint_false_positives": 28, "hash_slot_reads": 60358, "scan_fallback_positions": 246720, "stale_checked": 0, "updates": 21462}}, "original_index_bytes_lower_bound": 103279, "original_index_python_heap": 3540408, "positions": 4928}, "extension4096": {"arms": {"exact_unbounded": {"correct": 4943, "coverage": 0.6346545866364666, "covered": 8406, "long_correct": 4664, "long_coverage": 1.0, "long_covered": 8001, "queries": 13245, "success_all_positions": 0.3731974329935825, "total_lookup_ms": 14.791041, "total_update_ms": 69.876572, "work_units": 13245}, "legacy_sketch": {"correct": 2858, "coverage": 0.6823707059267649, "covered": 9038, "long_correct": 2425, "long_coverage": 0.7302837145356831, "long_covered": 5843, "queries": 13245, "success_all_positions": 0.21577953944884862, "total_lookup_ms": 82.152179, "total_update_ms": 55.808919, "work_units": 13245}, "locator1_1344": {"correct": 775, "coverage": 0.09075122687806719, "covered": 1202, "long_correct": 607, "long_coverage": 0.12023497062867142, "long_covered": 962, "queries": 13245, "success_all_positions": 0.058512646281615704, "total_lookup_ms": 54.66639, "total_update_ms": 294.151906, "work_units": 13245}, "locator1_4096": {"correct": 1772, "coverage": 0.2150245375613439, "covered": 2848, "long_correct": 1539, "long_coverage": 0.31421072365954256, "long_covered": 2514, "queries": 13245, "success_all_positions": 0.13378633446583615, "total_lookup_ms": 47.214734, "total_update_ms": 273.148146, "work_units": 13245}, "locator2_1344": {"correct": 839, "coverage": 0.1020007550018875, "covered": 1351, "long_correct": 653, "long_coverage": 0.13535808023997, "long_covered": 1083, "queries": 13245, "success_all_positions": 0.0633446583616459, "total_lookup_ms": 61.683799, "total_update_ms": 350.892947, "work_units": 26490}, "locator2_1344_scan64": {"correct": 1261, "coverage": 0.15462438656096641, "covered": 2048, "long_correct": 984, "long_coverage": 0.2053493313335833, "long_covered": 1643, "queries": 13245, "success_all_positions": 0.09520573801434504, "total_lookup_ms": 654.015843, "total_update_ms": 350.892947, "work_units": 787706}, "locator2_4096": {"correct": 1879, "coverage": 0.22906757266893168, "covered": 3034, "long_correct": 1630, "long_coverage": 0.33395825521809774, "long_covered": 2672, "queries": 13245, "success_all_positions": 0.14186485466213666, "total_lookup_ms": 59.838507, "total_update_ms": 337.793012, "work_units": 26490}, "locator2_4096_scan64": {"correct": 1997, "coverage": 0.2453756134390336, "covered": 3250, "long_correct": 1719, "long_coverage": 0.3555805524309461, "long_covered": 2845, "queries": 13245, "success_all_positions": 0.15077387693469232, "total_lookup_ms": 569.654939, "total_update_ms": 337.793012, "work_units": 679994}, "raw_1344": {"correct": 4503, "coverage": 0.5736504341260853, "covered": 7598, "long_correct": 4224, "long_coverage": 0.8990126234220722, "long_covered": 7193, "queries": 13245, "success_all_positions": 0.33997734994337486, "total_lookup_ms": 5926.694735, "total_update_ms": 17.262271, "work_units": 15165385}, "raw_4096": {"correct": 4943, "coverage": 0.6346545866364666, "covered": 8406, "long_correct": 4664, "long_coverage": 1.0, "long_covered": 8001, "queries": 13245, "success_all_positions": 0.3731974329935825, "total_lookup_ms": 10722.677752, "total_update_ms": 13.875355, "work_units": 27082977}, "raw_sub_1344": {"correct": 4312, "coverage": 0.5456398640996603, "covered": 7227, "long_correct": 4033, "long_coverage": 0.8526434195725534, "long_covered": 6822, "queries": 13245, "success_all_positions": 0.3255568138920347, "total_lookup_ms": 4721.913559, "total_update_ms": 13.982757, "work_units": 12111945}, "raw_sub_4096": {"correct": 4903, "coverage": 0.6302755756889392, "covered": 8348, "long_correct": 4624, "long_coverage": 0.9927509061367329, "long_covered": 7943, "queries": 13245, "success_all_positions": 0.37017742544356363, "total_lookup_ms": 10046.875674, "total_update_ms": 13.265955, "work_units": 25514273}, "table2_1344": {"correct": 2262, "coverage": 0.26885617214043034, "covered": 3561, "long_correct": 1985, "long_coverage": 0.39457567804024496, "long_covered": 3157, "queries": 13245, "success_all_positions": 0.17078142695356738, "total_lookup_ms": 350.785901, "total_update_ms": 247.429963, "work_units": 26490}, "table2_4096": {"correct": 3524, "coverage": 0.4159305398263496, "covered": 5509, "long_correct": 3247, "long_coverage": 0.6381702287214098, "long_covered": 5106, "queries": 13245, "success_all_positions": 0.2660626651566629, "total_lookup_ms": 341.030143, "total_update_ms": 208.52396, "work_units": 26490}}, "genuine_older_than64": 8001, "locator_diagnostics": {"locator1_1344": {"evictions": 48781, "exact_verified_hits": 1202, "fingerprint_false_positives": 6, "hash_slot_reads": 67969, "scan_fallback_positions": 0, "stale_checked": 0, "updates": 54724}, "locator1_4096": {"evictions": 40835, "exact_verified_hits": 2848, "fingerprint_false_positives": 67, "hash_slot_reads": 67969, "scan_fallback_positions": 0, "stale_checked": 0, "updates": 54724}, "locator2_1344": {"evictions": 48376, "exact_verified_hits": 2702, "fingerprint_false_positives": 6, "hash_slot_reads": 159686, "scan_fallback_positions": 761216, "stale_checked": 0, "updates": 54724}, "locator2_4096": {"evictions": 40108, "exact_verified_hits": 6068, "fingerprint_false_positives": 75, "hash_slot_reads": 156329, "scan_fallback_positions": 653504, "stale_checked": 0, "updates": 54724}}, "original_index_bytes_lower_bound": 211024, "original_index_python_heap": 6633044, "positions": 13245}, "horizon8192": {"arms": {"exact_unbounded": {"correct": 4861, "coverage": 0.6995078071961982, "covered": 8243, "long_correct": 4660, "long_coverage": 1.0, "long_covered": 7961, "queries": 11784, "success_all_positions": 0.41250848608282414, "total_lookup_ms": 13.647626, "total_update_ms": 112.157145, "work_units": 11784}, "legacy_sketch": {"correct": 2710, "coverage": 0.7045145960624576, "covered": 8302, "long_correct": 2396, "long_coverage": 0.7380982288657204, "long_covered": 5876, "queries": 11784, "success_all_positions": 0.22997284453496267, "total_lookup_ms": 72.154352, "total_update_ms": 86.7387, "work_units": 11784}, "locator1_1344": {"correct": 747, "coverage": 0.09538357094365241, "covered": 1124, "long_correct": 632, "long_coverage": 0.12159276472804924, "long_covered": 968, "queries": 11784, "success_all_positions": 0.06339103869653767, "total_lookup_ms": 48.400664, "total_update_ms": 489.548412, "work_units": 11784}, "locator1_4096": {"correct": 1672, "coverage": 0.2220807875084861, "covered": 2617, "long_correct": 1507, "long_coverage": 0.30021354101243564, "long_covered": 2390, "queries": 11784, "success_all_positions": 0.14188730482009504, "total_lookup_ms": 41.162562, "total_update_ms": 462.714097, "work_units": 11784}, "locator2_1344": {"correct": 824, "coverage": 0.10717922606924643, "covered": 1263, "long_correct": 697, "long_coverage": 0.1362894108780304, "long_covered": 1085, "queries": 11784, "success_all_positions": 0.06992532247114731, "total_lookup_ms": 54.315872, "total_update_ms": 593.241121, "work_units": 23568}, "locator2_1344_scan64": {"correct": 1255, "coverage": 0.16607264086897489, "covered": 1957, "long_correct": 1055, "long_coverage": 0.21040070342921743, "long_covered": 1675, "queries": 11784, "success_all_positions": 0.10650033944331297, "total_lookup_ms": 569.052316, "total_update_ms": 593.241121, "work_units": 696912}, "locator2_4096": {"correct": 1772, "coverage": 0.2380346232179226, "covered": 2805, "long_correct": 1593, "long_coverage": 0.3208139680944605, "long_covered": 2554, "queries": 11784, "success_all_positions": 0.15037338764426342, "total_lookup_ms": 52.095941, "total_update_ms": 577.562383, "work_units": 23568}, "locator2_4096_scan64": {"correct": 1910, "coverage": 0.25644942294636797, "covered": 3022, "long_correct": 1709, "long_coverage": 0.34417786710212284, "long_covered": 2740, "queries": 11784, "success_all_positions": 0.16208418194161575, "total_lookup_ms": 492.527589, "total_update_ms": 577.562383, "work_units": 598224}, "raw_1344": {"correct": 4152, "coverage": 0.5887644263408011, "covered": 6938, "long_correct": 3951, "long_coverage": 0.8360758698655948, "long_covered": 6656, "queries": 11784, "success_all_positions": 0.35234215885947046, "total_lookup_ms": 5582.468598, "total_update_ms": 27.59857, "work_units": 14500008}, "raw_4096": {"correct": 4742, "coverage": 0.6832993890020367, "covered": 8052, "long_correct": 4541, "long_coverage": 0.9760080391910564, "long_covered": 7770, "queries": 11784, "success_all_positions": 0.40241004752206383, "total_lookup_ms": 13466.217802, "total_update_ms": 23.283271, "work_units": 34653424}, "raw_sub_1344": {"correct": 3957, "coverage": 0.5563475899524779, "covered": 6556, "long_correct": 3756, "long_coverage": 0.7880919482477076, "long_covered": 6274, "queries": 11784, "success_all_positions": 0.3357942973523422, "total_lookup_ms": 4355.462501, "total_update_ms": 23.18029, "work_units": 11322728}, "raw_sub_4096": {"correct": 4642, "coverage": 0.6679395790902919, "covered": 7871, "long_correct": 4441, "long_coverage": 0.9532722019846753, "long_covered": 7589, "queries": 11784, "success_all_positions": 0.3939239646978955, "total_lookup_ms": 11103.161768, "total_update_ms": 22.672271, "work_units": 28587312}, "table2_1344": {"correct": 2148, "coverage": 0.27978615071283097, "covered": 3297, "long_correct": 1948, "long_coverage": 0.37884687853284765, "long_covered": 3016, "queries": 11784, "success_all_positions": 0.18228105906313646, "total_lookup_ms": 306.65173, "total_update_ms": 405.482194, "work_units": 23568}, "table2_4096": {"correct": 3343, "coverage": 0.4371181262729124, "covered": 5151, "long_correct": 3143, "long_coverage": 0.6118578068081899, "long_covered": 4871, "queries": 11784, "success_all_positions": 0.2836897488119484, "total_lookup_ms": 298.907578, "total_update_ms": 354.619101, "work_units": 23568}}, "genuine_older_than64": 7961, "locator_diagnostics": {"locator1_1344": {"evictions": 85518, "exact_verified_hits": 1124, "fingerprint_false_positives": 10, "hash_slot_reads": 107780, "scan_fallback_positions": 0, "stale_checked": 0, "updates": 95996}, "locator1_4096": {"evictions": 72039, "exact_verified_hits": 2617, "fingerprint_false_positives": 104, "hash_slot_reads": 107780, "scan_fallback_positions": 0, "stale_checked": 0, "updates": 95996}, "locator2_1344": {"evictions": 84735, "exact_verified_hits": 2526, "fingerprint_false_positives": 11, "hash_slot_reads": 233905, "scan_fallback_positions": 673344, "stale_checked": 0, "updates": 95996}, "locator2_4096": {"evictions": 70782, "exact_verified_hits": 5610, "fingerprint_false_positives": 102, "hash_slot_reads": 227704, "scan_fallback_positions": 574656, "stale_checked": 0, "updates": 95996}}, "original_index_bytes_lower_bound": 315419, "original_index_python_heap": 9220552, "positions": 11784}}, "status": "SOURCE_ONLY_FIXED_BUFFER_INDEX_ACTUAL_MEASUREMENT", "study": "LANGMEMORY048"}
+2026-10-29T05:55:56.6422891Z ##[group]Run actions/upload-artifact@v4
+2026-10-29T05:55:56.6423060Z with:
+2026-10-29T05:55:56.6423223Z   name: LANGMEMORY048-original-source-verified-cyclic-index
+2026-10-29T05:55:56.6423423Z   path: langmemory048-evidence/
+2026-10-29T05:55:56.6423564Z   retention-days: 90
+2026-10-29T05:55:56.6423689Z   if-no-files-found: warn
+2026-10-29T05:55:56.6423821Z   compression-level: 6
+2026-10-29T05:55:56.6423942Z   overwrite: false
+2026-10-29T05:55:56.6424065Z   include-hidden-files: false
+2026-10-29T05:55:56.6424196Z env:
+2026-10-29T05:55:56.6424301Z   CUDA_VISIBLE_DEVICES: 
+2026-10-29T05:55:56.6424425Z   OMP_NUM_THREADS: 2
+2026-10-29T05:55:56.6424580Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:55:56.6424819Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib/pkgconfig
+2026-10-29T05:55:56.6425321Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:55:56.6425533Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:55:56.6425765Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.17/x64
+2026-10-29T05:55:56.6425976Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.17/x64/lib
+2026-10-29T05:55:56.6426154Z ##[endgroup]
+2026-10-29T05:55:56.7495138Z (node:2243) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T05:55:56.7495600Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T05:55:56.7561376Z With the provided path, there will be 3 files uploaded
+2026-10-29T05:55:56.7561801Z Artifact name is valid!
+2026-10-29T05:55:56.7561937Z Root directory input is valid!
+2026-10-29T05:55:57.0708860Z Beginning upload of artifact content to blob storage
+2026-10-29T05:55:57.0920721Z (node:2243) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-29T05:55:57.2836131Z Uploaded bytes 31059
+2026-10-29T05:55:57.3655674Z Finished uploading artifact content to blob storage!
+2026-10-29T05:55:57.3656273Z SHA256 digest of uploaded artifact zip is 74436f9c5c5bc1e03fc9ecbd250fc02f0f195a6a517e37d7111574adae3283c1
+2026-10-29T05:55:57.3657760Z Finalizing artifact upload
+2026-10-29T05:55:57.8227743Z Artifact LANGMEMORY048-original-source-verified-cyclic-index.zip successfully finalized. Artifact ID 12876806909
+2026-10-29T05:55:57.8228296Z Artifact LANGMEMORY048-original-source-verified-cyclic-index has been successfully uploaded! Final size is 31059 bytes. Artifact ID is 12876806909
+2026-10-29T05:55:57.8232591Z Artifact download URL: https://github.com/FPC-effortless/TAC-OSM/actions/runs/40826044659/artifacts/12876806909
+2026-10-29T05:55:57.8391464Z Post job cleanup.
+2026-10-29T05:55:57.9125599Z (node:2256) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-29T05:55:57.9126202Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-29T05:55:57.9270933Z Post job cleanup.
+2026-10-29T05:55:57.9844633Z [command]/usr/bin/git version
+2026-10-29T05:55:57.9877695Z git version 2.56.0
+2026-10-29T05:55:57.9900607Z Temporarily overriding HOME='/home/runner/work/_temp/ed7418a7-2bbe-449d-bbdb-0ed8430a63ac' before making global git config changes
+2026-10-29T05:55:57.9901323Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T05:55:57.9903439Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TAC-OSM/TAC-OSM
+2026-10-29T05:55:57.9935406Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T05:55:57.9978616Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T05:55:58.0198199Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T05:55:58.0237748Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T05:55:58.0487501Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T05:55:58.0528005Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T05:55:58.0862060Z Cleaning up orphan processes
+2026-10-29T05:55:58.1103462Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
