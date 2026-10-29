@@ -67,7 +67,7 @@ def evaluate(seed,ckpt,verified,source_dir):
             x=torch.tensor([raw[t]],dtype=torch.long)
             f=source_factors(m,state,x)
             logits,nxt=engine.step(x,state,owners=(owner,))
-            context=raw[max(0,t-4):t].rjust(4,b'\\0')
+            context=raw[max(0,t-4):t].rjust(4,bytes([0]))
             k=context_key(context)
             eta_latest={}
             if t>0:
