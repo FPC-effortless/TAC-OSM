@@ -1,0 +1,60 @@
+name: LANGPRETRAIN075 no-fit corpus/cost safety checks
+on:
+  pull_request:
+    paths:
+      - 'scripts/langpretrain075_audit.py'
+      - 'tests/test_langpretrain075.py'
+      - 'research/langpretrain075/**'
+      - 'research/phone_queue/langpretrain075.json'
+      - '.github/workflows/langpretrain075-no-fit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  source-only-no-fit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      PYTHONPATH: '.:src'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Strict raw-byte source and conditional cost software fixtures
+        run: python -m unittest discover -s tests -p test_langpretrain075.py -v
+      - name: Cost remains unknown without actual dual T4 throughput
+        run: |
+          python scripts/langpretrain075_audit.py cost --exposure-bytes 10000000 > cost-plan.json
+          python - <<'PY'
+          import json
+          d=json.load(open('cost-plan.json'))
+          assert d['gpu_aggregate_bytes_per_second'] is None
+          assert d['estimated_paid_compute_two_seeds_usd'] is None
+          assert d['approved_to_spend'] is False
+          PY
+      - name: Training plan explicitly blocked until real sources and workload are reviewed
+        run: |
+          python scripts/phone_lab.py plan research/phone_queue/langpretrain075.json > compute-plan.json
+          python - <<'PY'
+          import json
+          d=json.load(open('compute-plan.json'))
+          assert d['state']=='BLOCKED_EVIDENCE_OR_DESIGN'
+          assert d['backend']=='kaggle_t4x2'
+          assert d['approved_to_train'] is False
+          assert d['gpu_devices_required']==2
+          PY
+      - name: Archive only constructed no-fit receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGPRETRAIN075-NO-FIT-AUDIT
+          path: |
+            cost-plan.json
+            compute-plan.json
+          retention-days: 30
+          if-no-files-found: warn
