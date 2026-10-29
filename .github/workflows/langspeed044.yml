@@ -1,0 +1,67 @@
+name: LANGSPEED044 trained cached TAC vs Transformer CPU
+on:
+  pull_request:
+    paths:
+      - 'scripts/langspeed044_cached.py'
+      - 'tests/test_langspeed044_cached.py'
+      - 'research/mathematical-engineering/langspeed044/**'
+      - '.github/workflows/langspeed044.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  cached-originals:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: No-fit causal Transformer KV parity tests
+        run: PYTHONPATH=src:. python -m pytest -q tests/test_langspeed044_cached.py
+      - name: Download immutable model sources and two original real-trained checkpoint artifacts
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 3 \
+            https://raw.githubusercontent.com/FPC-effortless/TAC-OSM/1ce108a3696db91c9bc21b9c9d4d5703a7db8d81/scripts/langcompare029_preflight.py \
+            -o scripts/langcompare029_preflight.py
+          test "$(git hash-object scripts/langcompare029_preflight.py)" = 935decb17dfac48419a82d84dc03aaf4b0327ecd
+          gh run download 40780215655 --repo FPC-effortless/TAC-OSM \
+            --name LANGCOMPARE031-CPU-FIT-causal_transformer-seed1701 --dir langspeed044-original/transformer
+          gh run download 40797105091 --repo FPC-effortless/TAC-OSM \
+            --name LANGLAYER040-CPU-state48_no_graph-seed1701 --dir langspeed044-original/tac
+      - name: Exact original logits parity before speed; preserve all raw timing evidence
+        run: |
+          PYTHONPATH=src:. python scripts/langspeed044_cached.py \
+            --tac-dir langspeed044-original/tac \
+            --transformer-dir langspeed044-original/transformer \
+            --transformer-source scripts/langcompare029_preflight.py \
+            --output langspeed044-evidence/RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('langspeed044-evidence/RESULTS.json'))
+          assert r['no_fit'] and r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          assert len(r['results'])==4 and all(row['parity_max_abs']<=3e-5 for row in r['results'])
+          assert r['bdh_cached'].startswith('NOT_RUN') and r['ssm_cached'].startswith('NOT_RUN')
+          PY
+      - name: Archive completed or partial evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSPEED044-original-cached-CPU-evidence
+          path: langspeed044-evidence/
+          retention-days: 90
+          if-no-files-found: warn
