@@ -22,21 +22,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Download only saved no-fit smoke JSON receipts
+      - name: Read-only retrieval and private-API diagnosis
+        id: retrieve
         env:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
           KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
         run: |
-          test -n "$KAGGLE_API_TOKEN" || { echo "Kaggle credential unavailable"; exit 2; }
-          test -n "$KAGGLE_USERNAME" || { echo "Kaggle account unavailable"; exit 2; }
           python -m pip install --quiet kaggle
-          mkdir -p ci-artifacts/kaggle-smoke/raw
-          # READ ONLY: no kernels push, no accelerator request or GPU quota.
-          kaggle kernels output "$KAGGLE_USERNAME/tacosm-dual-t4-readiness" \
-            -p ci-artifacts/kaggle-smoke/raw --file-pattern '(^|/)(phone-research-runtime|seed-101|seed-102)\.json$' \
-            --quiet
+          python scripts/kaggle_smoke_access_diagnostic.py \
+            --username "$KAGGLE_USERNAME" \
+            --output-dir ci-artifacts/kaggle-smoke/raw \
+            --report ci-artifacts/kaggle-smoke/verification.json
       - name: Audit self-reported worker receipt consistency
-        if: always()
+        if: steps.retrieve.outcome == 'success'
         run: |
           python scripts/verify_kaggle_dual_t4_smoke.py \
             --output-dir ci-artifacts/kaggle-smoke/raw \
