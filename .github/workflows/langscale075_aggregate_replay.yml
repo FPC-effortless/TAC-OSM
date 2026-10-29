@@ -1,0 +1,73 @@
+name: LANGSCALE075 source-checkpoint aggregate recovery no model fits
+on:
+  pull_request:
+    paths:
+      - 'scripts/langscale075_aggregate.py'
+      - '.github/workflows/langscale075_aggregate_replay.yml'
+      - 'research/results/langscale075/**'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  read-only-original-checkpoint-aggregate:
+    if: github.head_ref == 'research/langscale075-source-aggregate-replay-2026-10-29'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Retrieve six unchanged trained checkpoints and old 070 reference
+        run: |
+          mkdir -p original075-raw original070-verified original075-aggregated
+          gh run download 40881468228 -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGSCALE075-FIT-*' --dir original075-raw
+          gh run download 40871491842 -R FPC-effortless/TAC-OSM \
+            --name LANGSCALE070-SOURCE-VERIFIED-SCALING-SUMMARY --dir original070-verified
+          python - <<'PY'
+          from pathlib import Path
+          dirs=list(Path('original075-raw').glob('LANGSCALE075-FIT-*'))
+          assert len(dirs)==6, 'must replay all six original unchanged source checkpoints'
+          assert len(list(Path('original075-raw').rglob('FIT_AND_EXPOSED_DEV_RECEIPT.json')))==6
+          assert len(list(Path('original075-raw').rglob('*.pt')))==6
+          PY
+      - name: Recompute complete original source SHA/optimizer/seed paired summary
+        run: |
+          python scripts/langscale075_aggregate.py \
+            --results original075-raw \
+            --reference original070-verified/RESULTS.json \
+            --output original075-aggregated/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('original075-aggregated/RESULTS.json'))
+          assert r['study']=='LANGSCALE075'
+          assert r['new_checkpoints_verified']==6 and r['original_070_reference_checkpoints']==3
+          assert r['source_paired'] and r['parameter_parity_within_one_percent']
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          assert r['training_FLOP_parity']=='NOT_MATCHED'
+          assert set(r['metrics'])=={'m8','m12','m16'}
+          assert set(r['paired_against_m8'])=={'m12_minus_m8','m16_minus_m8'}
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+            print('# LANGSCALE075 — read-only recovery of original six trained checkpoints',file=f)
+            print('Original 075 run #40881468228 had six trained jobs succeed; aggregate printed wrong report field AFTER writing JSON. Original failed run retained; these are NOT newly fitted models.',file=f)
+            print('| Native matrix | Params | Mean NLL | Top1 | Mean CPU process sec |',file=f)
+            print('|---|---:|---:|---:|---:|',file=f)
+            for tier in ('m8','m12','m16'):
+                m=r['metrics'][tier]
+                print(f"| {tier} | {m['trainable_parameters']} | {m['mean_DEV_nll']:.6f} | {m['mean_DEV_top1']:.2%} | {m['mean_cpu_process_seconds']:.1f} |",file=f)
+            print('Already exposed DEV, reset128 only; no trained k>8 streaming state; not matched FLOPs and no model release.',file=f)
+          PY
+      - name: Preserve complete result evidence including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGSCALE075-ORIGINAL-RESULTS-READONLY-RECOVERY
+          path: original075-aggregated/
+          retention-days: 90
+          if-no-files-found: warn
