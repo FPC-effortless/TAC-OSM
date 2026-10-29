@@ -28,10 +28,11 @@ a quota-consuming GPU workflow when appropriate.
    executes a bounded, source-only diagnostic suite for at most three
    eligible short no-fit GitHub jobs; updates a bot status comment for
    tracked GitHub CPU Issues and publishes JSON/Markdown evidence artifacts.
-2. Kaggle remote-status workflow independently polls known Kaggle kernel
-   state three times a day, ONLY if credentials are configured. It reports
-   an incomplete/unknown remote state honestly and updates the dedicated
-   GPU Issue. A completed notebook is NEVER a scientific qualification.
+2. Kaggle monitor runs three times per day. With a repository-scoped token it
+   checks remote status; without one it checks the last successful GitHub
+   submission with read-only Actions access, and explicitly marks remote
+   execution **unverified**, not absent. It does not submit or spend GPU quota.
+   A completed notebook is NEVER scientific qualification.
 3. AI agent instruction roles under .github/agents guide coding researchers
    and adversarial reviewers; CHARTER.md and AGENTS.md remain compulsory.
    A compatible coding agent must be enabled in GitHub to actually write
@@ -106,7 +107,13 @@ On GitHub repository settings (phone browser Desktop Site if required):
 - Add environment secret PHONE_LAB_GPU_EXECUTION_ENABLED with value true
   ONLY after reviewing the job limits and approving quota usage.
 - Add secret KAGGLE_API_TOKEN from your Kaggle API settings. Prefer scoped
-  token; never post token/key in chat, Issues or git files.
+  token; never post token/key in chat, Issues or git files. A token ONLY in the
+  protected `kaggle-research` environment is usable by approved submissions
+  but NOT by unattended status checks. For automatic remote polling also set
+  `KAGGLE_API_TOKEN` as a repository Actions secret (a wider credential scope);
+  otherwise the monitor reports only accepted GitHub submission evidence and
+  the user can examine the private Kaggle notebook manually. Do not weaken
+  the submission approval or expose the token in logs.
 - Add repository or environment variable KAGGLE_USERNAME.
 - For *genuine trained models only*, separately configure a non-model
   independent trusted public key TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX and

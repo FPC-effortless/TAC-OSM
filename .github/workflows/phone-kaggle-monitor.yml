@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   issues: write
 
 concurrency:
@@ -32,21 +33,9 @@ jobs:
         run: |
           mkdir -p ci-artifacts/kaggle-monitor
           if [ -z "$KAGGLE_USERNAME" ] || [ -z "$KAGGLE_API_TOKEN" ]; then
-            echo "Kaggle credentials not configured; no remote progress can be asserted" >> "$GITHUB_STEP_SUMMARY"
-            echo '{"state":"UNCONFIGURED_NOT_SUBMITTED"}' > ci-artifacts/kaggle-monitor/unconfigured.json
-            python - <<'PY'
-          import os, sys
-          sys.path.insert(0, "scripts")
-          from phone_lab import update_issue
-          update_issue(
-              os.environ["GITHUB_REPOSITORY"], 473,
-              "<!-- tac-osm-phone-lab-status -->\n### Kaggle dual-T4 research status\n\n"
-              "**Status: UNCONFIGURED — no remote job submitted.**\n\n"
-              "The Kaggle owner token, account name and protected execution "
-              "approval are required before GPU use. There is no scientific "
-              "result to evaluate.\n",
-              os.environ["GH_TOKEN"])
-          PY
+            echo "Kaggle token unavailable to scheduled monitor; report accepted GitHub submissions, not a remote absence" >> "$GITHUB_STEP_SUMMARY"
+            python scripts/kaggle_status_fallback.py \
+              --out ci-artifacts/kaggle-monitor --post-issue
             exit 0
           fi
           python -m pip install --quiet kaggle
