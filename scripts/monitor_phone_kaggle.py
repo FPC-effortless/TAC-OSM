@@ -16,8 +16,9 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "scripts"))
 from tac_osm.phone_research_ops import decide, load_proposal, phone_markdown
-from phone_lab import update_issue
+from phone_lab import update_issue  # noqa: E402
 
 OWNER = re.compile(r"^[a-z0-9][a-z0-9_-]{0,39}$")
 
