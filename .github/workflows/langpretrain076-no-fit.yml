@@ -1,20 +1,25 @@
-name: LANGPRETRAIN076 original 500K T4 throughput design tests (NO GPU)
+name: LANGPRETRAIN076 authentic FIT Kaggle packaging and science safety (NO GPU)
 on:
   pull_request:
     paths:
-      - 'scripts/langpretrain076_t4_measure.py'
-      - 'tests/test_langpretrain076.py'
+      - 'scripts/langpretrain076_*.py'
+      - 'scripts/validate_research_parity.py'
+      - 'src/tac_osm/phone_research_ops.py'
+      - 'tests/test_langpretrain076*.py'
       - 'research/langpretrain076/**'
-      - '.github/workflows/langpretrain076-no-fit.yml'
+      - 'research/mathematical-engineering/langpretrain076/**'
+      - 'research/phone_queue/langpretrain076.json'
+      - '.github/workflows/langpretrain076*.yml'
   workflow_dispatch:
 permissions:
   contents: read
 
 jobs:
-  test-without-training:
+  fixture-and-real-source-only:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     env:
+      PYTHONPATH: '.:src'
       CUDA_VISIBLE_DEVICES: ''
     steps:
       - uses: actions/checkout@v4
@@ -23,17 +28,41 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: No-fit timing arithmetic, replay contract and source guards
+      - name: Strict original public FIT-only bundle verification and policy regressions
+        run: python -m unittest discover -s tests -p 'test_langpretrain076*.py' -v
+      - name: Internal real-FIT science and bounded two-T4 planner must pass
         run: |
-          python -m unittest discover -s tests -p test_langpretrain076.py -v
-      - name: Verify no GPU or protected data job is dispatched
-        run: |
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langpretrain076/FAIR_COMPARISON.json \
+            --phase preflight
+          python scripts/phone_lab.py plan research/phone_queue/langpretrain076.json > plan.json
           python - <<'PY'
-          import pathlib
-          s=pathlib.Path('scripts/langpretrain076_t4_measure.py').read_text()
-          assert 'torch.optim.AdamW' in s
-          assert 'torch.cuda.synchronize' in s
-          assert 'preflight_source(ROOT)' in s
-          assert 'weights_only=True' in s
-          assert 'NvidiaTeslaT4' not in s or 'T4' in s
+          import json
+          r=json.load(open('plan.json'))
+          assert r['state']=='READY_INTERNAL_RESEARCH_PLAN'
+          assert r['backend']=='kaggle_t4x2'
+          assert r['gpu_devices_required']==2
+          assert r['approved_to_train'] is False
+          assert r['approved_to_open_test'] is False
           PY
+      - name: Offline deterministic one-code-file Kaggle staging without submission
+        run: |
+          python scripts/langpretrain076_kaggle_bundle.py --kaggle-user tacosmlab --out stage
+          python - <<'PY'
+          import json,pathlib
+          r=json.load(open('stage/staging-receipt.json'))
+          assert r['status']=='STAGED_UNSUBMITTED' and r['DEV_bytes_embedded']==0
+          assert r['TEST_bytes_embedded']==0 and r['source_owner_count']==14
+          assert r['approved_to_spend_paid'] is False
+          compile(pathlib.Path('stage/entrypoint.py').read_text(), 'generated-kaggle.py','exec')
+          PY
+      - name: Archive only nonsecret no-fit readiness receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGPRETRAIN076-NO-GPU-READY
+          path: |
+            stage/staging-receipt.json
+            plan.json
+          retention-days: 30
+          if-no-files-found: warn
