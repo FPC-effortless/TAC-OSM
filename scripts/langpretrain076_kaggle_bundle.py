@@ -117,7 +117,7 @@ def bootstrap_source(encoded: str, payload_hash: str, file_hashes: dict[str, str
             '    runpy.run_path(str(root / "launcher.py"), run_name="__main__")\\n'
             'if __name__ == "__main__": main()\\n')
 
-    return assembled.replace(r"\\n", "\\n".encode("ascii").decode("unicode_escape"))
+    return assembled.replace(chr(92) + "n", chr(10))
 
 def build(root: Path, destination: Path, username: str) -> dict:
     if (not isinstance(username, str) or not 2 <= len(username) <= 39
