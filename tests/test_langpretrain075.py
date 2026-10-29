@@ -98,7 +98,7 @@ class CorpusAuditTests(unittest.TestCase):
 
     def test_cost_is_unknown_without_measured_gpu_rate(self):
         report = cost_plan(10_000_000, None, 0.0)
-        self.assertIsNone(report["estimated_paid_compute_per_seed_usd"])
+        self.assertIsNone(report["estimated_paid_compute_two_seeds_usd"])
         self.assertFalse(report["approved_to_spend"])
         self.assertGreater(report["cpu_extrapolated_hours_PER_SEED_NOT_FORECAST"], 0)
 
@@ -106,8 +106,8 @@ class CorpusAuditTests(unittest.TestCase):
         # Aggregate rate 20k byte targets/sec across BOTH physical T4s.
         report = cost_plan(10_000_000, 20_000.0, 1.0)
         self.assertEqual(report["gpu_count"], 2)
-        self.assertAlmostEqual(report["gpu_wall_hours_PER_SEED"], 1000 / 3600)
-        self.assertAlmostEqual(report["estimated_paid_compute_per_seed_usd"], 2000 / 3600)
+        self.assertAlmostEqual(report["gpu_wall_hours_TWO_CONCURRENT_SEEDS"], 1000 / 3600)
+        self.assertAlmostEqual(report["estimated_paid_compute_two_seeds_usd"], 2000 / 3600)
         with self.assertRaises(AuditError):
             cost_plan(10_000_000, float("nan"), 0.0)
         with self.assertRaises(AuditError):
