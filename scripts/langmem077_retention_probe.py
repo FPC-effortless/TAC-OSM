@@ -72,7 +72,7 @@ def native_transition_factors(model,state,token,position_mode):
             "query_write_cosine":float((query*wk).sum().item()),
             "old_query_write_key":wk.clone()}
 
-@torch.inference_mode()
+@torch.no_grad()
 def evaluate(tier,seed,checkpoint_dir,verified_summary):
     torch.set_num_threads(2)
     fit=fit_sources()
