@@ -93,6 +93,21 @@ jobs:
             --source-root pinned-me111 \
             --csv-output mobile/android/model01/sample-app/app/src/androidTest/assets/me111-original-fit-first256.csv \
             --reference-output mobile/android/model01/sample-app/app/src/androidTest/assets/me111_original_fit_expected.json
+      - name: Bundle original publisher-pinned first256 FIT sample for no-download offline demo
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,shutil
+          source=Path('mobile/android/model01/sample-app/app/src/androidTest/assets/me111-original-fit-first256.csv')
+          destination=Path('mobile/android/model01/sample-app/app/src/main/assets/me111-original-fit-first256.csv')
+          if not source.is_file() or source.stat().st_size < 1024:
+              raise RuntimeError('source-locked original FIT sample unavailable')
+          destination.parent.mkdir(parents=True,exist_ok=True)
+          shutil.copyfile(source,destination)
+          assert source.read_bytes()==destination.read_bytes()
+          print('ME111_BUNDLED_ORIGINAL_FIT_SAMPLE_SHA256='+hashlib.sha256(destination.read_bytes()).hexdigest())
+          print('ME111_BUNDLED_FIT_SAMPLE_ONLY_FOR_RESEARCH_NOT_MODEL_ACCURACY')
+          PY
       - name: Verify host JVM input/state guards and SHA256 state codec negatives
         run: python -m unittest discover -s tests -p 'test_me111_android*.py' -v
       - name: Verify authentic original FIT source raw-to-Java feature transformation
