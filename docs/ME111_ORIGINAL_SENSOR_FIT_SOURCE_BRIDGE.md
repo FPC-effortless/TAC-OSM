@@ -109,3 +109,29 @@ concentration or a health/safety instruction.
 All improvements must preserve these distinctions in generated receipts and
 customer-visible text. There is no release, merger or commercial deployment
 authorized by the software-only checks.
+
+## One-tap bundled original FIT sample — implemented, software gate pending
+
+To remove the need for a computer or dataset download, the debug Android APK
+now embeds ONLY the first 256 original publisher FIT rows of the Aotizhongxin
+station, obtained at build time from the original SHA256-verified UCI archive.
+The CI build copies the exact source bytes from its independently generated
+original-PyTorch test fixture. The published source is CC BY 4.0, attributed
+to Chen (2017), UCI Beijing Multi-Site Air Quality (10.24432/C5RK5G).
+
+The Android neural screen now offers **Run bundled original FIT sample offline**.
+A single user tap runs the exact 104,663-param ME111 ONNX CPU neural model
+through all 256 historical observations without a document picker,
+external permissions, internet connection, source configuration, or any
+changes to app-private persisted recurrent memory. The app displays its
+unqualified standardized forecast and clearly identifies the historic
+training-period sample and failed original scientific gate. It does NOT
+represent current local air quality, an independent accuracy benchmark,
+or evidence of real-world useful long memory.
+
+An Android instrumentation test checks that the main APK's bundled CSV is
+byte-identical to the UCI source-pinned test APK's original FIT CSV and
+that native neural output/state match the untouched original PyTorch
+checkpoint; any difference is a software gate FAIL. Do not claim it passed
+until the exact code commit's CI workflow succeeds. The separate custom
+user-selected CSV importer remains appropriately labeled as unauthenticated.
