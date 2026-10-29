@@ -11,7 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 for n in ("langmem085","langmem084","langmem083","langmem082","langmem081","langmem080","langmem079","langmem078","langscale075","langscale070","context026","langmemory042","langbase024"):
     p=str(ROOT/"research/mathematical-engineering"/n)
     if p not in sys.path:sys.path.insert(0,p)
-sys.path[:0]=[str(ROOT),str(ROOT/"src")]
+sys.path[:0]=[str(ROOT/"research/mathematical-engineering/langmem085"),str(ROOT),str(ROOT/"src")]
 from operators import ARMS,AGES,write,prospective_wrong_keys,load_frozen_new_rust,fixed_fit_prior,context_key,byte_book,decode
 from scripts.langmem081_context_address import restore_original,source_factors,DualNativeStreamingTAC079
 from scripts.langmem082_recover import RawRing
