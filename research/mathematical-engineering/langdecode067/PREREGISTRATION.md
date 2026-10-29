@@ -1,0 +1,12 @@
+# LANGDECODE067 — integrity-guarded cached position / original trained CPU acceptance
+
+## Prior evidence
+LANGDECODE064 [#603](https://github.com/FPC-effortless/TAC-OSM/pull/603) passed original trained 128/512 CPU speed gates, replicated three times in LANGDECODE065 [#604](https://github.com/FPC-effortless/TAC-OSM/pull/604). LANGDECODE066 [#605](https://github.com/FPC-effortless/TAC-OSM/pull/605) verified 65553 actual source clock positions in FP32/FP64 and local source-position gradients; its negative mutation control showed _check_model fails to detect edits to the separate cached tensor. These outcomes remain unchanged and do not confer success on this new candidate.
+
+## Proposed candidate
+VersionGuardedCapTAC067 inherits CachedCapPositionTAC064, including the identical _advance transition; this candidate does not change original model, positional 7-vector, state, input order or arithmetic. After inherited construction, it records the Python identity, tensor _version, shape, dtype, device and gradient flag; each inherited state-validation call performs an O(1) metadata check. Reject normal PyTorch in-place add_ and cache replacement. Does NOT detect deliberate writes through tensor .data or other raw memory, nor changes to guard metadata; no tamper-proof claim.
+
+## Frozen falsifiers
+Constructed FP32/FP64, native/cap_all, masked 2-owner original/064/067 exact state/logit parity and failed mutation/reassignment controls. Original trained SHA-locked 499623p seed1701/FIT320 checkpoint, publisher CPython3.13 FIT source 128/512 prefixes and same 16 greedy next bytes, unchanged source/optimizer/RNG; original 057 vs guarded 067 exact incremental logits, all 9 state tensors, full prefix <=3e-5, same argmax, bidirectional snapshots and original 3904 FP32 bytes/owner.
+
+Unprofiled CPU FP32 batch1 eager, 2 Torch intraop/1 interop threads, original inherited step validation, 2 warmups + 7 paired alternating measured repeats. Require BOTH prompts >=5% median speed improvement AND candidate/original p95 <=1.10, alongside ALL original checkpoint checks. Any failed gate means no decoder acceptance despite green source CI. Even successful first run needs independent host repeats. Do not retune gates on same FIT source. Zero training, Kaggle/GPU, protected TEST or promotion. Complete PNDS actual-source IEEE/AD proof, adversarial cache integrity and Android mobile speed remain OPEN. This candidate is draft/unmerged and source-inherits PNDS natural-time cap record [#70](https://github.com/FPC-effortless/pnds-lean/pull/70).
