@@ -9,7 +9,7 @@ import pytest
 import torch
 
 ROOT=Path(__file__).resolve().parents[1]
-for n in ("langstream076","langscale075","langscale070","langlayer040"):
+for n in ("langstream076","langstream043","langscale075","langscale070","langlayer040"):
     p=str(ROOT/"research/mathematical-engineering"/n)
     if p not in sys.path:sys.path.insert(0,p)
 from native_streaming import NativeStreamingTAC076,state_shapes
