@@ -1,0 +1,51 @@
+name: LANGMEMORY045A authentic-source cheap-memory verification preflight
+on:
+  pull_request:
+    paths:
+      - 'scripts/langmemory045_source_probe.py'
+      - 'tests/test_langmemory045_source_probe.py'
+      - 'research/mathematical-engineering/langmemory045a/**'
+      - 'research/phone_queue/langmemory045a.json'
+      - '.github/workflows/langmemory045a.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-original-source-no-fit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install numpy==2.3.5 pytest==8.4.2
+      - name: Frozen researcher preflight and future-poison tests
+        run: |
+          mkdir -p langmemory045a-evidence
+          python scripts/phone_lab.py plan research/phone_queue/langmemory045a.json > langmemory045a-evidence/PLAN.txt
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmemory045a/FAIR_COMPARISON.json --phase preflight > langmemory045a-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmemory045_source_probe.py
+      - name: Original publisher FIT bytes — source-only no-fit measured mechanism
+        run: |
+          PYTHONPATH=src:. python scripts/langmemory045_source_probe.py --output langmemory045a-evidence/RESULTS.json
+          python - <<'PY'
+          import json
+          r=json.load(open('langmemory045a-evidence/RESULTS.json'))
+          assert r['documents']==14 and r['summary']['positions']>0
+          assert r['summary']['verified_fraction']<=.20
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['training_updates']==0
+          PY
+      - name: Preserve all partial and completed original evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEMORY045A-real-source-two-cheap-memory-mechanism
+          path: langmemory045a-evidence/
+          retention-days: 90
+          if-no-files-found: warn
