@@ -84,3 +84,21 @@ def test_reject_invalid_upper_inputs():
     for x in (torch.zeros(2,0,280),torch.zeros(2,4,59),torch.zeros(2,4,280,dtype=torch.long)):
         with pytest.raises(ValueError): b(x)
     with pytest.raises(ValueError): RecurrenceOnlyUpperBlock(state_width=0)
+
+
+def test_actual_upper_probe_matches_source_scan_and_is_pure():
+    from probe_adapter import UPPER_PROBE
+    from tac_osm.research_probe import probe_memory
+    torch.manual_seed(38038);b=RecurrenceOnlyUpperBlock().double().eval()
+    z=torch.randn(2,7,280,dtype=torch.float64)
+    sample={'observed_features':z[:,:-1],'query_features':z[:,-1]}
+    UPPER_PROBE.validate(b,sample);h=UPPER_PROBE.start(b,sample)
+    with torch.no_grad():
+        for t in range(6): h=UPPER_PROBE.advance(b,h,sample,t)
+        out=UPPER_PROBE.forecast(b,h,sample)['residual_features']
+        full=b(z)
+    assert torch.allclose(full[:,-1],out,atol=1e-11,rtol=1e-9)
+    report=probe_memory(b,sample,UPPER_PROBE)
+    assert report['query_does_not_write_state']
+    assert report['candidate_permutation']['status']=='INCONCLUSIVE_NOT_DECLARED'
+    assert report['state_components']==['upper_recurrence']

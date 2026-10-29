@@ -30,6 +30,18 @@ class RecurrenceOnlyUpperBlock(nn.Module):
         self.output=nn.Linear(state_width,width)
         self.residual_gain=nn.Parameter(torch.tensor(-2.0))
 
+    def observe(self,z,prior):
+        """Actual upper-only one-step observation; no whole-model streaming API."""
+        u=self.input_proj(self.input_norm(z)).tanh()
+        alpha=.995*self.forget(u).sigmoid()
+        return alpha*prior+(1-alpha)*self.offer(u).tanh()
+
+    def read_from_prior(self,z,prior):
+        """Pure prewrite read for the upper diagnostic adapter only."""
+        u=self.input_proj(self.input_norm(z)).tanh()
+        gate=self.read_gate(torch.cat((u,prior),-1)).sigmoid()
+        return z+self.residual_gain.sigmoid()*self.output((u+gate*prior).tanh())
+
     def forward(self,z,*,return_trace=False):
         if z.ndim!=3 or z.shape[-1]!=self.width or z.shape[1]==0 or not z.is_floating_point():
             raise ValueError('expected floating nonempty [B,T,width]')
