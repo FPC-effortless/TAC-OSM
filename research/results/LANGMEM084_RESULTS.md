@@ -42,8 +42,8 @@ does not invent that separation. Each bank8×8 FP32=256 tensor bytes.
 Read M_t k_a uses **an external evaluator-supplied old key and clock**.
 Decode by fixed cosine nearest to256 original native value codes at clock a
 or the explicit byte codebook. No fitted decoder or probability calibration.
-Both wrong controls use other historical four-byte contexts, same owner and
-query clock: nearest/hard wrong key, and SHA-uniform wrong key. All predictions
+Both registered wrong controls use other historical four-byte contexts, same
+owner and query clock (see target-overlap limitation audited below): nearest/hard wrong key, and SHA-uniform wrong key. All predictions
 freeze before raw[a] is used by scorer. raw[a] legally entered memory only
 when historically observed; it is not fed directly into a query decoder.
 
@@ -106,6 +106,47 @@ readable at its unit key, but that property does not protect old values from
 subsequent writes. The source-key/native-value overwrite control has the same
 short-versus-long weakness. Neither longer retention alone nor more aggressive
 writing alone is established as a general solution.
+
+## Post-hoc audit: wrong contexts can themselves contain the historical target
+
+The registered wrong-address selector allowed any different context at4<=b<t.
+A context raw[b-4:b] **contains the requested source index a** when
+`a < b <= a+4`. This can supply answer-bearing information through the decoy
+key. All of these bytes are observed by query time, so it is **not future-byte
+leakage**, but it weakens the interpretation of this negative control. Merely
+having no explicit label argument does not establish label exclusion at the
+source producer. Correct old key raw[a-4:a] excludes raw[a]; a decoy can differ.
+The same source-level risk exists in the inherited083 control construction;
+we do not assert a count or effect on083 without auditing its original outputs.
+083's correct-key versus address-only comparison remains a separate control.
+
+This stronger historical-target exclusion was not implemented in the registered
+084 decoy control. **Do not mark it PASS** because the separate future-poison
+tests passed. The original predictions, original controls and all excluded rows
+are preserved. `LANGMEM084_CONTROL_AUDIT.json` adds a clearly labeled
+**post-hoc, read-only** analysis with zero new model evaluations, fits or DEV
+reads. It discards a row if **either** decoy context contains index a and scores
+correct/hard/uniform on the exact same remaining rows per seed. Selection uses
+only source indices, not target value or prediction correctness. These are not
+new decoys, prospectively confirmed controls or fresh unseen validation.
+
+Native hard-decoy overlaps occur14/29/24 times per956 source cells for the
+three seeds; uniform11/956 each. Hash hard-decoy overlaps8/956; uniform11/956.
+On the retained paired subset:
+
+| Arm and age | Correct | Hard wrong | Uniform wrong | Retained cells per seed |
+|---|---:|---:|---:|---|
+|native/native/source,8|3.97%|3.56%|1.37%|245 /244 /241|
+|bytebits/native/source,128|11.72%|12.80%|2.97%|250 /244 /248|
+|bytebits/hash/overwrite,8|10.84%|7.63%|2.41%|249 /249 /249|
+|bytebits/hash/overwrite,128|0.80%|1.20%|2.41%|249 /249 /249|
+|bytebits/hash/overwrite,256|0%|0.53%|2.66%|188 /188 /188|
+
+The descriptive short-delay separation and long-delay failure remain. The
+hard-control long-age result is still not convincing specific recovery. All8
+arms and per-seed denominators are retained in the audit JSON. Controls still
+differ in their writer ages: this audit removes direct target-position overlap,
+not every possible source/context correlation or temporal matching limitation.
 
 ## Distinguishing repeated context from erasure
 
