@@ -70,3 +70,14 @@ claim is made. Keep draft for independent review; do not merge automatically.
 
 LANGMEMORY056 remains a preserved negative. This result does not reopen keyed
 cache tuning or justify new training.
+
+## Preserved CI maintenance failure
+
+The initial full-suite CI run
+[40855792913](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40855792913)
+reported 1442 passed, 3 skipped and one failure: the baseline documentation
+still listed 1413 tests after these 33 new cases brought collection to 1446.
+Ran the canonical `scripts/sync_test_count.py`, changing only the explicitly
+mutable current count (frozen count 327 preserved); the targeted integrity
+regression then passed locally. The decoder experiment was already successful
+and was not repeated or retuned for this documentation change.
