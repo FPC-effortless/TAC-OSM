@@ -1,0 +1,124 @@
+name: LANGLAYER041 authentic DEV matched-target history lesion on 20 frozen checkpoints
+on:
+  pull_request:
+    paths:
+      - "scripts/langlayer041_real_context_probe.py"
+      - "scripts/langlayer041_aggregate.py"
+      - "research/mathematical-engineering/langlayer041/**"
+      - ".github/workflows/langlayer041.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-historical-interventions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [h48_graph,h48_plain,h59_graph,h59_plain]
+        seed: [1701,1702,1703,1704,1705]
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      CUDA_VISIBLE_DEVICES: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Pinned real-source CPU evaluation library only (no fit)
+        run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: No-fit source-eligible preregistration
+        run: |
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langlayer041/FAIR_COMPARISON.json --phase preflight
+      - name: Retrieve immutable trained original source checkpoint and receipt
+        run: |
+          set -euo pipefail
+          case "${{ matrix.arm }}" in
+            h48_graph)
+              trainrun=40785939365
+              artifact="LANGLAYER035-CPU-tac_layer2-seed${{ matrix.seed }}"
+              ;;
+            h59_plain)
+              trainrun=40795790808
+              artifact="LANGLAYER039-CPU-seed${{ matrix.seed }}"
+              ;;
+            h48_plain)
+              trainrun=40797105091
+              artifact="LANGLAYER040-CPU-state48_no_graph-seed${{ matrix.seed }}"
+              ;;
+            h59_graph)
+              trainrun=40797105091
+              artifact="LANGLAYER040-CPU-state59_full_graph-seed${{ matrix.seed }}"
+              ;;
+            *) exit 2 ;;
+          esac
+          gh run download "$trainrun" -R FPC-effortless/TAC-OSM --name "$artifact" --dir original
+          mapfile -t bins < <(find original -name '*.pt' -type f)
+          mapfile -t rec < <(find original -name FIT_AND_EXPOSED_DEV_RECEIPT.json -type f)
+          test "${#bins[@]}" -eq 1
+          test "${#rec[@]}" -eq 1
+          echo "ORIGINAL_BIN=${bins[0]}" >> "$GITHUB_ENV"
+          echo "ORIGINAL_REC=${rec[0]}" >> "$GITHUB_ENV"
+      - name: Actual frozen same-target 128/256/512 source-history/donor interventions
+        run: |
+          PYTHONPATH=src:. python scripts/langlayer041_real_context_probe.py \
+            --arm ${{ matrix.arm }} --seed ${{ matrix.seed }} \
+            --checkpoint "$ORIGINAL_BIN" --receipt "$ORIGINAL_REC" \
+            --output "langlayer041-results/${{ matrix.arm }}-seed${{ matrix.seed }}.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER041-CONTEXT-${{ matrix.arm }}-seed${{ matrix.seed }}
+          path: langlayer041-results/
+          retention-days: 90
+          if-no-files-found: warn
+  all-checkpoint-independent-history-audit:
+    needs: original-source-historical-interventions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Download original 20 frozen source-history receipts from this specific run
+        run: |
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern "LANGLAYER041-CONTEXT-*" --dir real-history-receipts
+      - name: Fail closed unless all sources, labels, seeds, arms and history lesions match
+        run: |
+          python scripts/langlayer041_aggregate.py \
+            --results real-history-receipts --output langlayer041-summary/RESULTS.json
+      - name: Post descriptive genuine-vs-donor original-source history results
+        run: |
+          python - <<'PY'
+          import json,os
+          r=json.load(open("langlayer041-summary/RESULTS.json"))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              print("# LANGLAYER041: 20 original checkpoints × three authentic context lengths",file=f)
+              print("No new training, TEST, streaming-state or independently qualified longer-term memory.",file=f)
+              print("| Trained arm | Observed bytes | Real prefix NLL | Donor prefix NLL | Donor−genuine NLL |",file=f)
+              print("|---|---:|---:|---:|---:|",file=f)
+              for name,depth in r["per_model"].items():
+                  for length,row in depth.items():
+                      print(f'| {name} | {length} | {row["genuine_nll_mean"]:.5f} | {row["distant_donor_nll_mean"]:.5f} | {row["history_utility_delta_donor_minus_genuine_mean"]:+.5f} |',file=f)
+              print("Same 32 exposed real byte targets/seed/model; last64 unchanged at each context length; no absolute-position invariance claim.",file=f)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER041-complete-20-checkpoint-real-history-diagnostics
+          path: langlayer041-summary/
+          retention-days: 90
