@@ -1,0 +1,60 @@
+name: LANGPRETRAIN076 read-only Kaggle T4 measured checkpoint audit
+
+# This workflow only downloads an existing Kaggle output; NEVER submits/runs GPUs.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  read-only-t4-audit:
+    environment: kaggle-research
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      PYTHONPATH: '.:src'
+      CUDA_VISIBLE_DEVICES: ''
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Use approved existing Kaggle credentials read-only
+        run: |
+          test -n "$KAGGLE_API_TOKEN" || exit 2
+          test -n "$KAGGLE_USERNAME" || exit 2
+          python -m pip install --quiet kaggle
+      - name: Retrieve ONLY known saved Kaggle training outputs
+        run: |
+          mkdir -p ci-artifacts/langpretrain076-output
+          kaggle kernels status "$KAGGLE_USERNAME/tacosm-langpretrain076-h48-t4-frozen"
+          kaggle kernels output "$KAGGLE_USERNAME/tacosm-langpretrain076-h48-t4-frozen" \
+            --file-pattern '^(phone-research-runtime\.json|seed-1701\.json|seed-1702\.json|seed-1701\.pt|seed-1702\.pt)$' \
+            -p ci-artifacts/langpretrain076-output
+      - name: Independently check original per-seed timing and actual checkpoint hashes
+        run: |
+          python scripts/langpretrain076_verify_t4.py \
+            --outputs ci-artifacts/langpretrain076-output \
+            --report ci-artifacts/langpretrain076-verified.json
+          python - <<'PY'
+          import json,os
+          data=json.load(open('ci-artifacts/langpretrain076-verified.json'))
+          assert len(data['workers'])==2
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('# Original publisher FIT dual T4 efficiency (internal, no quality claim)\n\n')
+              out.write('| Seed | Raw byte-tokens/sec | Peak CUDA tensor MiB |\n|---|---:|---:|\n')
+              for w in data['workers']:
+                  out.write(f"| {w['seed']} | {w['measured_raw_byte_tokens_per_second']:.2f} | {w['peak_cuda_tensor_allocated_bytes']/1048576:.2f} |\n")
+          PY
+      - name: Retain only self-reported verified scalar metrics, not private model weights
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGPRETRAIN076-VERIFIED-METRICS-OR-INCOMPLETE
+          path: ci-artifacts/langpretrain076-verified.json
+          retention-days: 90
+          if-no-files-found: warn
