@@ -150,6 +150,33 @@ Do not turn on background paid API coding or GPU runs without explicit
 user authorization. Notebook quota costs and GitHub Actions minutes
 must be checked against platform limits.
 
+## Read-only verification of the already-submitted dual-T4 smoke
+
+A successful GitHub `kaggle kernels push` receipt is not proof that the
+private Kaggle kernel executed, or that two workers succeeded. The protected
+workflow `.github/workflows/phone-kaggle-smoke-audit.yml` is a **manual,
+read-only** check that can use the existing `kaggle-research` environment's
+Kaggle token without expanding secret scope to unrelated scheduled jobs.
+
+On GitHub Actions select **Phone Research Lab • read-only Kaggle dual-T4
+smoke evidence** → **Run workflow**, then approve the protected environment
+if requested. This action does NOT submit any Kaggle kernel, change versions,
+request accelerators or consume new Kaggle GPU execution quota. It downloads
+only `phone-research-runtime.json`, `seed-101.json`, `seed-102.json`
+from the existing saved kernel using Kaggle's supported `kernels output`
+command. The offline auditor checks source SHA, frozen seed identifiers,
+two distinct worker indexes, physical slot mapping, successful child exits,
+T4 device names, arithmetic and the explicit no-fit/no-science flags.
+
+If any output is missing or cannot be read (including private notebook
+access-denied), the audit **FAILS** and archives only an incomplete status
+report; do not attempt to resolve that by rerunning a GPU job. If the
+receipts pass, status is **SELF_REPORTED_TWO_WORKER_RECEIPTS_CONSISTENT**,
+not independent device attestation: Kaggle execution version provenance,
+trusted independent device observability, and any model capability claim
+remain distinct. The source-controlled report archive is nonsecret; raw
+private Kaggle downloads are not uploaded to GitHub Actions artifacts.
+
 ## Useful source references
 
 Official Kaggle CLI:
