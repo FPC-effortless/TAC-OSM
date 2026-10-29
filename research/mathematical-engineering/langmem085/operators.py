@@ -9,7 +9,23 @@ from __future__ import annotations
 import hashlib
 import math
 import torch
-from operators import context_key,byte_book,decode
+import struct
+from torch.nn import functional as F
+
+def context_key(context):
+    if type(context) is not bytes or len(context)!=4:raise ValueError("4 observed previous bytes")
+    digest=hashlib.sha256(b'LANGMEM084-key-v1'+bytes([0])+context).digest()
+    values=[((x+.5)/2**32)*2-1 for x in struct.unpack('<8I',digest)]
+    return F.normalize(torch.tensor(values,dtype=torch.float32),dim=0)
+
+def byte_book():
+    bits=((torch.arange(256)[:,None]>>torch.arange(8)[None,:])&1).float()
+    return (2*bits-1)/(8**.5)
+
+def decode(matrix,key,book):
+    read=matrix@key
+    sims=book@F.normalize(read,dim=0,eps=1e-12)
+    return int(sims.argmax()),read
 
 ARMS=("source","overwrite","partial025","residual_clip035","selective")
 AGES=(8,32,128,256)
@@ -88,7 +104,7 @@ def load_frozen_new_rust(folder,source_receipt):
         if not path.is_file():raise ValueError("frozen Rust publisher source missing")
         raw=path.read_bytes()
         sha=hashlib.sha256(raw).hexdigest()
-        blob=hashlib.sha1(f"blob {len(raw)}\\0".encode()+raw).hexdigest()
+        blob=hashlib.sha1(b'blob '+str(len(raw)).encode()+bytes([0])+raw).hexdigest()
         if len(raw)!=x["bytes"] or sha!=x["sha256"] or blob!=x["git_blob"]:
             raise ValueError("original frozen MIT publisher source bytes/blob mismatch")
         docs[x["path"]]=raw
