@@ -1,0 +1,960 @@
+{
+  "general": {
+    "actor_path": "/tmp/langpersist096-cache/general/GENERAL_ACTOR.json",
+    "actor_sha256": "9a872b5366a5f456639b95165da9129ab120249d4e0f9eaeaffea7d0dc005d68",
+    "attribution": {
+      "arc": "ARC-AGI by Francois Chollet; Apache-2.0; training-task demonstrations and public queries",
+      "gsm8k": "GSM8K by OpenAI; MIT; train split only",
+      "humaneval": "HumanEval by OpenAI; MIT; public code completion prompts and functional tests"
+    },
+    "classification": "PUBLIC_DEVELOPMENT_EXPOSED_NOT_BLIND",
+    "eligible_counts": {
+      "arc": 46,
+      "gsm8k": 7473,
+      "humaneval": 158
+    },
+    "general_intelligence_claim": false,
+    "judge_path": "/tmp/langpersist096-cache/general/GENERAL_JUDGE.json",
+    "judge_sha256": "2b21dc1249d2685188b32182e7e5723931db659d9ea6ffee78278c2680f9c0ff",
+    "limitations": [
+      "24 exposed public tasks do not establish general intelligence",
+      "ARC transformation rules are not given, but input/output demonstrations are provided",
+      "GSM8K and HumanEval test problem solving rather than learned persistent-structure acquisition",
+      "Historical source exposure is not fully audited; no uncontaminated benchmark claim",
+      "Unsupported functional reference checks remain INCONCLUSIVE; task selection is not revised"
+    ],
+    "new_training": false,
+    "prediction_boundary": "Only acquisition_bytes and query_bytes; task IDs, gold, tests and references are metadata/judge-only",
+    "protected_repository_TEST": "NOT_OPENED",
+    "qualification": "INTERNAL_DEVELOPMENT_NOT_INDEPENDENTLY_QUALIFIED",
+    "selection": "eight smallest salted SHA256 task identities per domain after fixed structural limits",
+    "selection_salt": "LANGPERSIST096-GENERAL-96002",
+    "selection_uses_model_metrics": false,
+    "source_asset_bytes": {
+      "arc.LICENSE": 11347,
+      "arc.zip": 522356,
+      "gsm8k.LICENSE": 1062,
+      "gsm8k.train.jsonl": 4166206,
+      "humaneval.LICENSE": 1083,
+      "humaneval.jsonl.gz": 44877
+    },
+    "source_assets": {
+      "arc.LICENSE": {
+        "commit": "399030444e0ab0cc8b4e199870fb20b863846f34",
+        "license": "Apache-2.0",
+        "path": "LICENSE",
+        "repository": "fchollet/ARC-AGI",
+        "sha256": "b3a161754ffc20840ccf92aec0fe464fbbcf42f14c22f78a3ec2e98fca3864ca",
+        "url": "https://raw.githubusercontent.com/fchollet/ARC-AGI/399030444e0ab0cc8b4e199870fb20b863846f34/LICENSE"
+      },
+      "arc.zip": {
+        "commit": "399030444e0ab0cc8b4e199870fb20b863846f34",
+        "license": "Apache-2.0",
+        "license_asset": "arc.LICENSE",
+        "path": "archive snapshot; only data/training/*.json consumed",
+        "repository": "fchollet/ARC-AGI",
+        "sha256": "c57507f289aa398fc22547901ee05af61c8e71e4fe6795b73ee4dd5795bd8950",
+        "url": "https://codeload.github.com/fchollet/ARC-AGI/zip/399030444e0ab0cc8b4e199870fb20b863846f34"
+      },
+      "gsm8k.LICENSE": {
+        "commit": "3101c7d5072418e28b9008a6636bde82a006892c",
+        "license": "MIT",
+        "path": "LICENSE",
+        "repository": "openai/grade-school-math",
+        "sha256": "86bbb73e855821d7c401912fd4bf82e34313e6e3b6fd6f909f2b6cc9e209a53b",
+        "url": "https://raw.githubusercontent.com/openai/grade-school-math/3101c7d5072418e28b9008a6636bde82a006892c/LICENSE"
+      },
+      "gsm8k.train.jsonl": {
+        "commit": "3101c7d5072418e28b9008a6636bde82a006892c",
+        "license": "MIT",
+        "license_asset": "gsm8k.LICENSE",
+        "path": "grade_school_math/data/train.jsonl",
+        "repository": "openai/grade-school-math",
+        "sha256": "17f347dc51477c50d4efb83959dbb7c56297aba886e5544ee2aaed3024813465",
+        "url": "https://raw.githubusercontent.com/openai/grade-school-math/3101c7d5072418e28b9008a6636bde82a006892c/grade_school_math/data/train.jsonl"
+      },
+      "humaneval.LICENSE": {
+        "commit": "b9453e8f1865df0a0057a1383767caa400acfbcf",
+        "license": "MIT",
+        "path": "LICENSE",
+        "repository": "openai/human-eval",
+        "sha256": "bcba3de214851cce46ed5af42d6698044616eeace887c3231bc7a20474ab639e",
+        "url": "https://raw.githubusercontent.com/openai/human-eval/b9453e8f1865df0a0057a1383767caa400acfbcf/LICENSE"
+      },
+      "humaneval.jsonl.gz": {
+        "commit": "b9453e8f1865df0a0057a1383767caa400acfbcf",
+        "license": "MIT",
+        "license_asset": "humaneval.LICENSE",
+        "path": "data/HumanEval.jsonl.gz",
+        "repository": "openai/human-eval",
+        "sha256": "b796127e635a67f93fb35c04f4cb03cf06f38c8072ee7cee8833d7bee06979ef",
+        "url": "https://raw.githubusercontent.com/openai/human-eval/b9453e8f1865df0a0057a1383767caa400acfbcf/data/HumanEval.jsonl.gz"
+      }
+    },
+    "status": "FROZEN_PUBLIC_DEVELOPMENT_DATA",
+    "study": "LANGPERSIST096_GENERAL",
+    "task_counts": {
+      "arc": 8,
+      "gsm8k": 8,
+      "humaneval": 8
+    },
+    "task_ids": [
+      "arc/train/fafffa47/test0",
+      "arc/train/aedd82e4/test0",
+      "arc/train/25d8a9c8/test0",
+      "arc/train/dae9d2b5/test0",
+      "arc/train/67e8384a/test0",
+      "arc/train/44f52bb0/test0",
+      "arc/train/1e0a9b12/test0",
+      "arc/train/b1948b0a/test0",
+      "gsm8k/train/524",
+      "gsm8k/train/2302",
+      "gsm8k/train/3136",
+      "gsm8k/train/4535",
+      "gsm8k/train/4036",
+      "gsm8k/train/748",
+      "gsm8k/train/6866",
+      "gsm8k/train/4720",
+      "HumanEval/141",
+      "HumanEval/91",
+      "HumanEval/22",
+      "HumanEval/150",
+      "HumanEval/160",
+      "HumanEval/98",
+      "HumanEval/94",
+      "HumanEval/53"
+    ]
+  },
+  "lexical": {
+    "actor_inputs_only": [
+      "acquisition.npy",
+      "queries.npy"
+    ],
+    "artifacts": {
+      "acquisition.npy": {
+        "bytes": 38528,
+        "dtype": "uint8",
+        "path": "acquisition.npy",
+        "sha256": "7f0c4a62d0c5ed269a79116ec5bcfc018e898fd58ca09e70ca5158036415b3b8",
+        "shape": [
+          300,
+          128
+        ]
+      },
+      "donor_indices.npy": {
+        "bytes": 2528,
+        "dtype": "int64",
+        "path": "donor_indices.npy",
+        "sha256": "3c916295075370e97a0b4e173abc3b2bc3bae651f7a8bc8870a640982336f28c",
+        "shape": [
+          300
+        ]
+      },
+      "queries.npy": {
+        "bytes": 19328,
+        "dtype": "uint8",
+        "path": "queries.npy",
+        "sha256": "eb39f7271d9b90282aa10fceb8a4943b2d22ebedd7c1d5a7a9898d5094123e35",
+        "shape": [
+          300,
+          64
+        ]
+      },
+      "records.json": {
+        "bytes": 129736,
+        "path": "records.json",
+        "sha256": "f138fb9112725ae576f0bc185fc61413985ff7ba3c3e8c61c5459489671826fa"
+      },
+      "targets.npy": {
+        "bytes": 1328,
+        "dtype": "uint8",
+        "path": "targets.npy",
+        "sha256": "93d47909c0d9b02e0c1d7bf96d9fb91a6ffc5e5c7aad3fce68d1545a13f7beee",
+        "shape": [
+          300,
+          4
+        ]
+      }
+    },
+    "costs": {
+      "license_bytes_authenticated": 19723,
+      "preparation_seconds": 5.643567415000007,
+      "source_bytes_authenticated": 1530985
+    },
+    "excluded_partitions": [
+      "DEV",
+      "protected_TEST"
+    ],
+    "execution_level": "internal_research",
+    "independently_qualified": false,
+    "limits": [
+      "Existing TRANSFER_DEV already exposed in historical CODEVALUE003; not fresh blind TEST",
+      "Target-conditioned NAME strata are diagnostic; uniform group reports unconditioned byte outcomes",
+      "Full-source chronology and scorer-side future bytes used only for frozen cohort construction",
+      "License SHA256 was frozen; license byte-size/Git-blob values are newly measured",
+      "No model prediction, optimizer update, GPU use or theory validation"
+    ],
+    "model_executions": 0,
+    "original_source_receipt_sha256": "e809d0c5ab42814a7e886732d8d7502106ae80387785ac20a1c30c72be1e15ab",
+    "partitions_read": {
+      "FIT": 14,
+      "TRANSFER_DEV": 10
+    },
+    "protected_TEST": "NOT_ACCESSED",
+    "qualification": "internally_authenticated_source_and_frozen_cohort_not_capability_evidence",
+    "schema": "tac-osm.langpersist096.corpus.v1",
+    "scorer_only": [
+      "targets.npy",
+      "records.json",
+      "fit_identifier_inventory.txt",
+      "sources"
+    ],
+    "selection_proof": {
+      "candidate_counts": {
+        "Textualize/rich": {
+          "negative": {
+            "eligible_candidates": 2028,
+            "selected_nonoverlapping": 20
+          },
+          "positive": {
+            "eligible_candidates": 412,
+            "selected_nonoverlapping": 20
+          },
+          "uniform": {
+            "eligible_candidates": 141004,
+            "selected_nonoverlapping": 20
+          }
+        },
+        "django/django": {
+          "negative": {
+            "eligible_candidates": 1643,
+            "selected_nonoverlapping": 20
+          },
+          "positive": {
+            "eligible_candidates": 338,
+            "selected_nonoverlapping": 20
+          },
+          "uniform": {
+            "eligible_candidates": 136680,
+            "selected_nonoverlapping": 20
+          }
+        },
+        "fastapi/fastapi": {
+          "negative": {
+            "eligible_candidates": 3623,
+            "selected_nonoverlapping": 20
+          },
+          "positive": {
+            "eligible_candidates": 804,
+            "selected_nonoverlapping": 20
+          },
+          "uniform": {
+            "eligible_candidates": 315436,
+            "selected_nonoverlapping": 20
+          }
+        },
+        "pydantic/pydantic": {
+          "negative": {
+            "eligible_candidates": 1779,
+            "selected_nonoverlapping": 20
+          },
+          "positive": {
+            "eligible_candidates": 321,
+            "selected_nonoverlapping": 20
+          },
+          "uniform": {
+            "eligible_candidates": 179593,
+            "selected_nonoverlapping": 20
+          }
+        },
+        "pytest-dev/pytest": {
+          "negative": {
+            "eligible_candidates": 2204,
+            "selected_nonoverlapping": 20
+          },
+          "positive": {
+            "eligible_candidates": 423,
+            "selected_nonoverlapping": 20
+          },
+          "uniform": {
+            "eligible_candidates": 175250,
+            "selected_nonoverlapping": 20
+          }
+        }
+      },
+      "donor_policy": "fixed lexicographic cyclic other publisher, same within-publisher row index; no target filtering",
+      "failures": [],
+      "fit_inventory_names": 2347,
+      "fit_inventory_sha256": "6b1b9794265a369a410f88a60ee556fc4f6314a38af541a2b42228cfe7162c68",
+      "frozen_keywords": [
+        "False",
+        "None",
+        "True",
+        "and",
+        "as",
+        "assert",
+        "async",
+        "await",
+        "break",
+        "case",
+        "class",
+        "continue",
+        "def",
+        "del",
+        "elif",
+        "else",
+        "except",
+        "finally",
+        "for",
+        "from",
+        "global",
+        "if",
+        "import",
+        "in",
+        "is",
+        "lambda",
+        "match",
+        "nonlocal",
+        "not",
+        "or",
+        "pass",
+        "raise",
+        "return",
+        "try",
+        "type",
+        "while",
+        "with",
+        "yield"
+      ],
+      "interval_policy": "same-file disjoint half-open [target_offset-192,target_offset+4)",
+      "negative_policy": "full NAME absent all FIT inventory and both A/Q byte strings",
+      "per_group_per_publisher": 20,
+      "positive_policy": "full NAME absent all FIT inventory and Q bytes; completed same NAME token entirely inside A",
+      "python_version": "3.12.15",
+      "records_sha256": "58b4c299f1708204305666c1aca8797b7d0001ec246c42a0ae948f5ea42863d7",
+      "salt": "LANGPERSIST096-96001",
+      "selected_episodes": 300,
+      "selection_order": [
+        "positive",
+        "negative",
+        "uniform"
+      ],
+      "target_policy": "first four bytes at complete ASCII NAME start; full NAME length4..24; frozen keywords excluded",
+      "tokenizer": "stdlib tokenize NAME",
+      "uniform_policy": "all valid byte positions, independent of NAME and target values before nonoverlap"
+    },
+    "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+    "source_ref": "87d8a3b288242b2db8c4e052f1571ff6005d0e36",
+    "source_rights": [
+      {
+        "all_three_identities_prefrozen": false,
+        "cache_hit": false,
+        "commit": "9d8f9a372cc5916fd4781fec207ced7ddac2f08f",
+        "file": "license-Textualize-rich.txt",
+        "git_blob_sha1": "4415505566f261c802b671426be529a31f914137",
+        "path": "LICENSE",
+        "repo": "Textualize/rich",
+        "sha256": "deed7c17a4318158190a3ea239cc879a5a50271cebb98ae7025f48fbe58dca15",
+        "size": 1056,
+        "url": "https://raw.githubusercontent.com/Textualize/rich/9d8f9a372cc5916fd4781fec207ced7ddac2f08f/LICENSE"
+      },
+      {
+        "all_three_identities_prefrozen": false,
+        "cache_hit": false,
+        "commit": "3bdcd29a61be034b9c9a1cea744371c12339c48e",
+        "file": "license-django-django.txt",
+        "git_blob_sha1": "5f4f225dd282aa7e4361ec3c2750bbbaaed8ab1f",
+        "path": "LICENSE",
+        "repo": "django/django",
+        "sha256": "b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669",
+        "size": 1552,
+        "url": "https://raw.githubusercontent.com/django/django/3bdcd29a61be034b9c9a1cea744371c12339c48e/LICENSE"
+      },
+      {
+        "all_three_identities_prefrozen": false,
+        "cache_hit": false,
+        "commit": "79cab5bed28b24d92c185d236feb33f5783dfeb3",
+        "file": "license-fastapi-fastapi.txt",
+        "git_blob_sha1": "3e92463e6bd522a2a21e5f0a80d8089d6c4be20d",
+        "path": "LICENSE",
+        "repo": "fastapi/fastapi",
+        "sha256": "4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e",
+        "size": 1086,
+        "url": "https://raw.githubusercontent.com/fastapi/fastapi/79cab5bed28b24d92c185d236feb33f5783dfeb3/LICENSE"
+      },
+      {
+        "all_three_identities_prefrozen": false,
+        "cache_hit": false,
+        "commit": "f09b25e8ca3a50ff99d2f82a404960b43593ba8b",
+        "file": "license-pydantic-pydantic.txt",
+        "git_blob_sha1": "488c6260c10f2e88fa1fae58a63fccec8d600cd1",
+        "path": "LICENSE",
+        "repo": "pydantic/pydantic",
+        "sha256": "a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3",
+        "size": 1129,
+        "url": "https://raw.githubusercontent.com/pydantic/pydantic/f09b25e8ca3a50ff99d2f82a404960b43593ba8b/LICENSE"
+      },
+      {
+        "all_three_identities_prefrozen": false,
+        "cache_hit": false,
+        "commit": "a7b2446ee41a7298d3a0bc22c52f3b8bacae1566",
+        "file": "license-pytest-dev-pytest.txt",
+        "git_blob_sha1": "c3f1657fce94589bd1ec7cead810639047f3d359",
+        "path": "LICENSE",
+        "repo": "pytest-dev/pytest",
+        "sha256": "ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b",
+        "size": 1091,
+        "url": "https://raw.githubusercontent.com/pytest-dev/pytest/a7b2446ee41a7298d3a0bc22c52f3b8bacae1566/LICENSE"
+      },
+      {
+        "all_three_identities_prefrozen": false,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "license-python-cpython.txt",
+        "git_blob_sha1": "14603b95c2e23b5a4cd6ff93f50348d1817f7638",
+        "path": "LICENSE",
+        "repo": "python/cpython",
+        "sha256": "78b12c3a81360b357002334f0e70ea0e92eebf7a9b358805c03c48484945f3bb",
+        "size": 13809,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE"
+      }
+    ],
+    "source_rows": [
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "00.bin",
+        "git_blob_sha1": "e4a39f4d345c79088ef939218390740b46287ac0",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/asyncio/base_events.py",
+        "repo": "python/cpython",
+        "sha256": "06368fda7fba857cedfa5dec24d907b1d04f0a3ac8313e9b059b5191734ea354",
+        "size": 79451,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/asyncio/base_events.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "01.bin",
+        "git_blob_sha1": "64aac4cc50d15a5e076d5ad43ea8a9017f12a72e",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/asyncio/streams.py",
+        "repo": "python/cpython",
+        "sha256": "d1753bc21667afe914390623be181ebb31776845d7c7f2f50805cae972f0189b",
+        "size": 28481,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/asyncio/streams.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "02.bin",
+        "git_blob_sha1": "dadcb5b5f36bd787af05b347d078e6118bbdc804",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/asyncio/tasks.py",
+        "repo": "python/cpython",
+        "sha256": "821f2e08c8c33160250db98defbd5dc193b292ec057ae0565f372fbe6cfc5b5e",
+        "size": 39757,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/asyncio/tasks.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "03.bin",
+        "git_blob_sha1": "d06d84cbdfcc364883d1e4a6439b33a5028e7957",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/collections/__init__.py",
+        "repo": "python/cpython",
+        "sha256": "9d2fb944932526a29c70b83238fadc6a5a05c86910623776820e61a5e1deb69c",
+        "size": 52425,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/collections/__init__.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "04.bin",
+        "git_blob_sha1": "5b646fabca0225b4bb2cecec065f6861e7ed12ae",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/contextlib.py",
+        "repo": "python/cpython",
+        "sha256": "c1e0d67b2007de11ae93cd36cf6faf38d9ab32656a832d592a49325eec579f96",
+        "size": 27801,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/contextlib.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "05.bin",
+        "git_blob_sha1": "cd202659873811a2ea47c7374cc268d26a9ac5f3",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/csv.py",
+        "repo": "python/cpython",
+        "sha256": "bd242c88ac4fd905cc64121e6fc9714c32b9e6031f52a03296aa8d28b32903df",
+        "size": 19178,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/csv.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "06.bin",
+        "git_blob_sha1": "d04957c555295e41ed221f856bbf5a5a45e0dd6f",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/functools.py",
+        "repo": "python/cpython",
+        "sha256": "c38d26d5a6a97df9917cfd4aa66c168bccadab1b6b5bd9d118eb89d1e4ca6a91",
+        "size": 39558,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/functools.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "07.bin",
+        "git_blob_sha1": "a353716a8506e65ae9ac9f06581ad17397e2f2a2",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/http/client.py",
+        "repo": "python/cpython",
+        "sha256": "d78f92c3b6e5aa778d2ec8ef7faa14d6005a2ba7784d9e69fd872ecc81287774",
+        "size": 57228,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/http/client.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "08.bin",
+        "git_blob_sha1": "d69a45d6793069038fcb6d2a1741bb698e5700c8",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/json/decoder.py",
+        "repo": "python/cpython",
+        "sha256": "0e756ee2194d865d6d12d0349a802c99f3baee73a7971f38a8a72f4a2c292af2",
+        "size": 12820,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/json/decoder.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "09.bin",
+        "git_blob_sha1": "323332f064edf8fda55182f5a987054c2d9a7cd9",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/json/encoder.py",
+        "repo": "python/cpython",
+        "sha256": "3c9263358ba86870d71c52d64a64889ca968c54083ba690dd79c4c0e03f13e8d",
+        "size": 16074,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/json/encoder.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "10.bin",
+        "git_blob_sha1": "aa9b79d8cab4bb8ea464a994591845576f171ee9",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/logging/__init__.py",
+        "repo": "python/cpython",
+        "sha256": "8a0c633a1396c81d99d932e84fba2feb30e58e5f6aabb45bfb8ccda06995d03d",
+        "size": 83714,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/logging/__init__.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "11.bin",
+        "git_blob_sha1": "fbc8db78b86e61a6d43a4914c67c6cb0dbe4c34e",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/pathlib/_local.py",
+        "repo": "python/cpython",
+        "sha256": "cca3cb1978b8ffc85c1a1cb29d84bd40f2bc174472bed1e1f2decf650951c0cf",
+        "size": 31468,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/pathlib/_local.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "12.bin",
+        "git_blob_sha1": "24815952037fef7257655406e9409a66c94033a7",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/urllib/parse.py",
+        "repo": "python/cpython",
+        "sha256": "b1bb83c482a4838241c40bca0092d57fd0200b3ee2411fc1d73e0751718ca6db",
+        "size": 45008,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/urllib/parse.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+        "file": "13.bin",
+        "git_blob_sha1": "46bb8c21942af85ed4dada333ab6b34e6c86f3e2",
+        "group": "cpython",
+        "license": "PSF-2.0",
+        "partition": "FIT",
+        "path": "Lib/email/message.py",
+        "repo": "python/cpython",
+        "sha256": "70db4f3ef586530f1ea7de6b5e1308279af82fa2cb173be75bdac80ede6296b1",
+        "size": 48109,
+        "url": "https://raw.githubusercontent.com/python/cpython/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/Lib/email/message.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "3bdcd29a61be034b9c9a1cea744371c12339c48e",
+        "file": "20.bin",
+        "git_blob_sha1": "d65a5edcb6a6db4081ca7a4b68a73141a0f29fa5",
+        "group": "django/django",
+        "license": "BSD-3-Clause",
+        "partition": "TRANSFER_DEV",
+        "path": "django/core/handlers/base.py",
+        "repo": "django/django",
+        "sha256": "b661b5d782bed13a74805e9ab239da89e8369f0bcd51d4a4d31274cc3d4f9ce9",
+        "size": 14840,
+        "url": "https://raw.githubusercontent.com/django/django/3bdcd29a61be034b9c9a1cea744371c12339c48e/django/core/handlers/base.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "3bdcd29a61be034b9c9a1cea744371c12339c48e",
+        "file": "21.bin",
+        "git_blob_sha1": "e905372711c6d25efd0915c2fa302b042b6f3064",
+        "group": "django/django",
+        "license": "BSD-3-Clause",
+        "partition": "TRANSFER_DEV",
+        "path": "django/db/models/query.py",
+        "repo": "django/django",
+        "sha256": "0d06d11772bd9158a2a8860a0973f0d66714b1a73dc4492b35d191f8402e30a9",
+        "size": 122230,
+        "url": "https://raw.githubusercontent.com/django/django/3bdcd29a61be034b9c9a1cea744371c12339c48e/django/db/models/query.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "79cab5bed28b24d92c185d236feb33f5783dfeb3",
+        "file": "22.bin",
+        "git_blob_sha1": "a3f8043c9e326e7f95ad2f9239d2951e1985732c",
+        "group": "fastapi/fastapi",
+        "license": "MIT",
+        "partition": "TRANSFER_DEV",
+        "path": "fastapi/routing.py",
+        "repo": "fastapi/fastapi",
+        "sha256": "ca8791eabd4420688941a1d7e5bbb65a51454409f34ffd0313a27dac6beaf4b8",
+        "size": 260393,
+        "url": "https://raw.githubusercontent.com/fastapi/fastapi/79cab5bed28b24d92c185d236feb33f5783dfeb3/fastapi/routing.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "79cab5bed28b24d92c185d236feb33f5783dfeb3",
+        "file": "23.bin",
+        "git_blob_sha1": "247d0265ddf319323cca3a80d9f331559db3166a",
+        "group": "fastapi/fastapi",
+        "license": "MIT",
+        "partition": "TRANSFER_DEV",
+        "path": "fastapi/dependencies/utils.py",
+        "repo": "fastapi/fastapi",
+        "sha256": "3f6878056d4d5f1ea3cd60fe87dded805148641fd0d4410ad6165eff856ae469",
+        "size": 55433,
+        "url": "https://raw.githubusercontent.com/fastapi/fastapi/79cab5bed28b24d92c185d236feb33f5783dfeb3/fastapi/dependencies/utils.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "9d8f9a372cc5916fd4781fec207ced7ddac2f08f",
+        "file": "24.bin",
+        "git_blob_sha1": "0bdce769874bb787aa204682f3780b46bede90a4",
+        "group": "textualize/rich",
+        "license": "MIT",
+        "partition": "TRANSFER_DEV",
+        "path": "rich/console.py",
+        "repo": "Textualize/rich",
+        "sha256": "4533fc66963623a2a21447b501d6f51f8cfee7e14775178093a5e6eb61dc135a",
+        "size": 101361,
+        "url": "https://raw.githubusercontent.com/Textualize/rich/9d8f9a372cc5916fd4781fec207ced7ddac2f08f/rich/console.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "9d8f9a372cc5916fd4781fec207ced7ddac2f08f",
+        "file": "25.bin",
+        "git_blob_sha1": "1e2eb2b45aca21e15c9d0b183afe3a46c4a6c827",
+        "group": "textualize/rich",
+        "license": "MIT",
+        "partition": "TRANSFER_DEV",
+        "path": "rich/table.py",
+        "repo": "Textualize/rich",
+        "sha256": "eb2bfbc0c2d76603ac1a0cc40e9297a5e71740ec1c2c11cd3a7f8c61c6e8d599",
+        "size": 40033,
+        "url": "https://raw.githubusercontent.com/Textualize/rich/9d8f9a372cc5916fd4781fec207ced7ddac2f08f/rich/table.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "f09b25e8ca3a50ff99d2f82a404960b43593ba8b",
+        "file": "26.bin",
+        "git_blob_sha1": "08ebc7711442dba839a66437a5eecec6286383e1",
+        "group": "pydantic/pydantic",
+        "license": "MIT",
+        "partition": "TRANSFER_DEV",
+        "path": "pydantic/main.py",
+        "repo": "pydantic/pydantic",
+        "sha256": "5e3539708b63d4131b3e2cbcf9bd3885aa2b6caeaaf246df2ba0c7f8e784b2c5",
+        "size": 91725,
+        "url": "https://raw.githubusercontent.com/pydantic/pydantic/f09b25e8ca3a50ff99d2f82a404960b43593ba8b/pydantic/main.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "f09b25e8ca3a50ff99d2f82a404960b43593ba8b",
+        "file": "27.bin",
+        "git_blob_sha1": "4d9d4dce9d1c8d509c88ea903441ebbe02424c5b",
+        "group": "pydantic/pydantic",
+        "license": "MIT",
+        "partition": "TRANSFER_DEV",
+        "path": "pydantic/fields.py",
+        "repo": "pydantic/pydantic",
+        "sha256": "70538e4988a6748f96d7a991ace8ef8a56983bbd5f589afc13d31150531ebca7",
+        "size": 88258,
+        "url": "https://raw.githubusercontent.com/pydantic/pydantic/f09b25e8ca3a50ff99d2f82a404960b43593ba8b/pydantic/fields.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "a7b2446ee41a7298d3a0bc22c52f3b8bacae1566",
+        "file": "28.bin",
+        "git_blob_sha1": "1ce7f71a7bd1fff227a78470e4cbacfebcfb0cba",
+        "group": "pytest-dev/pytest",
+        "license": "MIT",
+        "partition": "TRANSFER_DEV",
+        "path": "src/_pytest/python.py",
+        "repo": "pytest-dev/pytest",
+        "sha256": "9553fbb38363c987f59b1de522142a9dc0e9f6191cd1f173a6bee21140d4c887",
+        "size": 72006,
+        "url": "https://raw.githubusercontent.com/pytest-dev/pytest/a7b2446ee41a7298d3a0bc22c52f3b8bacae1566/src/_pytest/python.py"
+      },
+      {
+        "all_three_identities_prefrozen": true,
+        "cache_hit": false,
+        "commit": "a7b2446ee41a7298d3a0bc22c52f3b8bacae1566",
+        "file": "29.bin",
+        "git_blob_sha1": "e3d6300b59931592ab98cb2d1d75b1062c4f3613",
+        "group": "pytest-dev/pytest",
+        "license": "MIT",
+        "partition": "TRANSFER_DEV",
+        "path": "src/_pytest/fixtures.py",
+        "repo": "pytest-dev/pytest",
+        "sha256": "3847b9bbb05ba2408c3e9e270276ee86a70c1f0d1d420ad14b37b06093a9a330",
+        "size": 103634,
+        "url": "https://raw.githubusercontent.com/pytest-dev/pytest/a7b2446ee41a7298d3a0bc22c52f3b8bacae1566/src/_pytest/fixtures.py"
+      }
+    ],
+    "status": "COHORT_READY",
+    "study": "LANGPERSIST096",
+    "training_steps": 0
+  },
+  "models": {
+    "checkpoint_scoring_performed": false,
+    "comparison_scope": "EXPOSURE_MATCHED_NOT_TRAINING_FLOP_MATCHED",
+    "factory_source_sha256": {
+      "research/commercial-value/codevalue002/REGISTER.json": "865f692347185cd2a2870438a679444571d88560ea8c916ad73e06848ac847f7",
+      "research/commercial-value/codevalue002/train.py": "5aa36c5c0c91d6eb70940f8c052126c3a12dad8b77d232ab1a9b093c5452f560",
+      "research/commercial-value/codevalue003/core.py": "5072d1ba786aba19cf8f4563b908a791f2be1f641a13d4d02394871e6883bc60",
+      "research/commercial-value/codevalue003/worker.py": "6b75dff3785f3c28e1bf36b976a2b4c8fd8f050743d6013230bb5b14780345db",
+      "research/mathematical-engineering/context026/context_transition.py": "c88f3f7c1b628cb733a4a58dcd168a75411d8bb3d80e382068593713e887510a",
+      "research/mathematical-engineering/langhead093/model093.py": "004aabb7ac8e6926d5b038dfdc79d3e4aa1878a2af7b22765c217f6212e81cf4",
+      "research/mathematical-engineering/langhead094/model094.py": "ba7693db65c7a5690954c3e1365134e0ad81f160ea6e00b46844385bc8717acd",
+      "research/mathematical-engineering/langlayer038/recurrence_only.py": "e1b52fca3e06b1440d1080924b847aa9649d04cf70ae033287cde37a6dad56f3",
+      "research/mathematical-engineering/langmem086/compact_tac.py": "7179908fa3672879f3c2046ec4521f0b9f783d5c696aaba82c4c2cd0b6ebc9b1",
+      "research/mathematical-engineering/langscale070/scaled_recurrence.py": "fb51763f1d3f85f2a44bd7bd768b7e34ac1d9ce8f06db90a40ca1abaa76b93a0"
+    },
+    "full_composed_source_math": "OPEN",
+    "maximum_total_checkpoint_bytes": 268435456,
+    "metadata_payload_validation": "REQUIRED_AFTER_SAFE_LOAD_BY_SCORING_WORKER",
+    "models": [
+      {
+        "arm": "tac",
+        "bytes": 6162231,
+        "checkpoint_sha256": "2e24990a1cbce06b7ca9e7e764b3f6d9106a9ac7706006f502bfdaa8614949a6",
+        "deployed_parameters": 499623,
+        "original_checkpoint_relative_path": "research/replay-bundles/CODEVALUE003/tac-1701/MODEL-010240.pt",
+        "path": "/tmp/langpersist096-cache/checkpoints/tac/1701/MODEL-010240.pt",
+        "sample_sha256": "2b5dd4c99cc91eab4c7bfdf1bf14b316dd9cd4ec8383268c45302594a7cfdeda",
+        "seed": 1701,
+        "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+        "steps": 10240,
+        "targets": 10485760,
+        "trainable_parameters": 499623,
+        "trained_snapshot": true
+      },
+      {
+        "arm": "tac",
+        "bytes": 6162231,
+        "checkpoint_sha256": "6f96f08cba3ace57b37c30d46dfdde43a28464c64c439e745ac49b33c6df41ab",
+        "deployed_parameters": 499623,
+        "original_checkpoint_relative_path": "research/replay-bundles/CODEVALUE003/tac-1702/MODEL-010240.pt",
+        "path": "/tmp/langpersist096-cache/checkpoints/tac/1702/MODEL-010240.pt",
+        "sample_sha256": "3d23beaf01243466a8bf0617ebaa54887ab7b36d75045b8c61680776c966d958",
+        "seed": 1702,
+        "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+        "steps": 10240,
+        "targets": 10485760,
+        "trainable_parameters": 499623,
+        "trained_snapshot": true
+      },
+      {
+        "arm": "tac",
+        "bytes": 6162231,
+        "checkpoint_sha256": "2ca96cb4e3fd12b361d3e43176360e0fb825fd3f853a8b6230626a3a27375b5d",
+        "deployed_parameters": 499623,
+        "original_checkpoint_relative_path": "research/replay-bundles/CODEVALUE003/tac-1703/MODEL-010240.pt",
+        "path": "/tmp/langpersist096-cache/checkpoints/tac/1703/MODEL-010240.pt",
+        "sample_sha256": "64889e5055ffc30b967d49ee71b6e042dfb0a6b95c3a0eb88bded1fac4f431fa",
+        "seed": 1703,
+        "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+        "steps": 10240,
+        "targets": 10485760,
+        "trainable_parameters": 499623,
+        "trained_snapshot": true
+      },
+      {
+        "arm": "gru",
+        "bytes": 6120413,
+        "checkpoint_sha256": "d60e8832da7f339da3f74a6180bd9df6d9306feaf622167904346d1b68e664ec",
+        "deployed_parameters": 500165,
+        "original_checkpoint_relative_path": "research/replay-bundles/CODEVALUE003/gru-1701/MODEL-010240.pt",
+        "path": "/tmp/langpersist096-cache/checkpoints/gru/1701/MODEL-010240.pt",
+        "sample_sha256": "2b5dd4c99cc91eab4c7bfdf1bf14b316dd9cd4ec8383268c45302594a7cfdeda",
+        "seed": 1701,
+        "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+        "steps": 10240,
+        "targets": 10485760,
+        "trainable_parameters": 500165,
+        "trained_snapshot": true
+      },
+      {
+        "arm": "gru",
+        "bytes": 6120413,
+        "checkpoint_sha256": "6ba3b0e55e5cf3d11cfe2e014ba13a2a857e858b6d62bbede8257e461a7f62eb",
+        "deployed_parameters": 500165,
+        "original_checkpoint_relative_path": "research/replay-bundles/CODEVALUE003/gru-1702/MODEL-010240.pt",
+        "path": "/tmp/langpersist096-cache/checkpoints/gru/1702/MODEL-010240.pt",
+        "sample_sha256": "3d23beaf01243466a8bf0617ebaa54887ab7b36d75045b8c61680776c966d958",
+        "seed": 1702,
+        "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+        "steps": 10240,
+        "targets": 10485760,
+        "trainable_parameters": 500165,
+        "trained_snapshot": true
+      },
+      {
+        "arm": "gru",
+        "bytes": 6120349,
+        "checkpoint_sha256": "e3b6f63a76a0d04a9df8eb3517904bc6522eb5a0618d9468214655e41e8236f5",
+        "deployed_parameters": 500165,
+        "original_checkpoint_relative_path": "research/replay-bundles/CODEVALUE003/gru-1703/MODEL-010240.pt",
+        "path": "/tmp/langpersist096-cache/checkpoints/gru/1703/MODEL-010240.pt",
+        "sample_sha256": "64889e5055ffc30b967d49ee71b6e042dfb0a6b95c3a0eb88bded1fac4f431fa",
+        "seed": 1703,
+        "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+        "steps": 10240,
+        "targets": 10485760,
+        "trainable_parameters": 500165,
+        "trained_snapshot": true
+      },
+      {
+        "arm": "ssm",
+        "bytes": 6119797,
+        "checkpoint_sha256": "99b0f8c12a4c75e12d0e1bfd65cd6dc90dcd02c13a4686b5555cbf9aeab91e53",
+        "deployed_parameters": 499782,
+        "original_checkpoint_relative_path": "research/replay-bundles/CODEVALUE003/ssm-1701/MODEL-010240.pt",
+        "path": "/tmp/langpersist096-cache/checkpoints/ssm/1701/MODEL-010240.pt",
+        "sample_sha256": "2b5dd4c99cc91eab4c7bfdf1bf14b316dd9cd4ec8383268c45302594a7cfdeda",
+        "seed": 1701,
+        "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+        "steps": 10240,
+        "targets": 10485760,
+        "trainable_parameters": 499782,
+        "trained_snapshot": true
+      },
+      {
+        "arm": "ssm",
+        "bytes": 6119797,
+        "checkpoint_sha256": "d97da2a372c6a9e0bd450e349f60cdc9d51b88e83a6fe4360e1612f63390a004",
+        "deployed_parameters": 499782,
+        "original_checkpoint_relative_path": "research/replay-bundles/CODEVALUE003/ssm-1702/MODEL-010240.pt",
+        "path": "/tmp/langpersist096-cache/checkpoints/ssm/1702/MODEL-010240.pt",
+        "sample_sha256": "3d23beaf01243466a8bf0617ebaa54887ab7b36d75045b8c61680776c966d958",
+        "seed": 1702,
+        "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+        "steps": 10240,
+        "targets": 10485760,
+        "trainable_parameters": 499782,
+        "trained_snapshot": true
+      },
+      {
+        "arm": "ssm",
+        "bytes": 6119797,
+        "checkpoint_sha256": "2006e0185a57aa862784199b6f892141a97af3a919a156fce279e2b8e3a0fe9c",
+        "deployed_parameters": 499782,
+        "original_checkpoint_relative_path": "research/replay-bundles/CODEVALUE003/ssm-1703/MODEL-010240.pt",
+        "path": "/tmp/langpersist096-cache/checkpoints/ssm/1703/MODEL-010240.pt",
+        "sample_sha256": "64889e5055ffc30b967d49ee71b6e042dfb0a6b95c3a0eb88bded1fac4f431fa",
+        "seed": 1703,
+        "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+        "steps": 10240,
+        "targets": 10485760,
+        "trainable_parameters": 499782,
+        "trained_snapshot": true
+      }
+    ],
+    "optimizer_updates_performed": 0,
+    "original_training_flops": "UNMATCHED_INCOMPLETE_OPERATOR_COVERAGE",
+    "protected_TEST": "NOT_OPENED",
+    "qualification": "INTERNAL_NOT_INDEPENDENTLY_QUALIFIED",
+    "source_commit": "87d8a3b288242b2db8c4e052f1571ff6005d0e36",
+    "source_metadata_sha256": {
+      "research/commercial-value/codevalue003/FINAL_MANIFEST.json": "a47ae8fd1ddb8843c032addbe7f62953a12493e860089a16b80b366f4ab324e3",
+      "research/commercial-value/codevalue003/REGISTER.json": "15a42998a68d61de4e82cca9381eb1e778d66697325a5a6d3ce77997ee02f671",
+      "research/commercial-value/codevalue003/SEAL.json": "083326a8399213645350cfcacab21e2d9d30529d8fcbb3fa6b04e93f8310fb43",
+      "research/commercial-value/codevalue003/SOURCE_RECEIPT.json": "e809d0c5ab42814a7e886732d8d7502106ae80387785ac20a1c30c72be1e15ab"
+    },
+    "source_repository": "FPC-effortless/TAC-OSM",
+    "status": "PASS_FIXED_ORIGINAL_CHECKPOINT_BYTES",
+    "study": "LANGPERSIST096",
+    "total_checkpoint_bytes": 55207259,
+    "verified_checkpoint_count": 9
+  }
+}
