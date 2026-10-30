@@ -93,7 +93,7 @@ def source_bindings(root, model_paths):
     root = Path(root).resolve()
     names = set(model_paths)
     names.update(("research/mathematical-engineering/langacquire097/" + name)
-                 for name in ("models.py", "objective.py", "train.py", "resources.py", "profile.py", "data.py"))
+                 for name in ("models.py", "objective.py", "train.py", "resources.py", "profile097.py", "data.py"))
     names.update(("src/tac_osm/research_objective_budget.py", "scripts/validate_research_parity.py"))
     result = {}
     for name in sorted(names):

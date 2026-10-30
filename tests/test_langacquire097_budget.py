@@ -3,6 +3,8 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 
@@ -297,6 +299,35 @@ def test_actual_dispatch_ledger_captures_forward_backward_and_mask_identity():
     additions = [json.loads(r["signature"]) for r in actual.rows() if 'aten::add' in r["signature"]]
     assert any(item[1][0] == ["torch.float32", [3, 2]] for item in additions)
     assert any(item[1][0] == ["torch.float64", [2, 3]] for item in additions)
+
+
+def test_study_working_directory_does_not_shadow_stdlib_profile_during_adamw_construction():
+    """Catch the real CLI import boundary without taking an optimizer step."""
+    study = Path(__file__).resolve().parents[1] / "research/mathematical-engineering/langacquire097"
+    script = """
+from pathlib import Path
+import importlib.util, json, sys
+study = Path.cwd().resolve()
+assert Path(sys.path[0] or '.').resolve() == study
+import torch
+spec = importlib.util.spec_from_file_location('langacquire097_constructor_fixture', study/'models.py')
+module = importlib.util.module_from_spec(spec); sys.modules[spec.name] = module; spec.loader.exec_module(module)
+model = module.make_model('tac', 1701)
+before = {key: value.detach().clone() for key, value in model.state_dict().items()}
+optimizer = torch.optim.AdamW(model.parameters(), lr=.001, weight_decay=.01, foreach=False, fused=False)
+import cProfile, profile
+assert Path(cProfile.__file__).resolve().parent == Path(profile.__file__).resolve().parent
+assert not Path(profile.__file__).resolve().is_relative_to(study)
+assert not optimizer.state
+assert sum(p.numel() for group in optimizer.param_groups for p in group['params']) == 100521
+assert all(torch.equal(value, model.state_dict()[key]) for key, value in before.items())
+print(json.dumps({'adamw_constructor': 'PASS', 'optimizer_steps': 0, 'model_weights_unchanged': True}))
+"""
+    result = subprocess.run([sys.executable, "-c", script], cwd=study, capture_output=True,
+                            text=True, timeout=45)
+    assert result.returncode == 0, result.stdout + result.stderr
+    receipt = json.loads(result.stdout)
+    assert receipt == {"adamw_constructor": "PASS", "optimizer_steps": 0, "model_weights_unchanged": True}
 
 
 def program_fixture(root):

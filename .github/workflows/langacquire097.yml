@@ -87,7 +87,7 @@ jobs:
       - name: Actual FIT operator profiles without optimizer updates
         if: steps.route.outputs.study == 'true' && steps.route.outputs.fit != 'true'
         run: >-
-          python "$STUDY/profile.py" --data /tmp/langacquire097-data
+          python "$STUDY/profile097.py" --data /tmp/langacquire097-data
           --register "$STUDY/REGISTER.json" --output ci-artifacts/no-fit-profile
           --source-commit "$SOURCE_COMMIT"
       - name: Block fits unless all four frozen family gates pass
