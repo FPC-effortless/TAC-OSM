@@ -73,7 +73,7 @@ jobs:
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langhead094/FAIR_COMPARISON.json --phase preflight
       - name: Train source-authenticated FIT and seal before new DEV access
         run: |
-          python research/mathematical-engineering/langhead094/run093.py --arm '${{ matrix.arm }}' --seed '${{ matrix.seed }}' --out result
+          python research/mathematical-engineering/langhead094/run094.py --arm '${{ matrix.arm }}' --seed '${{ matrix.seed }}' --out result
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -122,7 +122,7 @@ jobs:
               cp "$src/MODEL.pt" "$src/RESULTS.json" "$store/${arm}-${seed}/"
             done
           done
-          python research/mathematical-engineering/langhead094/aggregate093.py --directory "$store" --output research/mathematical-engineering/langhead094/TRAINED_NEW_DEV_RESULTS.json
+          python research/mathematical-engineering/langhead094/aggregate094.py --directory "$store" --output research/mathematical-engineering/langhead094/TRAINED_NEW_DEV_RESULTS.json
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add research/replay-bundles/LANGHEAD094 research/mathematical-engineering/langhead094/TRAINED_NEW_DEV_RESULTS.json
@@ -146,4 +146,4 @@ jobs:
           python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
       - name: Independent second fresh-checkout 25 checkpoint source and full per-token inference replay
         run: |
-          python research/mathematical-engineering/langhead094/aggregate093.py --directory research/replay-bundles/LANGHEAD094 --output /tmp/LANGHEAD094_REPLAY.json
+          python research/mathematical-engineering/langhead094/aggregate094.py --directory research/replay-bundles/LANGHEAD094 --output /tmp/LANGHEAD094_REPLAY.json
