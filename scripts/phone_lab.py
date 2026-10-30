@@ -22,6 +22,9 @@ from tac_osm.phone_research_ops import (  # noqa: E402
 )
 
 SUITES = {
+    "langmath095": ["tests/test_langmath095_audit.py", "tests/test_langmath095_scans.py",
+                    "tests/test_langmath095_candidate.py", "tests/test_langmath095_persistence.py",
+                    "tests/test_langmath095_checkpoints.py"],
     "lab": ["tests/test_research_lab.py", "tests/test_historical_read_controls.py",
             "tests/test_original_history_audit.py", "tests/test_research_execution_levels.py"],
     "anticheat": ["tests/test_research_anticheat.py", "tests/test_robot_anticheat.py",

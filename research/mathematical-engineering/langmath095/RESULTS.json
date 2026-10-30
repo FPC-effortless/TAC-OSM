@@ -1,0 +1,224 @@
+{
+  "checkpoint_diagnostics": {
+    "reason": "no authenticated checkpoint/input receipt supplied",
+    "status": "INCONCLUSIVE"
+  },
+  "checks": {
+    "aligned_gain": {
+      "constant_effective_key": {
+        "alpha": 0.9999,
+        "bounded_policy_equilibrium_gain": 0.25001250062509406,
+        "equilibrium_gain": 2500.125006251216,
+        "erase": 0.0001,
+        "write": 0.5
+      },
+      "evidence": "constructed_gain_counterexample_and_bounded_update_fixture",
+      "limitation": "admissible parameter counterexample; not an observed checkpoint instability",
+      "rotating_key_bounded_policy": {
+        "invariant_frobenius_bound": 4.0,
+        "peak_frobenius": 2.5512596114138195,
+        "steps": 2048
+      },
+      "status": "PASS"
+    },
+    "concept_graph": {
+      "bounded_score_max_slot_weight": 0.5964180031090851,
+      "condition_number": 1.2931543976274509,
+      "condition_number_upper_bound": 2.2,
+      "evidence": "constructed_solve_fixture_and_laplacian_algebra",
+      "limitation": "trained graph utility and parameter gradients require actual-source checkpoint diagnostics",
+      "min_eigenvalue": 1.25,
+      "posterior_written_back": false,
+      "sensitivity": [
+        {
+          "edge_directional_derivative_l2": 1.2753666495519175e-11,
+          "pool_departure_l2": 0.0
+        },
+        {
+          "edge_directional_derivative_l2": 0.004922091279707008,
+          "pool_departure_l2": 0.01
+        },
+        {
+          "edge_directional_derivative_l2": 0.0246104563797491,
+          "pool_departure_l2": 0.05
+        }
+      ],
+      "status": "PASS",
+      "uniform_pool_graph_effect_max_abs": 1.1102230246251565e-16
+    },
+    "linear_memory_load": {
+      "evidence": "constructed_linear_address_fixture",
+      "isotropic_squared_overlap_expectation": 0.125,
+      "key_dimension": 8,
+      "limitation": "single linear read, not an eight-fact bound on the model",
+      "rows": [
+        {
+          "address_rank": 1,
+          "best_linear_mse": 2.2148194360453212e-33,
+          "items": 1,
+          "off_diagonal_squared_mean": 4.930380657631324e-32
+        },
+        {
+          "address_rank": 2,
+          "best_linear_mse": 1.6418552775901186e-32,
+          "items": 2,
+          "off_diagonal_squared_mean": 0.0005152719950531821
+        },
+        {
+          "address_rank": 4,
+          "best_linear_mse": 3.2298447020481566e-31,
+          "items": 4,
+          "off_diagonal_squared_mean": 0.12157899434720225
+        },
+        {
+          "address_rank": 8,
+          "best_linear_mse": 2.410297563818703e-30,
+          "items": 8,
+          "off_diagonal_squared_mean": 0.14114547689419607
+        },
+        {
+          "address_rank": 8,
+          "best_linear_mse": 0.19789061416262466,
+          "items": 16,
+          "off_diagonal_squared_mean": 0.11676453329315305
+        },
+        {
+          "address_rank": 8,
+          "best_linear_mse": 0.2816326481611485,
+          "items": 32,
+          "off_diagonal_squared_mean": 0.11282489557135762
+        },
+        {
+          "address_rank": 8,
+          "best_linear_mse": 0.35619239772552524,
+          "items": 64,
+          "off_diagonal_squared_mean": 0.12633574364376285
+        }
+      ],
+      "status": "PASS"
+    },
+    "position": {
+      "coefficient": 0.5,
+      "evidence": "asymptotic_saturation_algebra_and_constructed_coefficient",
+      "limitation": "checkpoint-dependent onset; surviving separate lexical-key path is not removed",
+      "rows": [
+        {
+          "bounded_position_lexical_difference": 0.394750640449808,
+          "clock": 0,
+          "illustrative_lexical_difference": 0.394750640449808
+        },
+        {
+          "bounded_position_lexical_difference": 0.3359731907589193,
+          "clock": 128,
+          "illustrative_lexical_difference": 0.012525810759756228
+        },
+        {
+          "bounded_position_lexical_difference": 0.3302017662328369,
+          "clock": 1024,
+          "illustrative_lexical_difference": 0.0015995602554791377
+        },
+        {
+          "bounded_position_lexical_difference": 0.3258720589483092,
+          "clock": 16384,
+          "illustrative_lexical_difference": 0.00010026197840595774
+        },
+        {
+          "bounded_position_lexical_difference": 0.3223752791247661,
+          "clock": 1000000,
+          "illustrative_lexical_difference": 1.6430041078763225e-06
+        }
+      ],
+      "status": "PASS"
+    },
+    "retention": {
+      "alpha_cap": 0.995,
+      "approx_zero_preactivation_alpha": 0.4975,
+      "e_fold_updates": 199.49958228835612,
+      "evidence": "algebraic_direct_carry_bound",
+      "half_life_updates": 138.28257298606084,
+      "limitation": "fixed input schedule, one carry path; not whole-model context capacity",
+      "status": "PASS",
+      "survival": {
+        "1": 0.995,
+        "1024": 0.00589976459918676,
+        "128": 0.5264466124450268,
+        "32": 0.8518018596003469,
+        "4096": 1.211542726038875e-09,
+        "512": 0.07680992513462541,
+        "8": 0.9606930435754368
+      }
+    },
+    "scan": {
+      "evidence": "constructed_noncommuting_matrix_initial_state_mask_fixture",
+      "input_and_output_array_bytes": 334978,
+      "limitation": "not model decode latency, process RAM, energy or a speedup claim",
+      "rows": [
+        {
+          "algorithm": "sequential",
+          "max_abs_error": 0.0,
+          "seconds_fixture_only": 0.00040979799996421207,
+          "status": "PASS"
+        },
+        {
+          "algorithm": "tree",
+          "max_abs_error": 6.661338147750939e-16,
+          "seconds_fixture_only": 0.00040640300039740396,
+          "status": "PASS"
+        },
+        {
+          "algorithm": "chunked",
+          "max_abs_error": 6.661338147750939e-16,
+          "seconds_fixture_only": 0.00041929299959519994,
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS"
+    }
+  },
+  "evidence_level": "ENGINEERING_ONLY_NOT_CAPABILITY_OR_THEORY_VALIDATION",
+  "open_obligations": [
+    "independent real-source provenance",
+    "trained causal persistence and future utility",
+    "learned structure discovery, transfer and composition",
+    "full acquisition/retrieval/verification costs",
+    "CUDA AMP full-gradient parity",
+    "PNDS Lean kernel build and composed graph verification"
+  ],
+  "optimizer_steps": 0,
+  "protected_test_opened": false,
+  "runtime": {
+    "elapsed_seconds": 0.04077361700001347,
+    "numpy": "2.3.5",
+    "python": "3.12.14"
+  },
+  "schema": "tac-osm.langmath095.v1",
+  "source_commit": "d08fbba33990c503446c2a7d5073219a767f2f62",
+  "source_inventory": [
+    {
+      "git_blob_sha1": "cfdfa1ef07fc8af0d011c9727d629200025d6652",
+      "path": "research/mathematical-engineering/context026/context_transition.py",
+      "sha256": "c88f3f7c1b628cb733a4a58dcd168a75411d8bb3d80e382068593713e887510a",
+      "status": "PASS"
+    },
+    {
+      "git_blob_sha1": "1b0fca193ae61370a43dbe9ad7f9bc553569ad98",
+      "path": "research/mathematical-engineering/langlayer038/recurrence_only.py",
+      "sha256": "e1b52fca3e06b1440d1080924b847aa9649d04cf70ae033287cde37a6dad56f3",
+      "status": "PASS"
+    },
+    {
+      "git_blob_sha1": "fc91f1bcc5dbb226c1c80f261288759be39539a5",
+      "path": "research/mathematical-engineering/langscale070/scaled_recurrence.py",
+      "sha256": "fb51763f1d3f85f2a44bd7bd768b7e34ac1d9ce8f06db90a40ca1abaa76b93a0",
+      "status": "PASS"
+    },
+    {
+      "git_blob_sha1": "6461e3e53c97d8188238cb129229992369943d87",
+      "path": "research/language-scaling/lang10m/model.py",
+      "sha256": "ae62392d6d454ceaa96d403c17fc1d6f8436a20a6055a7aca77a5f29a1ad4252",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS_CONSTRUCTED_CHECKS",
+  "study": "LANGMATH095"
+}
