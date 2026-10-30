@@ -31,8 +31,9 @@ Execution has two stages. First, source-authenticated FIT-only profiles record
 all ATen forward/backward operator signatures, shapes and counts with zero
 optimizer steps. Their original receipts and the mathematical companion are
 reviewed and pinned. `REGISTER.json` keeps fitting disabled until those gates
-are complete. Then five CPU jobs each seal eight fits. The downstream evaluator
-requires every original checkpoint before making any DEV predictions.
+are complete. Ten CPU jobs each seal four fits, one objective per seed. A separate
+assembly verifies all forty original checkpoint and receipt hashes, then groups
+them into five eight-model seed seals. DEV prediction requires that full matrix.
 
 Carry/reset/donor/corruption test lexical state use. ARC also has a format-
 matched shuffle of observed demonstration outputs; all eight shuffled controls
@@ -48,9 +49,15 @@ compute-matched architecture benchmark remain unqualified. Full tensor/IEEE/AD
 formal certification, autonomous verification/repair and intelligence claims
 remain open.
 
-The seven phone proposals expose the full upper bound: 15 CPU minutes for
-preflight, five fit jobs of at most 40 minutes, and 40 evaluation minutes,
-255 aggregate CPU-job minutes. No GPU, protected TEST, promotion or merge is
+The twelve phone proposals expose the full experiment-stage upper bound:
+15 CPU minutes for preflight, ten objective-leg fit jobs of at most 40 minutes,
+and 40 evaluation minutes, or 455 aggregate experiment minutes. Runner setup,
+downloads and uploads are measured separately, and each Actions job has a
+45-minute timeout. Actual preflight on GitHub showed that the originally
+proposed eight fits per seed would exceed its limit; the job split preserves
+all models, examples, updates and objectives. Physical CPU details are recorded
+for each fit; hardware FLOP identity and equal CPU time are not claimed.
+No GPU, protected TEST, promotion or merge is
 authorized by these receipts. Report-only commits run software checks without
 repeating scientific fitting. Failures, all seeds and negative outcomes remain
 part of the evidence.

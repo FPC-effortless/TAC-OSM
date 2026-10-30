@@ -1,6 +1,8 @@
 """Finite forty-fit LANGACQUIRE097 orchestration and access-separated scoring.
 
-Five FIT jobs each seal eight original checkpoints. A downstream evaluator must
+Ten FIT objective legs each seal four original checkpoints. The assembler
+verifies the complete forty-model matrix and produces five seed seals.
+A downstream evaluator must
 verify all forty before DEV prediction. Source-authentication/poison producers
 may inspect answers; prediction actors never do. Target-score computation starts
 after every prediction/replay is sealed. No checkpoint selection occurs.
@@ -13,6 +15,7 @@ import json
 import math
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import time
@@ -41,21 +44,24 @@ def execute(command,label,output,deadline,log):
 def fit(args):
     register=R.load_register(args.config)
     if register.get('fit_enabled') is not True:raise ValueError('measured no-fit profiles must be sealed before enabling fits')
-    if args.seed not in R.SEEDS:raise ValueError('one registered seed per fit job')
+    if args.seed not in R.SEEDS or args.objective not in R.OBJECTIVES:
+        raise ValueError('one registered seed and objective per fit job')
     if args.output.exists():raise FileExistsError(args.output)
     source=R.verify_source(args.source_commit,args.config)
     # The fit artifact contains only these two files, never DEV actors/answers.
     trainer=R.load_local('train');trainer.validate_data(args.data,register)
     args.output.mkdir(parents=True)
-    deadline=R.Deadline(register['training']['max_seed_seconds']);log=[];sealed=[]
+    deadline=R.Deadline(register['training'].get('max_leg_seconds',register['training'].get('max_seed_seconds')));log=[];sealed=[]
     R.write_json(args.output/'FIT_PLAN_SEAL.json',{'source_commit':args.source_commit,'source_hashes':source,
-        'seed':args.seed,'register_sha256':R.sha256(args.config),'matrix':[[f,o] for f in R.FAMILIES for o in R.OBJECTIVES],
+        'seed':args.seed,'objective':args.objective,'register_sha256':R.sha256(args.config),
+        'matrix':[[f,args.objective] for f in R.FAMILIES],
         'DEV_scoring_permitted':False,'before_first_optimizer_step':True})
     for family in R.FAMILIES:
-        for objective in R.OBJECTIVES:
+        for objective in (args.objective,):
             name=family+'-'+objective;folder=args.output/name
             command=[sys.executable,str(R.HERE/'train.py'),'--family',family,'--objective',objective,
                 '--seed',str(args.seed),'--data',str(args.data),'--config',str(args.config),'--output',str(folder),
+                '--initials',str(args.initials),
                 '--source-commit',args.source_commit]
             execute(command,name,args.output,deadline,log)
             receipt=R.read_json(folder/'FIT_RECEIPT.json')
@@ -67,10 +73,149 @@ def fit(args):
                 'receipt_sha256':R.sha256(folder/'FIT_RECEIPT.json')})
             print(json.dumps({'stage':'fit_sealed','family':family,'objective':objective,'seed':args.seed}),flush=True)
     deadline.check()
-    R.write_json(args.output/'FITS_SEAL.json',{'schema':'langacquire097.seed-fit-seal.v1','seed':args.seed,
+    R.write_json(args.output/'FIT_LEG_SEAL.json',{'schema':'langacquire097.objective-leg-fit-seal.v1','seed':args.seed,
+        'objective':args.objective,
         'source_commit':args.source_commit,'register_sha256':R.sha256(args.config),'models':sealed,
         'DEV_predictions_started':False,'elapsed_seconds':time.perf_counter()-deadline.started,'execution':log,
-        'optimizer_steps_all_models':8*register['training']['steps'],'gpu_minutes':0})
+        'optimizer_steps_all_models':4*register['training']['steps'],'gpu_minutes':0})
+
+
+def verify_model_checkpoint(folder,receipt,register,source_commit,source_hashes):
+    """Read exact tensor/optimizer bytes; never execute a DEV/model forward."""
+    import torch
+    M=R.load_local('models')
+    checkpoint=folder/'MODEL.pt';initial=folder/'INITIAL_MODEL.pt'
+    if checkpoint.is_symlink() or initial.is_symlink():raise ValueError('original checkpoints must be regular artifact files')
+    if R.sha256(checkpoint)!=receipt['checkpoint_sha256'] or R.sha256(initial)!=receipt['initial_checkpoint_sha256']:
+        raise ValueError('original trained or initial checkpoint bytes changed')
+    saved=torch.load(checkpoint,map_location='cpu',weights_only=True)
+    beginning=torch.load(initial,map_location='cpu',weights_only=True)
+    expected={'schema','metadata','model','optimizer','rng'}
+    if set(saved)!=expected or set(beginning)!=expected or saved['schema']!='langacquire097.checkpoint.v1' or beginning['schema']!='langacquire097.checkpoint.v1':
+        raise ValueError('complete original checkpoint/optimizer/RNG archive required')
+    metadata=saved['metadata']
+    for key in ('family','objective','seed','optimizer_steps','source_commit','source_hashes',
+                'register_sha256','data_manifest_sha256','fit_sha256','schedule_sha256',
+                'initial_model_sha256','final_model_sha256','profile_initial_state_sha256','counts','status'):
+        if metadata.get(key)!=receipt.get(key):raise ValueError('checkpoint and receipt differ: '+key)
+    if (metadata['source_commit']!=source_commit or metadata['source_hashes']!=source_hashes
+            or metadata['data_manifest_sha256']!=register['data']['manifest_sha256']
+            or metadata['fit_sha256']!=register['data']['FIT.json_sha256']
+            or metadata['optimizer_steps']!=register['training']['steps']):
+        raise ValueError('original checkpoint source/recipe differs')
+    family,objective,seed=receipt['family'],receipt['objective'],receipt['seed']
+    optimizer=saved['optimizer'];rng=saved['rng']
+    if (not isinstance(optimizer,dict) or not optimizer.get('state') or not optimizer.get('param_groups')
+            or not isinstance(rng,dict) or set(rng)!={'python','numpy','torch'}
+            or not isinstance(rng['torch'],torch.Tensor) or rng['torch'].dtype!=torch.uint8 or rng['torch'].numel()==0):
+        raise ValueError('completed original optimizer update state and RNG archives are required')
+    for state in optimizer['state'].values():
+        step=state.get('step')
+        if (not isinstance(step,torch.Tensor) or step.numel()!=1 or not bool(torch.isfinite(step).all())
+                or float(step)!=register['training']['steps']):
+            raise ValueError('original optimizer update counts differ from the fixed complete fit')
+    initial_metadata=beginning['metadata']
+    if (initial_metadata.get('family'),initial_metadata.get('seed'),initial_metadata.get('status'))!=(family,seed,'UNTRAINED_FIT_REPLAY_ONLY'):
+        raise ValueError('original pre-optimizer checkpoint identity differs')
+    model=M.make_model(family,seed).eval()
+    if len(optimizer['state'])!=len(list(model.parameters())):
+        raise ValueError('original optimizer does not cover every active parameter tensor')
+    model.load_state_dict(beginning['model'],strict=True)
+    initial_digest=R.model_digest(model)
+    family_contract=R.read_json(R.ROOT/register['manifest_paths'][family])
+    profile=R.read_json(R.ROOT/family_contract['operator_profile_path'])
+    frozen=next(row for row in profile['profiles'] if row['seed']==seed and row['objective']==objective)
+    if (initial_digest!=frozen['weights_before'] or initial_digest!=receipt['initial_model_sha256']
+            or initial_digest!=receipt['actual_initial_model_sha256']
+            or receipt.get('actual_profile_initial_state_sha256')!=frozen['initial_state_sha256']
+            or metadata.get('profile_initial_state_sha256')!=frozen['initial_state_sha256']):
+        raise ValueError('actual initial checkpoint differs from the source-bound profile')
+    model.load_state_dict(saved['model'],strict=True)
+    counts=R.assert_counts(model,M.PARAMETERS[family])
+    if counts!=metadata['counts'] or R.model_digest(model)!=receipt['final_model_sha256']:
+        raise ValueError('actual loaded model count/content differs from original receipt')
+    if receipt['final_model_sha256']==initial_digest:raise ValueError('completed fit has unchanged original weights')
+
+
+def model_artifacts(root,register,config,source_commit,source_hashes):
+    """Validate the complete forty-artifact matrix before assembly or DEV access."""
+    paths=list(Path(root).rglob('FIT_RECEIPT.json'))
+    if len(paths)!=40:raise ValueError('all forty original model fit artifacts are required for assembly')
+    expected={(family,objective,seed) for family in R.FAMILIES for objective in R.OBJECTIVES for seed in R.SEEDS}
+    matrix={};register_sha=R.sha256(config)
+    for path in paths:
+        if path.is_symlink():raise ValueError('fit receipt must be a regular artifact file')
+        receipt=R.read_json(path);key=receipt.get('family'),receipt.get('objective'),receipt.get('seed')
+        if key not in expected or key in matrix:raise ValueError('duplicate or unsupported original model artifact')
+        if (receipt.get('study_id')!='LANGACQUIRE097' or receipt.get('status')!='SEALED_BEFORE_DEV'
+                or receipt.get('source_commit')!=source_commit or receipt.get('source_hashes')!=source_hashes
+                or receipt.get('register_sha256')!=register_sha or receipt.get('optimizer_steps')!=register['training']['steps']
+                or receipt.get('actual_steps')!=register['training']['steps']
+                or receipt.get('actual_examples')!=register['training']['steps']*register['training']['batch_size']
+                or receipt.get('actual_dense_compute_tokens')!=register['training']['steps']*register['training']['batch_size']*register['training']['context']):
+            raise ValueError('incomplete or source/config-mismatched model artifact')
+        if receipt.get('replay',{}).get('cold_reload_bitwise_equal') is not True:
+            raise ValueError('original fitted checkpoint lacks its completed FIT cold replay')
+        if R.sha256(path.parent/'MODEL.pt')!=receipt.get('checkpoint_sha256'):
+            raise ValueError('original model artifact checksum changed')
+        matrix[key]={'folder':path.parent,'receipt':receipt,'receipt_path':path}
+    if set(matrix)!=expected:raise ValueError('entire forty-model artifact matrix is required')
+    for seed in R.SEEDS:
+        rows=[matrix[(f,o,seed)]['receipt'] for f in R.FAMILIES for o in R.OBJECTIVES]
+        for key in ('schedule_sha256','actual_tokens','actual_dense_compute_tokens','actual_examples','actual_steps'):
+            if len({r[key] for r in rows})!=1:raise ValueError('original training exposure differs across models: '+key)
+        for family in R.FAMILIES:
+            paired=[matrix[(family,o,seed)]['receipt']['actual_initial_model_sha256'] for o in R.OBJECTIVES]
+            if paired[0]!=paired[1]:raise ValueError('objective pair did not start from identical actual weights')
+    legs=list(Path(root).rglob('FIT_LEG_SEAL.json'))
+    if len(legs)!=10:raise ValueError('all ten successful objective-leg seals are required for assembly')
+    seen=set()
+    for path in legs:
+        seal=R.read_json(path);identity=seal.get('seed'),seal.get('objective')
+        if (identity not in {(s,o) for s in R.SEEDS for o in R.OBJECTIVES} or identity in seen
+                or seal.get('schema')!='langacquire097.objective-leg-fit-seal.v1'
+                or seal.get('source_commit')!=source_commit or seal.get('register_sha256')!=register_sha
+                or seal.get('DEV_predictions_started') is not False or len(seal.get('models',[]))!=4):
+            raise ValueError('complete original objective-leg seal required')
+        seen.add(identity);leg_families=set()
+        for row in seal['models']:
+            key=row.get('family'),row.get('objective'),row.get('seed')
+            if key not in matrix or key[1:]!=(identity[1],identity[0]) or key[0] in leg_families:
+                raise ValueError('objective-leg model matrix differs')
+            leg_families.add(key[0]);item=matrix[key]
+            if row.get('checkpoint_sha256')!=item['receipt']['checkpoint_sha256'] or row.get('receipt_sha256')!=R.sha256(item['receipt_path']):
+                raise ValueError('objective-leg seal differs from original checkpoint/receipt')
+    for key,item in sorted(matrix.items()):
+        verify_model_checkpoint(item['folder'],item['receipt'],register,source_commit,source_hashes)
+    return matrix
+
+
+def assemble(args):
+    """Join original artifacts only: no dataset, actor, scorer or optimizer access."""
+    if args.output.exists():raise FileExistsError(args.output)
+    register=R.load_register(args.config);source=R.verify_source(args.source_commit,args.config)
+    matrix=model_artifacts(args.fits,register,args.config,args.source_commit,source)
+    args.output.mkdir(parents=True)
+    for seed in R.SEEDS:
+        folder=args.output/f'seed-{seed}';folder.mkdir();sealed=[]
+        for family in R.FAMILIES:
+            for objective in R.OBJECTIVES:
+                item=matrix[(family,objective,seed)];name=family+'-'+objective
+                # Preserve every original diagnostic, optimizer/RNG checkpoint and log.
+                shutil.copytree(item['folder'],folder/name)
+                receipt=item['receipt']
+                sealed.append({'family':family,'objective':objective,'seed':seed,'checkpoint':name+'/MODEL.pt',
+                    'checkpoint_sha256':receipt['checkpoint_sha256'],'receipt':name+'/FIT_RECEIPT.json',
+                    'receipt_sha256':R.sha256(folder/name/'FIT_RECEIPT.json')})
+        R.write_json(folder/'FITS_SEAL.json',{'schema':'langacquire097.seed-fit-seal.v1','seed':seed,
+            'source_commit':args.source_commit,'register_sha256':R.sha256(args.config),'models':sealed,
+            'DEV_predictions_started':False,'assembled_from_separately_bounded_objective_legs':True,
+            'optimizer_steps_all_models':8*register['training']['steps'],'gpu_minutes':0})
+    all_fits(args.output,register,args.config,args.source_commit)
+    R.write_json(args.output/'ASSEMBLY.json',{'schema':'langacquire097.artifact-assembly.v1','models_verified':40,
+        'objective_legs_verified':10,'seed_seals':5,'source_commit':args.source_commit,
+        'register_sha256':R.sha256(args.config),'datasets_opened':False,'DEV_predictions_started':False,
+        'model_forward_calls':0,'optimizer_steps':0,'gpu_minutes':0})
 
 
 def all_fits(root,register,config,source_commit):
@@ -282,14 +427,23 @@ def evaluate(args):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--mode',choices=('fit','evaluate'),required=True)
-    p.add_argument('--seed',type=int);p.add_argument('--fits',type=Path);p.add_argument('--data',type=Path,required=True)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--mode',choices=('fit','assemble','evaluate'),required=True)
+    p.add_argument('--seed',type=int);p.add_argument('--objective',choices=R.OBJECTIVES)
+    p.add_argument('--fits',type=Path);p.add_argument('--data',type=Path)
+    p.add_argument('--initials',type=Path)
     p.add_argument('--config',type=Path,default=R.HERE/'REGISTER.json');p.add_argument('--source-commit',required=True)
     p.add_argument('--output',type=Path,required=True);args=p.parse_args()
     try:
-        if args.mode=='fit':fit(args)
+        if args.mode=='fit':
+            if args.data is None or args.initials is None:raise ValueError('FIT-only data and original zero-update initialization artifacts required')
+            fit(args)
+        elif args.mode=='assemble':
+            if args.fits is None or args.seed is not None or args.objective is not None or args.data is not None or args.initials is not None:
+                raise ValueError('assembly accepts only original fit artifacts, not data or a selected arm')
+            assemble(args)
         else:
-            if args.fits is None or args.seed is not None:raise ValueError('evaluation requires all five seed artifacts')
+            if args.fits is None or args.seed is not None or args.objective is not None or args.data is None or args.initials is not None:
+                raise ValueError('evaluation requires all five complete seed artifacts and frozen DEV data')
             evaluate(args)
     except BaseException as error:
         if args.output.exists() and not (args.output/'FAILED_ATTEMPT.json').exists():

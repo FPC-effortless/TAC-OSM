@@ -68,9 +68,16 @@ def load_register(path):
     if (tuple(register.get('seeds',()))!=SEEDS or tuple(register.get('families',()))!=FAMILIES
             or tuple(register.get('objectives',()))!=OBJECTIVES):raise ValueError('frozen forty-model matrix differs')
     training=register.get('training',{})
-    for key in ('steps','batch_size','context','max_arm_seconds','max_seed_seconds'):
+    for key in ('steps','batch_size','context','max_arm_seconds'):
         if type(training.get(key)) is not int or training[key]<=0:raise ValueError('invalid training budget: '+key)
-    if training['batch_size']!=4 or training['context']!=272 or training['max_seed_seconds']>2400:
+    leg_seconds=training.get('max_leg_seconds',training.get('max_seed_seconds'))
+    if type(leg_seconds) is not int or not 1<=leg_seconds<=2400:
+        raise ValueError('each objective leg requires a bounded CPU budget')
+    by_family=training.get('max_arm_seconds_by_family')
+    if (not isinstance(by_family,dict) or set(by_family)!=set(FAMILIES)
+            or any(type(value) is not int or not 1<=value<=2400 for value in by_family.values())):
+        raise ValueError('all four actual model-family CPU ceilings are required')
+    if training['batch_size']!=4 or training['context']!=272:
         raise ValueError('registered bounded CPU geometry differs')
     for key in ('learning_rate','weight_decay','grad_clip'):
         value=training.get(key)

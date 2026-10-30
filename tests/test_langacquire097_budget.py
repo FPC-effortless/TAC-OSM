@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from tac_osm.research_objective_budget import (
-    OperatorLedger, canonical, digest, validate_comparison, validate_program,
+    OperatorLedger, canonical, digest, validate_comparison, validate_program, state_dict_digest,
 )
 from scripts.validate_research_parity import check_manifest, ParityError
 
@@ -34,6 +34,13 @@ def fixture(root):
               "feature_contract_sha256", "target_contract_sha256", "optimizer_schedule_sha256",
               "tuning_policy_sha256", "selection_policy_sha256", "evaluation_contract_sha256")}
     for seed in (1701, 1702):
+        torch = pytest.importorskip("torch")
+        state = {"weight": torch.full((100000,), float(seed))}
+        initial_digest = state_dict_digest(state)
+        initial_file = root / f"INIT_tac_{seed}.pt"
+        torch.save({"schema": "langacquire097.initial-state.v1", "family": "tac", "seed": seed,
+                    "model": state, "model_sha256": initial_digest, "optimizer_steps": 0}, initial_file)
+        initial_sha = hashlib.sha256(initial_file.read_bytes()).hexdigest()
         for objective in ("full", "query"):
             budget = {"steps": 3, "examples_seen": 12, "tokens_seen": 1200, "batch_size": 4,
                       "history_events": 272, "dense_compute_tokens": 3264, "tuning_trials": 0, "tuning_flops": 0}
@@ -45,7 +52,8 @@ def fixture(root):
             p = {"family": "tac", "objective": objective, "seed": seed,
                  "trainable_parameters": 100000, "deployed_parameters": 100000,
                  "fit_sha256": common["train_split_sha256"], "schedule_sha256": digest(seed),
-                 "weights_before": digest([seed, "weights"]), "weights_after": digest([seed, "weights"]),
+                 "weights_before": initial_digest, "weights_after": initial_digest,
+                 "initial_state_file": initial_file.name, "initial_state_sha256": initial_sha,
                  "all_gradients_connected_and_finite": True, "input_shape": [4, 272],
                  "planned_steps": 3, "planned_examples_seen": 12, "planned_tokens_seen": 1200,
                  "planned_dense_compute_tokens": 3264, "operators": operators,
@@ -53,6 +61,8 @@ def fixture(root):
             first = ledger("optimizer", name="aten::mul")
             warm = ledger("optimizer", 2, name="aten::mul")
             model["measured"] = {"trainable_parameters": 100000, "deployed_parameters": 100000,
+                "initial_model_sha256": p["weights_before"],
+                "actual_profile_initial_state_sha256": initial_sha,
                 "checkpoint_sha256": digest([seed, objective]), "actual_steps": 3, "actual_examples": 12,
                 "actual_tokens": 1200, "actual_dense_compute_tokens": 3264,
                 "actual_sample_order_sha256": digest(seed),
@@ -181,6 +191,37 @@ def test_postfit_requires_every_actual_step_and_optimizer_pair(tmp_path):
         validate_comparison(m, "final", root=tmp_path)
 
 
+@pytest.mark.parametrize("change_both", [False, True])
+def test_postfit_initial_weights_must_match_frozen_profile_not_just_seed(tmp_path, change_both):
+    m, _ = fixture(tmp_path)
+    m["models"][1]["measured"]["initial_model_sha256"] = "f" * 64
+    if change_both:
+        m["models"][0]["measured"]["initial_model_sha256"] = "f" * 64
+    with pytest.raises(ValueError, match="initialization differs"):
+        validate_comparison(m, "final", root=tmp_path)
+
+
+@pytest.mark.parametrize("tamper", ["family", "tensor", "optimizer_step"])
+def test_initial_archive_must_contain_actual_zero_update_profiled_tensors(tmp_path, tamper):
+    torch = pytest.importorskip("torch")
+    m, p = fixture(tmp_path)
+    path = tmp_path / "INIT_tac_1701.pt"
+    payload = torch.load(path, map_location="cpu", weights_only=True)
+    if tamper == "family":
+        payload["family"] = "gru"
+    elif tamper == "tensor":
+        payload["model"]["weight"][0] += 1
+    else:
+        payload["optimizer_steps"] = 1
+    torch.save(payload, path)
+    for row in p["profiles"]:
+        if row["seed"] == 1701:
+            row["initial_state_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+    rewrite_profile(tmp_path, m, p)
+    with pytest.raises(ValueError, match="initial"):
+        validate_comparison(m, root=tmp_path)
+
+
 def test_no_independent_qualification_or_parameter_scale_bypass(tmp_path):
     m, _ = fixture(tmp_path)
     m["execution_level"] = "independent_qualification"
@@ -194,6 +235,30 @@ def test_no_independent_qualification_or_parameter_scale_bypass(tmp_path):
 
 def test_actual_dispatch_ledger_captures_forward_backward_and_mask_identity():
     torch = pytest.importorskip("torch")
+    from collections import Counter
+    from torch.utils._python_dispatch import TorchDispatchMode
+    class OriginalCollector(TorchDispatchMode):
+        """Preserved pre-optimization serializer, a software reference only."""
+        def __init__(self):
+            super().__init__()
+            self.counter = Counter()
+        def tensors(self, value):
+            if isinstance(value, torch.Tensor):
+                return [(str(value.dtype), tuple(value.shape))]
+            if isinstance(value, (tuple, list)):
+                return [entry for item in value for entry in self.tensors(item)]
+            if isinstance(value, dict):
+                return [entry for key in sorted(value) for entry in self.tensors(value[key])]
+            return []
+        def __torch_dispatch__(self, func, types, args=(), kwargs=None):
+            kwargs = kwargs or {}
+            output = func(*args, **kwargs)
+            signature = (func._schema.name, tuple(self.tensors((args, kwargs))), tuple(self.tensors(output)))
+            self.counter[("forward_backward", signature)] += 1
+            return output
+        def rows(self):
+            return [{"stage": stage, "signature": canonical(signature).decode(), "calls": calls}
+                    for (stage, signature), calls in sorted(self.counter.items())]
     torch.set_num_threads(1)
     torch.manual_seed(97001)
     weight = torch.randn(8, 4, requires_grad=True)
@@ -206,12 +271,36 @@ def test_actual_dispatch_ledger_captures_forward_backward_and_mask_identity():
             loss = (y.square() * mask).sum() / mask.sum()
             loss.backward()
         rows.append(actual.rows())
+        weight.grad = None
+        with OriginalCollector() as original:
+            y = inputs @ weight
+            loss = (y.square() * mask).sum() / mask.sum()
+            loss.backward()
+        assert actual.rows() == original.rows()
         assert actual.sha256() == digest(actual.rows())
         assert any("aten::mm" in item["signature"] for item in actual.rows())
     assert rows[0] == rows[1]
+    # Reuse one tensor object across genuine shape and dtype changes. Metadata
+    # caching by tensor identity would silently lose one of these signatures.
+    def changing_shapes():
+        value = torch.zeros(2, 3)
+        value.resize_(3, 2)
+        first = value + 1
+        value.resize_(2, 3)
+        second = value.double() + 1
+        return first, second
+    with OperatorLedger("forward_backward") as actual:
+        changing_shapes()
+    with OriginalCollector() as original:
+        changing_shapes()
+    assert actual.rows() == original.rows()
+    additions = [json.loads(r["signature"]) for r in actual.rows() if 'aten::add' in r["signature"]]
+    assert any(item[1][0] == ["torch.float32", [3, 2]] for item in additions)
+    assert any(item[1][0] == ["torch.float64", [2, 3]] for item in additions)
 
 
 def program_fixture(root):
+    torch = pytest.importorskip("torch")
     original, profile = fixture(root)
     paths = {}
     for family in ("tac", "gru", "ssm", "transformer"):
@@ -222,6 +311,16 @@ def program_fixture(root):
             row["architecture_family"] = family
         for row in p["profiles"]:
             row["family"] = family
+            old = root / row["initial_state_file"]
+            payload = torch.load(old, map_location="cpu", weights_only=True)
+            payload["family"] = family
+            path = root / f"INIT_{family}_{row['seed']}.pt"
+            torch.save(payload, path)
+            row["initial_state_file"] = path.name
+            row["initial_state_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+        for row in m["models"]:
+            initial = next(r for r in p["profiles"] if r["seed"] == row["seed"] and r["objective"] == row["name"])
+            row["measured"]["actual_profile_initial_state_sha256"] = initial["initial_state_sha256"]
         rewrite_profile(root, m, p)
         path = root / f"FAIR_{family}.json"
         path.write_bytes(canonical(m))

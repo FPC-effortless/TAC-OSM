@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 import hashlib
+import io
 import json
 import math
 from pathlib import Path
@@ -102,6 +103,46 @@ def source_bindings(root, model_paths):
     return result
 
 
+def state_dict_digest(state):
+    """Same tensor-byte convention as the source runner, without model forward."""
+    import torch
+    _require(isinstance(state, dict) and bool(state), "original initial model tensors required")
+    result = hashlib.sha256()
+    for name, tensor in sorted(state.items()):
+        _require(isinstance(name, str) and isinstance(tensor, torch.Tensor) and
+                 tensor.device.type == "cpu" and tensor.layout == torch.strided and
+                 bool(torch.isfinite(tensor).all()), "initial model state must contain finite CPU tensors")
+        result.update(name.encode())
+        result.update(str(tuple(tensor.shape)).encode())
+        result.update(tensor.detach().contiguous().numpy().tobytes())
+    return result.hexdigest()
+
+
+def verify_initial_state(profile_path, row, family):
+    """Authenticate the zero-update weights, not a seed reproducibility claim."""
+    import torch
+    name = row.get("initial_state_file")
+    _require(isinstance(name, str) and name == f"INIT_{family}_{row['seed']}.pt" and
+             re.fullmatch(r"INIT_[a-z0-9_]+_[0-9]+\.pt", name), "source initial-state filename differs")
+    _sha(row.get("initial_state_sha256"), "original initial-state archive")
+    parent = Path(profile_path).resolve().parent
+    path = parent / name
+    _require(not path.is_symlink() and path.resolve().is_relative_to(parent), "initial-state archive escapes profile directory")
+    _require(path.stat().st_size <= 32 * 1024 * 1024, "initial-state archive exceeds bounded model storage")
+    raw = path.read_bytes()
+    _require(hashlib.sha256(raw).hexdigest() == row["initial_state_sha256"], "source initial-state archive changed")
+    payload = torch.load(io.BytesIO(raw), map_location="cpu", weights_only=True)
+    _require(isinstance(payload, dict) and set(payload) ==
+             {"schema", "family", "seed", "model", "model_sha256", "optimizer_steps"} and
+             payload["schema"] == "langacquire097.initial-state.v1" and payload["family"] == family and
+             payload["seed"] == row["seed"] and payload["optimizer_steps"] == 0,
+             "original zero-optimizer initial-state payload required")
+    actual = state_dict_digest(payload["model"])
+    _require(actual == payload["model_sha256"] == row["weights_before"],
+             "actual original initial tensors differ from the profile")
+    return actual
+
+
 def _profile(manifest, root):
     root = Path(root).resolve()
     relative = manifest.get("operator_profile_path")
@@ -186,6 +227,7 @@ def validate_comparison(manifest, phase="preflight", *, root=None):
              profile.get("hardware", {}).get("cuda_used") is False,
              "registered single-thread CPU profile required")
     by_seed = defaultdict(list)
+    verified_initials = {}
     for row in rows:
         _parameter_count(row)
         _require(row.get("architecture_family", family) == family and row.get("objective", row["name"]) == row["name"],
@@ -216,6 +258,14 @@ def validate_comparison(manifest, phase="preflight", *, root=None):
         _require(p.get("family") == family and p.get("optimizer_steps") == 0,
                  "prefit row changed model family or executed an optimizer")
         _sha(p.get("weights_before"), "initial model weights")
+        _require(p.get("initial_state_file") == f"INIT_{family}_{p['seed']}.pt",
+                 "profile row initial-state identity differs")
+        _sha(p.get("initial_state_sha256"), "profile row initial-state archive")
+        initial_key = p.get("initial_state_file"), p.get("initial_state_sha256")
+        if initial_key not in verified_initials:
+            profile_path = Path(root or Path.cwd()) / manifest["operator_profile_path"]
+            verified_initials[initial_key] = verify_initial_state(profile_path, p, family)
+        _require(verified_initials[initial_key] == p["weights_before"], "objective initial archive/tensors differ")
         _require(p.get("all_gradients_connected_and_finite") is True, "prefit active gradients incomplete/nonfinite")
         _require(p.get("input_shape") == [budget["batch_size"], budget["history_events"]], "actual profiled geometry differs")
         ledger_counter(p)
@@ -225,6 +275,10 @@ def validate_comparison(manifest, phase="preflight", *, root=None):
             _require(isinstance(measured, dict), "postfit actual operator/resource receipt missing")
             for field in ("trainable_parameters", "deployed_parameters"):
                 _require(measured.get(field) == row[field], "postfit active/deployed model count changed")
+            _require(measured.get("initial_model_sha256") == p["weights_before"],
+                     "actual training initialization differs from the frozen original profile")
+            _require(measured.get("actual_profile_initial_state_sha256") == p["initial_state_sha256"],
+                     "actual training initial archive differs from the frozen original profile")
             _sha(measured.get("checkpoint_sha256"), "replayable checkpoint")
             for actual, frozen in (("actual_steps", "steps"), ("actual_examples", "examples_seen"),
                                    ("actual_tokens", "tokens_seen"), ("actual_dense_compute_tokens", "dense_compute_tokens")):
@@ -250,8 +304,12 @@ def validate_comparison(manifest, phase="preflight", *, root=None):
         _require(a["trainable_parameters"] == b["trainable_parameters"] and a["deployed_parameters"] == b["deployed_parameters"],
                  "same-graph objective pair must have identical parameter counts")
         _require(pa["weights_before"] == pb["weights_before"], "objective pair initial weights differ")
+        _require(pa["initial_state_file"] == pb["initial_state_file"] and
+                 pa["initial_state_sha256"] == pb["initial_state_sha256"], "objective pair initial archives differ")
         verify_same_ledger(pa, pb, "prefit full/query")
         if phase == "final":
+            _require(a["measured"]["initial_model_sha256"] == b["measured"]["initial_model_sha256"],
+                     "actual full/query training initializations differ")
             for kind in ("first", "warm"):
                 verify_same_ledger(a["measured"]["optimizer_operators_" + kind], b["measured"]["optimizer_operators_" + kind],
                                    "actual full/query optimizer " + kind, require_matrix=False)
@@ -316,20 +374,37 @@ class OperatorLedger:
         import torch
         from torch.utils._python_dispatch import TorchDispatchMode
         owner = self
-        def tensors(value):
-            if isinstance(value, torch.Tensor):
-                return [(str(value.dtype), tuple(value.shape))]
-            if isinstance(value, (tuple, list)):
-                return [entry for item in value for entry in tensors(item)]
-            if isinstance(value, dict):
-                return [entry for key in sorted(value) for entry in tensors(value[key])]
-            return []
+        tensor_type = torch.Tensor
+        names = {}
+        counter = self.counter
+        counter_get = counter.get
+        def tensors(values):
+            # Most ATen arguments are a flat tuple of tensors/scalars. Avoid
+            # a recursive Python call for every scalar and tensor argument.
+            result = []
+            append = result.append
+            for value in values:
+                if isinstance(value, tensor_type):
+                    append((value.dtype, value.shape))
+                elif isinstance(value, (tuple, list)):
+                    result.extend(tensors(value))
+                elif isinstance(value, dict):
+                    result.extend(tensors(value[key] for key in sorted(value)))
+            return result
         class Mode(TorchDispatchMode):
             def __torch_dispatch__(self, func, types, args=(), kwargs=None):
-                kwargs = kwargs or {}
-                output = func(*args, **kwargs)
-                signature = (func._schema.name, tuple(tensors((args, kwargs))), tuple(tensors(output)))
-                owner.counter[(owner.stage, signature)] += 1
+                output = func(*args, **kwargs) if kwargs else func(*args)
+                name = names.get(func)
+                if name is None:
+                    name = names[func] = func._schema.name
+                inputs = tensors(args)
+                if kwargs:
+                    inputs.extend(tensors(kwargs[key] for key in sorted(kwargs)))
+                outputs = ((output.dtype, output.shape),) if isinstance(output, tensor_type) else tuple(tensors((output,)))
+                # Dtypes and torch.Size are immutable/hashable metadata. Never
+                # cache by tensor identity: every actual shape is read again.
+                key = name, tuple(inputs), outputs
+                counter[key] = counter_get(key, 0) + 1
                 return output
         self.mode = Mode()
         self.mode.__enter__()
@@ -339,8 +414,20 @@ class OperatorLedger:
         return self.mode.__exit__(*args)
 
     def rows(self):
-        return [{"stage": stage, "signature": canonical(signature).decode(), "calls": calls}
-                for (stage, signature), calls in sorted(self.counter.items())]
+        names = {}
+        def normalized(tensors):
+            result = []
+            for dtype, shape in tensors:
+                if dtype not in names:
+                    names[dtype] = str(dtype)
+                result.append((names[dtype], tuple(shape)))
+            return tuple(result)
+        # Canonical names/JSON are materialized only once per distinct signature,
+        # preserving the original serialized ledger bytes and sort convention.
+        entries = [((name, normalized(inputs), normalized(outputs)), calls)
+                   for (name, inputs, outputs), calls in self.counter.items()]
+        return [{"stage": self.stage, "signature": canonical(signature).decode(), "calls": calls}
+                for signature, calls in sorted(entries)]
 
     def sha256(self):
         return digest(self.rows())

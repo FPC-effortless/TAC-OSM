@@ -57,10 +57,13 @@
   "execution_budget": {
     "backend": "github_actions_cpu",
     "profile_max_minutes": 15,
-    "max_fit_minutes_per_seed": 40,
-    "max_fit_minutes_all_seeds": 200,
+    "fit_jobs": 10,
+    "fit_job_matrix": "five seeds x two objectives; four family fits per job",
+    "max_fit_minutes_per_objective_leg": 40,
+    "max_fit_minutes_all_legs": 400,
     "evaluate_max_minutes": 40,
-    "max_total_minutes": 255,
+    "max_experiment_stage_minutes": 455,
+    "job_setup_download_upload_minutes": "separately measured; each job has45minute timeout",
     "gpu_minutes": 0
   },
   "profile_policy": "Missing exact profiles/bindings blocks every family preflight and optimizer; fill only from original no-fit GHA artifact before firstfit.",
@@ -79,5 +82,15 @@
         "url": "https://aclanthology.org/P19-1285/"
       }
     ]
+  },
+  "runtime_execution": {
+    "fit_jobs": 10,
+    "models_per_job": 4,
+    "max_models": 40,
+    "source_data_models_objectives_steps_unchanged": true,
+    "stage_budget_minutes": 455,
+    "CI_setup_download_upload": "Separate measured orchestration cost; not hidden in the experiment-stage arithmetic",
+    "all_forty_models_sealed_before_any_DEV_prediction": true,
+    "profile_repeated_after_source_instrumentation_amendment": true
   }
 }

@@ -161,20 +161,55 @@ the40-minute ceiling. The fixed plan was therefore reduced to256 updates
 before source sealing. No cohort, seed, model, endpoint or threshold was
 changed, and no trained result informed this budget correction.
 
+The subsequent original FIT-only GitHub profile measured approximately7.1
+seconds per TAC update under complete operator recording. Eight256-update
+fits in one seed job would take approximately72 minutes, so the five seed-job
+layout is not eligible. Retain256 updates and all forty models; do not reduce
+learning to fit that layout. Before any optimizer step or DEV result, split
+the work into ten objective legs (five seeds times two objectives), each with
+the four family fits. This amortizes CI setup while giving every objective
+condition the same family-specific and leg-wide limits. Runner/ledger source
+changes and the changed runtime recipe invalidate the earlier profile binding;
+preserve that attempt and repeat original FIT-only no-optimizer profiling
+before enabling any fit. This is a prefit execution amendment, not a change
+selected using learning or DEV outcomes.
+
 First run source-authenticated, zero-optimizer GitHub CPU profiling and the
 PNDS/Lean checks. Commit the original measured profiles and their exact source,
 data and training-recipe bindings. Only then enable the forty fixed fits.
-Each of five seed jobs has at most40 wall minutes for eight fits; each arm has
-at most30 minutes inside that shared ceiling. Maximum aggregate fit budget is
-200 CPU minutes, plus at most15 preparation/profile minutes and40 evaluation
-minutes (255 total). These are honest finite job boundaries, not a hidden GPU
-fallback or a claim of equal CPU speed. No GPU quota is allocated.
+Each of ten objective-leg jobs has a shared40-minute experiment ceiling for
+four family fits. Family-specific fit caps are35 minutes for TAC,8 for GRU,
+8 for SSM and4 for Transformer, with identical caps for full/query conditions.
+The shared leg ceiling still applies when those per-family ceilings would sum
+to more than40 minutes. No fit may continue by silently reducing its256 steps.
+The legacy `max_seed_seconds` field is retained only for compatibility; the
+ten-leg workflow uses the explicit objective-leg ceiling.
+
+The maximum aggregate fit-stage budget is400 minutes, plus at most15 original
+preparation/profile minutes and40 evaluation minutes:455 experiment-stage
+minutes. CI package installation, data download, startup and artifact upload
+are separately measured orchestration overhead, not hidden inside that455.
+Each GitHub job has a45-minute outer timeout. Preserve incomplete checkpoints
+and failures if a cap is reached; never replace a failed arm or seed.
+
+Runs use the same pinned one-thread CPU FP32 software environment. Record the
+actual physical CPU/runtime identity for every fit; separate GitHub virtual
+machines may have different physical CPUs. Complete mathematical operator
+signatures/counts match within each source-pinned objective pair; this does not
+establish identical hardware instructions or FLOPs. CPU wall/process times
+are efficiency observations and are not required to match. No GPU quota is
+allocated or substituted.
 
 All forty original final checkpoints must seal before any DEV predictions.
 Retain model/optimizer/Python/NumPy/Torch RNG, input order, source bindings,
 actual steps, partial failures and every checkpoint hash. No failed seed is
 replaced. Cold reload and streaming/full FIT parity precede DEV access. A
 failed fit or missing final receipt blocks a complete matrix claim.
+Before the first optimizer step, the actual live initial-model digest must
+match its frozen original profile. Assembly rechecks equality of each full/query
+initial-model pair across the ten legs; a seed label alone is not initialization
+evidence. All ten leg artifacts must assemble into forty sealed checkpoint
+receipts before any DEV prediction.
 
 ## Acquired-state and binding controls
 

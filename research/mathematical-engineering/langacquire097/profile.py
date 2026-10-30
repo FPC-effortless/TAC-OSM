@@ -62,10 +62,17 @@ def create_profiles(data, config, output, source_commit, families=None):
                                    for batch in planned for i in batch)
             inputs, targets, query_mask, valid_mask, exposure = TRAIN.collate(rows, planned[0], training["context"])
             paired = []
+            initial_file = output / f"INIT_{family}_{seed}.pt"
             for objective in register["objectives"]:
                 model = M.make_model(family, seed).train()
                 counts = R.assert_counts(model, M.PARAMETERS[family])
                 before = R.model_digest(model)
+                if not initial_file.exists():
+                    payload = {"schema": "langacquire097.initial-state.v1", "family": family, "seed": seed,
+                               "model": R.cpu_tree(model.state_dict()), "model_sha256": before, "optimizer_steps": 0}
+                    with initial_file.open("xb") as handle:
+                        torch.save(payload, handle)
+                initial_sha = R.sha256(initial_file)
                 model.zero_grad(set_to_none=True)
                 started = time.perf_counter()
                 with OperatorLedger("forward_backward") as ledger:
@@ -81,6 +88,7 @@ def create_profiles(data, config, output, source_commit, families=None):
                 row = {"family": family, "seed": seed, "objective": objective,
                        "trainable_parameters": counts["trainable"], "deployed_parameters": counts["deployed"],
                        "weights_before": before, "weights_after": after,
+                       "initial_state_file": initial_file.name, "initial_state_sha256": initial_sha,
                        "fit_sha256": R.sha256(data / "FIT.json"), "schedule_sha256": schedule_sha,
                        "planned_steps": training["steps"], "planned_examples_seen": len(planned) * training["batch_size"],
                        "planned_tokens_seen": scheduled_tokens,

@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import random
+import re
 import signal
 import subprocess
 import sys
@@ -129,6 +130,31 @@ def checkpoint(path,model,optimizer,metadata):
     return R.sha256(path)
 
 
+def load_initial_state(model,profile,directory,family,seed):
+    """Load the exact zero-update profile snapshot, never an extra pretrained model."""
+    name=profile.get('initial_state_file')
+    if (not isinstance(name,str) or len(name)>128 or Path(name).name!=name
+            or re.fullmatch(r'[A-Za-z0-9_.-]+\.pt',name) is None):
+        raise ValueError('bounded original initialization basename required')
+    directory=Path(directory);path=directory/name
+    if directory.is_symlink() or path.is_symlink() or not path.resolve().is_relative_to(directory.resolve()):
+        raise ValueError('original initialization path escapes its pinned artifact')
+    expected=profile.get('initial_state_sha256')
+    if not isinstance(expected,str) or re.fullmatch('[0-9a-f]{64}',expected) is None or R.sha256(path)!=expected:
+        raise ValueError('original zero-update initialization bytes differ')
+    saved=torch.load(path,map_location='cpu',weights_only=True)
+    if (not isinstance(saved,dict) or set(saved)!={'schema','family','seed','model','model_sha256','optimizer_steps'}
+            or saved['schema']!='langacquire097.initial-state.v1' or saved['family']!=family
+            or type(saved['seed']) is not int or saved['seed']!=seed
+            or type(saved['optimizer_steps']) is not int or saved['optimizer_steps']!=0
+            or saved['model_sha256']!=profile['weights_before']):
+        raise ValueError('source-bound zero-update initialization identity differs')
+    model.load_state_dict(saved['model'],strict=True)
+    if R.model_digest(model)!=profile['weights_before']:
+        raise ValueError('actual loaded initialization differs from the frozen profile weights')
+    return expected
+
+
 def cold_reload(model,path,register,fit_sample):
     payload=torch.load(path,map_location='cpu',weights_only=True)
     metadata=payload['metadata']
@@ -172,20 +198,24 @@ def train(args):
         raise ValueError('live model absent from family-specific pre-fit parity matrix')
     operator_profile=R.read_json(R.ROOT/family_contract['operator_profile_path'])
     frozen_profile=next(p for p in operator_profile['profiles'] if p['seed']==args.seed and p['objective']==args.objective)
+    profile_initial_sha=load_initial_state(model,frozen_profile,args.initials,args.family,args.seed)
     args.output.mkdir(parents=True)
     planned=schedule(rows,args.seed,training['steps'],training['batch_size'])
     planned_ids=[[rows[i]['id'] for i in batch] for batch in planned]
     sample_hash=R.json_digest(planned_ids);initial=R.model_digest(model)
+    if initial!=frozen_profile['weights_before']:
+        raise ValueError('live initial model differs from the frozen actual profile weights')
     if matches[0].get('training_sample_order_sha256')!=sample_hash:
         raise ValueError('actual sample schedule differs from frozen family registration')
     R.write_json(args.output/'PREFIT.json',{'source_commit':args.source_commit,'source_hashes':source,
         'register_sha256':R.sha256(args.config),'family_manifest_sha256':R.sha256(family_manifest),
         'data_manifest_sha256':R.sha256(args.data/'MANIFEST.json'),'fit_sha256':R.sha256(args.data/'FIT.json'),
         'counts':counts,'schedule_sha256':sample_hash,'schedule_ids':planned_ids,'initial_model_sha256':initial,
+        'profile_initial_state_sha256':profile_initial_sha,
         'hardware':R.runtime_hardware(),'preflight':preflight,'before_first_optimizer_step':True})
     optimizer=torch.optim.AdamW(model.parameters(),lr=training['learning_rate'],weight_decay=training['weight_decay'],
                                 betas=tuple(training['betas']),eps=training['eps'],foreach=False,fused=False)
-    deadline=R.Deadline(training['max_arm_seconds']);actual_steps=0;history=[];seen={d:0 for d in ('lexical','arc')}
+    deadline=R.Deadline(training['max_arm_seconds_by_family'][args.family]);actual_steps=0;history=[];seen={d:0 for d in ('lexical','arc')}
     observed=padding=supervised=0;optimizer_seconds=0.;gradient=None;acquisition=None
     forward_steps=[];optimizer_steps=[];operator_examples={}
     try:
@@ -235,6 +265,7 @@ def train(args):
             'fit_sha256':R.sha256(args.data/'FIT.json'),'schedule_sha256':sample_hash,'observed_input_bytes':observed,
             'supervised_targets':supervised,'padded_compute_positions':training['steps']*4*training['context'],
             'end_padding_positions':padding,'initial_model_sha256':initial,'final_model_sha256':final,
+            'profile_initial_state_sha256':profile_initial_sha,
             'status':'SEALED_BEFORE_DEV','selection':'fixed_final_step_no_DEV_selection'}
         path=args.output/'MODEL.pt';digest=checkpoint(path,model,optimizer,metadata)
         replay=cold_reload(model,path,register,rows[planned[0][0]])
@@ -244,9 +275,12 @@ def train(args):
             'domain_observed_input_bytes':seen,'elapsed_seconds':time.perf_counter()-deadline.started,
             'optimizer_seconds':optimizer_seconds,'peak_rss_bytes':R.peak_rss_bytes(),'history':history,'replay':replay,
             'actual_sample_order_sha256':sample_hash,'actual_dense_compute_tokens':training['steps']*4*training['context'],
+            'actual_initial_model_sha256':initial,
+            'actual_profile_initial_state_sha256':profile_initial_sha,
             'forward_backward_operator_step_sha256':forward_steps,'optimizer_operator_step_sha256':optimizer_steps,
             **operator_examples,'setup_seconds':deadline.started-PROCESS_START,
             'elapsed_process_seconds':time.perf_counter()-PROCESS_START,
+            'hardware':R.runtime_hardware(),
             'initial_checkpoint_sha256':initial_checkpoint_sha,'initial_replay':initial_replay,
             'acquisition_gradient':acquisition,
             'gpu_minutes':0,'protected_TEST_opened':False,'capability_result':None,
@@ -275,6 +309,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--family',choices=R.FAMILIES,required=True);p.add_argument('--objective',choices=R.OBJECTIVES,required=True)
     p.add_argument('--seed',type=int,choices=R.SEEDS,required=True);p.add_argument('--data',type=Path,required=True)
+    p.add_argument('--initials',type=Path,required=True)
     p.add_argument('--config',type=Path,default=R.HERE/'REGISTER.json');p.add_argument('--output',type=Path,required=True)
     p.add_argument('--source-commit',required=True)
     train(p.parse_args())

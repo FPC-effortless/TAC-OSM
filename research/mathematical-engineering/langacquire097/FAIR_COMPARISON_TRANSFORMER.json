@@ -74,7 +74,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 130486,
       "expected_observed_by_domain": {
@@ -108,7 +110,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 12905,
       "expected_observed_by_domain": {
@@ -142,7 +146,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 131083,
       "expected_observed_by_domain": {
@@ -176,7 +182,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 13251,
       "expected_observed_by_domain": {
@@ -210,7 +218,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 131352,
       "expected_observed_by_domain": {
@@ -244,7 +254,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 13302,
       "expected_observed_by_domain": {
@@ -278,7 +290,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 131190,
       "expected_observed_by_domain": {
@@ -312,7 +326,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 12930,
       "expected_observed_by_domain": {
@@ -346,7 +362,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 130627,
       "expected_observed_by_domain": {
@@ -380,7 +398,9 @@
         "history_events": 272,
         "dense_compute_tokens": 278528,
         "tuning_trials": 0,
-        "tuning_flops": 0
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 240,
+        "shared_objective_leg_wall_seconds": 2400
       },
       "expected_supervised_targets": 12933,
       "expected_observed_by_domain": {
@@ -393,7 +413,7 @@
   "operator_profile_path": "research/mathematical-engineering/langacquire097/profiles/PROFILE_transformer.json",
   "operator_profile_sha256": null,
   "implementation_sha256": null,
-  "training_recipe_sha256": "854c68a2a1c2a0aa9a6ca21cafdb3e7619708795863dad6b95346c13ca8a7459",
+  "training_recipe_sha256": "ea5358dec719bf0e028466ab5de69a77a21ba8933ab57d0074c78576bf07fcb6",
   "optimizer_contract": {
     "name": "AdamW",
     "learning_rate": 0.001,
@@ -409,7 +429,7 @@
     "clip_foreach": false,
     "fused": false
   },
-  "profile_status": "OPEN_UNTIL_ORIGINAL_GHA_ZERO_OPTIMIZER_PROFILE_COMMITTED",
+  "profile_status": "OPEN_REPROFILE_AFTER_RUNTIME_RECIPE_AND_INSTRUMENTATION_CHANGES_BEFORE_ANY_OPTIMIZER",
   "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
   "cross_architecture_superiority": "INELIGIBLE",
   "contracts": {
@@ -473,9 +493,26 @@
     ],
     "eps": 1e-08,
     "foreach": false,
-    "max_arm_seconds": 1800,
+    "max_arm_seconds": 2100,
     "max_seed_seconds": 2400,
-    "tuning_trials": 0
+    "tuning_trials": 0,
+    "max_arm_seconds_by_family": {
+      "tac": 2100,
+      "gru": 480,
+      "ssm": 480,
+      "transformer": 240
+    },
+    "max_leg_seconds": 2400
   },
-  "claims": "Internally measured within-family learning-objective effects only; no general intelligence, independent qualification or deployment advantage."
+  "claims": "Internally measured within-family learning-objective effects only; no general intelligence, independent qualification or deployment advantage.",
+  "runtime_execution": {
+    "jobs": "one objective leg per seed; four family fits, ten legs total",
+    "per_fit_wall_cap_seconds": 240,
+    "shared_objective_leg_wall_cap_seconds": 2400,
+    "actual_physical_CPU_recorded_per_fit": true,
+    "environment": "pinned one-thread CPU FP32; separate GHA virtual machines may use different physical CPU models",
+    "hardware_FLOP_parity_claim": false,
+    "CPU_time_parity_requirement": false,
+    "initialization": "Actual live initial parameter digest must match frozen profile before optimizer; full/query digest pair rechecked in assembly"
+  }
 }

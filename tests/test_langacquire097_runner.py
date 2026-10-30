@@ -4,6 +4,7 @@ import json
 import math
 import os
 from pathlib import Path
+import shutil
 import sys
 import tempfile
 import unittest
@@ -27,6 +28,35 @@ T=load('train');E=load('evaluate');RUN=load('run')
 def row(i,domain='lexical',a=8,q=4,y=4):
     return {'id':f'fixture-{i}','domain':domain,'partition':'FIT','acquisition_bytes':[65+i%8]*a,
             'query_bytes':[66]*q,'target_bytes':[67]*y}
+
+
+def artifact_fixture(base):
+    """Mock artifact transport only: these are not trained checkpoints/results."""
+    incoming=base/'incoming';incoming.mkdir();config=base/'register.json';config.write_text('{"fixture":true}')
+    register={'training':{'steps':2,'batch_size':4,'context':272},'manifest_paths':{f:'fixture' for f in RUN.R.FAMILIES}}
+    source={'fixture.py':'a'*64};commit='b'*40;register_sha=RUN.R.sha256(config);paths=[]
+    for seed in RUN.R.SEEDS:
+        for objective in RUN.R.OBJECTIVES:
+            leg=incoming/f'leg-{seed}-{objective}';leg.mkdir();models=[]
+            for fi,family in enumerate(RUN.R.FAMILIES):
+                name=f'{family}-{objective}';folder=leg/name;folder.mkdir()
+                (folder/'MODEL.pt').write_bytes(f'UNTRAINED ARTIFACT FIXTURE {family}-{objective}-{seed}'.encode())
+                (folder/'INITIAL_MODEL.pt').write_bytes(b'UNTRAINED ARTIFACT FIXTURE')
+                checkpoint_sha=RUN.R.sha256(folder/'MODEL.pt')
+                receipt={'constructed_fixture':True,'study_id':'LANGACQUIRE097','status':'SEALED_BEFORE_DEV',
+                    'family':family,'objective':objective,'seed':seed,'source_commit':commit,'source_hashes':source,
+                    'register_sha256':register_sha,'optimizer_steps':2,'actual_steps':2,'actual_examples':8,
+                    'actual_dense_compute_tokens':2176,'actual_tokens':1000,'schedule_sha256':f'{seed:064x}',
+                    'actual_initial_model_sha256':f'{seed+fi:064x}',
+                    'checkpoint_sha256':checkpoint_sha,'replay':{'cold_reload_bitwise_equal':True}}
+                RUN.R.write_json(folder/'FIT_RECEIPT.json',receipt);paths.append(folder)
+                models.append({'family':family,'objective':objective,'seed':seed,'checkpoint':name+'/MODEL.pt',
+                    'checkpoint_sha256':checkpoint_sha,'receipt':name+'/FIT_RECEIPT.json',
+                    'receipt_sha256':RUN.R.sha256(folder/'FIT_RECEIPT.json')})
+            RUN.R.write_json(leg/'FIT_LEG_SEAL.json',{'schema':'langacquire097.objective-leg-fit-seal.v1',
+                'seed':seed,'objective':objective,'source_commit':commit,'register_sha256':register_sha,
+                'DEV_predictions_started':False,'models':models})
+    return incoming,config,register,source,commit,paths
 
 
 class RunnerBoundaryTests(unittest.TestCase):
@@ -68,6 +98,27 @@ class RunnerBoundaryTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,'disabled'):T.train(args)
                 optimizer.assert_not_called()
 
+    def test_pinned_zero_update_initialization_restores_exact_weights(self):
+        # An untrained source fixture, with no optimizer or model forward.
+        model=T.M.make_model('gru',1701);before=T.R.model_digest(model)
+        payload={'schema':'langacquire097.initial-state.v1','family':'gru','seed':1701,
+                 'optimizer_steps':0,'model':T.R.cpu_tree(model.state_dict()),'model_sha256':before}
+        with tempfile.TemporaryDirectory() as temp:
+            directory=Path(temp);path=directory/'INIT_gru_1701.pt'
+            torch.save(payload,path)
+            profile={'initial_state_file':path.name,'initial_state_sha256':T.R.sha256(path),'weights_before':before}
+            with torch.no_grad():next(model.parameters()).add_(.125)
+            self.assertNotEqual(T.R.model_digest(model),before)
+            T.load_initial_state(model,profile,directory,'gru',1701)
+            self.assertEqual(T.R.model_digest(model),before)
+            with self.assertRaisesRegex(ValueError,'bytes differ'):
+                T.load_initial_state(model,{**profile,'initial_state_sha256':'0'*64},directory,'gru',1701)
+            with self.assertRaisesRegex(ValueError,'basename'):
+                T.load_initial_state(model,{**profile,'initial_state_file':'../INIT_gru_1701.pt'},directory,'gru',1701)
+            payload['optimizer_steps']=1;torch.save(payload,path)
+            with self.assertRaisesRegex(ValueError,'zero-update initialization identity'):
+                T.load_initial_state(model,{**profile,'initial_state_sha256':T.R.sha256(path)},directory,'gru',1701)
+
     def test_actor_denies_answers_and_gold_dependent_budgets(self):
         with tempfile.TemporaryDirectory() as temp:
             p=Path(temp)/'actor.json'
@@ -80,6 +131,43 @@ class RunnerBoundaryTests(unittest.TestCase):
     def test_all_forty_seals_are_required_before_dev(self):
         with tempfile.TemporaryDirectory() as temp:
             with self.assertRaisesRegex(ValueError,'all five'):RUN.all_fits(temp,{},Path('config'), '0'*40)
+
+    def test_assembly_missing_duplicate_or_changed_model_is_rejected(self):
+        # Only the tensor-loader is mocked; matrix, identity, seal and byte checks run.
+        for damage in ('missing','duplicate','changed'):
+            with self.subTest(damage=damage),tempfile.TemporaryDirectory() as temp:
+                incoming,config,register,source,commit,paths=artifact_fixture(Path(temp))
+                if damage=='missing':(paths[-1]/'FIT_RECEIPT.json').unlink()
+                elif damage=='duplicate':shutil.copyfile(paths[0]/'FIT_RECEIPT.json',paths[-1]/'FIT_RECEIPT.json')
+                else:(paths[-1]/'MODEL.pt').write_bytes(b'changed original bytes')
+                with mock.patch.object(RUN,'verify_model_checkpoint') as verify:
+                    with self.assertRaises(ValueError):RUN.model_artifacts(incoming,register,config,commit,source)
+                    verify.assert_not_called()
+
+    def test_assembly_builds_five_complete_seed_seals_without_data_access(self):
+        with tempfile.TemporaryDirectory() as temp:
+            incoming,config,register,source,commit,paths=artifact_fixture(Path(temp))
+            args=type('Args',(),{'fits':incoming,'config':config,'source_commit':commit,'output':Path(temp)/'assembled'})()
+            with mock.patch.object(RUN.R,'load_register',return_value=register), \
+                 mock.patch.object(RUN.R,'verify_source',return_value=source), \
+                 mock.patch.object(RUN.R,'load_local',side_effect=AssertionError('no dataset import')), \
+                 mock.patch.object(RUN,'verify_model_checkpoint') as verify:
+                RUN.assemble(args)
+            self.assertEqual(verify.call_count,40)
+            self.assertEqual(len(list(args.output.rglob('FITS_SEAL.json'))),5)
+            matrix=RUN.all_fits(args.output,register,config,commit)
+            self.assertEqual(len(matrix),40)
+            receipt=RUN.R.read_json(args.output/'ASSEMBLY.json')
+            self.assertFalse(receipt['datasets_opened']);self.assertEqual(receipt['optimizer_steps'],0)
+
+    def test_objective_pair_initial_weights_must_match_before_assembly(self):
+        with tempfile.TemporaryDirectory() as temp:
+            incoming,config,register,source,commit,paths=artifact_fixture(Path(temp))
+            target=paths[4]/'FIT_RECEIPT.json';receipt=RUN.R.read_json(target)
+            receipt['actual_initial_model_sha256']='f'*64;target.write_text(json.dumps(receipt))
+            with mock.patch.object(RUN,'verify_model_checkpoint') as verify:
+                with self.assertRaisesRegex(ValueError,'identical actual weights'):RUN.model_artifacts(incoming,register,config,commit,source)
+                verify.assert_not_called()
 
     def test_unavailable_donor_and_binding_cases_are_preserved(self):
         actor=[{'id':'lex','domain':'lexical','query_bytes':[65],'generation_limit':4},

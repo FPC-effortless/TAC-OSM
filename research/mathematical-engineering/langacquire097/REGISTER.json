@@ -32,9 +32,16 @@
     ],
     "eps": 1e-08,
     "foreach": false,
-    "max_arm_seconds": 1800,
+    "max_arm_seconds": 2100,
     "max_seed_seconds": 2400,
-    "tuning_trials": 0
+    "tuning_trials": 0,
+    "max_arm_seconds_by_family": {
+      "tac": 2100,
+      "gru": 480,
+      "ssm": 480,
+      "transformer": 240
+    },
+    "max_leg_seconds": 2400
   },
   "manifest_paths": {
     "tac": "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_TAC.json",
@@ -63,14 +70,23 @@
   "compute": {
     "backend": "github_actions_cpu",
     "profile_max_minutes": 15,
-    "max_fit_minutes_per_seed": 40,
-    "max_fit_minutes_all_seeds": 200,
+    "fit_jobs": 10,
+    "fit_job_matrix": "five seeds x two objectives; four family fits per job",
+    "max_fit_minutes_per_objective_leg": 40,
+    "max_fit_minutes_all_legs": 400,
     "evaluate_max_minutes": 40,
-    "max_total_minutes": 255,
+    "max_experiment_stage_minutes": 455,
+    "job_setup_download_upload_minutes": "separately measured; each job has45minute timeout",
     "gpu_minutes": 0
   },
   "fit_enabled": false,
   "protected_repository_TEST_permitted": false,
   "checkpoint_promotion_permitted": false,
-  "phase_policy": "First source-authenticated no-fit profiles and mathematical companion; freeze their measured receipts before enabling any optimizer. All40 original checkpoints sealed before DEV predictions."
+  "phase_policy": "First source-authenticated no-fit profiles and mathematical companion; freeze their measured receipts before enabling any optimizer. All40 original checkpoints sealed before DEV predictions.",
+  "initialization": {
+    "run_id": null,
+    "artifact_name": null,
+    "archive_sha256": null,
+    "policy": "Use20hash-verifiedoriginalzero-optimizerinitialstate_dictsfromtheactualpreflightartifact; loadtheidenticalstateforeachpairedobjective."
+  }
 }
