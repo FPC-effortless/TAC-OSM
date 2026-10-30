@@ -97,6 +97,11 @@ class ProvenanceTests(ReceiptFixture):
                 raise RuntimeError("fixture interruption")
         self.assertIs(module.affine_scan, original_matrix)
         self.assertIs(module.scalar_affine_scan, original_diagonal)
+        wrong = SimpleNamespace(__file__="historical/langmemory042/candidate.py")
+        with mock.patch.dict(sys.modules, {"langmath095_candidate": wrong}):
+            with self.assertRaisesRegex(ValueError, "outside reviewed path"):
+                checkpoints._candidate_module()
+            self.assertIs(sys.modules["langmath095_candidate"], wrong)
 
 
 @unittest.skipIf(torch is None, "optional torch dependency unavailable")
@@ -109,9 +114,12 @@ class ConstructedCheckpointTests(ReceiptFixture):
         self.write_receipt()
         return model
 
-    def test_constructed_checkpoint_forward_gradient_and_scan_audit(self):
+    def test_constructed_checkpoint_audit_ignores_unrelated_candidate_module(self):
         self.fixture_model()
-        report = self.audit()
+        historical = SimpleNamespace(__file__="historical/langmemory042/candidate.py")
+        with mock.patch.dict(sys.modules, {"candidate": historical}):
+            report = self.audit()
+            self.assertIs(sys.modules["candidate"], historical)
         self.assertEqual(report["status"], "PASS_BOUNDED_CPU_FP32_FIXTURES", report.get("reason"))
         self.assertEqual(report["checkpoint_step_metadata_unverified"], 0)
         gradients = report["diagnostics"]["full_named_gradients"]

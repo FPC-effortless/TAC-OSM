@@ -131,13 +131,17 @@ composition, arbitrary-state serial transitions, bounded aligned writes,
 six-concept solve, fixed-key amplification and bounded log positions. Its tests
 are constructed mathematical/engineering checks only.
 
+Recorded validation: [PNDS CI](https://github.com/FPC-effortless/pnds-lean/actions/runs/41107033496)
+compiled this operator module and inspected all nine theorem axiom reports on
+Lean 4.14.0. Only standard Mathlib axioms were reported. The implementation and
+companion commits are pinned in `PNDS_LINK.json`; this does not certify the
+whole model. CPU source-forward/parameter-gradient fixtures and a historical
+trained-checkpoint numerical probe also passed; see `VALIDATION.json`.
+
 The following remain **OPEN** until recorded execution and review:
 
-- Lean kernel compilation and axiom-output inspection; the local runtime has
-  no Lean executable. No placeholder proof is used to claim these passed.
 - Matrix-level formal scan/state norm proofs and the full typed composed
   observation-to-logit graph in Lean.
-- Candidate implementation commit/cross-repository reciprocal publication pins.
 - Actual-source forward, state, mask, input/parameter gradient and precision
   correspondence for every registered candidate and shape.
 - Real-checkpoint causal persistence after source removal, transfer/composition,

@@ -157,15 +157,35 @@ def _vjps(model, logits, torch, prefix=""):
     return outputs
 
 
+def _candidate_module():
+    """Bind the new wrapper to its file without occupying generic 'candidate'."""
+    name = "langmath095_candidate"
+    path = Path(__file__).resolve().with_name("candidate.py")
+    existing = sys.modules.get(name)
+    if existing is not None:
+        if Path(getattr(existing, "__file__", "")).resolve() != path:
+            raise ValueError("preloaded LANGMATH095 candidate is outside reviewed path")
+        return existing
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module  # dataclasses resolve their defining module here
+    try:
+        spec.loader.exec_module(module)
+    except BaseException:
+        sys.modules.pop(name, None)
+        raise
+    return module
+
+
 def _parity(model, tokens, torch):
-    from candidate import TACMathCandidate095
+    candidate_module = _candidate_module()
     reference, traces = model(tokens, return_trace=True)
     reference = reference.detach() if not reference.requires_grad else reference
     gradients = _vjps(model, reference, torch)
     reference = reference.detach()
     traces = {k: v.detach() for k, v in traces.items()}
-    candidate = TACMathCandidate095(model).eval()
-    modules = [sys.modules["context_transition"], sys.modules["recurrence_only"], sys.modules["candidate"]]
+    candidate = candidate_module.TACMathCandidate095(model).eval()
+    modules = [sys.modules["context_transition"], sys.modules["recurrence_only"], candidate_module]
     results = {}
     for algorithm in ("original", "sequential", "tree", "chunked"):
         @contextmanager
