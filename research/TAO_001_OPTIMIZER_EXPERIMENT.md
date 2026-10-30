@@ -46,11 +46,11 @@ Synthetic gradient update latency, milliseconds per matrix per step, medians of 
 
 | shape | AdamW fallback | Muon | AdaMuon | NorMuon | pre-NS |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 32x32 | 0.0738 | 0.2180 | 0.2565 | 0.2920 | 0.2721 |
-| 64x128 | 0.1424 | 0.4481 | 0.4875 | 0.5253 | 0.4894 |
-| 128x128 | 0.1752 | 1.1706 | 1.3065 | 1.1941 | 1.1795 |
+| 32x32 | 0.0863 | 0.2423 | 0.2353 | 0.2537 | 0.2883 |
+| 64x128 | 0.1278 | 0.4486 | 0.4838 | 0.4692 | 0.4638 |
+| 128x128 | 0.1757 | 1.0622 | 1.1304 | 1.1742 | 1.1530 |
 
-The **only numerical speed conclusion** from this probe: eager orthogonal update processing costs more than eager AdamW at these shapes. It does not establish net training speed, task quality, GPU throughput, NS accuracy under BF16, stability at realistic learning rates, or a TAC loss improvement. None of the optimizer modes has passed a real TAC training comparison.
+After correcting redundant per-step temporary moment allocations, tests were rerun (seven functions for each of the direct and package imports, 14 passes total); the table reports the revised local probe. This is an unfused Python reference, **not** a like-for-like comparison with production fused AdamW. The **only numerical speed conclusion** from this probe: eager orthogonal update processing costs more than eager AdamW at these shapes. It does not establish net training speed, task quality, GPU throughput, NS accuracy under BF16, stability at realistic learning rates, or a TAC loss improvement. None of the optimizer modes has passed a real TAC training comparison.
 
 ## Proper next study (not executed on this branch)
 
