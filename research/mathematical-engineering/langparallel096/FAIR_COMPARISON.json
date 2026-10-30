@@ -1,0 +1,108 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGPARALLEL096",
+  "study_type": "noncomparative_diagnostic",
+  "execution_level": "internal_research",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Reuse original historically trained 500K-parameter parallel first stage CONTEXT026 and recurrence-only layered parallel LANGLAYER038/039 checkpoints, exactly five seeds each, with original CPU training source-replay receipts. Score 3 authentic previously-exposed Rust Book documents at identical source targets with 64/128 observed causal bytes and paired native full-window throughput on same hosted 2-thread CPU. No retraining or full-FLOP-matched superiority claim.",
+  "real_world_source": {
+    "name": "Original source-attested PSF CPython 3.13 training and MIT/Apache-2.0 original Rust Book developer evaluation",
+    "observed_real_outcomes": true,
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF 2.0 and 0BSD examples; Rust Book MIT or Apache-2.0",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "597dde0eb3ff98c798ccb3657b1ac02074a8cdb929189f3cc68612877e45f13e",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "original_training_runs": {
+      "non_layered_parallel": 40785939365,
+      "layered_parallel": 40795790808
+    },
+    "seeds": [
+      1701,
+      1702,
+      1703,
+      1704,
+      1705
+    ],
+    "source_publisher": "rust-lang/book",
+    "source_commit": "2771df165f092a4fbb9f46b5b2e7450f19010adb",
+    "registered_dev_git_blobs": {
+      "src/ch01-01-installation.md": "a9e03f534aec9791f6b8200068376fa5678a576c",
+      "src/ch02-00-guessing-game-tutorial.md": "f118eb5455f20aa14128056733a0182869d816d8",
+      "src/ch03-01-variables-and-mutability.md": "ed15afc0fd46a011578cdf41b3e4f03a5e3257fc"
+    },
+    "context_lengths": [
+      64,
+      128
+    ],
+    "same_target_positions": [
+      256,
+      384,
+      512,
+      640,
+      768,
+      896,
+      1024,
+      1152
+    ],
+    "previously_exposed_development": true,
+    "protected_TEST": false
+  },
+  "causal_protocol": "For each preregistered real source position score exact publisher next byte y_t using only original observed bytes x_(t-L)..x_(t-1), reset native scan states at window boundary. Identical publisher document, target ordinal and input length across all original ten independently trained models. No evaluator-provided memory keys, learned offsets or target bytes enter model. Do not claim streaming carry or transfer beyond these selected developers' docs.",
+  "checkpoint_policy": "Download original original GitHub Actions artifacts from LANGLAYER035 40785939365 nonlayered flat and LANGLAYER039 40795790808 recurrence-only layered. Require all ten complete original publisher source, RNG, optimizer, sample schedule digests, checkpoint SHA, full original strict model state, same original parameter counts and zero new fits. Preserve all negative outcomes, no incomplete aggregation, independent replay of exact original hashes and metrics.",
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "original_models": {
+    "flat_parallel": {
+      "model_class": "ContextTransition026",
+      "parameters": 500122,
+      "historical_training_run": 40785939365,
+      "source_model": "research/mathematical-engineering/context026/context_transition.py"
+    },
+    "layered_parallel": {
+      "model_class": "RecurrenceOnlyDepth038",
+      "parameters": 499901,
+      "historical_training_run": 40795790808,
+      "source_model": "research/mathematical-engineering/langlayer038/recurrence_only.py"
+    }
+  },
+  "previous_500k_owner_exception": "HISTORICAL_ONLY; NO NEW FIT AUTHORIZED; 95k-105k binding prospective research model size unchanged",
+  "budget": {
+    "optimizer_steps_this_study": 0,
+    "new_models_trained": 0,
+    "seed_count": 5,
+    "cores": 2,
+    "software": "PyTorch CPU",
+    "single_run_benchmark_batches": 4,
+    "window_tokens": 128,
+    "benchmark_repetitions": 5,
+    "gpu_minutes": 0
+  },
+  "limitations": [
+    "Neither full model streaming API implemented",
+    "No protected TEST",
+    "Previously exposed DEV in prior other study",
+    "Both original source-trained models had different training FLOPs",
+    "Model-scale historical exception not a new blanket allowance",
+    "No mobile p95 or energy results",
+    "PNDS original exact full model graph still open"
+  ]
+}

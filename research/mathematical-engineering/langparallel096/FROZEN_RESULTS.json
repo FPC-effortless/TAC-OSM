@@ -1,0 +1,1485 @@
+{
+  "full_training_FLOPs_matched": false,
+  "gpu_minutes": 0,
+  "historical_model_seeds": 5,
+  "no_true_carried_state": true,
+  "original_checkpoints": {
+    "flat_parallel-1701": "d5c1045fd9c678a373d68bcbada2d678a953e2cc7b64f8a61239989a6ba1e24f",
+    "flat_parallel-1702": "0ae2bdd701dbb23417fcc3448c54981b6ae92f994180161e1b770b0a08ca7f86",
+    "flat_parallel-1703": "ff441da49c36e5d65faf84e269775b20a30a250e09f289d78e93ff3d796d60e9",
+    "flat_parallel-1704": "33324c8e412d1579fced59087a6e17a6f42146b0041a4ebe42e203c8b0d66cfc",
+    "flat_parallel-1705": "8208960b3519f8014521fa1b9d9319b814d6f44bbe6143c2c3c619265ad531a2",
+    "layered_parallel-1701": "7a1719a06fe87d172b681f3f9f3795254ab2076697a54f5efd064b3af6670fd4",
+    "layered_parallel-1702": "2c6107f47b9c6eac5f1f914ad4eaecbb94ded59d33828f73667dcea109038698",
+    "layered_parallel-1703": "1b4a988676b244d17b978273aeee5608f5abf043f19067f401dd8e38a0e175d8",
+    "layered_parallel-1704": "96efa5efae23186153340841c9160f97219dce8a5907eefaddd8b02b0ddab4e9",
+    "layered_parallel-1705": "82e61f16ed0e65f5cef034801a447d24a63f5c23ac8b90290efbcb23e0acd1e4"
+  },
+  "paired_by_seed": {
+    "128": {
+      "95pct_descriptive_t_interval": [
+        -0.1997182828802649,
+        0.1879870345392651
+      ],
+      "layer_minus_flat_mean_nll_delta": -0.005865624170499917,
+      "per_seed": {
+        "1701": 0.08984656743168706,
+        "1702": 0.03824225470895559,
+        "1703": -0.17753541964871333,
+        "1704": -0.15788997202578736,
+        "1705": 0.17800844868135846
+      },
+      "seeds_layer_better": 2
+    },
+    "64": {
+      "95pct_descriptive_t_interval": [
+        -0.13410882383381612,
+        0.1441628566924113
+      ],
+      "layer_minus_flat_mean_nll_delta": 0.005027016429297593,
+      "per_seed": {
+        "1701": 0.032316299343914334,
+        "1702": 0.05978505771289866,
+        "1703": -0.13877811108974303,
+        "1704": -0.07340115539750292,
+        "1705": 0.1452129915769209
+      },
+      "seeds_layer_better": 2
+    }
+  },
+  "paired_runtime": {
+    "layer_over_flat_ratio_mean": 1.159475163735302,
+    "ratios_per_seed": {
+      "1701": 1.062419609000449,
+      "1702": 1.0749665216342599,
+      "1703": 1.0719987958570103,
+      "1704": 1.0747426688590123,
+      "1705": 1.513248223325779
+    }
+  },
+  "parallelism": "Hillis-Steele native memory + wave + concept scan; layered adds affine-scan residual",
+  "per_architecture": {
+    "flat_parallel": {
+      "128": {
+        "mean_accuracy": 0.25833333333333336,
+        "mean_nll": 2.760218693825062,
+        "seed_std_nll": 0.18484574735696396,
+        "target_count_per_seed": 24
+      },
+      "64": {
+        "mean_accuracy": 0.26666666666666666,
+        "mean_nll": 2.7341259625312984,
+        "seed_std_nll": 0.15296976271928509,
+        "target_count_per_seed": 24
+      },
+      "cpu_full_window": {
+        "mean_ms_per_byte": 0.05499198554687499,
+        "median_ms_per_byte": 0.05503933398437509,
+        "per_seed": {
+          "1701": 0.055069896484375054,
+          "1702": 0.05503933398437509,
+          "1703": 0.05487564648437495,
+          "1704": 0.05509586132812494,
+          "1705": 0.05487918945312493
+        },
+        "unit": "2-thread hosted CPU batch4 window128 full inference (not incremental stream)"
+      }
+    },
+    "layered_parallel": {
+      "128": {
+        "mean_accuracy": 0.275,
+        "mean_nll": 2.754353069654562,
+        "seed_std_nll": 0.20632956420523524,
+        "target_count_per_seed": 24
+      },
+      "64": {
+        "mean_accuracy": 0.25,
+        "mean_nll": 2.739152978960596,
+        "seed_std_nll": 0.18108467967551456,
+        "target_count_per_seed": 24
+      },
+      "cpu_full_window": {
+        "mean_ms_per_byte": 0.063751823046875,
+        "median_ms_per_byte": 0.059165441406250005,
+        "per_seed": {
+          "1701": 0.05850733789062494,
+          "1702": 0.059165441406250005,
+          "1703": 0.05882662695312493,
+          "1704": 0.059213873046875046,
+          "1705": 0.08304583593750012
+        },
+        "unit": "2-thread hosted CPU batch4 window128 full inference (not incremental stream)"
+      }
+    }
+  },
+  "per_seed": {
+    "flat_parallel": {
+      "1701": {
+        "score": {
+          "128": {
+            "accuracy": 0.16666666666666666,
+            "carried_state": false,
+            "mean_nll": 2.933826141782306,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 1,
+                "n": 8,
+                "nll_sum": 27.845478815356763,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 1,
+                "n": 8,
+                "nll_sum": 21.23407274812985,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 21.33227583928874,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.15304071499999994,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.16666666666666666,
+            "carried_state": false,
+            "mean_nll": 2.913522708199929,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 1,
+                "n": 8,
+                "nll_sum": 28.116242726602863,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 1,
+                "n": 8,
+                "nll_sum": 20.389478066482695,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 21.41882420371274,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.09002845799999992,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.055069896484375054,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.028543868000000083,
+            0.028144201000000146,
+            0.028194826999999867,
+            0.02920009499999998,
+            0.028195787000000028
+          ],
+          "window": 128
+        }
+      },
+      "1702": {
+        "score": {
+          "128": {
+            "accuracy": 0.2916666666666667,
+            "carried_state": false,
+            "mean_nll": 2.7829535385458013,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 5,
+                "n": 8,
+                "nll_sum": 24.652470721999965,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 21.97455526042569,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 20.16385894267358,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.1520953220000001,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.2916666666666667,
+            "carried_state": false,
+            "mean_nll": 2.7556337726000617,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 5,
+                "n": 8,
+                "nll_sum": 24.065854728836303,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 22.35976281524445,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 19.709592998320723,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.09145334499999991,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.05503933398437509,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.029300000999999964,
+            0.028205154999999982,
+            0.02818013900000005,
+            0.028079409000000055,
+            0.02793674200000007
+          ],
+          "window": 128
+        }
+      },
+      "1703": {
+        "score": {
+          "128": {
+            "accuracy": 0.3333333333333333,
+            "carried_state": false,
+            "mean_nll": 2.6332453114516343,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 4,
+                "n": 8,
+                "nll_sum": 21.264907493331563,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 18.958797353416987,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 22.974182628090666,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.159606264,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.375,
+            "carried_state": false,
+            "mean_nll": 2.593865779628687,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 5,
+                "n": 8,
+                "nll_sum": 20.958326077770177,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 19.287769424873115,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 22.00668320844519,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.09124343099999987,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.05487564648437495,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.028096330999999974,
+            0.02956545799999999,
+            0.028272480000000044,
+            0.028085090000000035,
+            0.028034015000000023
+          ],
+          "window": 128
+        }
+      },
+      "1704": {
+        "score": {
+          "128": {
+            "accuracy": 0.20833333333333334,
+            "carried_state": false,
+            "mean_nll": 2.9346838495059693,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 3,
+                "n": 8,
+                "nll_sum": 23.48295383455084,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 23.847868430495996,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 23.101590123096422,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.1546885309999999,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.20833333333333334,
+            "carried_state": false,
+            "mean_nll": 2.8442342323707175,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 3,
+                "n": 8,
+                "nll_sum": 21.361568802723756,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 24.1172747392013,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 22.782778034972168,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.09105378799999997,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.05509586132812494,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.028328286000000036,
+            0.02925030900000003,
+            0.02820908099999997,
+            0.028049073999999896,
+            0.028102162000000153
+          ],
+          "window": 128
+        }
+      },
+      "1705": {
+        "score": {
+          "128": {
+            "accuracy": 0.2916666666666667,
+            "carried_state": false,
+            "mean_nll": 2.5163846278395994,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 3,
+                "n": 8,
+                "nll_sum": 20.599948657417087,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 19.24219087698658,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 20.55109153374672,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.154177263,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.2916666666666667,
+            "carried_state": false,
+            "mean_nll": 2.563373319857096,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 3,
+                "n": 8,
+                "nll_sum": 21.227137774857034,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 18.949632131441984,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 21.344189770271278,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.09228673900000017,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.05487918945312493,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.028231914999999885,
+            0.028021662000000003,
+            0.028098144999999963,
+            0.028186087999999998,
+            0.028001815000000096
+          ],
+          "window": 128
+        }
+      }
+    },
+    "layered_parallel": {
+      "1701": {
+        "score": {
+          "128": {
+            "accuracy": 0.20833333333333334,
+            "carried_state": false,
+            "mean_nll": 3.0236727092139932,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 3,
+                "n": 8,
+                "nll_sum": 26.455193382563763,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 22.053187352017666,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 24.05976428655441,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.1625118710000002,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.25,
+            "carried_state": false,
+            "mean_nll": 2.945839007543843,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 4,
+                "n": 8,
+                "nll_sum": 26.118775370232356,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 20.16586409804448,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 24.4154967127754,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.09696522399999985,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.05850733789062494,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.02997484199999989,
+            0.029955756999999972,
+            0.029956578000000178,
+            0.02995420400000004,
+            0.029902267000000204
+          ],
+          "window": 128
+        }
+      },
+      "1702": {
+        "score": {
+          "128": {
+            "accuracy": 0.2916666666666667,
+            "carried_state": false,
+            "mean_nll": 2.821195793254757,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 5,
+                "n": 8,
+                "nll_sum": 24.1662665980942,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 23.153469143514034,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 20.388963296505928,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.1638846559999998,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.3333333333333333,
+            "carried_state": false,
+            "mean_nll": 2.8154188303129604,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 6,
+                "n": 8,
+                "nll_sum": 23.92838968795764,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 22.821882506402414,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 20.819779733150995,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.09869672099999982,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.059165441406250005,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.030305129999999902,
+            0.030292706000000003,
+            0.03158136500000008,
+            0.03023157200000015,
+            0.030141203000000116
+          ],
+          "window": 128
+        }
+      },
+      "1703": {
+        "score": {
+          "128": {
+            "accuracy": 0.3333333333333333,
+            "carried_state": false,
+            "mean_nll": 2.455709891802921,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 4,
+                "n": 8,
+                "nll_sum": 20.194024181087975,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 3,
+                "n": 8,
+                "nll_sum": 17.07562754706865,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 1,
+                "n": 8,
+                "nll_sum": 21.66738567511348,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.16022401699999977,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.25,
+            "carried_state": false,
+            "mean_nll": 2.455087668538944,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 4,
+                "n": 8,
+                "nll_sum": 20.782699546066727,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 1,
+                "n": 8,
+                "nll_sum": 17.310453435293866,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 1,
+                "n": 8,
+                "nll_sum": 20.828951063574067,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.1014651900000001,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.05882662695312493,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.030168664999999928,
+            0.030116366000000117,
+            0.030119232999999968,
+            0.030157122999999952,
+            0.030089507000000015
+          ],
+          "window": 128
+        }
+      },
+      "1704": {
+        "score": {
+          "128": {
+            "accuracy": 0.25,
+            "carried_state": false,
+            "mean_nll": 2.776793877480182,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 4,
+                "n": 8,
+                "nll_sum": 23.122079070705915,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 21.322517406874496,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 22.198456581943955,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.1622589379999999,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.16666666666666666,
+            "carried_state": false,
+            "mean_nll": 2.7708330769732146,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 3,
+                "n": 8,
+                "nll_sum": 22.019849338853156,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 0,
+                "n": 8,
+                "nll_sum": 21.792296303870263,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 1,
+                "n": 8,
+                "nll_sum": 22.687848204633738,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.100176198,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.059213873046875046,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.030317503000000023,
+            0.03219218700000015,
+            0.031618834999999956,
+            0.03017868299999993,
+            0.030096739999999844
+          ],
+          "window": 128
+        }
+      },
+      "1705": {
+        "score": {
+          "128": {
+            "accuracy": 0.2916666666666667,
+            "carried_state": false,
+            "mean_nll": 2.694393076520958,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 3,
+                "n": 8,
+                "nll_sum": 21.71333936080726,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 19.472108837776545,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 23.479985637919178,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.20758513300000048,
+            "window_reset": true
+          },
+          "64": {
+            "accuracy": 0.25,
+            "carried_state": false,
+            "mean_nll": 2.7085863114340167,
+            "n": 24,
+            "per_document": {
+              "src/ch01-01-installation.md": {
+                "correct": 3,
+                "n": 8,
+                "nll_sum": 22.238828993992065,
+                "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch02-00-guessing-game-tutorial.md": {
+                "correct": 1,
+                "n": 8,
+                "nll_sum": 19.413967571572613,
+                "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              },
+              "src/ch03-01-variables-and-mutability.md": {
+                "correct": 2,
+                "n": 8,
+                "nll_sum": 23.35327490885172,
+                "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+                "targets": [
+                  256,
+                  384,
+                  512,
+                  640,
+                  768,
+                  896,
+                  1024,
+                  1152
+                ]
+              }
+            },
+            "process_seconds": 0.09914776699999983,
+            "window_reset": true
+          }
+        },
+        "timing": {
+          "batch": 4,
+          "median_process_ms_per_observed_byte": 0.08304583593750012,
+          "repetitions": 5,
+          "throughput_mode": "batch4 full window recomputation, NOT incremental persistent decode",
+          "times_process_seconds": [
+            0.04361437499999998,
+            0.04571174499999997,
+            0.04251946800000006,
+            0.04008200299999998,
+            0.039449711000000054
+          ],
+          "window": 128
+        }
+      }
+    }
+  },
+  "protected_TEST": "UNOPENED",
+  "publisher": "rust-lang/book original MIT or Apache-2.0 text",
+  "source_docs": {
+    "src/ch01-01-installation.md": {
+      "git_blob": "a9e03f534aec9791f6b8200068376fa5678a576c",
+      "sha256": "5796f74894f69e71d937ef93be972815294c6047c65038981d4d155e89d890c4",
+      "source_bytes": 6660
+    },
+    "src/ch02-00-guessing-game-tutorial.md": {
+      "git_blob": "f118eb5455f20aa14128056733a0182869d816d8",
+      "sha256": "bf8769bd079c4b6ae75183f6e22a6b33ed82fdac17cdec52377edae56ab291f0",
+      "source_bytes": 40398
+    },
+    "src/ch03-01-variables-and-mutability.md": {
+      "git_blob": "ed15afc0fd46a011578cdf41b3e4f03a5e3257fc",
+      "sha256": "f8e3bd09891f35846d61ec183508fcd4e88ef3450da1107cb6749eeddc815f60",
+      "source_bytes": 9435
+    }
+  },
+  "source_exposure": "PREVIOUSLY_EXPOSED_DEVELOPMENT_NOT_PROTECTED_TEST",
+  "status": "FROZEN_ORIGINAL_10_CHECKPOINTS_SOURCE_GROUNDED_NO_FIT",
+  "study": "LANGPARALLEL096",
+  "superiority_qualified": false,
+  "trained_models_in_this_study": 0
+}
