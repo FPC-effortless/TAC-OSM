@@ -3,7 +3,11 @@ name: TAOTUNE004 genuine publisher 15-trial LR sweep on free CPU
 on:
   push:
     branches: ['research/tao004-optimizer-lr-selection-2026-10-30']
-    paths: ['.github/workflows/tao004-fit.yml']
+    paths:
+      - '.github/workflows/tao004-fit.yml'
+      - 'tests/test_tao004_tune.py'
+      - 'scripts/tao004_tune.py'
+      - 'research/mathematical-engineering/taotune004/FAIR_COMPARISON.json'
   workflow_dispatch:
 
 permissions:
