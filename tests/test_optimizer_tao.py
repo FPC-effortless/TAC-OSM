@@ -111,3 +111,18 @@ def test_zero_gradient_does_not_nan_or_drift_without_wd():
     p.grad = torch.zeros_like(p)
     o.step()
     assert torch.equal(p, torch.ones_like(p))
+
+
+def test_adamuon_sign_is_momentum_not_nesterov():
+    p = torch.nn.Parameter(torch.zeros(3, 3))
+    opt = TAO([{'params': [p], 'kind': 'orthogonal'}], mode='adamuon', lr=0.1, weight_decay=0, momentum=.95)
+    g = torch.zeros_like(p)
+    g[0, 0] = 1.0
+    p.grad = g.clone()
+    opt.step()
+    after_first = p[0, 0].item()
+    p.grad = g * (-0.9)
+    opt.step()
+    # Muon Nesterov blend switches sign; AdaMuon paper's M_t remains positive.
+    assert float(opt.state[p]['momentum_buffer'][0, 0]) > 0
+    assert p[0, 0].item() < after_first - .005
