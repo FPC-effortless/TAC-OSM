@@ -29,7 +29,9 @@
       "Doc/library/tomllib.rst": "521a7a17fb3e8bc9984e0d875ba7a3c89de231d8"
     },
     "protected_TEST_unopened": true,
-    "one_publisher_group": true
+    "one_publisher_group": true,
+    "cohort_sha256": "517bf23ca080f3df95fbd27bc8cc4e3da528357f4f46b902b7f14fd1d545bf8a",
+    "cohort_sha256_recipe": "SHA256 UTF8 of `FIT:<training_sha256>\\n` plus three lexically sorted `DEV:<path>:<pinned_publisher_blob_sha>\\n` lines"
   },
   "causal_protocol": "Each model predicts the next actual publisher byte using only the observed current/past byte and its own recurrent state. After checkpoint save and cold loading, fetch separate preregistered developer source owners and score byte t+1 only after prediction. No target, future index, evaluator lookup, externally supplied memory key or protected TEST input enters inference.",
   "checkpoint_policy": "Keep every full original model optimizer RNG source sampler and per-token score receipt for 25 model seeds committed in draft branch, verify replay under fresh CI checkout and original new-source bytes before interpreting. No missing archive accepted.",
