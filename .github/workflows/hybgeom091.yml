@@ -22,7 +22,7 @@ jobs:
       - id: intent
         shell: bash
         run: |
-          if [[ "$(git log -1 --format=%s)" == HYBGEOM091-ARCHIVE:* ]]; then
+          if [[ -s research/mathematical-engineering/hybgeom091/TRAINED_EXPOSED_DEV_RESULTS.json ]]; then
             echo 'fit=false' >> "$GITHUB_OUTPUT"
           else
             echo 'fit=true' >> "$GITHUB_OUTPUT"

@@ -12,13 +12,14 @@ import torch
 ROOT=Path(__file__).resolve().parents[3]
 sys.path.insert(0,str(ROOT/'research/mathematical-engineering/hybgeom091'))
 from model091 import ARMS,EXPECTED,HybridGeometryTAC091
-from run091 import SEEDS,STEPS,BATCH,LENGTH,DEV_OWNERS,state_dict_hash,source_hash
+from run091 import SEEDS,STEPS,BATCH,LENGTH,DEV_OWNERS,state_dict_hash,source_hash,source_docs,eval_model
 
 def digest(raw):return hashlib.sha256(raw).hexdigest()
 
 def verify(location: Path):
     report=[];sha_per_seed={}
     torch.set_num_threads(2)
+    real_dev=source_docs()  # exact original file SHA256 and Git blob verified
     for seed in SEEDS:
         for arm in ARMS:
             path=location/f'{arm}-{seed}'
@@ -51,6 +52,17 @@ def verify(location: Path):
                     raise ValueError('original prequential prediction stream')
                 if not math.isclose(sum(t['nll'] for t in d['tokens'])/224,d['nll'],abs_tol=1e-7):
                     raise ValueError('DEV NLL aggregate incorrect')
+            # Independently recompute every exposed DEV next-byte log-probability
+            # from exact committed weights; no optimizer step and no fitting.
+            replayed,_=eval_model(model,real_dev)
+            expected=sorted(data['exposed_DEV'],key=lambda z:z['owner'])
+            replayed=sorted(replayed,key=lambda z:z['owner'])
+            for before,after in zip(expected,replayed):
+                if before['owner']!=after['owner'] or before['source_sha256']!=after['source_sha256']:
+                    raise ValueError('independent original DEV identity changed')
+                for x,y in zip(before['tokens'],after['tokens']):
+                    if x['ordinal']!=y['ordinal'] or x['correct']!=y['correct'] or abs(x['nll']-y['nll'])>3e-5:
+                        raise ValueError('cold-checkout actual DEV prediction mismatch')
             report.append(data)
     paired={}
     baseline={z['seed']:statistics.mean(d['nll'] for d in z['exposed_DEV']) for z in report if z['arm']=='original'}
@@ -71,7 +83,7 @@ def verify(location: Path):
         'checkpoint_count':len(report),'seed_count':len(SEEDS),'source':'published original CPython genuine FIT and exposed DEV',
         'dev_targets_per_arm':len(SEEDS)*len(DEV_OWNERS)*224,
         'note':'two DEV owners reused in each seed; t interval treats 5 seeds as independent only',
-        'replay_certification':'source_code_weights_optimizer_and_metrics_integrity_checked; no original independent full inference replay',
+        'replay_certification':'PASS_exact_committed_source_checkpoint_optimizer_and_independent_original_DEV_prediction_replay',
         'gpu_minutes':0,'protected_TEST':'UNOPENED',
         'actual_elapsed_timestamps':False,'context_specific_human_semantics':False,
         'matched_training_FLOPs':False,'full_PNDS_proof':False,'paired':paired}
