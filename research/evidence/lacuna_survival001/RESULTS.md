@@ -136,3 +136,9 @@ not launch the later trained sweep or claim that all proposed research is done.
 
 Current scoped PNDS Lean/Python CI40998663258 PASSED. Full local TAC suite:
 1,620passed/4skipped; no new fits or DEV scores were needed for verification.
+
+Cross-host replay against the NEW anchors was within the preregistered tolerance,
+with maximum absolute error 8.583069e-6; none of the nine complete outputs/states
+were bitwise identical across hosts. Within-host cold reload was bitwise for
+all nine. Direct remote clone on the anchor host matched bitwise. Original-job
+FIT logits were never saved, so historical-output equality stays INCONCLUSIVE.
