@@ -1,6 +1,6 @@
 {
   "variant": "LANG10M001",
-  "status": "CONSTRUCTOR_VERIFIED_TOKENIZER_FITTED_CAPACITY_PREFLIGHT_PENDING",
+  "status": "TOKENIZER_FITTED_FP32_CAPACITY_PASS_AMP_PRECISION_REPAIR_VALIDATED_LOCALLY",
   "execution_level": "internal_research",
   "owner_direction": "2026-10-30 proceed with tokenized language TAC scaling recommendation, preserving running CODEVALUE004",
   "source_parent": "c5bc32976c298439eb04b7b342213f6946ac09f2",
@@ -39,7 +39,7 @@
   "scope": {
     "no_training": true,
     "no_optimizer_steps": true,
-    "no_gpu_allocation": true,
+    "no_gpu_allocation": false,
     "no_protected_test": true,
     "no_architecture_superiority_claim": true,
     "pr657_unmodified": true,
@@ -54,9 +54,10 @@
   ],
   "gpu_profile": {
     "script": "research/language-scaling/lang10m/profile_no_fit.py",
-    "execution": "REGISTERED_NOT_SUBMITTED",
+    "execution": "INITIAL_MATRIX_COMPLETE_FP32_PASS10_AMP_DTYPE_FAILURE10",
     "requires": "separate explicit Kaggle allocation two real T4 UUIDs",
-    "operator_quota": "OWNER_CONTINUE_ONE_PRIVATE_NO_UPDATE_DUAL_T4_PROFILE_MAX12_GPU_MINUTES"
+    "operator_quota": "OWNER_CONTINUE_ONE_PRIVATE_NO_UPDATE_DUAL_T4_PROFILE_MAX12_GPU_MINUTES",
+    "precision_repair": "One source-tested follow-up, cumulative total cap12 GPU minutes, no optimizer updates"
   },
   "research_gate": {
     "global_param_policy": "100k band unchanged; owner-scoped 10M training exception must be registered separately",

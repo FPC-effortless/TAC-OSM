@@ -1,0 +1,17 @@
+{
+  "study": "LANG10M001_CAPACITY_PRECISION_REPAIR",
+  "reason": "All10 FP32 cases pass; all10 AMP cases fail with Float H versus Half RHS in inherited concept solve.",
+  "original_evidence": "capacity/attempt1/CAPACITY.json",
+  "original_profile_optimizer_steps": 0,
+  "scope": "Only10M evidence projection output is promoted to FP32 under autocast before the concept solve; original500K ContextTransition026 source remains untouched.",
+  "parameters": "Reuse the original evidence weight/bias objects, unchanged state_dict keys and initialization RNG; count remains10001188.",
+  "CPU_verification": "Exact FP32 output and all-parameter gradient equality versus legacy projection on constructed input, plus successful CPU-BF16 autocast forward/backward.",
+  "original_profile_elapsed_seconds": 15.012867303999997,
+  "conservative_first_allocation_debit_seconds": 60,
+  "repair_runtime_deadline_seconds": 240,
+  "repair_platform_timeout_seconds": 300,
+  "repair_allocation_ceiling_GPU_minutes": 10,
+  "combined_initial_plus_repair_ceiling_GPU_minutes": 12,
+  "automatic_retry": false,
+  "policy": "One manually corrected implementation and preflight under the remaining original quota ceiling; no optimizer and no neural training. Preserve both case matrices. No further allocation on failure."
+}

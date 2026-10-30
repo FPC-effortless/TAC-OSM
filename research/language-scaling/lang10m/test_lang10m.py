@@ -92,3 +92,49 @@ def test_fit_only_manifest_fails_closed(tmp_path):
     manifest.write_text(json.dumps({"partition": "FIT", "sources": [row]}))
     with pytest.raises(ValueError, match="SHA256"):
         t.validate_fit_manifest(manifest)
+
+
+def test_evidence_precision_bridge_preserves_fp32_values_parameters_and_gradients():
+    import copy
+    torch.set_num_threads(2)
+    module=local_module('lang10m_precision_bridge','model.py')
+    torch.manual_seed(1010)
+    patched=module.TACLanguage10M001()
+    legacy=copy.deepcopy(patched)
+    p=legacy.evidence
+    original=torch.nn.Linear(p.in_features,p.out_features)
+    original.load_state_dict(p.state_dict())
+    legacy.evidence=original
+    assert list(patched.state_dict())==list(legacy.state_dict())
+    for name,tensor in patched.state_dict().items():assert torch.equal(tensor,legacy.state_dict()[name])
+    x=torch.tensor([[11,12,13,14,15]],dtype=torch.long);target=torch.tensor([[12,13,14,15,16]])
+    a=patched(x);b=legacy(x)
+    torch.testing.assert_close(a,b,atol=0,rtol=0)
+    torch.nn.functional.cross_entropy(a.reshape(-1,4096),target.reshape(-1)).backward()
+    torch.nn.functional.cross_entropy(b.reshape(-1,4096),target.reshape(-1)).backward()
+    for (an,ap),(bn,bp) in zip(patched.named_parameters(),legacy.named_parameters()):
+        assert an==bn and ap.grad is not None and bp.grad is not None
+        torch.testing.assert_close(ap.grad,bp.grad,atol=0,rtol=0)
+
+
+def test_actual_cpu_autocast_solve_boundary_has_matching_fp32_operands():
+    torch.set_num_threads(2)
+    module=local_module('lang10m_cpu_autocast','model.py')
+    torch.manual_seed(1010);model=module.TACLanguage10M001().train()
+    x=torch.tensor([[5,10,20,30,40,50]],dtype=torch.long)
+    with torch.autocast('cpu',dtype=torch.bfloat16):
+        logits=model(x)
+        loss=torch.nn.functional.cross_entropy(logits[:,-1],torch.tensor([51]))
+    assert torch.isfinite(logits).all() and torch.isfinite(loss)
+    loss.backward()
+    assert all(p.grad is not None and torch.isfinite(p.grad).all() for p in model.parameters())
+
+
+def test_precision_bridge_reuses_parameters_without_initialization_rng_change():
+    module=local_module('lang10m_bridge_identity','model.py')
+    torch.manual_seed(1010);original=torch.nn.Linear(7,5)
+    state=torch.get_rng_state().clone()
+    bridge=module.Float32EvidenceProjection(original)
+    assert bridge.weight is original.weight and bridge.bias is original.bias
+    assert torch.equal(state,torch.get_rng_state())
+    assert list(bridge.state_dict())==list(original.state_dict())

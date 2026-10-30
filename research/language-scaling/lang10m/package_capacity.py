@@ -48,12 +48,12 @@ def source_files():
         'research/mathematical-engineering/lang10m001_capacity/FAIR_COMPARISON.json')]
     return sorted(set(p for p in files if p.is_file()))
 
-def bootstrap(archive):
+def bootstrap(archive,max_seconds=300):
     archive=Path(archive)
     with zipfile.ZipFile(archive) as z:manifest_sha=hashlib.sha256(z.read('BUNDLE_MANIFEST.json')).hexdigest()
-    return BOOTSTRAP.format(archive_sha=hashlib.sha256(archive.read_bytes()).hexdigest(),manifest_sha=manifest_sha)
+    return BOOTSTRAP.format(archive_sha=hashlib.sha256(archive.read_bytes()).hexdigest(),manifest_sha=manifest_sha).replace("max_seconds=300",f"max_seconds={max_seconds}")
 
-def package(corpus,tokens,out,user,require_clean=True):
+def package(corpus,tokens,out,user,require_clean=True,dataset_suffix="v1",max_seconds=300):
     if require_clean and subprocess.check_output(['git','status','--porcelain'],cwd=ROOT):raise ValueError('commit exact reviewed source first')
     commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     dataset=out/'dataset';kernel=out/'kernel';dataset.mkdir(parents=True,exist_ok=False);kernel.mkdir(parents=True,exist_ok=False)
@@ -79,10 +79,10 @@ def package(corpus,tokens,out,user,require_clean=True):
     with zipfile.ZipFile(archive,'w',compression=zipfile.ZIP_DEFLATED) as z:
         for name,raw in sorted(assets.items()):
             info=zipfile.ZipInfo(name,date_time=(2026,10,30,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED;z.writestr(info,raw)
-    meta={'id':user+'/lang10m001-fit-capacity-v1','title':'LANG10M001 private FIT tokenizer capacity',
+    meta={'id':user+'/lang10m001-fit-capacity-'+dataset_suffix,'title':'LANG10M001 private FIT tokenizer capacity',
           'licenses':[{'name':'other'}]}
     (dataset/'dataset-metadata.json').write_text(json.dumps(meta,indent=2)+'\n')
-    script=bootstrap(archive);(kernel/'main.py').write_text(script)
+    script=bootstrap(archive,max_seconds=max_seconds);(kernel/'main.py').write_text(script)
     k={'id':user+'/lang10m001-no-update-capacity-t4x2','title':'LANG10M001 no update capacity T4x2',
        'code_file':'main.py','language':'python','kernel_type':'script','is_private':'true','enable_gpu':'true',
        'enable_internet':'false','machine_shape':'NvidiaTeslaT4','dataset_sources':[meta['id']],
@@ -92,11 +92,14 @@ def package(corpus,tokens,out,user,require_clean=True):
        'dataset':meta['id'],'kernel':k['id'],'private':True,'internet':False,'accelerator':'NvidiaTeslaT4',
        'archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),'files':len(assets),
        'bootstrap_sha256':hashlib.sha256(script.encode()).hexdigest(),'archive_bytes':archive.stat().st_size,
-       'optimizer_steps':0,'neural_training':False,'max_aggregate_GPU_minutes':12,'global_deadline_seconds':300}
+       'optimizer_steps':0,'neural_training':False,'max_aggregate_GPU_minutes':12,'global_deadline_seconds':max_seconds}
     (out/'PACKAGE_RECEIPT.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps(receipt));return receipt
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--corpus',type=Path,required=True)
     p.add_argument('--tokens',type=Path,required=True);p.add_argument('--out',type=Path,required=True)
-    p.add_argument('--user',required=True);a=p.parse_args();package(a.corpus,a.tokens,a.out,a.user)
+    p.add_argument('--user',required=True);p.add_argument('--dataset-suffix',default='v1');p.add_argument('--max-seconds',type=int,default=300)
+    a=p.parse_args()
+    if a.max_seconds not in (240,300) or a.dataset_suffix not in ('v1','v2'):raise ValueError('unregistered profile package')
+    package(a.corpus,a.tokens,a.out,a.user,dataset_suffix=a.dataset_suffix,max_seconds=a.max_seconds)

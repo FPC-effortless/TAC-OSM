@@ -154,6 +154,7 @@ def stop(child):
     except subprocess.TimeoutExpired:child.kill();child.wait(timeout=5)
 
 def run(tokens,output,max_seconds=300):
+    if max_seconds not in (240,300):raise ValueError('unregistered capacity deadline')
     if output.exists():raise FileExistsError('do not overwrite original GPU evidence')
     output.mkdir(parents=True)
     physical=physical_t4s();jobs=shards();started=time.monotonic();children=[];streams=[]

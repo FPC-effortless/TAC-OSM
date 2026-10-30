@@ -34,6 +34,25 @@ OUTPUT_FFN = 1214
 EXPECTED_PARAMETERS = 10_001_188
 
 
+class Float32EvidenceProjection(nn.Module):
+    """Keep the tiny concept-solve RHS in FP32 under autocast.
+
+    Reuse the original Linear parameters directly: no new weights, changed
+    state_dict keys or RNG consumption. In FP32 this is the exact same F.linear
+    operation. Under AMP it promotes only this projection output before tanh,
+    so the original Float H and its evidence RHS share a supported solve dtype.
+    """
+    def __init__(self, original):
+        super().__init__()
+        self.in_features = original.in_features
+        self.out_features = original.out_features
+        self.weight = original.weight
+        self.bias = original.bias
+
+    def forward(self, value):
+        return F.linear(value, self.weight, self.bias).float()
+
+
 class RecurrentFFNBlock(nn.Module):
     """Causal prewrite recurrent read + residual gated feed-forward layer."""
 
@@ -59,6 +78,7 @@ class TACLanguage10M001(ContextTransition026):
 
     def __init__(self):
         super().__init__(vocab=VOCAB, ffn_width=OUTPUT_FFN)
+        self.evidence = Float32EvidenceProjection(self.evidence)
         self.layernorm = nn.Sequential(
             nn.LayerNorm(WIDTH),
             *[RecurrentFFNBlock() for _ in range(UPPER_BLOCKS)],
@@ -90,6 +110,7 @@ class TACLanguage10M001(ContextTransition026):
             "upper_ffn_width": UPPER_FFN,
             "output_ffn_width": OUTPUT_FFN,
             "output_head_tied": False,
+            "concept_evidence_solve_dtype": "FP32 including AMP",
             "window_reset_only": True,
             "trained": False,
             "full_model_streaming": False,
