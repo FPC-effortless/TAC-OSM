@@ -1,0 +1,171 @@
+{
+  "study": "CODEVALUE004",
+  "status": "REGISTERED_VALIDATED_AWAITING_SUBMISSION",
+  "execution_level": "internal_research",
+  "owner_request": "Proceed with a preregistered data-diversity x LR-schedule study retaining TAC and GRU, DEV-only checkpoint selection, refitted count baselines and new frozen transfer publishers.",
+  "parameter_budget_contract": "owner-2026-10-30-codevalue004-generalization-500k",
+  "parent_study": "CODEVALUE003",
+  "parent_preservation": "All CODEVALUE003 source, checkpoints, scores and failures unchanged; only shared validator gains an exact004 scope.",
+  "architecture": {
+    "tac": 499623,
+    "gru": 500165,
+    "source_graph_sha256": {
+      "research/commercial-value/codevalue002/train.py": "5aa36c5c0c91d6eb70940f8c052126c3a12dad8b77d232ab1a9b093c5452f560",
+      "research/mathematical-engineering/langscale070/scaled_recurrence.py": "fb51763f1d3f85f2a44bd7bd768b7e34ac1d9ce8f06db90a40ca1abaa76b93a0",
+      "research/mathematical-engineering/context026/context_transition.py": "c88f3f7c1b628cb733a4a58dcd168a75411d8bb3d80e382068593713e887510a",
+      "research/mathematical-engineering/langlayer038/recurrence_only.py": "e1b52fca3e06b1440d1080924b847aa9649d04cf70ae033287cde37a6dad56f3",
+      "research/mathematical-engineering/langhead094/model094.py": "ba7693db65c7a5690954c3e1365134e0ad81f160ea6e00b46844385bc8717acd",
+      "research/mathematical-engineering/langhead093/model093.py": "004aabb7ac8e6926d5b038dfdc79d3e4aa1878a2af7b22765c217f6212e81cf4",
+      "research/mathematical-engineering/langmem086/compact_tac.py": "7179908fa3672879f3c2046ec4521f0b9f783d5c696aaba82c4c2cd0b6ebc9b1"
+    },
+    "changes": "NONE"
+  },
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "cells": [
+    "small_constant",
+    "small_cosine",
+    "broad_constant",
+    "broad_cosine"
+  ],
+  "budget": {
+    "updates_per_model": 5120,
+    "batch_size": 8,
+    "context_bytes": 128,
+    "labels_per_model": 5242880,
+    "trained_models": 24,
+    "total_labels": 125829120,
+    "checkpoint_candidates": [
+      320,
+      640,
+      1280,
+      2560,
+      5120
+    ],
+    "original_full_model_optimizer_rng_checkpoints": 120,
+    "extra_hyperparameter_trials": 0,
+    "allocated_gpu_minutes_ceiling": 240,
+    "runtime_deadline_seconds": 7020,
+    "platform_timeout_seconds": 7080,
+    "automatic_retries": false,
+    "training_flops": "UNMATCHED_INCOMPLETE_OPERATOR_COVERAGE"
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "weight_decay": 0.01,
+    "gradient_clip": 1.0,
+    "constant_lr": 0.001,
+    "cosine_lr_formula": "0.001*(0.1+0.9*0.5*(1+cos(pi*zero_based_update/5119)))",
+    "cosine_start_lr": 0.001,
+    "cosine_final_lr": 0.0001,
+    "warmup": false
+  },
+  "sampling": {
+    "unit": "Uniform document owner then uniform valid129-byte window; independent reset8x128 target batches",
+    "pairing": "Same seed and corpus yields identical windows across architectures and schedules",
+    "initialization": "Same seed resets Python/NumPy/torch CPU+CUDA before every from-scratch model",
+    "corpus_treatment": "Broader corpus adds79 documents from8 publishers to original14. It changes size and content together; not a pure diversity causal effect."
+  },
+  "source_receipt": "research/commercial-value/codevalue004/SOURCE_RECEIPT.json",
+  "source_cohort_sha256": "0b2ed6fd3fa4f751e5ba7d97a19ac150d8dc31a262ef470d5f057f415843e4ef",
+  "selection": {
+    "partition": "SELECT_DEV",
+    "files": 6,
+    "publishers": [
+      "requests",
+      "httpx",
+      "click"
+    ],
+    "candidate_updates": [
+      320,
+      640,
+      1280,
+      2560,
+      5120
+    ],
+    "rule": "Lowest pooled target-weighted full SELECT_DEV NLL per architecture/cell/seed; exact tie earlier update",
+    "all_models_train_to_maximum": true,
+    "equal_selection_access": true,
+    "use_transfer_to_select": false,
+    "freeze": "Seal all120 checkpoint hashes and24 DEV-only selections before transfer prediction"
+  },
+  "transfer": {
+    "partition": "TRANSFER_DEV",
+    "files": 10,
+    "publishers": [
+      "astropy/astropy",
+      "sympy/sympy",
+      "networkx/networkx",
+      "scrapy/scrapy",
+      "bokeh/bokeh"
+    ],
+    "classification": "New frozen internal DEV cohort; not protected access-separated blind TEST",
+    "source_audit_before_training": "Publisher/blob/SHA/license/exact+lexical overlap verification only; no model predictions",
+    "prediction_access_budget": "Exactly one chosen checkpoint per24 model fits; no reranking after transfer scores",
+    "targets": "Every real byte after initial64 once;64-byte burn-in and up to64 scored outputs per127-byte input block, final partial mask",
+    "offers_per_file": 512,
+    "completion_lengths": [
+      2,
+      4,
+      8
+    ],
+    "generation": "Free-running, rolling128-byte prefix; no gold feedback, state reset each window",
+    "metrics": [
+      "NLL",
+      "bits/byte",
+      "top1/top5",
+      "Brier",
+      "ECE10",
+      "exact2/4/8",
+      "correct prefix length",
+      "synchronized batch1 latency",
+      "CPU/GPU memory",
+      "oracle and rejection-cost net keys"
+    ]
+  },
+  "baselines": {
+    "models": [
+      "No suggestion",
+      "FIT-only P3 tau4",
+      "FIT-only interpolated Witten-Bell order6"
+    ],
+    "refitting": "Independently refit both count models on each exact small/broad FIT corpus, never DEV or transfer",
+    "tuning": "NONE; fixed count smoothing/escape law; schedule irrelevant to count predictor",
+    "exposure_disclosure": "Count models read every unique FIT byte, neural models sample fixed5.24M target labels"
+  },
+  "endpoints": {
+    "primary": "TAC broad_cosine selected checkpoint versus TAC small_constant selected checkpoint: positive NLL gain with lower paired95% CI>0, >=4/5 publisher wins and>=2/3 seed wins",
+    "secondary": "Within-architecture corpus and schedule main effects and interaction, GRU replication, and count-baseline utility comparisons; descriptive without multiplicity-adjusted confirmatory claims",
+    "bootstrap": "10000 paired seed/publisher/file hierarchical resamples, fixed seed940004; limited by3 seeds and5 publishers",
+    "commercial": "No observed acceptance, real developer time, Android, serving costs, willingness to pay or revenue; a language gate pass is not commercial qualification"
+  },
+  "prediction_boundary": "Only prefix bytes reach models. No filenames, publisher IDs, gold suffixes or cross-file state. DEV selection may read DEV scores; never transfer scores.",
+  "diagnostics": {
+    "required": [
+      "Immutable source and licenses",
+      "exact/lexical FIT-heldout separation",
+      "actual parameters before training and final",
+      "finite gradients/loss",
+      "actual source-schedule hashes",
+      "cold model+optimizer+RNG checkpoint replay",
+      "future suffix poison invariance",
+      "selection seal",
+      "JSON-serializable summary regression",
+      "two physical T4 UUIDs",
+      "global allocation deadline"
+    ],
+    "full_module_state_and_semantic_leakage_certification": "INCONCLUSIVE; unchanged source graph, not independently certified"
+  },
+  "math": "Exact inherited graph; full composed PNDS/IEEE/AD certification remains OPEN",
+  "claims": {
+    "no_architecture_superiority": true,
+    "no_independent_qualification": true,
+    "no_protected_TEST": true,
+    "no_checkpoint_promotion": true,
+    "no_commercial_proof": true
+  },
+  "gpu_authorization": "Owner said Proceed with the proposed generalization study, continuing the credential-authorized Kaggle workflow. One private offline dual-T4 allocation, at most240 aggregate GPU-minutes; no automatic retries."
+}
