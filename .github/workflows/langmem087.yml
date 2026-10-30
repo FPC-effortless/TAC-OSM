@@ -64,7 +64,7 @@ jobs:
           PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem087-continue640.json > evidence087/PLAN.json
           PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmem087/FAIR_COMPARISON.json --phase preflight > evidence087/PREFLIGHT.json
           PYTHONPATH=src:. python -m pytest -q tests/test_langmem087.py tests/test_langmem086.py tests/test_research_probe_agnostic.py
-          curl --fail --silent --show-error --location https://raw.githubusercontent.com/FPC-effortless/pnds-lean/PNDS087_PIN/foundation/v1/langmem087_historical.py --output /tmp/langmem087_historical.py
+          curl --fail --silent --show-error --location https://raw.githubusercontent.com/FPC-effortless/pnds-lean/5cefe03434af0248b0cce483518d4e89bb3a5217/foundation/v1/langmem087_historical.py --output /tmp/langmem087_historical.py
           PYTHONPATH=src:. python scripts/langmem087_math_parity.py --reference /tmp/langmem087_historical.py > evidence087/PNDS087_PARITY.json
           curl --fail --silent --show-error --location https://raw.githubusercontent.com/FPC-effortless/pnds-lean/0fd3c5006326a98107de2d02c63a6107226615b9/foundation/v1/langmem086_autonomous.py --output /tmp/langmem086_autonomous.py
           PYTHONPATH=src:. python scripts/langmem086_math_parity.py --reference /tmp/langmem086_autonomous.py > evidence087/PNDS086_PARITY.json

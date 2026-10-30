@@ -11,7 +11,7 @@ from torch.nn import functional as F
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'src'),str(ROOT/'research/mathematical-engineering/langmem086'),str(ROOT/'research/mathematical-engineering/langbase024')]
 from compact_tac import CompactDualClippedTAC086
-from probe_adapter import adapter086
+from probe_adapter086 import adapter086
 from byte_next_reference import read_sha_source
 from scripts.validate_research_parity import check_manifest
 from tac_osm.research_probe import probe_memory,probe_dependencies

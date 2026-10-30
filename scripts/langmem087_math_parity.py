@@ -15,7 +15,7 @@ def main():
  matrix=state.tensors['slow_memory'].clone().requires_grad_(True);state=replace(state,tensors={**state.tensors,'slow_memory':matrix})
  _,nxt,tr=m(torch.tensor([[33]]),state=state,owners=('operator',),return_trace=True);f=tr[0]
  k=f['writer'][0].detach().tolist();v=f['value'][0].detach().tolist();q=f['query'][0].detach().tolist();rho=float(f['slow_rho'].detach());eta=float(f['slow_eta'][0,0].detach());M=matrix[0].detach().tolist()
- old,current=ref.split_slow(M,k,v,rho,eta);error=max(float((f['old_slow_component'][0]-torch.tensor(old)).abs().max().detach()),float((f['current_slow_component'][0]-torch.tensor(current)).abs().max().detach()))
+ old,current=ref.split_slow(M,k,v,rho,eta)
  # Explicit dtype avoids accidentally comparing double source with rounded float32 reference.
  error=max(float((f['old_slow_component'][0]-torch.tensor(old,dtype=torch.float64)).abs().max().detach()),float((f['current_slow_component'][0]-torch.tensor(current,dtype=torch.float64)).abs().max().detach()))
  read_error=0.

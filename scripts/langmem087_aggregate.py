@@ -9,6 +9,8 @@ def aggregate(directory):
  records=[];fits=[]
  for path in paths:
   r=json.loads(path.read_text());fit=json.loads((path.parent/'TRAINED/FIT_RECEIPT.json').read_text())
+  checkpoint_path=path.parent/'TRAINED/MODEL.pt'
+  if hashlib.sha256(checkpoint_path.read_bytes()).hexdigest()!=r['checkpoint_sha256']:raise ValueError('actual checkpoint file checksum')
   if r['study']!='LANGMEM087' or r['seed']!=fit['seed'] or r['trained_steps']!=fit['trained_steps'] or r['checkpoint_sha256']!=fit['checkpoint_sha256'] or r['trained_model_hash']!=fit['trained_model_hash']:raise ValueError('source model identity')
   if not fit['cold_replay_bitwise'] or fit['unseen_DEV_accessed_before_seal'] is not False or not r['original_graph_default_bitwise_parity'] or not r['weights_unchanged_during_evaluation'] or not r['all_three_durations_fitted_before_workflow_DEV_acquisition']:raise ValueError('replay/causal gate')
   if r['model_counts']['trainable']!=100521 or r['model_counts']['deployed']!=100521 or r['nextbyte_targets_per_checkpoint']!=3584 or len(r['rows'])!=3584 or r['persistent_tensor_bytes_per_owner']!=1920:raise ValueError('model/cohort budget')
@@ -21,6 +23,10 @@ def aggregate(directory):
    if abs(sum(x[key] for x in r['rows'])/3584-value)>1e-10:raise ValueError('metric recomputation')
   records.append(r);fits.append(fit)
  if sorted((r['seed'],r['trained_steps']) for r in records)!=[(s,n) for s in (1701,1702,1703) for n in (160,640,1280)]:raise ValueError('complete seed/duration grid')
+ for seed in (1701,1702,1703):
+  chain={f['trained_steps']:f for f in fits if f['seed']==seed}
+  if chain[640]['parent_checkpoint_sha256']!=chain[160]['checkpoint_sha256'] or chain[1280]['parent_checkpoint_sha256']!=chain[640]['checkpoint_sha256']:raise ValueError('exact original optimizer continuation chain')
+  if any(chain[n]['targets_seen']!=n*1024 for n in (160,640,1280)):raise ValueError('actual exposure counts')
  for field in ('evaluation_nextbyte_target_sha256','fit_source_sha256','model_source_sha256','diagnostic_source_sha256'):
   if len({r[field] for r in records})!=1:raise ValueError('source/cohort identity')
  if len({json.dumps(r['new_document_hashes'],sort_keys=True) for r in records})!=1:raise ValueError('new publisher source equality')

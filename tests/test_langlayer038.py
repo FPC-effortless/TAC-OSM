@@ -87,7 +87,7 @@ def test_reject_invalid_upper_inputs():
 
 
 def test_actual_upper_probe_matches_source_scan_and_is_pure():
-    from probe_adapter import UPPER_PROBE
+    from probe_adapter038 import UPPER_PROBE
     from tac_osm.research_probe import probe_memory
     torch.manual_seed(38038);b=RecurrenceOnlyUpperBlock().double().eval()
     z=torch.randn(2,7,280,dtype=torch.float64)

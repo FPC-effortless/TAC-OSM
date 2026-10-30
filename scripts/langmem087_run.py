@@ -12,7 +12,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'src'),str(ROOT/'research/mathematical-engineering/langmem086'),str(ROOT/'research/mathematical-engineering/langmem087')]
 from scripts import langmem086_run as old
 from diagnostic_tac087 import DiagnosticTAC087
-from probe_adapter import adapter086
+from probe_adapter086 import adapter086
 from tac_osm.research_probe import probe_memory,probe_dependencies
 from scripts.validate_research_parity import check_manifest
 REG=ROOT/'research/mathematical-engineering/langmem087'
