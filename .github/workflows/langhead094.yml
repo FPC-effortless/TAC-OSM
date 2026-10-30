@@ -115,8 +115,8 @@ jobs:
               src="langhead094-downloads/LANGHEAD094-${arm}-${seed}"
               test -s "$src/MODEL.pt"
               test -s "$src/RESULTS.json"
-              for name in zlib bisect tomllib; do
-                cmp "$src/DEV_SOURCE/Doc/library/${name}.rst" "$store/DEV_SOURCE/Doc/library/${name}.rst"
+              for name in ch01-01-installation ch02-00-guessing-game-tutorial ch03-01-variables-and-mutability; do
+                cmp "$src/DEV_SOURCE/src/${name}.md" "$store/DEV_SOURCE/src/${name}.md"
               done
               mkdir -p "$store/${arm}-${seed}"
               cp "$src/MODEL.pt" "$src/RESULTS.json" "$store/${arm}-${seed}/"
