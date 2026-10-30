@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LANGHEAD094: original real-FIT 192-step independent 5-seed x 5-head study.
+"""LANGHEAD094: original real-FIT 384-step independent 5-seed x 4-architecture study.
 
 Checkpoint is sealed before any evaluation documents are retrieved.
 Same exposure/seed/optimizer/parameter parity, but training FLOPs not matched.
@@ -24,7 +24,9 @@ DEV_BLOBS={
  'src/ch03-01-variables-and-mutability.md':'ed15afc0fd46a011578cdf41b3e4f03a5e3257fc'}
 STEPS=384;BATCH=4;LENGTH=64;EVAL_START=128;EVAL_STOP=640
 def digest(b):return hashlib.sha256(b).hexdigest()
-def counts(m):\n n=sum(p.numel() for p in m.parameters() if p.requires_grad)\n return {'trainable':n,'deployed':sum(p.numel() for p in m.parameters())}
+def counts(m):
+ n=sum(p.numel() for p in m.parameters() if p.requires_grad)
+ return {'trainable':n,'deployed':sum(p.numel() for p in m.parameters())}
 def source_hash():return digest((REG/'model093.py').read_bytes())
 def state_hash(m):
  h=hashlib.sha256()
