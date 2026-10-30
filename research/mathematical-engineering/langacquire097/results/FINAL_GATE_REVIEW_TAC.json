@@ -1,0 +1,82 @@
+{
+  "original_resource_gate": {
+    "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
+    "architecture_family": "tac",
+    "eligible_for_architecture_superiority": false,
+    "matched_objectives": [
+      "full",
+      "query"
+    ],
+    "matched_seeds": [
+      1701,
+      1702,
+      1703,
+      1704,
+      1705
+    ],
+    "phase": "final",
+    "research_execution": {
+      "checkpoint_promotion_permitted": false,
+      "evidence_level": "internally_measured_not_independently_qualified",
+      "execution_level": "internal_research",
+      "independently_qualified": false,
+      "protected_TEST_permitted": false,
+      "status": "PASS_INTERNAL_RESEARCH_METADATA"
+    },
+    "reward_integrity": "NOT_INDEPENDENTLY_CERTIFIED_INTERNAL_RESEARCH",
+    "scope": "same executable model; complete mathematical ATen signatures/shapes/counts, not hardware instructions",
+    "status": "PASS_WITHIN_FAMILY_OPERATOR_PARITY",
+    "study_id": "LANGACQUIRE097-TAC"
+  },
+  "original_source_files_unchanged": true,
+  "postfit_verifier_review": {
+    "actor_scorer_cohort_thresholds_changed": false,
+    "model_training_code_changed": false,
+    "model_weights_retrained_or_selected": false,
+    "new_postfit_verifier_implementation": true,
+    "original_verifier_disk_bytes_changed": false,
+    "original_verifier_sha256": "4855d96a02dec22669d033440e7391da6d469244b5b2f182c4f6fdb94b5ab7a1",
+    "qualification": "internal research; no architecture, AGI or independent qualification",
+    "repair_rule": {
+      "allowed_names": [
+        "profiler::_record_function_enter_new",
+        "profiler::_record_function_exit"
+      ],
+      "counts": "positive integers, unique rows, balanced enter/exit; retained in Counter comparisons",
+      "other_operations": "every ATen row goes through the unchanged original parser; any other namespace fails",
+      "required_stage": "optimizer",
+      "required_tensor_inputs": [],
+      "required_tensor_outputs": [],
+      "scientific_scope": "profiler serialization compatibility only; no arithmetic, data, parameter or outcome waiver"
+    },
+    "review_driver_commit": "dbe3f9edba9a89037b3e8c6bfe2e775f81777ae4",
+    "review_driver_commit_verified": true,
+    "review_driver_sha256": "3a0efcdceeefd84f83375095598de4567ae4f025a7dad3c8df569afa87d698ed",
+    "schema": "langacquire097.postfit-verifier-review.v1",
+    "source_hashes_before": {
+      "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_GRU.json": "5da397018bc88c548e94e726f568980cf5351a9a1fbee84060841817a418bb50",
+      "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_SSM.json": "65fc822fc93485fc41b17d091943ade3dd66d57e6996de2a2fbe1063243f979a",
+      "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_TAC.json": "0dece21777f1d884b73ce7e40d761cddc770047afa347ee5c9d67e78e6cc8d9b",
+      "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_TRANSFORMER.json": "21f016821e80701433bbad283f06b09a05bb67cf820df3649ea31beede2041f6",
+      "research/mathematical-engineering/langacquire097/PREREGISTRATION.md": "6ff04de5683a10a8ea84d97857877aaeb480cbf8047309324f9ed7a8263dbb18",
+      "research/mathematical-engineering/langacquire097/REGISTER.json": "7ee8497ba7185bd12563fc72557cc2d948d797a52516226960c3494e723573b3",
+      "research/mathematical-engineering/langacquire097/analysis.py": "5171da9fddc8154a1e1500a5193412e0680dcd8fa56912d41d340f94cabe91dd",
+      "research/mathematical-engineering/langacquire097/data.py": "008951ae941e7c733c2f938982095260b6b1055d6a536ca33ee03b267f1735c6",
+      "research/mathematical-engineering/langacquire097/evaluate.py": "d787b4185165519bb40416bb4d293f87749d76afda7f0185c4d196531ad20987",
+      "research/mathematical-engineering/langacquire097/models.py": "da787c2f201479496dc94104e992aad4cda86a1569d542105b7dc56dd88cd266",
+      "research/mathematical-engineering/langacquire097/objective.py": "be2014d299ca97cb97bbd3e7d5f69312d80e18f0a13818e81d3a5facbe78014a",
+      "research/mathematical-engineering/langacquire097/probe_adapter.py": "569ae907504d4d0bb880f65ee0a468cb657109d2609e9a76abfa159b7ac40577",
+      "research/mathematical-engineering/langacquire097/profile097.py": "2ab8f0a8c56fab77864f5150e18d8e5b65bd57de6f377babcc5fc7c7d73b1369",
+      "research/mathematical-engineering/langacquire097/raw_control.py": "23f3a91f1e42bd3b32549750441f1be1cab1694383feb5d17b1c1019bc11e083",
+      "research/mathematical-engineering/langacquire097/resources.py": "1b8e975f93b7e641c0eec6e1bcd9b6b17ccb4eb9030948bcbce76a5a5d5b3527",
+      "research/mathematical-engineering/langacquire097/run.py": "d6b9e33b7c0a63f72e5726f7026957a214a475ba2f1e6147256845c7a4a64b55",
+      "research/mathematical-engineering/langacquire097/train.py": "35830767309f2b45c424f2d040f9a51eca8b846064cfdaa12f69b5767f4e10d6",
+      "research/mathematical-engineering/langhead093/model093.py": "004aabb7ac8e6926d5b038dfdc79d3e4aa1878a2af7b22765c217f6212e81cf4",
+      "research/mathematical-engineering/langhead094/model094.py": "ba7693db65c7a5690954c3e1365134e0ad81f160ea6e00b46844385bc8717acd",
+      "research/mathematical-engineering/langmem086/compact_tac.py": "7179908fa3672879f3c2046ec4521f0b9f783d5c696aaba82c4c2cd0b6ebc9b1",
+      "scripts/validate_research_parity.py": "54046eab1faf2f8c51d757eb02eba5f47f61f4fdc042cb691692effc4992f526",
+      "src/tac_osm/research_objective_budget.py": "4855d96a02dec22669d033440e7391da6d469244b5b2f182c4f6fdb94b5ab7a1"
+    },
+    "training_source_commit": "d21c7e7b385ca164eac9046fafca43fc9a3762b1"
+  }
+}

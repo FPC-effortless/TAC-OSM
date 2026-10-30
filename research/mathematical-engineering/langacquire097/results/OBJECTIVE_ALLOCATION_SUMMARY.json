@@ -1,0 +1,314 @@
+{
+  "ARC_target_length_distribution": {
+    "distribution": {
+      "12": 7,
+      "15": 1,
+      "18": 2,
+      "19": 1,
+      "21": 3,
+      "27": 1,
+      "28": 4,
+      "33": 1,
+      "39": 3,
+      "7": 1
+    },
+    "maximum": 39,
+    "mean": 21.375,
+    "minimum": 7
+  },
+  "all_five_seed_summary": {
+    "arc_domain_mass_increase_query_minus_full_mean": 0.22462000077612493,
+    "future_Y_mass_full_mean": 0.098682009263058,
+    "lexical_Y_mass_mean": {
+      "full": 0.01588973696147013,
+      "query": 0.1686509890202607
+    },
+    "mean_per_step_domain_mass": {
+      "full": {
+        "arc": 0.6067290102036144,
+        "lexical": 0.3932709897963857
+      },
+      "query": {
+        "arc": 0.8313490109797392,
+        "lexical": 0.1686509890202607
+      }
+    },
+    "pooled_target_counts_all_five_schedules": {
+      "arc": {
+        "full": 401298,
+        "query": 55081
+      },
+      "lexical": {
+        "full": 253440,
+        "query": 10240
+      }
+    },
+    "same_Y_byte_coefficient_multiplier_mean": 10.489326359596628
+  },
+  "counts": {
+    "ARC_examples_per_batch": 2,
+    "FIT_ARC_episodes": 24,
+    "FIT_episodes": 152,
+    "FIT_lexical_episodes": 128,
+    "examples_per_batch": 4,
+    "lexical_A_Q_Y_lengths": [
+      64,
+      32,
+      4
+    ],
+    "lexical_examples_per_batch": 2,
+    "lexical_full_targets_per_episode": 99,
+    "seeds": 5,
+    "steps_per_seed": 256
+  },
+  "exact_registered_loss": {
+    "arc_n_i": "len(acquisition_bytes)+len(query_bytes)+len(target_bytes)-1",
+    "arc_y_i": "len(target_bytes) for the sampled ARC episode",
+    "full_segment_counts_per_episode": "A_internal=len(A)-1;Q_labels=len(Q);Y_labels=len(Y)",
+    "full_step": "(sum over 198 lexical next-byte cross-entropies + sum over n_i+n_j ARC next-byte cross-entropies)/(198+n_i+n_j)",
+    "query_step": "(sum over 8 lexical Y-byte cross-entropies + sum over y_i+y_j ARC Y-byte cross-entropies)/(8+y_i+y_j)",
+    "reduction": "Each optimizer step minimizes a batch mean over active target bytes, not a domain-balanced or example-balanced mean.",
+    "step_mean_vs_pool": "The mean of per-step domain shares is the exact allocation of the uniformly weighted registered batch losses. A pooled-byte share uses different batch weights and is reported separately."
+  },
+  "full_audit": {
+    "bytes": 1534423,
+    "contains": "All1280 scheduled batches with exact integer loss masses, profile-binding hashes, length distributions and per-episode coefficients.",
+    "path": "/workspace/langacquire097-objective-allocation-audit.json",
+    "sha256": "2c1872269d15dd957efdfa30441b8718b5a9c410df40bfe74b67e5dee5d47b4e"
+  },
+  "per_seed": [
+    {
+      "all_eight_profile_bindings_verified": true,
+      "full_supervised_targets": 130486,
+      "lexical_future_Y_coefficient_mass": {
+        "full": 0.01594377213181474,
+        "query": 0.17075045927335125
+      },
+      "loss_target_counts_by_domain": {
+        "arc": {
+          "full": 79798,
+          "query": 10857
+        },
+        "lexical": {
+          "full": 50688,
+          "query": 2048
+        }
+      },
+      "mean_same_Y_byte_coefficient_multiplier_query_over_full": 10.581012779308985,
+      "mean_step_domain_coefficient_mass": {
+        "full": {
+          "arc": 0.6053916397375851,
+          "lexical": 0.39460836026241486
+        },
+        "query": {
+          "arc": 0.8292495407266488,
+          "lexical": 0.17075045927335125
+        }
+      },
+      "query_supervised_targets": 12905,
+      "schedule_sha256": "cb9549ac2322e38abc3d6419052314eb11202a2784065f6b05da5fc8dfed8d2d",
+      "seed": 1701
+    },
+    {
+      "all_eight_profile_bindings_verified": true,
+      "full_supervised_targets": 131083,
+      "lexical_future_Y_coefficient_mass": {
+        "full": 0.015903467738621488,
+        "query": 0.16737299395045507
+      },
+      "loss_target_counts_by_domain": {
+        "arc": {
+          "full": 80395,
+          "query": 11203
+        },
+        "lexical": {
+          "full": 50688,
+          "query": 2048
+        }
+      },
+      "mean_same_Y_byte_coefficient_multiplier_query_over_full": 10.38731548655956,
+      "mean_step_domain_coefficient_mass": {
+        "full": {
+          "arc": 0.6063891734691181,
+          "lexical": 0.39361082653088186
+        },
+        "query": {
+          "arc": 0.8326270060495449,
+          "lexical": 0.16737299395045507
+        }
+      },
+      "query_supervised_targets": 13251,
+      "schedule_sha256": "aecf077eb29f524edf67199e223bbfc3944c4b2f09c6202d67727759e58f714a",
+      "seed": 1702
+    },
+    {
+      "all_eight_profile_bindings_verified": true,
+      "full_supervised_targets": 131352,
+      "lexical_future_Y_coefficient_mass": {
+        "full": 0.015828055377935468,
+        "query": 0.16560550838597476
+      },
+      "loss_target_counts_by_domain": {
+        "arc": {
+          "full": 80664,
+          "query": 11254
+        },
+        "lexical": {
+          "full": 50688,
+          "query": 2048
+        }
+      },
+      "mean_same_Y_byte_coefficient_multiplier_query_over_full": 10.342931270277528,
+      "mean_step_domain_coefficient_mass": {
+        "full": {
+          "arc": 0.6082556293960971,
+          "lexical": 0.3917443706039028
+        },
+        "query": {
+          "arc": 0.8343944916140252,
+          "lexical": 0.16560550838597476
+        }
+      },
+      "query_supervised_targets": 13302,
+      "schedule_sha256": "6210a2e18cbac3b190120161dc5b121a6e9e53dca59bb458f030303d2f2a5eda",
+      "seed": 1703
+    },
+    {
+      "all_eight_profile_bindings_verified": true,
+      "full_supervised_targets": 131190,
+      "lexical_future_Y_coefficient_mass": {
+        "full": 0.015873903240562332,
+        "query": 0.17012793003287807
+      },
+      "loss_target_counts_by_domain": {
+        "arc": {
+          "full": 80502,
+          "query": 10882
+        },
+        "lexical": {
+          "full": 50688,
+          "query": 2048
+        }
+      },
+      "mean_same_Y_byte_coefficient_multiplier_query_over_full": 10.597822831199931,
+      "mean_step_domain_coefficient_mass": {
+        "full": {
+          "arc": 0.6071208947960823,
+          "lexical": 0.3928791052039177
+        },
+        "query": {
+          "arc": 0.8298720699671219,
+          "lexical": 0.17012793003287807
+        }
+      },
+      "query_supervised_targets": 12930,
+      "schedule_sha256": "4900225ef39add3cf557f3d2cb8c713c4d4a149a86c56a3a2432ed60e19ce082",
+      "seed": 1704
+    },
+    {
+      "all_eight_profile_bindings_verified": true,
+      "full_supervised_targets": 130627,
+      "lexical_future_Y_coefficient_mass": {
+        "full": 0.01589948631841661,
+        "query": 0.16939805345864448
+      },
+      "loss_target_counts_by_domain": {
+        "arc": {
+          "full": 79939,
+          "query": 10885
+        },
+        "lexical": {
+          "full": 50688,
+          "query": 2048
+        }
+      },
+      "mean_same_Y_byte_coefficient_multiplier_query_over_full": 10.537549430637139,
+      "mean_step_domain_coefficient_mass": {
+        "full": {
+          "arc": 0.606487713619189,
+          "lexical": 0.3935122863808111
+        },
+        "query": {
+          "arc": 0.8306019465413556,
+          "lexical": 0.16939805345864448
+        }
+      },
+      "query_supervised_targets": 12933,
+      "schedule_sha256": "16ec892b870e2c99e5390c05c67715b12de244e17e97953704722552d0cc2aac",
+      "seed": 1705
+    }
+  ],
+  "permissions_observed": {
+    "DEV_inputs_or_outcomes_read": false,
+    "frozen_files_changed": false,
+    "model_checkpoints_read": 0,
+    "model_forwards": 0,
+    "optimizer_steps": 0
+  },
+  "prefit_profile_bindings": {
+    "gru": {
+      "bytes": 487089,
+      "implementation_sha256": "0e5d945bcffea192c43e2bbe22193203bdd6a875e39d9d050398982830b7daf7",
+      "path": "research/mathematical-engineering/langacquire097/profiles/PROFILE_gru.json",
+      "profiles_checked": 10,
+      "recipe_sha256": "ea5358dec719bf0e028466ab5de69a77a21ba8933ab57d0074c78576bf07fcb6",
+      "sha256": "7534474e25e73f8a5c6b8c18c65b4af2620ef88b46e7aa8995712154941b22d6",
+      "source_commit": "4713262c1a8110c15b85691c4fd3b8388dfba677"
+    },
+    "ssm": {
+      "bytes": 302785,
+      "implementation_sha256": "0e5d945bcffea192c43e2bbe22193203bdd6a875e39d9d050398982830b7daf7",
+      "path": "research/mathematical-engineering/langacquire097/profiles/PROFILE_ssm.json",
+      "profiles_checked": 10,
+      "recipe_sha256": "ea5358dec719bf0e028466ab5de69a77a21ba8933ab57d0074c78576bf07fcb6",
+      "sha256": "04676ea30bc4c5e7d8c5c5596666ba016cae4861a2db7147958c13434f53c101",
+      "source_commit": "4713262c1a8110c15b85691c4fd3b8388dfba677"
+    },
+    "tac": {
+      "bytes": 1613050,
+      "implementation_sha256": "0e5d945bcffea192c43e2bbe22193203bdd6a875e39d9d050398982830b7daf7",
+      "path": "research/mathematical-engineering/langacquire097/profiles/PROFILE_tac.json",
+      "profiles_checked": 10,
+      "recipe_sha256": "ea5358dec719bf0e028466ab5de69a77a21ba8933ab57d0074c78576bf07fcb6",
+      "sha256": "af5a3725625767bbe9f8978252cb418147d907f4105351eb0bc0152785c802b4",
+      "source_commit": "4713262c1a8110c15b85691c4fd3b8388dfba677"
+    },
+    "transformer": {
+      "bytes": 288008,
+      "implementation_sha256": "0e5d945bcffea192c43e2bbe22193203bdd6a875e39d9d050398982830b7daf7",
+      "path": "research/mathematical-engineering/langacquire097/profiles/PROFILE_transformer.json",
+      "profiles_checked": 10,
+      "recipe_sha256": "ea5358dec719bf0e028466ab5de69a77a21ba8933ab57d0074c78576bf07fcb6",
+      "sha256": "d1955c3704465aa0f14905c359b3cd5083ad070a6e983f394294ab75990d0b81",
+      "source_commit": "4713262c1a8110c15b85691c4fd3b8388dfba677"
+    }
+  },
+  "reproducible_calculator": {
+    "bytes": 11872,
+    "command": "python objective_allocation_audit.py --repo /path/to/frozen/TAC-OSM --fit /path/to/authenticated/FIT.json --output /new/path/audit.json",
+    "imports": "Pythonstandardlibrary+NumPyonly;noTorch/models/checkpoints/DEVreads",
+    "path": "/workspace/langacquire097-objective-allocation-audit.py",
+    "repeat_verified_byte_identical": true,
+    "sha256": "1a774ac0d19ca8eba155759ce73603b580624eb3219f72713fe16a53fb7a13ee"
+  },
+  "schema": "langacquire097.objective-allocation-summary.v1",
+  "scientific_takeaway": [
+    "Two lexical and two ARC examples per batch balances example counts, not direct-loss coefficient mass. ARC targets are longer and receive most query-objective coefficient mass.",
+    "Changing full to query is a bundled intervention: removing direct prefix losses, increasing all future-target coefficients, and shifting relative domain/episode weights. Any observed objective effect cannot uniquely isolate learning to write acquisition state.",
+    "Lexical future Y bytes receive larger direct coefficients in query than full despite a smaller total lexical domain share; it would be incorrect to infer simple lexical target starvation from overall domain shares.",
+    "These are coefficients determined by FIT lengths and the frozen schedule, not measured per-domain losses, gradient norms, optimizer updates or causes of any eventual outcome. AdamW, gradient clipping and gradient interactions preclude translating mass percentages into learning percentages.",
+    "The same schedule applies to every model family/objective; this is an interpretation limitation of the registered objective contrast, not evidence of cross-arm data/order cheating.",
+    "Shorter and longer ARC episodes receive unequal per-example weight; source/task-clustered exact-match evaluation is a different estimand from token-weighted training CE.",
+    "Both objectives keep acquisition within the differentiable graph; query-only training does not add a gradient path absent from the full objective.",
+    "No change to the frozen objectives, data, selection, thresholds or scorer is proposed for this trial. A future separately preregistered study could compare domain/example-balanced losses on the same observed episodes."
+  ],
+  "scope": "Postfit, outcome-blind mathematical interpretation of the frozen FIT bytes and schedules; no retrospective scorer/objective changes.",
+  "source_bindings": {
+    "FIT_json_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+    "REGISTER_json_sha256": "7ee8497ba7185bd12563fc72557cc2d948d797a52516226960c3494e723573b3",
+    "numpy_version": "2.3.5",
+    "objective_py_sha256": "be2014d299ca97cb97bbd3e7d5f69312d80e18f0a13818e81d3a5facbe78014a",
+    "train_py_sha256": "35830767309f2b45c424f2d040f9a51eca8b846064cfdaa12f69b5767f4e10d6"
+  },
+  "status": "READ_ONLY_FIT_SCHEDULE_MATHEMATICS_NOT_AN_OUTCOME"
+}

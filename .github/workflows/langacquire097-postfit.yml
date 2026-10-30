@@ -1,0 +1,186 @@
+name: LANGACQUIRE097 original-checkpoint postfit review
+on:
+  pull_request:
+    paths:
+      - 'scripts/langacquire097_postfit_review.py'
+      - 'tests/test_langacquire097_postfit_review.py'
+      - 'research/mathematical-engineering/langacquire097/POSTFIT_REVIEW.json'
+      - '.github/workflows/langacquire097-postfit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  PYTHONPATH: src
+  REVIEW_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 'pytest>=8,<9' cryptography==46.0.3
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify narrow profiler-format compatibility and source preservation
+        run: python -m pytest -q tests/test_langacquire097_postfit_review.py tests/test_langacquire097_budget.py tests/test_research_parity_gate.py
+      - name: Require an explicit original-checkpoint review request
+        id: route
+        env:
+          REQUESTED_EVENT: ${{ github.event_name }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,re,subprocess
+          path='research/mathematical-engineering/langacquire097/POSTFIT_REVIEW.json'
+          cfg=json.load(open(path));commit=os.environ['REVIEW_COMMIT']
+          assert re.fullmatch('[0-9a-f]{40}',commit)
+          changed=subprocess.check_output(['git','diff-tree','--root','--no-commit-id','--name-only','-r',commit],text=True).splitlines()
+          requested=cfg['evaluation_enabled'] and (path in changed or os.environ['REQUESTED_EVENT']=='workflow_dispatch')
+          assert cfg['no_new_model_fits'] and cfg['new_optimizer_steps']==0
+          assert cfg['training_run_id']==41137837235 and cfg['training_source_commit']=='d21c7e7b385ca164eac9046fafca43fc9a3762b1'
+          assert cfg['initialization_run_id']==41137176363
+          if requested:
+              assert hashlib.sha256(open('scripts/langacquire097_postfit_review.py','rb').read()).hexdigest()==cfg['reviewed_driver_sha256']
+              entry=cfg['pre_evaluation_checkpoint_audit'];raw=open(entry['path'],'rb').read()
+              assert hashlib.sha256(raw).hexdigest()==entry['sha256']
+              audit=json.loads(raw)
+              assert audit['status']=='PASS_ALL_40_ORIGINAL_CHECKPOINTS' and len(audit['fits'])==40 and not audit['errors']
+              assert audit['source_commit']==cfg['training_source_commit']
+              assert audit['model_forward_calls']==0 and audit['optimizer_steps']==0
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:
+              out.write('evaluate='+str(bool(requested)).lower()+'\n')
+          print('Evaluation-only review requested:',bool(requested),'; new fits prohibited')
+          PY
+      - name: Confirm the registered bounded CPU evaluation route
+        if: steps.route.outputs.evaluate == 'true'
+        run: python scripts/phone_lab.py plan research/phone_queue/langacquire097-evaluate.json > /tmp/langacquire097-postfit-plan.json
+      - name: Verify all ten original fit jobs succeeded
+        if: steps.route.outputs.evaluate == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json,os,re,urllib.request
+          base='https://api.github.com/repos/'+os.environ['GITHUB_REPOSITORY']
+          def get(path):
+              req=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'})
+              with urllib.request.urlopen(req,timeout=30) as response:return json.load(response)
+          run=get('/actions/runs/41137837235')
+          assert run['head_sha']=='d21c7e7b385ca164eac9046fafca43fc9a3762b1'
+          jobs=get('/actions/runs/41137837235/jobs?per_page=100')['jobs']
+          expected={(str(s),o) for s in range(1701,1706) for o in ('full','query')};found=set()
+          for job in jobs:
+              match=re.fullmatch(r'fit \((170[1-5]), (full|query)\)',job['name'])
+              if match:
+                  assert job['status']=='completed' and job['conclusion']=='success',job['name']
+                  found.add(match.groups())
+          assert found==expected,'All original fit jobs are required before review'
+          original_evaluation=[j for j in jobs if j['name']=='evaluate']
+          assert len(original_evaluation)==1 and original_evaluation[0]['status']=='completed'
+          assert original_evaluation[0]['conclusion']=='failure','Preserve the original rejected verifier attempt before a separate review'
+          print('All10 original objective legs succeeded; require tensor/checkpoint verification next')
+          cfg=json.load(open('research/mathematical-engineering/langacquire097/POSTFIT_REVIEW.json'))
+          artifacts=get('/actions/runs/41137176363/artifacts?per_page=100')['artifacts']
+          selected=[a for a in artifacts if a['name']==cfg['initialization_artifact_name']]
+          assert len(selected)==1 and not selected[0]['expired']
+          assert selected[0]['digest']=='sha256:'+cfg['initialization_archive_sha256']
+          assert selected[0]['workflow_run']['id']==41137176363
+          print('Original initialization archive digest authenticated; per-tensor verification follows')
+          PY
+      - uses: actions/checkout@v4
+        if: steps.route.outputs.evaluate == 'true'
+        with:
+          ref: d21c7e7b385ca164eac9046fafca43fc9a3762b1
+          path: original-source
+          fetch-depth: 1
+      - uses: actions/download-artifact@v4
+        if: steps.route.outputs.evaluate == 'true'
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41137837235
+          pattern: langacquire097-seed-*
+          path: /tmp/langacquire097-original-fits
+      - uses: actions/download-artifact@v4
+        if: steps.route.outputs.evaluate == 'true'
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41137176363
+          name: langacquire097-preflight-41137176363
+          path: original-source/research/mathematical-engineering/langacquire097/profiles
+      - name: Review fixed original checkpoints and run unchanged inference/scoring
+        if: steps.route.outputs.evaluate == 'true'
+        run: >-
+          python scripts/langacquire097_postfit_review.py
+          --source-root "$PWD/original-source"
+          --fits /tmp/langacquire097-original-fits --data /tmp/langacquire097-postfit-data
+          --output ci-artifacts/postfit-review --review-commit "$REVIEW_COMMIT"
+      - name: Retain the exact review driver and request with the original evidence
+        if: always() && steps.route.outputs.evaluate == 'true'
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,shutil,subprocess
+          out=Path('ci-artifacts/postfit-review/review-source');out.mkdir(parents=True,exist_ok=True)
+          for name in ('scripts/langacquire097_postfit_review.py','tests/test_langacquire097_postfit_review.py','.github/workflows/langacquire097-postfit.yml','research/mathematical-engineering/langacquire097/POSTFIT_REVIEW.json'):
+              shutil.copyfile(name,out/Path(name).name)
+          plan=Path('/tmp/langacquire097-postfit-plan.json')
+          if plan.is_file():shutil.copyfile(plan,out/'PHONE_EVALUATION_PLAN.json')
+          root=Path('original-source').resolve()
+          if root.exists():
+              tracked=set(subprocess.check_output(['git','ls-files','-z'],cwd=root).decode().split('\0'))-{''}
+              prefix='research/mathematical-engineering/langacquire097/'
+              names={p for p in tracked if p.startswith(prefix) or p.startswith('src/tac_osm/')}
+              names.add('scripts/validate_research_parity.py')
+              receipt=Path('ci-artifacts/postfit-review/POSTFIT_VERIFIER_REVIEW.json')
+              if receipt.exists():names.update(json.loads(receipt.read_text())['source_hashes_before'])
+              provenance=json.loads((root/prefix/'SOURCE_PROVENANCE.json').read_text())
+              names.update(provenance['source_support_sha256'])
+              recorded={}
+              for name in sorted(names):
+                  source=root/name
+                  assert name in tracked and source.is_file() and not source.is_symlink()
+                  assert source.resolve().is_relative_to(root) and source.suffix in ('.py','.json','.md')
+                  target=out/'original-source'/name;target.parent.mkdir(parents=True,exist_ok=True)
+                  shutil.copyfile(source,target)
+                  recorded[name]={'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'bytes':target.stat().st_size}
+              (out/'ORIGINAL_TRACKED_SOURCE_FILES.json').write_text(json.dumps({'training_source_commit':'d21c7e7b385ca164eac9046fafca43fc9a3762b1','files':recorded},indent=2,sort_keys=True)+'\n')
+          fits=Path('/tmp/langacquire097-original-fits')
+          records={}
+          if fits.exists():
+              for leg in sorted(fits.iterdir()):
+                  assert leg.is_dir() and not leg.is_symlink()
+                  for source in sorted(leg.iterdir()):
+                      if not source.is_file():continue
+                      assert not source.is_symlink() and source.suffix in ('.json','.log')
+                      name=source.relative_to(fits).as_posix()
+                      target=out/'original-fit-leg-records'/name;target.parent.mkdir(parents=True,exist_ok=True)
+                      shutil.copyfile(source,target)
+                      records[name]={'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'bytes':target.stat().st_size}
+              (out/'ORIGINAL_FIT_LEG_RECORDS.json').write_text(json.dumps({'training_run_id':41137837235,'files':records},indent=2,sort_keys=True)+'\n')
+          data=Path('/tmp/langacquire097-postfit-data')
+          if data.exists():
+              frozen=json.loads(Path('original-source/research/mathematical-engineering/langacquire097/FROZEN_INPUTS.json').read_text())
+              for name,expected in frozen['artifact_sha256'].items():
+                  source=data/name
+                  assert source.is_file() and not source.is_symlink()
+                  assert hashlib.sha256(source.read_bytes()).hexdigest()==expected
+                  target=out/'frozen-data'/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
+              for name in ('MANIFEST.json',):
+                  source=data/name
+                  assert hashlib.sha256(source.read_bytes()).hexdigest()==frozen['data_manifest_sha256']
+                  shutil.copyfile(source,out/'frozen-data'/name)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.route.outputs.evaluate == 'true'
+        with:
+          name: langacquire097-postfit-review-${{ github.run_id }}
+          path: ci-artifacts/postfit-review/
+          if-no-files-found: error

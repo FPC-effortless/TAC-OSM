@@ -1,0 +1,92 @@
+{
+  "schema": "langacquire097.register.v1",
+  "study_id": "LANGACQUIRE097",
+  "execution_level": "internal_research",
+  "seeds": [
+    1701,
+    1702,
+    1703,
+    1704,
+    1705
+  ],
+  "families": [
+    "tac",
+    "gru",
+    "ssm",
+    "transformer"
+  ],
+  "objectives": [
+    "full",
+    "query"
+  ],
+  "training": {
+    "steps": 256,
+    "batch_size": 4,
+    "context": 272,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "foreach": false,
+    "max_arm_seconds": 2100,
+    "max_seed_seconds": 2400,
+    "tuning_trials": 0,
+    "max_arm_seconds_by_family": {
+      "tac": 2100,
+      "gru": 480,
+      "ssm": 480,
+      "transformer": 240
+    },
+    "max_leg_seconds": 2400
+  },
+  "manifest_paths": {
+    "tac": "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_TAC.json",
+    "gru": "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_GRU.json",
+    "ssm": "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_SSM.json",
+    "transformer": "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_TRANSFORMER.json"
+  },
+  "data": {
+    "manifest_sha256": "c44e95dd75524d152a9d84d277554805cba6a00f4db642f48e2139472a2c8d41",
+    "source_provenance_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+    "FIT.json_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+    "artifact_sha256": {
+      "DEV_ACTOR.json": "52104399d27087183ceef9520f4204aa6f50ca8184bd1518342bc6a884699a91",
+      "DEV_CONTROL_ACTOR.json": "4d4d2b03231c90fd5fb323215d85fe52908e75955667593094989cf4a7a745af",
+      "DEV_DONORS.json": "a73e7f036f8a939abba008ef1b5b0c70e1321738b7d68d0fe6be33d76b1e95c6",
+      "DEV_JUDGE.json": "f38224274cb787a5bcd9f68ee43436fa6bdefbde3d19f47b90290d04108e4aec",
+      "FIT.json": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1"
+    },
+    "fit_episodes": 152,
+    "dev_episodes": 72
+  },
+  "generation_limits": {
+    "lexical": 4,
+    "arc": 40
+  },
+  "compute": {
+    "backend": "github_actions_cpu",
+    "profile_max_minutes": 15,
+    "fit_jobs": 10,
+    "fit_job_matrix": "five seeds x two objectives; four family fits per job",
+    "max_fit_minutes_per_objective_leg": 40,
+    "max_fit_minutes_all_legs": 400,
+    "evaluate_max_minutes": 40,
+    "max_experiment_stage_minutes": 455,
+    "job_setup_download_upload_minutes": "separately measured; each job has45minute timeout",
+    "gpu_minutes": 0
+  },
+  "fit_enabled": true,
+  "protected_repository_TEST_permitted": false,
+  "checkpoint_promotion_permitted": false,
+  "phase_policy": "First source-authenticated no-fit profiles and mathematical companion; freeze their measured receipts before enabling any optimizer. All40 original checkpoints sealed before DEV predictions.",
+  "initialization": {
+    "run_id": 41137176363,
+    "artifact_name": "langacquire097-preflight-41137176363",
+    "archive_sha256": "f750810ce2222f4f22fb1fa4981a91fb537a094330c9f98578e9edbe577d6abf",
+    "policy": "Original20zero-optimizer snapshots; bothobjectivesloadSHAverifiedidenticalbytes before AdamW construction."
+  }
+}
