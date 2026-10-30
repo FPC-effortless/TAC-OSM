@@ -121,7 +121,9 @@ class TAO(Optimizer):
                         v.mul_(beta2).addcmul_(nesterov, nesterov, value=1 - beta2)
                         nesterov = nesterov / ((v / (1 - beta2 ** t)).sqrt() + eps)
                     if mode == "adamuon":
-                        nesterov = nesterov.sign()
+                        # Paper AdaMuon orthogonalizes sign(M_t), not sign of
+                        # the Muon Nesterov blend; these can oppose one another.
+                        nesterov = m.reshape(m.shape[0], -1).sign()
                     u = ns5(nesterov, group["ns_steps"], eps)
                     if mode == "adamuon":
                         if "second_moment" not in state:
