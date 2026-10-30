@@ -1,0 +1,287 @@
+{
+  "study": "CODEVALUE003",
+  "status": "DRAFT_BLOCKED_NOT_TRAINED",
+  "execution_level": "internal_research",
+  "parent_commit": "e73cfeb68f7a462ed25bdaf4ac164f6235b41bd1",
+  "owner_request": "2026-10-30: Run CODEVALUE002 follow-up on Kaggle dual T4s with longer training and better language/commercial usefulness tests.",
+  "parameter_budget_contract": "owner-2026-10-30-codevalue003-500k-proposed",
+  "objective": "Determine whether longer optimization improves unseen-project code prediction enough to justify a human utility pilot.",
+  "arms": {
+    "tac": {
+      "params": 499623,
+      "model": "ScaledRecurrenceTAC070(p500k), first-stage native 8x8/aligned/wave/6 concepts, graph-free upper h48"
+    },
+    "gru": {
+      "params": 500165,
+      "model": "Embedding48 GRU2 hidden211 Linear211-256"
+    },
+    "ssm": {
+      "params": 499782,
+      "model": "Simple selective diagonal SSM128, gated FFN931; not Mamba3"
+    }
+  },
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "train": {
+    "repo": "python/cpython",
+    "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+    "license": "PSF License",
+    "files": [
+      {
+        "path": "Lib/asyncio/base_events.py",
+        "git_blob_sha1": "e4a39f4d345c79088ef939218390740b46287ac0",
+        "size": 79451
+      },
+      {
+        "path": "Lib/asyncio/streams.py",
+        "git_blob_sha1": "64aac4cc50d15a5e076d5ad43ea8a9017f12a72e",
+        "size": 28481
+      },
+      {
+        "path": "Lib/asyncio/tasks.py",
+        "git_blob_sha1": "dadcb5b5f36bd787af05b347d078e6118bbdc804",
+        "size": 39757
+      },
+      {
+        "path": "Lib/collections/__init__.py",
+        "git_blob_sha1": "d06d84cbdfcc364883d1e4a6439b33a5028e7957",
+        "size": 52425
+      },
+      {
+        "path": "Lib/contextlib.py",
+        "git_blob_sha1": "5b646fabca0225b4bb2cecec065f6861e7ed12ae",
+        "size": 27801
+      },
+      {
+        "path": "Lib/csv.py",
+        "git_blob_sha1": "cd202659873811a2ea47c7374cc268d26a9ac5f3",
+        "size": 19178
+      },
+      {
+        "path": "Lib/functools.py",
+        "git_blob_sha1": "d04957c555295e41ed221f856bbf5a5a45e0dd6f",
+        "size": 39558
+      },
+      {
+        "path": "Lib/http/client.py",
+        "git_blob_sha1": "a353716a8506e65ae9ac9f06581ad17397e2f2a2",
+        "size": 57228
+      },
+      {
+        "path": "Lib/json/decoder.py",
+        "git_blob_sha1": "d69a45d6793069038fcb6d2a1741bb698e5700c8",
+        "size": 12820
+      },
+      {
+        "path": "Lib/json/encoder.py",
+        "git_blob_sha1": "323332f064edf8fda55182f5a987054c2d9a7cd9",
+        "size": 16074
+      },
+      {
+        "path": "Lib/logging/__init__.py",
+        "git_blob_sha1": "aa9b79d8cab4bb8ea464a994591845576f171ee9",
+        "size": 83714
+      },
+      {
+        "path": "Lib/pathlib/_local.py",
+        "git_blob_sha1": "fbc8db78b86e61a6d43a4914c67c6cb0dbe4c34e",
+        "size": 31468
+      },
+      {
+        "path": "Lib/urllib/parse.py",
+        "git_blob_sha1": "24815952037fef7257655406e9409a66c94033a7",
+        "size": 45008
+      },
+      {
+        "path": "Lib/email/message.py",
+        "git_blob_sha1": "46bb8c21942af85ed4dada333ab6b34e6c86f3e2",
+        "size": 48109
+      }
+    ]
+  },
+  "exposed_dev": {
+    "classification": "FIRST_OPEN_DEVELOPMENT_NOT_STRICT_BLIND_TEST",
+    "files": [
+      {
+        "group": "requests",
+        "repo": "psf/requests",
+        "commit": "0e322af87745eff34caffe4df68456ebc20d9068",
+        "path": "src/requests/adapters.py",
+        "git_blob_sha1": "9a58b1602532f9bee41afb0dfadaa7eb548e98c1",
+        "size": 27451
+      },
+      {
+        "group": "requests",
+        "repo": "psf/requests",
+        "commit": "0e322af87745eff34caffe4df68456ebc20d9068",
+        "path": "src/requests/sessions.py",
+        "git_blob_sha1": "b387bc36df7bc064b502adcb3c1a4527dd401fda",
+        "size": 30495
+      },
+      {
+        "group": "httpx",
+        "repo": "encode/httpx",
+        "commit": "26d48e0634e6ee9cdc0533996db289ce4b430177",
+        "path": "httpx/_client.py",
+        "git_blob_sha1": "2249231f8c3b912c731ff160344d3672e2f11738",
+        "size": 65714
+      },
+      {
+        "group": "httpx",
+        "repo": "encode/httpx",
+        "commit": "26d48e0634e6ee9cdc0533996db289ce4b430177",
+        "path": "httpx/_models.py",
+        "git_blob_sha1": "67d74bf86bfc80e22d9a4a3153572845accd9039",
+        "size": 44700
+      },
+      {
+        "group": "click",
+        "repo": "pallets/click",
+        "commit": "934813e4d421071a1b3db3973c02fe2721359a6e",
+        "path": "src/click/types.py",
+        "git_blob_sha1": "a70fd58ce202974a1aef37fc1db73c2ee39c7491",
+        "size": 36422
+      },
+      {
+        "group": "click",
+        "repo": "pallets/click",
+        "commit": "934813e4d421071a1b3db3973c02fe2721359a6e",
+        "path": "src/click/decorators.py",
+        "git_blob_sha1": "bcf8906e7098a3cf82bdd87855c410e86f4f4279",
+        "size": 18925
+      }
+    ]
+  },
+  "source_metadata_sha256": "0991a52e2ba671a62a382f8e2a6ded19e006d6b5367957738085a9c87f866ed6",
+  "budget": {
+    "updates": 10240,
+    "batch": 8,
+    "context": 128,
+    "target_bytes_per_model": 10485760,
+    "total_model_fits": 9,
+    "optimizer": "AdamW lr=0.001 wd=0.01 grad_clip=1; constant LR; no tuning",
+    "checkpoint_updates": [
+      320,
+      1280,
+      2560,
+      5120,
+      10240
+    ],
+    "same_seed_source_schedule_across_arms": true,
+    "restart_from_scratch": true,
+    "training_flops": "UNMEASURED_NOT_MATCHED",
+    "maximum_allocation_minutes": 120,
+    "maximum_gpu_minutes": 240,
+    "automatic_resubmission": false
+  },
+  "gpu": {
+    "accelerator": "NvidiaTeslaT4",
+    "physically_observed_count_required": 2,
+    "strategy": "seed_shard",
+    "private": true,
+    "internet": false,
+    "assignment": {
+      "gpu0": [
+        1701,
+        1703
+      ],
+      "gpu1": [
+        1702
+      ]
+    },
+    "worker_processes": 2,
+    "sequential_arms_per_seed": [
+      "tac",
+      "gru",
+      "ssm"
+    ],
+    "timeout_outcome": "INCOMPLETE; retain latest complete checkpoints, receipts and worker logs; no full-cohort aggregate"
+  },
+  "evaluation": {
+    "exposed_dev": "Full-file next-byte learning curves at every frozen checkpoint; no selection on transfer cohort.",
+    "fresh_transfer": "Candidate five publishers/two files each pinned in TRANSFER_SOURCES.json. Byte SHA256 verification, license text archival, historical exposure and duplicate audits pending.",
+    "fresh_transfer_status": "METADATA_PINNED_CONTENT_AND_EXPOSURE_AUDIT_PENDING",
+    "fresh_transfer_labels_open": "Source metadata API may return encoded content; no strict-blind claim. Scoring only after all nine final checkpoints sealed, once; no subsequent tuning.",
+    "protected_TEST": "NOT_OPENED",
+    "scoring": "Every byte after first 64 bytes of each file, once. Causal windows 128 bytes, score final 64; final partial block masks missing targets; reset per window and per file. Same windows and masks for all predictors.",
+    "completion_offers_per_file": 512,
+    "completion_offsets": "Evenly spaced unique positions from byte128 through len(file)-32; exclude files with fewer than512 eligible positions before fit.",
+    "greedy_lengths": [
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "primary_length": 4,
+    "prefix_bytes": 128,
+    "teacher_forced_completion": false,
+    "confidence_bins": 10,
+    "confidence_interval": "Paired hierarchical bootstrap: publisher then file, 10000 replicates, seed930003; report each seed separately; byte targets are not independent replicates.",
+    "selection": "Primary neural endpoint = fixed update10240; checkpoints descriptive only. No best-transfer-checkpoint selection.",
+    "metrics": [
+      "NLL nats/byte",
+      "bits/byte",
+      "next-byte top1/top5",
+      "top1 calibration ECE10 and multiclass Brier",
+      "exact completion by length",
+      "longest correct prefix length",
+      "oracle net keys under zero/one/four key rejection costs",
+      "per publisher and seed scores",
+      "p50/p95 synchronized greedy suggestion latency",
+      "peak CPU RSS and allocated/reserved GPU memory",
+      "checkpoint size and logical classical count storage"
+    ]
+  },
+  "baselines": {
+    "required": [
+      "no suggestion",
+      "original FIT-only P3 tau4",
+      "FIT-only interpolated variable-order count model maxorder6 with fixed Witten-Bell backoff",
+      "same500K GRU",
+      "same500K selective diagonal SSM"
+    ],
+    "attention_control": "Required before broad contemporary architecture-superiority claim; not implemented in this draft.",
+    "baseline_information": "Same immutable FIT documents only; no online updates from held-out labels; no crossing file boundaries.",
+    "classical_budget": "Classical predictors see every original FIT byte; disclose neural sampled exposure and classical full-corpus exposure separately."
+  },
+  "advance_rule": {
+    "language_signal": "TAC fixed10240 NLL improves versus320 in >=2/3 seeds on exposedDEV; report overfitting trajectories.",
+    "transfer_utility": "TAC mean exact4 rate exceeds BOTH classical predictors with lower paired95% CI of gain >0, positive in>=4/5 publishers and>=2/3 seeds; rejection-cost4 net keys positive.",
+    "interpretation": "Pass only authorizes consideration of separately preregistered human pilot; no profitability or architectural-superiority claim.",
+    "commercial_evidence": "NOT_MEASURED; real randomized developer task time, acceptance, distraction, device latency, willingness to pay and fully loaded serving/training cost required."
+  },
+  "audit": {
+    "prediction_boundary": "Only observed prefix bytes; no target suffix, filenames or publisher IDs as model inputs; no cross-owner state.",
+    "required": [
+      "original source hashes and license",
+      "exact and near-duplicate FIT/DEV/transfer audit",
+      "future-byte poison invariance through actual model",
+      "finite activations and gradients",
+      "all actual trainable/deployed parameter counts",
+      "sample order and target-byte digest pairing",
+      "no held-out labels in classical counts",
+      "original model optimizer Python NumPy torch CPU/CUDA RNG sampler state",
+      "cold checkpoint prediction replay",
+      "numeric training-compute receipts and scope",
+      "all failed seeds and timeouts retained"
+    ],
+    "unimplemented_checks": "INCONCLUSIVE; cannot be represented as PASS"
+  },
+  "blockers": [
+    "Kaggle authentication and account username not available in current environment; protected GitHub secret configuration cannot be inspected with current token (403).",
+    "Candidate transfer commit/blob/license metadata pinned; actual byte hashes, license text archival, historical exposure and duplicate audits pending.",
+    "Reviewed runnable offline training/evaluation bundle and private Kaggle data source not yet implemented.",
+    "FAIR_COMPARISON preflight is not satisfied: scope-specific500K authorization needs validator integration; numerical compute-budget receipts absent.",
+    "Protected Kaggle execution workflow still requires signed evidence unconditionally despite internal_research amendment; needs reviewed integration."
+  ],
+  "qualification": {
+    "no_architecture_superiority_claim": true,
+    "commercial_viability_proved": false,
+    "independently_qualified": false,
+    "pnds": "Reuse exact parent architecture; whole-model composed Lean/IEEE/AD certification remains OPEN."
+  }
+}
