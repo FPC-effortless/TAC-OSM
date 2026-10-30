@@ -22,6 +22,7 @@ from scripts.replay_langmem086087 import digest, fit_sources, load_source, origi
 from tac_osm.research_probe import probe_memory, probe_dependencies
 
 REG = ROOT / 'research/mathematical-engineering/lacuna_retrieval003'
+REFERENCE_SHA256 = '05c1383ce4ed853c730f33c5fb2b0a5d31a6438314aa8213d9e2467929123a4c'
 BINS = ((8, 32), (32, 128), (128, 240))
 ARMS = ('A', 'B', 'C', 'D', 'matrix_wrong', 'raw_wrong',
         'A_shuffle', 'B_shuffle', 'C_shuffle', 'D_shuffle')
@@ -230,6 +231,8 @@ def run(output):
     adapter_module = importlib.util.module_from_spec(adapter_spec)
     adapter_spec.loader.exec_module(adapter_module)
     ref_spec = importlib.util.spec_from_file_location('retrieval003_independent_reference', REG/'pnds_reference.py')
+    if digest((REG/'pnds_reference.py').read_bytes()) != REFERENCE_SHA256:
+        raise ValueError('independent reference source changed')
     ref = importlib.util.module_from_spec(ref_spec)
     ref_spec.loader.exec_module(ref)
     fit_docs, _ = fit_sources(ROOT)
