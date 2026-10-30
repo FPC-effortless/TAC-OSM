@@ -1,10 +1,10 @@
 # LANG10M001 — tokenized 10M TAC prefit research candidate
 
-**Status:** actual constructor verified at10,001,188 parameters. A4K tokenizer
-is fitted on219 authenticated FIT-only code/documentation files, with exact
-roundtrips on every source. The no-update dual-T4 capacity matrix is registered
-in PROFILE_PLAN.json; submission/runtime evidence is recorded separately when
-available. No neural optimizer update or trained-language result exists.
+**Status:** tokenizer pilot and20-case dual-T4 capacity matrix completed and
+verified after a preserved precision-boundary repair. No neural optimizer update
+or trained-language result exists. See [RESULTS.md](RESULTS.md),
+[CAPACITY_VERIFICATION.json](CAPACITY_VERIFICATION.json) and both original
+case matrices under capacity/. AMP training backward precision remains OPEN.
 
 ## Scope and separation
 
@@ -76,7 +76,7 @@ No parameters are frozen, padded, or excluded from the deployed total.
   whitespace and Python indentation; compare a 256-byte control using
   byte-normalized NLL/BPB, not incomparable token-level perplexity.
 
-## Kaggle preflight and full training (future, NOT started)
+## Capacity profiling procedure and future full training
 
 1. Run CPU tests: parameter count, causal prefix poison, gradients, FIT-only
    source boundary and tokenizer roundtrip.

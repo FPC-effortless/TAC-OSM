@@ -59,6 +59,9 @@ def prepare(code_receipt,code_data,out):
                 git_blob_sha1=row['sha'],license=next(r['license'] for r in code if r['repo']==repo)))
             total+=row['size']
             if len(selected)==16:break
+        for row in selected:
+            if repo=='python/cpython' and row['path'].startswith('Modules/_decimal/libmpdec/'):
+                row['license']='BSD-2-Clause; CPython Doc/license.rst additional libmpdec notice'
         return selected
     with ThreadPoolExecutor(max_workers=6) as ex:
         for rows in ex.map(metadata,sorted(approved.items())):prose.extend(rows)
@@ -84,6 +87,10 @@ def prepare(code_receipt,code_data,out):
         if sha(raw)!=lic['sha256']:raise ValueError('original license mismatch')
         name='licenses/'+lic['file'];(out/name).write_bytes(raw)
         archives.append(dict(repo=repo,commit=lic['commit'],path=lic['path'],file=name,sha256=sha(raw)))
+    if 'python/cpython' in approved:
+        commit=approved['python/cpython']['commit'];raw=api(f'repos/python/cpython/contents/Doc/license.rst?ref={commit}',True)
+        name='licenses/license-python-cpython-additional-notices.rst';(out/name).write_bytes(raw)
+        archives.append({'repo':'python/cpython','commit':commit,'path':'Doc/license.rst','file':name,'sha256':sha(raw)})
     manifest={'variant':'LANG10M001','partition':'FIT','purpose':'Tokenizer pilot and no-update capacity profile only; not a claim of adequate unique data for10M pretraining',
         'source_policy':identities['policy'],'license_archives':archives,'sources':sources,
         'dev_accessed':False,'test_accessed':False,'neural_fits':0}

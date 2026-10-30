@@ -1,6 +1,6 @@
 {
   "variant": "LANG10M001",
-  "status": "TOKENIZER_FITTED_FP32_CAPACITY_PASS_AMP_PRECISION_REPAIR_VALIDATED_LOCALLY",
+  "status": "TOKENIZER_FITTED_CAPACITY_VERIFIED_NO_NEURAL_TRAINING",
   "execution_level": "internal_research",
   "owner_direction": "2026-10-30 proceed with tokenized language TAC scaling recommendation, preserving running CODEVALUE004",
   "source_parent": "c5bc32976c298439eb04b7b342213f6946ac09f2",
@@ -54,10 +54,11 @@
   ],
   "gpu_profile": {
     "script": "research/language-scaling/lang10m/profile_no_fit.py",
-    "execution": "INITIAL_MATRIX_COMPLETE_FP32_PASS10_AMP_DTYPE_FAILURE10",
+    "execution": "COMPLETE20_REGISTERED_GATES_PASS_AFTER_DOCUMENTED_PRECISION_REPAIR",
     "requires": "separate explicit Kaggle allocation two real T4 UUIDs",
     "operator_quota": "OWNER_CONTINUE_ONE_PRIVATE_NO_UPDATE_DUAL_T4_PROFILE_MAX12_GPU_MINUTES",
-    "precision_repair": "One source-tested follow-up, cumulative total cap12 GPU minutes, no optimizer updates"
+    "precision_repair": "One source-tested follow-up, cumulative total cap12 GPU minutes, no optimizer updates",
+    "AMP_backward_precision": "OPEN: unscaled AMP zero-gradient tensors in8/10 cases; loss scaling and full-gradient parity unmeasured"
   },
   "research_gate": {
     "global_param_policy": "100k band unchanged; owner-scoped 10M training exception must be registered separately",
