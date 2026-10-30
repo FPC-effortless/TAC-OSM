@@ -81,6 +81,45 @@ def checked_new_scale(m):
         return True
     return False
 
+# Owner2026-10-30: exact CODEVALUE003 exposure-matched internal follow-up.
+# No global size waiver and no eligibility for architectural superiority.
+CODEVALUE003_CONTRACT = "owner-2026-10-30-codevalue003-500k"
+CODEVALUE003_COUNTS = {"tac":499623,"gru":500165,"ssm":499782}
+
+def checked_codevalue003(m):
+    return (m.get("study_id") == "CODEVALUE003"
+            and m.get("parameter_budget_contract") == CODEVALUE003_CONTRACT
+            and m.get("study_type") == "single_model_training"
+            and m.get("execution_level") == "internal_research"
+            and m.get("no_architecture_superiority_claim") is True)
+
+def check_codevalue003(m, phase):
+    demand(checked_codevalue003(m), "CODEVALUE003 exact owner scope required")
+    models=m.get("models", [])
+    expected={(a,s) for a in CODEVALUE003_COUNTS for s in (1701,1702,1703)}
+    demand(len(models)==9 and {(r.get("name"),r.get("seed")) for r in models}==expected,
+           "CODEVALUE003 fixed nine-model matrix required")
+    budget=m.get("budget",{})
+    demand((budget.get("training_updates"),budget.get("batch_size"),budget.get("context_bytes"))==(10240,8,128),
+           "CODEVALUE003 frozen exposure must remain10240x8x128")
+    demand(budget.get("tuning_trials")==0, "CODEVALUE003 no tuning")
+    for r in models:
+        n=CODEVALUE003_COUNTS[r["name"]]
+        demand(r.get("trainable_parameters")==n and r.get("deployed_parameters")==n,
+               "CODEVALUE003 inherited active/deployed count changed")
+        if phase=="final":
+            actual=r.get("measured",{})
+            demand(actual.get("steps")==10240 and actual.get("targets")==10485760,
+                   "CODEVALUE003 incomplete training cannot pass final gate")
+            digest(actual.get("sample_sha256"),"CODEVALUE003 actual paired sample")
+            demand(actual.get("cold_replay_max_abs_difference",1)>-1 and
+                   actual.get("cold_replay_max_abs_difference",1)<=1e-6,
+                   "CODEVALUE003 cold replay failed")
+    if phase=="final":
+        for seed in (1701,1702,1703):
+            rows=[r["measured"] for r in models if r["seed"]==seed]
+            shared(rows,"sample_sha256",seed)
+
 def check_500k_model_size(trainable,deployed,label):
     positive_num(trainable,label+".trainable_parameters",whole=True)
     positive_num(deployed,label+".deployed_parameters",whole=True)
@@ -229,6 +268,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
         return {"study_id":m["study_id"],"phase":phase,"eligible_for_architecture_superiority":False,
                 "status":"PASS_DIAGNOSTIC_ONLY"}
     if kind=="single_model_training":
+        if m.get("study_id")=="CODEVALUE003":check_codevalue003(m,phase)
         demand(m.get("registered_before_first_fit") is True,
                "single-model fit must be preregistered")
         source=m.get("real_world_source")
@@ -250,6 +290,8 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 check_langscale074_model(model,f"models[{i}]")
             elif checked_langscale070(m):
                 check_langscale070_model(model,f"models[{i}]")
+            elif checked_codevalue003(m):
+                check_500k_model_size(model.get("trainable_parameters"),model.get("deployed_parameters"),f"models[{i}]")
             elif checked_new_scale(m):
                 check_500k_model_size(model.get("trainable_parameters"), model.get("deployed_parameters"), f"models[{i}]")
             elif requires_100k_policy(m["study_id"]):
@@ -288,6 +330,8 @@ def _check_manifest_parity_only(m,phase="preflight"):
                         "trainable_parameters":receipt.get("trainable_parameters"),
                         "deployed_parameters":receipt.get("deployed_parameters")},
                         f"models[{i}].measured")
+                elif checked_codevalue003(m):
+                    check_500k_model_size(receipt.get("trainable_parameters"),receipt.get("deployed_parameters"),f"models[{i}].measured")
                 elif checked_new_scale(m):
                     check_500k_model_size(receipt.get("trainable_parameters"),receipt.get("deployed_parameters"),f"models[{i}].measured")
                 elif requires_100k_policy(m["study_id"]):

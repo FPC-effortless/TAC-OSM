@@ -1,0 +1,112 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "CODEVALUE003",
+  "study_type": "single_model_training",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "parameter_budget_contract": "owner-2026-10-30-codevalue003-500k",
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Owner-directed long exposure internal measurement of unchanged500K code models; three separately trained families, not a compute-matched architecture superiority study. Preserve every failed run and utility result.",
+  "real_world_source": {
+    "name": "Original real licensed publisher CPython FIT and code DEV files",
+    "observed_real_outcomes": true,
+    "sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF-2.0 FIT; Apache-2.0/BSD-3-Clause/MIT DEV; original publisher license texts archived",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/commercial-value/codevalue003/SOURCE_RECEIPT.json"
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "TRANSFER_DEV_is_DEV_not_protected_TEST": true
+  },
+  "causal_protocol": "Only observed prefix bytes; no target suffix, filenames or publisher IDs as model inputs; no cross-owner state.",
+  "checkpoint_policy": "All45 original model+optimizer+CPU/CUDA/Python/NumPy RNG+sampler checkpoints cold replayed and hash-sealed before first heldout scoring. No overwrite.",
+  "budget": {
+    "training_updates": 10240,
+    "batch_size": 8,
+    "context_bytes": 128,
+    "tuning_trials": 0,
+    "targets_per_model": 10485760,
+    "training_FLOPs": "UNMATCHED_INCOMPLETE_OPERATOR_COVERAGE",
+    "max_allocated_GPU_minutes": 240
+  },
+  "models": [
+    {
+      "name": "tac",
+      "seed": 1701,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac",
+      "seed": 1702,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac",
+      "seed": 1703,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "gru",
+      "seed": 1701,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru",
+      "seed": 1702,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru",
+      "seed": 1703,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "ssm",
+      "seed": 1701,
+      "trainable_parameters": 499782,
+      "deployed_parameters": 499782
+    },
+    {
+      "name": "ssm",
+      "seed": 1702,
+      "trainable_parameters": 499782,
+      "deployed_parameters": 499782
+    },
+    {
+      "name": "ssm",
+      "seed": 1703,
+      "trainable_parameters": 499782,
+      "deployed_parameters": 499782
+    }
+  ],
+  "pnds": "Exact inherited source graph retained; composed whole-model Lean/IEEE/AD certification OPEN.",
+  "literature": [
+    "Witten and Bell1991: established count-based escape/interpolation, not a TAC novelty claim. https://doi.org/10.1109/18.87000",
+    "Hoffmann et al2022 Training Compute-Optimal Large Language Models: more training/data versus capacity is an existing empirical question; this is not a scaling-law fit. https://arxiv.org/abs/2203.15556"
+  ],
+  "scope_limitation": "Exposure-matched descriptive engineering measurements only; cannot rank architectural superiority with unmatched compute."
+}
