@@ -61,6 +61,9 @@ The 432 saved model-condition-task records comprise 414 judged failures and
 all 144 GSM8K outputs lacked a valid numeric answer. HumanEval produced 83
 syntax/indentation failures and 43 assertion failures; most assertion failures
 were empty or comments-only function continuations. No judge cases are missing.
+Descriptively, TAC's carried state changed 70 of 72 paired generated outputs
+relative to reset, while producing zero correct answers. State sensitivity
+alone therefore does not establish useful transfer.
 
 Thus the pilot exposes a present instruction/formatting and executable-action
 limit. It does not isolate abstract reasoning from the output interface, and
@@ -120,3 +123,11 @@ already exist in LANGMEM086 and must not be presented as an untested novelty.
 Machine-readable results and receipts beside this document are copied exactly
 from the CI artifact. `ATTEMPT2.json` records hashes, archive location and its
 GitHub expiration; retain the full archive for replay beyond that date.
+
+Publishing these reports automatically triggered the same experiment again.
+`PUBLICATION_DUPLICATE.json` preserves that post-outcome run separately; it is
+not a new prospective trial or additional independent evidence. All generated
+bytes matched, and the lexical gates and general scores were unchanged.
+Cross-run FP32 log probabilities differed by at most 0.00001526; each run's own
+fresh-process replay was exact. A verified CI guard now keeps report/workflow-
+only commits from repeating model evaluation while retaining software checks.
