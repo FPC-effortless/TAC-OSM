@@ -1,0 +1,167 @@
+name: CODEVALUE002 original source code training and bounded completion value
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'research/commercial-value/codevalue002/**'
+      - 'research/replay-bundles/CODEVALUE002/**'
+      - '.github/workflows/codevalue002.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  preflight:
+    if: github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM' && github.head_ref == 'research/codevalue002-500k-code-2026-10-30'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      phase: ${{ steps.phase.outputs.phase }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - id: phase
+        shell: bash
+        run: |
+          if [ -s research/commercial-value/codevalue002/RESULTS.json ]; then
+            echo phase=complete >> "$GITHUB_OUTPUT"
+          elif [ -s research/replay-bundles/CODEVALUE002/SEAL.json ]; then
+            echo phase=eval >> "$GITHUB_OUTPUT"
+          else
+            echo phase=train >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Constructed-only prefit model count, causal owner, source and denominator guards
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          PYTHONPATH=src:. python -m pytest -q research/commercial-value/codevalue002/test_codevalue002.py
+  fit:
+    needs: preflight
+    if: needs.preflight.outputs.phase == 'train'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 80
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [tac, gru, ssm]
+        seed: [1701, 1702, 1703]
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Original licensed CPython PY source 320-update fit; NO DEV
+        run: |
+          PYTHONPATH=src:. python research/commercial-value/codevalue002/train.py --arm ${{ matrix.arm }} --seed ${{ matrix.seed }} --out artifact/${{ matrix.arm }}-${{ matrix.seed }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: CODEVALUE002-FIT-${{ matrix.arm }}-${{ matrix.seed }}
+          path: artifact/
+          retention-days: 90
+          if-no-files-found: warn
+  seal:
+    needs: [preflight,fit]
+    if: needs.fit.result == 'success' && needs.preflight.outputs.phase == 'train'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Save full original model, optimizer, RNG and source schedule to Git BEFORE DEV
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e research/replay-bundles/CODEVALUE002/SEAL.json
+          gh run download "$GITHUB_RUN_ID" -R FPC-effortless/TAC-OSM --pattern 'CODEVALUE002-FIT-*' --dir downloaded
+          mkdir -p research/replay-bundles/CODEVALUE002
+          for arm in tac gru ssm; do
+            for seed in 1701 1702 1703; do
+              src="downloaded/CODEVALUE002-FIT-$arm-$seed/$arm-$seed"
+              test -s "$src/MODEL.pt"
+              test -s "$src/RECEIPT.json"
+              cp -a "$src" "research/replay-bundles/CODEVALUE002/$arm-$seed"
+            done
+          done
+          PYTHONPATH=src:. python research/commercial-value/codevalue002/evaluate.py --seal-dir research/replay-bundles/CODEVALUE002 --seal-out research/replay-bundles/CODEVALUE002/SEAL.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/replay-bundles/CODEVALUE002
+          git commit -m "CODEVALUE002: seal nine original source-trained 500K full model optimizer RNG checkpoints before DEV"
+          git push origin "HEAD:${{ github.head_ref }}"
+  evaluate:
+    needs: preflight
+    if: needs.preflight.outputs.phase == 'eval'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    permissions:
+      contents: write
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: First-open independent publisher code evaluation, sealed original checkpoints only
+        run: |
+          test ! -e research/commercial-value/codevalue002/RESULTS.json
+          PYTHONPATH=src:. python research/commercial-value/codevalue002/evaluate.py --evaluate-dir research/replay-bundles/CODEVALUE002 --output research/commercial-value/codevalue002/RESULTS.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: CODEVALUE002-FIRST-OPEN-REPORT
+          path: research/commercial-value/codevalue002/RESULTS.json
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve all original positive and negative evidence; do not merge
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/commercial-value/codevalue002/RESULTS.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/commercial-value/codevalue002/RESULTS.json
+          git commit -m "CODEVALUE002: freeze first-open original code-utility scores and all seed failures"
+          git push origin "HEAD:${{ github.head_ref }}"
