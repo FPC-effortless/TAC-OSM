@@ -42,7 +42,8 @@ is scoped producer/worker evidence, not arbitrary-code information-flow proof.
 ## Run
 
 Use a clean checkout of the frozen prospective commit, Python3.12, NumPy2.3.5,
-CPU PyTorch2.5.1, pytest and system bubblewrap. The reviewed phone planner routes
+CPU PyTorch2.5.1, pytest and an isolated judge backend (bubblewrap locally or the
+pinned, non-root Docker runtime in CI). The reviewed phone planner routes
 the bounded job to GitHub Actions CPU; the workflow retains state/prediction/
 resource files and failed outputs in a downloadable artifact.
 

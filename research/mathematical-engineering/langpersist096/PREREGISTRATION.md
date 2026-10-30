@@ -149,6 +149,13 @@ fixed selected HumanEval/160 canonical solution uses eval and is unsupported.
 Keep it inconclusive without replacement. Any loss of the seven supported
 references or of OS judge confinement blocks all model scoring until repaired.
 
+Runtime amendment before model predictions: originalCIrun41120544973 stopped
+at the reference/confinement guard with zero prediction workers reached.
+Ubuntu denied the unprivileged bubblewrap namespace. The repeat uses an
+immutable official Python container, UID/GID65534, no network, read-only root,
+zero capabilities, no-new-privileges and resource limits. No task, model,
+threshold, answer parser or output budget changes; no host-exec fallback.
+
 For all domains, acquisition and query run in separate processes. Generate
 exactly128greedybytes for each carry/reset condition, with no gold-dependent
 stopping or access to answer length, task labels or reference algorithms.

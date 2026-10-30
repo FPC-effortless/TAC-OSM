@@ -1,8 +1,8 @@
 """Bounded public-development task judges, not a general intelligence certificate.
 
-HumanEval code runs only in an isolated bubblewrap process with a supported
-Python subset. Missing confinement or unsupported public reference code stays
-INCONCLUSIVE. There is no unrestricted host-exec fallback.
+HumanEval code runs only in an isolated bubblewrap or pinned Docker process
+with a supported Python subset. Missing confinement or unsupported public
+reference code stays INCONCLUSIVE. There is no host-exec fallback.
 """
 from __future__ import annotations
 
@@ -20,6 +20,12 @@ import shutil
 import signal
 import subprocess
 import sys
+import uuid
+
+
+DOCKER_IMAGE = 'python@sha256:1148dbb014615300fa7e713b2f94f550c0d1c69780c0805f84f093ceee34dd0b'
+DOCKER_HOST = 'unix:///var/run/docker.sock'
+BACKEND_ENV = 'LANGPERSIST096_JUDGE_BACKEND'
 
 
 BUILTINS = ("abs all any bool dict divmod enumerate filter float frozenset int isinstance "
@@ -146,10 +152,24 @@ def _compile_supported(source, filename):
     return compile(tree, filename, 'exec'), imported
 
 
-def _child(payload):
+def _docker_privileges_ok():
+    """Verify the fixed nonroot, capability-free Docker launch contract."""
+    try:
+        if (os.getresuid(),os.getresgid()) != ((65534,65534,65534),(65534,65534,65534)):
+            return False
+        status=dict(line.split(':',1) for line in Path('/proc/self/status').read_text().splitlines() if ':' in line)
+        return status.get('NoNewPrivs','').strip() == '1' and all(
+            int(status.get(name,'-1').strip(),16) == 0 for name in ('CapEff','CapPrm','CapAmb'))
+    except (OSError,ValueError,AttributeError):
+        return False
+
+
+def _child(payload, docker_child=False):
     """Runs inside an empty-workspace/network namespace; emits fixed JSON only."""
     import builtins
     import resource
+    if docker_child and not _docker_privileges_ok():
+        return {'status':'INCONCLUSIVE','correct':None,'reason':'container privilege guard failed'}
     resource.setrlimit(resource.RLIMIT_CPU, (1, 1))
     resource.setrlimit(resource.RLIMIT_AS, (256*1024*1024, 256*1024*1024))
     resource.setrlimit(resource.RLIMIT_FSIZE, (0, 0))
@@ -186,50 +206,104 @@ def _child(payload):
         return {'status':'FAIL','correct':False,'reason':type(error).__name__}
 
 
-def execute_program(program, test, entry_point, timeout=3):
-    """No host-exec fallback: unavailable OS confinement is INCONCLUSIVE."""
-    bwrap = shutil.which('bwrap')
-    if not bwrap or not Path('/usr/bin/python3').is_file():
-        return {'status':'INCONCLUSIVE','correct':None,'reason':'bubblewrap unavailable'}
-    command = [bwrap,'--unshare-all','--die-with-parent','--new-session','--clearenv',
-               '--ro-bind','/usr','/usr','--ro-bind','/lib','/lib',
-               '--ro-bind','/lib64','/lib64','--ro-bind',str(Path(__file__).resolve()),'/judge.py',
-               '--proc','/proc','--dev','/dev','--tmpfs','/tmp','--chdir','/tmp',
-               '/usr/bin/python3','-I','/judge.py','--child']
+def _docker_environment():
+    # Retain normal Docker registry/proxy configuration, never connection overrides.
+    return {k:v for k,v in os.environ.items() if k not in
+            ('DOCKER_HOST','DOCKER_CONTEXT','DOCKER_TLS','DOCKER_TLS_VERIFY','DOCKER_CERT_PATH')}
+
+
+def _remove_container(docker, name, environment):
+    try:
+        subprocess.run([docker,'--host='+DOCKER_HOST,'rm','--force',name],
+                       capture_output=True,text=True,timeout=3,check=False,env=environment)
+    except (OSError,subprocess.TimeoutExpired):
+        pass
+
+
+def _execute_program(program, test, entry_point, timeout, backend):
+    """The backend selector is closed; it never specifies an image or command."""
+    if backend not in ('bubblewrap','docker'):
+        return {'status':'INCONCLUSIVE','correct':None,'reason':'unsupported judge backend'}
     raw = json.dumps({'program':program,'test':test,'entry_point':entry_point})
     if len(raw.encode()) > 160000:
         return {'status':'INCONCLUSIVE','correct':None,'reason':'judge payload too large'}
+    docker=container_name=None
+    if backend == 'docker':
+        docker=shutil.which('docker')
+        if not docker:
+            return {'status':'INCONCLUSIVE','correct':None,'reason':'Docker unavailable'}
+        source=str(Path(__file__).resolve())
+        if ',' in source:
+            return {'status':'INCONCLUSIVE','correct':None,'reason':'unsupported judge mount path'}
+        container_name='langpersist096-judge-'+uuid.uuid4().hex
+        environment=_docker_environment()
+        command=[docker,'--host='+DOCKER_HOST,'run','--rm','--interactive','--pull=never',
+                 '--name',container_name,'--network','none','--read-only','--cap-drop','ALL',
+                 '--security-opt','no-new-privileges','--user','65534:65534','--memory','256m',
+                 '--cpus','1','--pids-limit','16','--tmpfs','/tmp:rw,noexec,nosuid,nodev,size=16m',
+                 '--workdir','/tmp','--mount','type=bind,source='+source+',target=/judge.py,readonly',
+                 DOCKER_IMAGE,'python','-I','/judge.py','--docker-child']
+    else:
+        bwrap=shutil.which('bwrap')
+        if not bwrap or not Path('/usr/bin/python3').is_file():
+            return {'status':'INCONCLUSIVE','correct':None,'reason':'bubblewrap unavailable'}
+        environment={'PATH':'/usr/bin:/bin'}
+        command = [bwrap,'--unshare-all','--die-with-parent','--new-session','--clearenv',
+                   '--ro-bind','/usr','/usr','--ro-bind','/lib','/lib',
+                   '--ro-bind','/lib64','/lib64','--ro-bind',str(Path(__file__).resolve()),'/judge.py',
+                   '--proc','/proc','--dev','/dev','--tmpfs','/tmp','--chdir','/tmp',
+                   '/usr/bin/python3','-I','/judge.py','--child']
     try:
         proc = subprocess.Popen(command,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
-                                text=True,close_fds=True,start_new_session=True,env={'PATH':'/usr/bin:/bin'})
+                                text=True,close_fds=True,start_new_session=True,env=environment)
+        try:
+            out, error = proc.communicate(raw,timeout=timeout)
+        except subprocess.TimeoutExpired:
+            if docker:
+                _remove_container(docker,container_name,environment)
+            try:
+                os.killpg(proc.pid,signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            try:
+                proc.communicate(timeout=1)
+            except subprocess.TimeoutExpired:
+                pass
+            return {'status':'FAIL','correct':False,'reason':'bounded execution timeout'}
     except OSError:
         return {'status':'INCONCLUSIVE','correct':None,'reason':'confinement launch unavailable'}
-    try:
-        out, error = proc.communicate(raw,timeout=timeout)
-    except subprocess.TimeoutExpired:
-        try:
-            os.killpg(proc.pid,signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-        proc.communicate()
-        return {'status':'FAIL','correct':False,'reason':'bounded execution timeout'}
+    finally:
+        if docker:
+            _remove_container(docker,container_name,environment)
     if proc.returncode != 0:
-        return {'status':'INCONCLUSIVE' if 'bwrap:' in error else 'FAIL', 'correct':None if 'bwrap:' in error else False,
-                'reason':'confinement unavailable' if 'bwrap:' in error else 'bounded child terminated'}
+        unavailable=('bwrap:' in error or (backend == 'docker' and
+                     (proc.returncode in (125,126,127) or 'docker:' in error or "can't open file" in error)))
+        return {'status':'INCONCLUSIVE' if unavailable else 'FAIL', 'correct':None if unavailable else False,
+                'reason':'confinement unavailable' if unavailable else 'bounded child terminated'}
     if len(out.encode()) > 4096:
         return {'status':'FAIL','correct':False,'reason':'judge output limit'}
     try:
         result = json.loads(out)
-        if set(result) != {'status','correct','reason'} or result['status'] not in ('PASS','FAIL','UNSUPPORTED'):
+        if set(result) != {'status','correct','reason'} or result['status'] not in ('PASS','FAIL','UNSUPPORTED','INCONCLUSIVE'):
             raise ValueError('schema')
     except (ValueError,TypeError):
         return {'status':'INCONCLUSIVE','correct':None,'reason':'judge output unavailable'}
-    return {**result,'confinement':'bubblewrap_isolated_namespace_restricted_python'}
+    return {**result,'confinement':backend+'_isolated_restricted_python',
+            **({'docker_image':DOCKER_IMAGE} if backend == 'docker' else {})}
+
+
+def execute_program(program, test, entry_point, timeout=3):
+    """No host-exec fallback: unavailable OS confinement is INCONCLUSIVE."""
+    return _execute_program(program,test,entry_point,timeout,os.environ.get(BACKEND_ENV,'bubblewrap'))
 
 
 @functools.lru_cache(maxsize=128)
+def _reference_cached(backend, prompt, canonical_solution, test, entry_point):
+    return _execute_program(prompt+canonical_solution,test,entry_point,3,backend)
+
+
 def _reference(prompt, canonical_solution, test, entry_point):
-    return execute_program(prompt+canonical_solution,test,entry_point)
+    return _reference_cached(os.environ.get(BACKEND_ENV,'bubblewrap'),prompt,canonical_solution,test,entry_point)
 
 
 def _validate_reference(record):
@@ -311,13 +385,13 @@ def judge_case(record, generated, validate_reference=True):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--child',action='store_true')
+    group=parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--child',action='store_true')
+    group.add_argument('--docker-child',action='store_true')
     args=parser.parse_args()
-    if not args.child:
-        parser.error('Use the trusted judge_case API')
     raw=sys.stdin.read(160001)
     try:
-        result=_child(json.loads(raw)) if len(raw)<=160000 else {'status':'FAIL','correct':False,'reason':'payload limit'}
+        result=_child(json.loads(raw),docker_child=args.docker_child) if len(raw)<=160000 else {'status':'FAIL','correct':False,'reason':'payload limit'}
     except BaseException as error:
         result={'status':'FAIL','correct':False,'reason':type(error).__name__}
     print(json.dumps(result,separators=(',',':')))

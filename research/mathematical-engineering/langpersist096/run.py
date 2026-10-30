@@ -268,6 +268,8 @@ def run(args):
     write_reports(lexical,args.output/'LEXICAL_RESULTS.json',args.output/'LEXICAL_RESULTS.md')
     if lexical['status']=='FAIL': raise ValueError('lexical analysis failed: '+str(lexical.get('analysis_error')))
     broad=general_results(general_predictions,judge_records,references,general_costs)
+    if time.perf_counter()>deadline:
+        raise TimeoutError('registered total research budget exhausted during analysis/judging')
     write_json(args.output/'GENERAL_RESULTS.json',broad)
     with (args.output/'GENERAL_RESULTS.md').open('x') as handle: handle.write(general_markdown(broad))
     # Gold is owned only by this scorer; poisoning never changes actor inputs.
@@ -281,6 +283,8 @@ def run(args):
         if digest(args.cache/'lexical'/name)!=expected: raise ValueError('input changed during scoring')
     for row in model_manifest['models']:
         if digest(row['path'])!=row['checkpoint_sha256']: raise ValueError('checkpoint changed during scoring')
+    if time.perf_counter()>deadline:
+        raise TimeoutError('registered total research budget exhausted during final integrity checks')
     write_json(args.output/'EXECUTION.json',{'status':'COMPLETED_INTERNAL_RESEARCH',
         'source_commit':args.preregistration_commit,'preparation_seconds':preparation_seconds,
         'elapsed_seconds':time.perf_counter()-started,'battery_subprocess_seconds':battery_seconds,

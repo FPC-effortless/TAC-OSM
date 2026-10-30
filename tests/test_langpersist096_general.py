@@ -1,10 +1,12 @@
 """Constructed boundary/security checks, never intelligence evidence."""
 import importlib.util
 import json
+import os
 from pathlib import Path
 import shutil
 import sys
 import tempfile
+import subprocess
 import unittest
 from unittest import mock
 
@@ -29,6 +31,10 @@ except ImportError:
 worker=load('langpersist096_general_worker_test',HERE/'general_worker.py') if torch is not None else None
 
 
+def confinement_available():
+    return bool(shutil.which('docker' if os.environ.get(judge.BACKEND_ENV,'bubblewrap') == 'docker' else 'bwrap'))
+
+
 class GeneralJudgeTests(unittest.TestCase):
     def test_grid_and_numeric_outputs_only(self):
         self.assertTrue(judge.judge_case({'domain':'arc','expected':[[1,2],[3,4]]},b'[[1,2],[3,4]]')['correct'])
@@ -49,7 +55,75 @@ class GeneralJudgeTests(unittest.TestCase):
         with mock.patch.object(judge.shutil,'which',return_value=None), mock.patch.object(judge.subprocess,'Popen',side_effect=AssertionError('no execution')):
             self.assertEqual(judge.execute_program('','', 'f')['status'],'INCONCLUSIVE')
 
-    @unittest.skipUnless(shutil.which('bwrap'),'OS confinement unavailable')
+    def test_docker_command_is_pinned_restricted_and_cleans_up(self):
+        process=mock.Mock(returncode=0,pid=999999)
+        process.communicate.return_value=(json.dumps({'status':'PASS','correct':True,'reason':'public assertions passed'}),'')
+        variables={judge.BACKEND_ENV:'docker','DOCKER_HOST':'tcp://denied','DOCKER_CONTEXT':'denied',
+                   'DOCKER_TLS_VERIFY':'1','DOCKER_CERT_PATH':'/denied','DOCKER_CONFIG':'/fixture/config'}
+        with mock.patch.dict(os.environ,variables), mock.patch.object(judge.shutil,'which',return_value='/usr/bin/docker'), \
+             mock.patch.object(judge.subprocess,'Popen',return_value=process) as launch, \
+             mock.patch.object(judge.subprocess,'run') as cleanup:
+            result=judge.execute_program('def f(x): return x','def check(candidate): pass','f')
+        self.assertEqual(result['status'],'PASS')
+        command=launch.call_args.args[0]
+        self.assertEqual(command[:3],['/usr/bin/docker','--host='+judge.DOCKER_HOST,'run'])
+        for flag,value in (('--network','none'),('--user','65534:65534'),('--memory','256m'),
+                           ('--cpus','1'),('--pids-limit','16'),('--cap-drop','ALL'),
+                           ('--security-opt','no-new-privileges')):
+            self.assertEqual(command[command.index(flag)+1],value)
+        self.assertIn('--read-only',command); self.assertIn('--pull=never',command)
+        self.assertEqual(command[-5:],[judge.DOCKER_IMAGE,'python','-I','/judge.py','--docker-child'])
+        self.assertEqual(command.count('--mount'),1)
+        self.assertEqual(command[command.index('--mount')+1],f'type=bind,source={judge.__file__},target=/judge.py,readonly')
+        environment=launch.call_args.kwargs['env']
+        self.assertEqual(environment['DOCKER_CONFIG'],'/fixture/config')
+        for key in ('DOCKER_HOST','DOCKER_CONTEXT','DOCKER_TLS_VERIFY','DOCKER_CERT_PATH'):
+            self.assertNotIn(key,environment)
+        self.assertEqual(cleanup.call_args.args[0][:4],['/usr/bin/docker','--host='+judge.DOCKER_HOST,'rm','--force'])
+        self.assertEqual(cleanup.call_args.kwargs['timeout'],3)
+        self.assertEqual(cleanup.call_args.args[0][-1],command[command.index('--name')+1])
+        with mock.patch.dict(os.environ,{judge.BACKEND_ENV:'unsafe-host'}), \
+             mock.patch.object(judge.subprocess,'Popen',side_effect=AssertionError('no fallback')):
+            self.assertEqual(judge.execute_program('','','f')['status'],'INCONCLUSIVE')
+
+    def test_docker_child_requires_nonroot_no_new_privileges_and_no_caps(self):
+        clean='NoNewPrivs:\t1\nCapEff:\t0000000000000000\nCapPrm:\t0000000000000000\nCapAmb:\t0000000000000000\n'
+        with mock.patch.object(judge.os,'getresuid',return_value=(65534,)*3), \
+             mock.patch.object(judge.os,'getresgid',return_value=(65534,)*3), \
+             mock.patch.object(judge.Path,'read_text',return_value=clean):
+            self.assertTrue(judge._docker_privileges_ok())
+            with mock.patch.object(judge.Path,'read_text',return_value=clean.replace('NoNewPrivs:\t1','NoNewPrivs:\t0')):
+                self.assertFalse(judge._docker_privileges_ok())
+            with mock.patch.object(judge.Path,'read_text',return_value=clean.replace('CapEff:\t0000000000000000','CapEff:\t0000000000000001')):
+                self.assertFalse(judge._docker_privileges_ok())
+        with mock.patch.object(judge.os,'getresuid',return_value=(0,)*3), \
+             mock.patch.object(judge,'_compile_supported',side_effect=AssertionError('no candidate execution')):
+            self.assertEqual(judge._child({},docker_child=True)['status'],'INCONCLUSIVE')
+
+    def test_docker_timeout_removes_container_even_when_client_is_killed(self):
+        process=mock.Mock(pid=999999)
+        process.communicate.side_effect=[subprocess.TimeoutExpired('docker',3),('','')]
+        with mock.patch.dict(os.environ,{judge.BACKEND_ENV:'docker'}), \
+             mock.patch.object(judge.shutil,'which',return_value='/usr/bin/docker'), \
+             mock.patch.object(judge.subprocess,'Popen',return_value=process), \
+             mock.patch.object(judge.subprocess,'run') as cleanup, \
+             mock.patch.object(judge.os,'killpg') as kill:
+            result=judge.execute_program('','','f')
+        self.assertEqual(result['reason'],'bounded execution timeout')
+        self.assertEqual(cleanup.call_count,2)
+        kill.assert_called_once_with(process.pid,judge.signal.SIGKILL)
+
+    def test_reference_cache_is_bound_to_selected_backend(self):
+        judge._reference_cached.cache_clear()
+        with mock.patch.object(judge,'_execute_program',return_value={'status':'PASS','correct':True,'reason':'fixture'}) as execute:
+            with mock.patch.dict(os.environ,{judge.BACKEND_ENV:'bubblewrap'}):
+                judge._reference('prompt','solution','test','f')
+            with mock.patch.dict(os.environ,{judge.BACKEND_ENV:'docker'}):
+                judge._reference('prompt','solution','test','f')
+        self.assertEqual(execute.call_count,2)
+        judge._reference_cached.cache_clear()
+
+    @unittest.skipUnless(confinement_available(),'OS confinement unavailable')
     def test_supported_code_and_independent_checker_namespaces(self):
         program='all=lambda x:True\ndef f(x):\n    return 0\n'
         test='def check(candidate):\n    assert all([candidate(1)==2])\n'
@@ -60,7 +134,7 @@ class GeneralJudgeTests(unittest.TestCase):
         good=judge.execute_program('def f(x):\n    return x+1\n','def check(candidate):\n    assert candidate(2)==3\n','f')
         self.assertEqual(good['status'],'PASS')
 
-    @unittest.skipUnless(shutil.which('bwrap'),'OS confinement unavailable')
+    @unittest.skipUnless(confinement_available(),'OS confinement unavailable')
     def test_math_mutation_cannot_tamper_with_checker(self):
         result=judge.execute_program('import math\ndef f(x):\n    math.sqrt=lambda x:0\n    return 0\n',
             'import math\ndef check(candidate):\n    assert candidate(9)==math.sqrt(9)\n','f')
@@ -74,7 +148,7 @@ class GeneralJudgeTests(unittest.TestCase):
         with mock.patch.object(judge,'_reference',return_value={'status':'FAIL','correct':False}):
             self.assertEqual(judge.judge_case(row,b'    return x+1\n')['status'],'INCONCLUSIVE')
 
-    @unittest.skipUnless(shutil.which('bwrap'),'OS confinement unavailable')
+    @unittest.skipUnless(confinement_available(),'OS confinement unavailable')
     def test_fixed_completion_stops_preserve_finished_entry_function(self):
         row={'domain':'humaneval','prompt':'def f(x):\n','canonical_solution':'    return x+1\n',
              'test':'def check(candidate):\n    assert candidate(2)==3\n','entry_point':'f'}
