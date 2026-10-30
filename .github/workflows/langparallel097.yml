@@ -47,7 +47,7 @@ jobs:
           set -euo pipefail
           python scripts/phone_lab.py plan research/phone_queue/langparallel097.json
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langparallel097/FAIR_COMPARISON.json --phase preflight
-          PYTHONPATH=src:. python -m pytest -q research/mathematical-engineering/langparallel097/test_parallel096.py tests/test_research_probe_agnostic.py
+          PYTHONPATH=src:. python -m pytest -q research/mathematical-engineering/langparallel097/test_parallel097.py tests/test_research_probe_agnostic.py
       - name: Download original authentic publisher trained checkpoints (never refit)
         if: steps.frozen-mode.outputs.first == 'true'
         run: |
