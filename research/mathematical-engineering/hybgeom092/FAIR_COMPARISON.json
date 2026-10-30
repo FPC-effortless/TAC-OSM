@@ -27,5 +27,20 @@
   },
   "fixed_checkpoint_source": "research/replay-bundles/HYBGEOM091",
   "source_model_sha256": "bbd5bd4ae8dc8062fef3d6a4c8113041238122cc329fe90d27c1bac12be07f2b",
-  "replay": "No new optimization, two real publisher DEV docs, original 10 trained checkpoint bytes, five seeds, 224 targets per document per seed, exact source-target chronology, all earlier token NLL replayed."
+  "replay": "No new optimization, two real publisher DEV docs, original 10 trained checkpoint bytes, five seeds, 224 targets per document per seed, exact source-target chronology, all earlier token NLL replayed.",
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "1f315fca7a87be33209c0dd28d8d355d6fcf0815d8a4c8678fe2caf9666cc239",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "exposed_dev_owners": [
+      "Doc/tutorial/controlflow.rst",
+      "Doc/tutorial/venv.rst"
+    ],
+    "test_unopened": true
+  },
+  "causal_protocol": "Read only original source-attested frozen HYBGEOM091 checkpoints; process observed DEV bytes t one by one with independent owner states; produce all original and lesioned logits at t, then reveal actual byte t+1 for next-byte scoring. No training, no future labels or target-dependent selection, no TEST.",
+  "checkpoint_policy": "Hash-validate ten original Git-tracked immutable checkpoint files and authentic publisher DEV file hashes; verify optimizer step count and original 091 source hash; cold recompute original and fixed FULL per-token DEV scores, preserving original checkpoint bytes unchanged."
 }
