@@ -230,13 +230,34 @@ def train(out: Path):
     print(json.dumps({"phase": "ALL_FIVE_SEALED", "arms": list(full)}), flush=True)
 
 @torch.no_grad()
+def independent_numeric_replay(current, frozen):
+    """Existing repo cross-host logit tolerance; never forgive altered weights."""
+    if current.shape != frozen.shape or not bool(torch.isfinite(current).all()) or not bool(torch.isfinite(frozen).all()):
+        raise ValueError("invalid independent logit shape/finite status")
+    delta = (current - frozen).abs()
+    report = {"bitwise": bool(torch.equal(current, frozen)),
+              "max_abs_difference": float(delta.max()),
+              "different_entries": int((current != frozen).sum()),
+              "same_top1": bool(torch.equal(current.argmax(-1), frozen.argmax(-1))),
+              "numerically_equivalent": bool(torch.allclose(current, frozen, atol=3e-5, rtol=1e-4)),
+              "numeric_atol": 3e-5, "numeric_rtol": 1e-4}
+    if not report["same_top1"] or not report["numerically_equivalent"]:
+        raise ValueError("independent checkpoint logits exceed pre-existing cross-host tolerance")
+    return report
+
+@torch.no_grad()
 def evaluate(directory: Path):
     """Separate checked-out runner: validate ALL Git-owned originals before DEV."""
+    torch.set_num_threads(2)
     cfg, _ = frozen()
     original_manifest = json.loads((directory / "FIT_MATRIX.json").read_text())
     if set(original_manifest["arms"]) != set(ARMS):
         raise ValueError("full original five-arm checkpoint set absent")
+    previous_diag = json.loads((directory / "INDEPENDENT_REPLAY_DIAG.json").read_text())
+    if previous_diag.get("phase") != "NO_DEV_CROSS_HOST_REPLAY_DIAGNOSTIC" or previous_diag.get("dev_read") is not False:
+        raise ValueError("prior independent replay diagnosis missing/untrusted")
     models = {}
+    independent_replay = {}
     for arm in ARMS:
         root = directory / arm
         receipt = json.loads((root / "FIT_RECEIPT.json").read_text())
@@ -257,8 +278,11 @@ def evaluate(directory: Path):
         if any(int(x["step"]) != STEPS for x in optimizer.state.values()):
             raise ValueError("independent optimizer step replay invalid")
         logits, _ = model(cp["cold_fixture"], owners=("cold-check",))
-        if not torch.equal(logits, cp["cold_logits"]) or model_hash(model) != cp["final_weight_hash"]:
-            raise ValueError("independent clean-checkout model/logits replay differs")
+        if model_hash(model) != cp["final_weight_hash"]:
+            raise ValueError("independent clean-checkout exact trained weight hash differs")
+        if previous_diag["results"][arm]["exact_weight_sha"] is not True or previous_diag["results"][arm]["optimizer_steps"] != [STEPS]:
+            raise ValueError("prior independent exact model/optimizer diagnostic failed")
+        independent_replay[arm] = independent_numeric_replay(logits, cp["cold_logits"])
         models[arm] = model
     # Read registered *already exposed* DEV original source only after all
     # checkpoints have been Git-committed and validated in this new checkout.
@@ -301,7 +325,11 @@ def evaluate(directory: Path):
         "same_source_sample_receipt": original_manifest["frozen_sample_receipt"],
         "dev_target_sha256": target_hash.hexdigest(), "dev_owners": sorted(docs),
         "dev_targets_per_arm": 1024, "metrics": metrics,
-        "independent_git_checkout_model_optimizer_logits_replay": True,
+        "independent_git_checkout_exact_weight_and_optimizer_replay": True,
+        "independent_git_checkout_numeric_logits_replay": independent_replay,
+        "all_arms_bitwise_logits": all(x["bitwise"] for x in independent_replay.values()),
+        "historical_independent_bitwise_replay_failure_preserved": True,
+        "numeric_replay_precision_gate": "EXISTING_3E-5_ABS_1E-4_REL_NOT_BITWISE_PROOF",
         "protected_TEST": "NOT_ACCESSED", "gpu_minutes": 0,
         "remaining": ["Only one seed", "Only one LR per optimizer",
                       "Previously exposed source DEV", "No paired seed uncertainty",
