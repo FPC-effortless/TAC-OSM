@@ -1,0 +1,39 @@
+name: TAOPILOT003 independent no-DEV numerical replay diagnosis
+
+on:
+  push:
+    branches:
+      - 'research/tao003-real-language-pilot-2026-10-30'
+    paths:
+      - '.github/workflows/taopilot003-replay-diag.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose-original-checkpoint-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install --quiet numpy==2.3.3 torch pytest
+      - name: Compare exact frozen model/optimizer bytes to fresh-runner logits, no DEV
+        run: python scripts/tao003_replay_diagnostic.py
+      - name: Preserve first independent failure diagnosis without changing model bytes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f research/evidence/taopilot003/seed1701/INDEPENDENT_REPLAY_DIAG.json
+          git commit -m "evidence(tao003): preserve no-DEV cross-host numerical replay diagnosis"
+          git fetch origin research/tao003-real-language-pilot-2026-10-30
+          git rebase origin/research/tao003-real-language-pilot-2026-10-30
+          git push origin HEAD:research/tao003-real-language-pilot-2026-10-30
