@@ -65,3 +65,26 @@ swaprounding/conservation is not implemented. Later neural fits therefore stay
 STOPPED/OPEN, not mislabeled as executed or as architectural impossibilities.
 ARCHFUSE's eight operator families were screened, not fitted or fused. All
 eligible P0 work completed; the trained research program remains conditional.
+
+## Context-relevant follow-up and existing bias experiment
+
+001's fixed-age events need not match the current source context. Registered a
+separate002cohort before execution, selecting most recent past continuations
+by observed4bytecontext andage, without looking at the future answer. Successful
+run41000661247 measured570rows over190source/query/bin cells. Matching past
+continuations predict the nextbyte56.7–75%whenavailable, but no agebin meets
+old-event utility threshold;8–31hasinsufficientsupport. The first importfailure
+occurredbeforecohortexecution and is preserved. Full report:
+[matched002](../evidence/lacuna_matched002/RESULTS.md).
+
+LANGMEM088 original run40989434082 had already finished successfully. Read-only
+recovery ofall7originalarchives and the unchangedaggregator reproducedoriginal
+JSON exactly, with baseline/checkpoint/perseedrowchecks. Bias+1meanNLL worsens
+by0.010905; seed1702is a favorableexception. No088modelwasrerun. The3newbiased
+checkpoints are archived as additional originals, not included in9checkpoint
+086/087replaycertification. See [088closeout](../evidence/langmem088_readonly/RESULTS.md).
+
+All eligibleP0checks are executed; trained integrations remain unstarted under
+the registered utility/data/math/budget prerequisites. Do not equate component
+screens with learned swaprounding, actual stale-fact unlearning or full-model
+architectural comparisons. No scientific negative is omitted or redefined.

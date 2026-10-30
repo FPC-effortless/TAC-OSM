@@ -1,0 +1,164 @@
+{
+  "bias_minus_baseline_nll": 0.010904923552862655,
+  "bias_minus_baseline_old_slow_contribution": -0.003202694091019761,
+  "bias_minus_baseline_slow_mix_share": 0.009567750378913678,
+  "full_original_100521p_unchanged_graph": true,
+  "gpu_minutes": 0,
+  "independently_qualified": false,
+  "limits": [
+    "two fresh Rust docs same publisher as 085/086/087, not independent cross-publisher suite",
+    "old_slow attribution is one-query read lesion retaining current write and original full next state",
+    "same source byte positions reused across 3 trained seeds, no iid point-level inference",
+    "slow mix share and NLL improvement do not establish correct historical-byte/factual retrieval",
+    "all 640-step original baseline model checkpoints from 087 reused; bias+1 models trained anew on same real FIT order",
+    "no matched trained fast-only model; no broad architecture superiority conclusion"
+  ],
+  "matched_training_steps": 640,
+  "metrics": {
+    "baseline": {
+      "by_seed": {
+        "1701": {
+          "NLL": 2.7942312083089615,
+          "old_slow_zero_minus_full_nll": -0.0039127402887970675,
+          "slow_mix_share": 0.13734480652250827
+        },
+        "1702": {
+          "NLL": 2.7350768813448667,
+          "old_slow_zero_minus_full_nll": -0.0014868124516007292,
+          "slow_mix_share": 0.09817268832812585
+        },
+        "1703": {
+          "NLL": 2.7958394315114026,
+          "old_slow_zero_minus_full_nll": -0.0026766636385998155,
+          "slow_mix_share": 0.06409587962977119
+        }
+      },
+      "early": {
+        "accuracy": 0.3736979166666667,
+        "current_slow_write_read_L2": 0.0018601599256221994,
+        "distinct_source_target_clocks": 512,
+        "nll": 2.410054287605211,
+        "old_slow_read_L2": 0.13868699285255084,
+        "old_slow_zero_minus_full_nll": -0.002311185310342504,
+        "repeated_prediction_count": 1536,
+        "slow_mix_share": 0.10695895409603888
+      },
+      "late": {
+        "accuracy": 0.3162434895833333,
+        "current_slow_write_read_L2": 0.001806416533211161,
+        "distinct_source_target_clocks": 2048,
+        "nll": 2.7876281333299935,
+        "old_slow_read_L2": 0.16295212217490493,
+        "old_slow_zero_minus_full_nll": -0.002844888083624634,
+        "repeated_prediction_count": 6144,
+        "slow_mix_share": 0.09077470160484324
+      },
+      "middle": {
+        "accuracy": 0.248046875,
+        "current_slow_write_read_L2": 0.0019602165268413955,
+        "distinct_source_target_clocks": 1024,
+        "nll": 2.9323886975635105,
+        "old_slow_read_L2": 0.16612933000063398,
+        "old_slow_zero_minus_full_nll": -0.0025768836197433607,
+        "repeated_prediction_count": 3072,
+        "slow_mix_share": 0.11452005663610028
+      },
+      "overall": {
+        "accuracy": 0.30496651785714285,
+        "current_slow_write_read_L2": 0.0018580370160213762,
+        "distinct_source_target_clocks": 3584,
+        "nll": 2.7750491737217438,
+        "old_slow_read_L2": 0.16039344879334835,
+        "old_slow_zero_minus_full_nll": -0.0026920721263325375,
+        "repeated_prediction_count": 10752,
+        "slow_mix_share": 0.09987112482680177
+      }
+    },
+    "slow_bias_plus1": {
+      "by_seed": {
+        "1701": {
+          "NLL": 2.8241972926745285,
+          "old_slow_zero_minus_full_nll": -0.008605030787163872,
+          "slow_mix_share": 0.09057000841342447
+        },
+        "1702": {
+          "NLL": 2.731914492539675,
+          "old_slow_zero_minus_full_nll": 0.0005587110712700191,
+          "slow_mix_share": 0.09656963986709245
+        },
+        "1703": {
+          "NLL": 2.8017505066096158,
+          "old_slow_zero_minus_full_nll": -0.009637978936163043,
+          "slow_mix_share": 0.1411769773366294
+        }
+      },
+      "early": {
+        "accuracy": 0.3665364583333333,
+        "current_slow_write_read_L2": 0.0016701799935684807,
+        "distinct_source_target_clocks": 512,
+        "nll": 2.4107727447432503,
+        "old_slow_read_L2": 0.1242779571906188,
+        "old_slow_zero_minus_full_nll": -0.008447170045352928,
+        "repeated_prediction_count": 1536,
+        "slow_mix_share": 0.11516706797787417
+      },
+      "late": {
+        "accuracy": 0.310546875,
+        "current_slow_write_read_L2": 0.0016004383173164143,
+        "distinct_source_target_clocks": 2048,
+        "nll": 2.8046069950911865,
+        "old_slow_read_L2": 0.15430375822514483,
+        "old_slow_zero_minus_full_nll": -0.00493287590984437,
+        "repeated_prediction_count": 6144,
+        "slow_mix_share": 0.1002841837893745
+      },
+      "middle": {
+        "accuracy": 0.2421875,
+        "current_slow_write_read_L2": 0.00192336711698519,
+        "distinct_source_target_clocks": 1024,
+        "nll": 2.9362389779071236,
+        "old_slow_read_L2": 0.159533357030341,
+        "old_slow_zero_minus_full_nll": -0.006542344918367841,
+        "repeated_prediction_count": 3072,
+        "slow_mix_share": 0.12488416165231797
+      },
+      "overall": {
+        "accuracy": 0.2990141369047619,
+        "current_slow_write_read_L2": 0.0017026667852577883,
+        "distinct_source_target_clocks": 3584,
+        "nll": 2.7859540972746064,
+        "old_slow_read_L2": 0.1515085291645543,
+        "old_slow_zero_minus_full_nll": -0.0058947662173522986,
+        "repeated_prediction_count": 10752,
+        "slow_mix_share": 0.10943887520571545
+      }
+    }
+  },
+  "model_promoted": false,
+  "new_extra_parameters": 0,
+  "new_source_files": {
+    "src/ch05-01-defining-structs.md": {
+      "git_blob": "66da9389568e8505e5cfd2611a087d251e7e273b",
+      "sha256": "344424e680093f9fd0291e895cd1002c5645a769d3b928de541d78148b93caa7",
+      "size": 13693
+    },
+    "src/ch08-01-vectors.md": {
+      "git_blob": "25b8f67bf76f9baf77712665f4b55e2543df291a",
+      "sha256": "8ded9a736f59d44aa6dc9c9121b503db8ef1d3e2eae8db5be83c04180e3d618f",
+      "size": 11646
+    }
+  },
+  "original_publisher": "Rust Project; two new same-publisher docs",
+  "protected_TEST": "NOT_ACCESSED",
+  "same_true_source_labels_clocks_across_models": true,
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "source_SHA256": "cf6a5bd0055a740f59e15fc1cc6bcb48f7ea7fe62d0fc1dc2113eb6eb4ca4ba3",
+  "source_owner_count": 2,
+  "status": "THREE_ORIGINAL_SEED_MATCHED640_BIAS_PLUS1_FIRST_NEW_RUST",
+  "study": "LANGMEM088",
+  "true_nextbyte_positions_per_seed": 3584
+}
