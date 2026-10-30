@@ -58,3 +58,23 @@ def test_no_dev_scoring_without_all_five_git_backed_checkpoints(tmp_path, monkey
     monkeypatch.setattr(pilot, "read_sha_source", forbidden)
     with pytest.raises(FileNotFoundError):
         pilot.evaluate(tmp_path)
+
+
+def test_numeric_cross_host_replay_bounded_and_top1_stable():
+    original = torch.tensor([[[0.1, 0.2, 0.3], [0.001, 0.00101, 0.01]]])
+    exact = pilot.independent_numeric_replay(original, original)
+    assert exact["bitwise"] and exact["numerically_equivalent"]
+    tiny = original.clone()
+    tiny[0, 0, 0] += 4.76837158203125e-7
+    measured = pilot.independent_numeric_replay(tiny, original)
+    assert not measured["bitwise"] and measured["numerically_equivalent"]
+    broken = original.clone()
+    broken[0, 0, 0] += 0.01
+    with pytest.raises(ValueError):
+        pilot.independent_numeric_replay(broken, original)
+    # A tiny perturbation inside the numerical bound must still fail when
+    # it changes the predicted class (not permit scientific rank drift).
+    close = torch.tensor([[[0.0, 1.e-5]]])
+    reversed_rank = torch.tensor([[[2.e-5, 1.e-5]]])
+    with pytest.raises(ValueError):
+        pilot.independent_numeric_replay(reversed_rank, close)
