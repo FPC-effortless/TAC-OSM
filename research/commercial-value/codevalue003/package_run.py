@@ -73,7 +73,7 @@ def package(data,out,user,require_clean=True):
             info.compress_type=zipfile.ZIP_DEFLATED;z.writestr(info,raw)
     archive_sha=hashlib.sha256(archive.read_bytes()).hexdigest()
     dataset_meta={'id':user+'/codevalue003-offline-code-v1',
-                  'title':'CODEVALUE003 private offline licensed code and exact runner',
+                  'title':'CODEVALUE003 private offline code and runner',
                   'licenses':[{'name':'other'}]}
     (dataset/'dataset-metadata.json').write_text(json.dumps(dataset_meta,indent=2)+'\n')
     (kernel/'main.py').write_text(BOOTSTRAP.format(archive_sha=archive_sha))

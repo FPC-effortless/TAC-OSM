@@ -110,3 +110,5 @@ def test_package_excludes_credentials_and_pins_archive(tmp_path):
     metadata=json.loads((staged/'kernel/kernel-metadata.json').read_text())
     assert metadata['is_private']=='true' and metadata['enable_internet']=='false'
     assert metadata['machine_shape']=='NvidiaTeslaT4'
+    dataset_metadata=json.loads((staged/'dataset/dataset-metadata.json').read_text())
+    assert 6<=len(dataset_metadata['title'])<=50
