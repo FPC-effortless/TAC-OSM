@@ -1,0 +1,85 @@
+name: LANGPARALLEL097 independent fifteen-checkpoint clean-checkout source replay
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '.github/workflows/langparallel097-replay.yml'
+      - 'research/mathematical-engineering/langparallel097/FROZEN_RESULTS.json'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-replay:
+    if: github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Independently fetch registered original 15 trained models, no training
+        run: |
+          set -euo pipefail
+          gh run download 40785939365 -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGLAYER035-CPU-tac_context026-seed*' --dir fresh-checkpoints
+          gh run download 40795790808 -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGLAYER039-CPU-seed*' --dir fresh-checkpoints
+          gh run download 40797105091 -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGLAYER040-CPU-state48_no_graph-seed*' --dir fresh-checkpoints
+          test "$(find fresh-checkpoints -name FIT_AND_EXPOSED_DEV_RECEIPT.json -type f | wc -l)" -eq 15
+          gh run download 41021358840 -R FPC-effortless/TAC-OSM \
+            --name LANGPARALLEL097-original-fifteen-model-source-replay --dir original-study
+          test -s original-study/langparallel097-results/DEV_SOURCE/src/ch01-01-installation.md
+      - name: Re-run all original 10 actual publisher source forecasts and reproducibility aggregate
+        run: |
+          set -euo pipefail
+          for seed in 1701 1702 1703 1704 1705; do
+            for arm in flat_parallel layered_h59 layered_h48_preferred; do
+              PYTHONPATH=src:. python research/mathematical-engineering/langparallel097/frozen_compare097.py \
+                --arm "$arm" --seed "$seed" --root fresh-checkpoints \
+                --source-root original-study/langparallel097-results/DEV_SOURCE \
+                --output "fresh-096/$arm-$seed/RESULTS.json"
+            done
+          done
+          PYTHONPATH=src:research/mathematical-engineering/langparallel097:. python \
+            research/mathematical-engineering/langparallel097/aggregate097.py \
+            --root fresh-096 --output fresh-096/FRESH_AGGREGATE.json
+      - name: Verify exact original checkpoint and publisher source identities, byte prediction scores within numeric tolerance
+        run: |
+          python - <<'PY'
+          import json,math
+          expected=json.load(open('research/mathematical-engineering/langparallel097/FROZEN_RESULTS.json'))
+          replay=json.load(open('fresh-096/FRESH_AGGREGATE.json'))
+          for field in ('study','status','historical_model_seeds','trained_models_in_this_study','original_checkpoints','publisher','source_docs','source_exposure','parallelism','no_true_carried_state','full_training_FLOPs_matched','protected_TEST','gpu_minutes','superiority_qualified'):
+              assert expected[field]==replay[field],field
+          for arch in ('flat_parallel','layered_h59','layered_h48_preferred'):
+              for seed in ('1701','1702','1703','1704','1705'):
+                  a=expected['per_seed'][arch][seed]['score']
+                  b=replay['per_seed'][arch][seed]['score']
+                  for length in ('64','128'):
+                      assert a[length]['n']==b[length]['n']==24
+                      assert a[length]['per_document']==b[length]['per_document'] or all(
+                          d['n']==b[length]['per_document'][name]['n'] and
+                          d['targets']==b[length]['per_document'][name]['targets'] and
+                          d['sha256']==b[length]['per_document'][name]['sha256'] and
+                          abs(d['nll_sum']-b[length]['per_document'][name]['nll_sum'])<1e-4 and
+                          d['correct']==b[length]['per_document'][name]['correct']
+                          for name,d in a[length]['per_document'].items())
+                      assert abs(a[length]['mean_nll']-b[length]['mean_nll'])<1e-5
+                      assert a[length]['accuracy']==b[length]['accuracy']
+          print('LANGPARALLEL097 independent 15 original checkpoints × 2 contexts × 24 real targets, publisher hashes and score replay: PASS')
+          print('Timing deliberately not required equal across hosted CPUs; no original model fitting or TEST.')
+          PY

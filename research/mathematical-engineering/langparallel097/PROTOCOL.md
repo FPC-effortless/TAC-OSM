@@ -1,0 +1,19 @@
+# LANGPARALLEL097 — correct primary layered-parallel 48D candidate
+
+**Preregistered 2026-10-30, before evaluating historical 48D checkpoints against the already-exposed Rust Book protocol.** No new model training. Source lineage and all negative results from LANGPARALLEL096 retained. Models are ACTUAL parallel affine-scan implementations, not 100K sequential LANGFAST095.
+
+Primary: **LANGLAYER040 h48 graph-free** (499,623 trained parameters; parallel native 8×8 associative memories, two aligned heads, eight wave modes, six BASE concept seeds, plus a second upper 48D affine recurrent scan and SwiGLU decoder width455), original five 320-update CPU source-trained checkpoint artifacts from Actions #40797105091.
+
+Controls: **LANGLAYER039 h59 graph-free** (499,901 parameters, upper recurrent state59D, FFN442, original #40795790808) and **nonlayered CONTEXT026** (500,122 parameters, original #40785939365). Exactly 5 independently trained original seeds (1701–1705) per arm, same original authentic PSF CPython FIT + UTF8 supplement, 320 updates, batch8, 128 real next-byte targets/sample, 327,680 original FIT targets per checkpoint, original source order SHA and checkpoint/optimizer/RNG preserved and checked. Equal data and active parameter budget within 1%; **whole-model train FLOPs NOT matched**. The 500K exemption belongs ONLY to historic fitted experiments; this adds no training and grants NO future 500K blanket exemption. No protected TEST.
+
+Original Rust Book publisher MIT/Apache-2.0 developer source Git commit `2771df165f092a4fbb9f46b5b2e7450f19010adb`, 3 previously exposed files, with immutably registered Git blobs and 8 target indices (256..1152 step128) per file. Both 64- and 128-byte causal within-document reset-window contexts are scored at the SAME 24 byte target positions per original model/seed, without future tokens or DEV tuning; no independent generalization claim. Seed is experimental repetition, not each repeated byte as independent sample.
+
+Benchmark SAME hosted runner, same CPU, 2 threads, five warm per-arm trials batch4/window128, report both median and outliers/seed. **Batch full-window**, not incremental/carried inference. No android, real-energy, GPU, qualified decoder speed, or streaming memory claim.
+
+Preflight: real source model parameter counts, parallel scan serial equivalence, 3-arm causal prefix poison, byte validity, start!=0 rejection, retained six BASE concept graph and absent UPPER concept graph in BOTH layered arms. Aggregate fails closed on missing any of fifteen ORIGINAL source-authenticated checkpoints, sample order differences, wrong Rust blob IDs, incomplete targets, training/optimizer metadata or nonfinite result.
+
+Primary outcome: h48 minus flat NLL and h48 minus h59 NLL at same 24 Rust targets at L64/L128, with seed-paired descriptive 95% intervals and per-document results. Hypothesis suggested by original LANGLAYER040 320-update DEV that h48 should outperform h59, but the current different publisher cohort was already exposed in 094/096 and is NOT blind. Failure to outperform is preserved and does not justify another unregistered variant.
+
+**Critical confound:** h48 vs h59 changes both upper state dimension and FFN width (455 vs442) to keep parameter parity. This is a *budget allocation* comparison and not a pure recurrence size causal ablation. Parent native scans + concept processing retained in all three. PNDS scoped source math inherited, full composed Lean/Python equivalence and actual streaming state open.
+
+No merges, checkpoint promotion, retraining, Kaggle/GPU, protected TEST, state-of-the-art or architecture superiority claims.
