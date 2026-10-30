@@ -6,8 +6,8 @@ documents (fractions/weakref). All integrity checks passed on the first diagnost
 run. No new fit, GPU, protected TEST, checkpoint promotion or merge.
 
 The four-condition comparison is now fully specified: fixed cosine attention
-maps a query to raw history, the byte-code readout is shared, decoder reads are
-matched to native amplitude, direct current-write contribution is preserved,
+maps a query to raw history, the byte-code readout is shared, historical reads
+are matched to native historical-read amplitude, direct current-write contribution is preserved,
 and wrong-address/value-shuffle controls are included. Both storage banks have
 256B payloads. This is a conditional one-clock diagnostic, not autonomous
 replacement-model evaluation or proof of equal whole-model memory efficiency.
@@ -33,6 +33,9 @@ control7.14%,9.62%,6.60%. D therefore has descriptive address/value sensitivity
 under this operator, with no prospective recovery-superiority significance test.
 The isolated original encoded value is byte-decodable in100% of these cells;
 that evaluator reference is not a read from the accumulated native matrix.
+Perfect isolated value decoding is expected by design: the source adds a bounded
+0.1residual to fixed byte bit-codes before normalization. It is not a learned
+historical-retrieval discovery.
 
 Supplying a past key improves matrix readout versus the native query. However,
 the matrix wrong-key control has **better past-byte NLL than B at every age**:
@@ -44,6 +47,9 @@ alone does not establish correct-address-specific native matrix recall.
 Positive values below mean original NLL minus intervention NLL, i.e. improvement.
 Each intervention keeps the original native read magnitude and current write.
 Patched next states are discarded; original source trajectory always advances.
+Specifically, the **old contribution** has matched magnitude. Adding the fixed
+current contribution can change the total read norm through their angle; the
+experiment does not constrain both old and total read norms simultaneously.
 
 | Age bin | B supplied key/matrix | C native query/raw | D supplied key/raw | Registered diagnostic utility signal |
 | --- | ---: | ---: | ---: | --- |
