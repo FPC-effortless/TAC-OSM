@@ -98,31 +98,41 @@ class TAO(Optimizer):
                 t = state["step"]
                 if group["kind"] == "adamw":
                     b1, b2 = group["betas"]
-                    m = state.setdefault("exp_avg", torch.zeros_like(p, dtype=torch.float32))
-                    v = state.setdefault("exp_avg_sq", torch.zeros_like(p, dtype=torch.float32))
+                    if "exp_avg" not in state:
+                        state["exp_avg"] = torch.zeros_like(g)
+                        state["exp_avg_sq"] = torch.zeros_like(g)
+                    m, v = state["exp_avg"], state["exp_avg_sq"]
                     m.mul_(b1).add_(g, alpha=1 - b1)
                     v.mul_(b2).addcmul_(g, g, value=1 - b2)
                     d = (m / (1 - b1 ** t)) / ((v / (1 - b2 ** t)).sqrt() + eps)
                 else:
                     mu, beta2, mode = group["momentum"], group["beta2"], group["mode"]
-                    m = state.setdefault("momentum_buffer", torch.zeros_like(p, dtype=torch.float32))
+                    if "momentum_buffer" not in state:
+                        state["momentum_buffer"] = torch.zeros_like(g)
+                    m = state["momentum_buffer"]
                     m.mul_(mu).add_(g)
                     nesterov = g + mu * m
                     original_shape = nesterov.shape
                     nesterov = nesterov.reshape(nesterov.shape[0], -1)
                     if mode == "pre_ns":
-                        v = state.setdefault("second_moment", torch.zeros_like(nesterov))
+                        if "second_moment" not in state:
+                            state["second_moment"] = torch.zeros_like(nesterov)
+                        v = state["second_moment"]
                         v.mul_(beta2).addcmul_(nesterov, nesterov, value=1 - beta2)
                         nesterov = nesterov / ((v / (1 - beta2 ** t)).sqrt() + eps)
                     if mode == "adamuon":
                         nesterov = nesterov.sign()
                     u = ns5(nesterov, group["ns_steps"], eps)
                     if mode == "adamuon":
-                        v = state.setdefault("second_moment", torch.zeros_like(u))
+                        if "second_moment" not in state:
+                            state["second_moment"] = torch.zeros_like(u)
+                        v = state["second_moment"]
                         v.mul_(beta2).addcmul_(u, u, value=1 - beta2)
                         u = u / (v.sqrt() + eps)
                     elif mode == "normuon":
-                        v = state.setdefault("second_moment", torch.zeros((u.shape[0], 1), device=u.device, dtype=torch.float32))
+                        if "second_moment" not in state:
+                            state["second_moment"] = torch.zeros((u.shape[0], 1), device=u.device, dtype=torch.float32)
+                        v = state["second_moment"]
                         v.mul_(beta2).add_(u.square().mean(dim=1, keepdim=True), alpha=1 - beta2)
                         u = u / (v.sqrt() + eps)
                     norm = torch.linalg.vector_norm(u)
