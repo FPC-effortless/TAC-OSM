@@ -80,3 +80,15 @@ source clocks compare actual full-model update against that independent Python.
 AD check uses the native argmax class, which is known before future labels.
 Forensic disagreement/context/writer tables are evaluator diagnostics, not
 claimed bounded deployed inputs. Their erasure scores are mechanics only.
+
+Additional original-seven P0 coverage before fits: run source-pinned seven-math
+and ARCHFUSE089 suites unchanged. On actual native FIT keys/values, check a
+full-covariance reference (Q=1e-4I,r=.1) for PSD/positive denominator and discarded
+offdiagonal mass; FP64 covariance costs512B, not256BFP32. It is not substituted
+into model predictions, and covariance must be rebudgeted before integration.
+All14FITowners get a prefix literal-bracket/finite-capacity8 overflow audit.
+This ignores language syntax/quotes and is only a structural proxy, never an
+oracle model input or code-capability benchmark. Source has no second native
+8x8 layer bank; aligned heads are not layers. Generic Möbius/triangular scan
+identities do not prove whole-source parallelizability because original query
+and fast clipping depend on prior neural state. Record these feasibility gates.

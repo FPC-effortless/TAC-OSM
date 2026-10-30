@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Frozen authentic FIT mechanism screens; no fitting or held-out scoring."""
 from __future__ import annotations
-import argparse,hashlib,json,math,struct,sys,time,importlib.util
+import argparse,hashlib,json,math,struct,sys,time,importlib.util,resource
 from dataclasses import replace
 from pathlib import Path
 import numpy as np
@@ -10,6 +10,7 @@ ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from scripts.replay_langmem086087 import fit_sources,load_source,original_checkpoints,weights,digest
 from scripts.langmem086_run import PackedRing086
 REG=ROOT/'research/mathematical-engineering/lacuna_survival001'
+if digest((REG/'pnds087_reference.py').read_bytes())!='ee342c6c444c7729c7187ec95922e0a0a3fdaa393e023b6820ad3fa80a949653':raise ValueError('pinned independent PNDS reference changed')
 spec=importlib.util.spec_from_file_location('pnds087_reference',REG/'pnds087_reference.py');pnds=importlib.util.module_from_spec(spec);spec.loader.exec_module(pnds)
 AGES=(8,32,128,256,512);OWNERS=('Doc/tutorial/appendix.rst','Doc/tutorial/classes.rst')
 
@@ -58,10 +59,12 @@ def run(out):
   prior=(np.array(cp['fit_byte_counts'],dtype=np.float64)+.5)/(640*1024+128);modal=int(prior.argmax())
   for owner in OWNERS:
    raw=docs[owner];state=model.start((owner,));ring=PackedRing086(1928);caches={p:PackedContexts(p,seed) for p in ('fifo','reservoir','diversity')}
-   pool=torch.empty((0,8,8),dtype=torch.float64);vals={};keys={};contexts={};flags=[False,False];sum_error=0.;current_term_error=0.;normal_wall=0.;reference_error=0.;calls={p:0 for p in ('always','random','entropy','survival_proxy')};look_wall={p:0. for p in calls};contradictions=0;erased_rows=[]
+   pool=torch.empty((0,8,8),dtype=torch.float64);vals={};keys={};contexts={};flags=bytearray(2);sum_error=0.;current_term_error=0.;normal_wall=0.;reference_error=0.;cov=np.eye(8);kalman=np.zeros((8,8));min_eigen=1.;min_denom=1.;offdiag_max=0.;calls={p:0 for p in ('always','random','entropy','survival_proxy')};look_wall={p:0. for p in calls};contradictions=0;erased_rows=[]
    for t in range(1024):
     token=torch.tensor([[raw[t]]]);oldstate=state;tic=time.perf_counter();logits,state,tr=model(token,state=state,owners=(owner,),return_trace=True);normal_wall+=time.perf_counter()-tic;f=tr[0]
     e=(model.embedding(token)+model.position(model.positions(t,1,1,torch.float32,token.device))).tanh();eta=float((.01*model.slow_gate(e).sigmoid())[0,0,0]);rho=float(.995+.004*model.slow_decay.sigmoid());k=f['writer'][0].double();v=f['value'][0].double();q=f['query'][0].double()
+    kk=k.numpy();vv=v.numpy();pred=cov+1e-4*np.eye(8);pk=pred@kk;denom=.1+float(kk@pk);gain=pk/denom;kalman=rho*kalman+np.outer(vv-rho*kalman@kk,gain);cov=pred-np.outer(pk,pk)/denom;cov=.5*(cov+cov.T);min_eigen=min(min_eigen,float(np.linalg.eigvalsh(cov).min()));min_denom=min(min_denom,denom);offdiag_max=max(offdiag_max,float(np.linalg.norm(cov-np.diag(np.diag(cov)))))
+    if min_eigen< -1e-10 or min_denom<=0:raise ValueError('actual-key Kalman PSD/denominator')
     ring.append(raw[t])
     for c in caches.values():c.append(raw[t])
     staged_events=[]
@@ -112,7 +115,7 @@ def run(out):
     if context:contexts.setdefault(context,set()).add(raw[t])
     if t<128:continue
     lp=logits[0,0].log_softmax(-1);p=lp.exp().numpy().astype(np.float64);entropy=-float((lp.exp()*lp).sum());overlap=abs(float(q@k));block=t//4
-    if t%4==0:flags=[False,False]
+    if t%4==0:flags=bytearray(2)
     entropy_trigger=not flags[0] and (entropy>=3. or t%4==3);survival_trigger=not flags[1] and (entropy+.2*(1-overlap)>=3.1 or t%4==3)
     if entropy_trigger:flags[0]=True
     if survival_trigger:flags[1]=True
@@ -134,7 +137,7 @@ def run(out):
      row['disagreement_context_erasure_minus_full_nll']=nll(erasures['context'],y)-nll(logits,y);row['disagreement_wrong_erasure_minus_full_nll']=nll(erasures['wrong'],y)-nll(logits,y)
     policy_rows.append(row)
    if any(calls[n]!=224 for n in ('random','entropy','survival_proxy')) or calls['always']!=896:raise ValueError('exact query budgets')
-   source_checks.append({'seed':seed,'owner':owner,'event_sum_error':sum_error,'independent_PNDS_step_error':reference_error,'lookup_calls':calls,'lookup_wall_seconds':look_wall,'native_forward_wall_seconds':normal_wall,'disagreement_events_NOT_stale_facts':contradictions,'cache_bytes_each':{k:len(c.data) for k,c in caches.items()},'lookback_tier_bytes':3858})
+   source_checks.append({'seed':seed,'owner':owner,'event_sum_error':sum_error,'independent_PNDS_step_error':reference_error,'lookup_calls':calls,'lookup_wall_seconds':look_wall,'native_forward_wall_seconds':normal_wall,'disagreement_events_NOT_stale_facts':contradictions,'cache_bytes_each':{k:len(c.data) for k,c in caches.items()},'lookback_tier_bytes':3858,'Kalman_actual_keys_min_cov_eigenvalue':min_eigen,'Kalman_min_innovation_denominator':min_denom,'Kalman_discarded_offdiagonal_maxnorm':offdiag_max,'Kalman_extra_cov_bytes':512})
   if weights(model)!=before:raise ValueError('original weights changed')
  summary=[]
  for age in AGES:
@@ -149,7 +152,21 @@ def run(out):
  # Per-cell erasure fields have a different denominator and are kept separately.
  er=[x for x in policy_rows if 'disagreement_context_erasure_minus_full_nll' in x]
  erase_summary={k:sum(x[k] for x in er)/len(er) if er else None for k in ('disagreement_context_erasure_minus_full_nll','disagreement_wrong_erasure_minus_full_nll')}
- result={'study':'LACUNA-SURVIVAL001','status':'PASS_FROZEN_FIT_SCREENS','source_model_sha256':mfest['model_source_sha256'],'checkpoint_sha256s':[x[0]['checkpoint_sha256'] for x in cps],'FIT_targets_per_seed':1792,'distinct_source_positions':1792,'repeated_across_seeds':True,'events':events,'policy_rows':policy_rows,'age_summary':summary,'policy_mean':policies,'source_checks':source_checks,'local_AD_checks':ad_checks,'targeted_unlearning':{'status':'MECHANICS_ONLY_EFFICACY_BLOCKED_NO_AUTHENTICATED_SUPERSESSIONS','disagreement_rows':len(er),**erase_summary},'candidate_fit_gate':{'passed_ages':eligible,'status':'PASS_SCREEN_ONLY_STILL_REQUIRES_MATCHED_REGISTRATION' if eligible else 'STOP_NO_CONSISTENT_NONTRIVIAL_OLD_CONTENT_UTILITY'},'cpu_seconds':time.process_time()-started,'new_training_steps':0,'DEV_scoring':False,'GPU_minutes':0,'protected_TEST':False,'independently_qualified':False}
+ structural=[]
+ for name,source in docs.items():
+  stack=[];maximum=0;overflow=0;unmatched=0;bounded=[]
+  pairs={41:40,93:91,125:123}
+  for byte in source:
+   if byte in (40,91,123):
+    stack.append(byte);maximum=max(maximum,len(stack))
+    if len(bounded)<8:bounded.append(byte)
+    else:overflow+=1
+   elif byte in pairs:
+    if stack and stack[-1]==pairs[byte]:stack.pop()
+    else:unmatched+=1
+    if bounded and bounded[-1]==pairs[byte]:bounded.pop()
+  structural.append({'owner':name,'maximum_literal_bracket_depth':maximum,'bounded8_overflow_events':overflow,'unmatched_literal_closers':unmatched,'syntax_parser':False,'oracle_labels_fed_to_model':False})
+ result={'study':'LACUNA-SURVIVAL001','status':'PASS_FROZEN_FIT_SCREENS','source_model_sha256':mfest['model_source_sha256'],'checkpoint_sha256s':[x[0]['checkpoint_sha256'] for x in cps],'FIT_targets_per_seed':1792,'distinct_source_positions':1792,'repeated_across_seeds':True,'events':events,'policy_rows':policy_rows,'age_summary':summary,'policy_mean':policies,'source_checks':source_checks,'local_AD_checks':ad_checks,'structural_stack_prefix_audit':structural,'targeted_unlearning':{'status':'MECHANICS_ONLY_EFFICACY_BLOCKED_NO_AUTHENTICATED_SUPERSESSIONS','disagreement_rows':len(er),**erase_summary},'candidate_fit_gate':{'passed_ages':eligible,'status':'PASS_SCREEN_ONLY_STILL_REQUIRES_MATCHED_REGISTRATION' if eligible else 'STOP_NO_CONSISTENT_NONTRIVIAL_OLD_CONTENT_UTILITY'},'cpu_seconds':time.process_time()-started,'peak_RSS_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,'new_training_steps':0,'DEV_scoring':False,'GPU_minutes':0,'protected_TEST':False,'independently_qualified':False}
  out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(result,indent=2,sort_keys=True,allow_nan=False)+'\n');print(json.dumps({k:result[k] for k in ('age_summary','policy_mean','candidate_fit_gate','targeted_unlearning','cpu_seconds')}))
 
 def main():
