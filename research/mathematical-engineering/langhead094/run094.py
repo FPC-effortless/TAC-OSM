@@ -27,7 +27,7 @@ def digest(b):return hashlib.sha256(b).hexdigest()
 def counts(m):
  n=sum(p.numel() for p in m.parameters() if p.requires_grad)
  return {'trainable':n,'deployed':sum(p.numel() for p in m.parameters())}
-def source_hash():return digest((REG/'model093.py').read_bytes())
+def source_hash():return digest((REG/'model094.py').read_bytes())
 def state_hash(m):
  h=hashlib.sha256()
  for k,v in sorted(m.state_dict().items()):
