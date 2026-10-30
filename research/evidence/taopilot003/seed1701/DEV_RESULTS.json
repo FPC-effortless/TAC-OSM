@@ -1,0 +1,132 @@
+{
+  "all_arms_bitwise_logits": true,
+  "dev_owners": [
+    "Doc/tutorial/controlflow.rst",
+    "Doc/tutorial/index.rst",
+    "Doc/tutorial/introduction.rst",
+    "Doc/tutorial/venv.rst"
+  ],
+  "dev_target_sha256": "7a397995fbcb688586662d1402c880196ef50a39d13f50121d6bbc91331c8548",
+  "dev_targets_per_arm": 1024,
+  "gpu_minutes": 0,
+  "historical_independent_bitwise_replay_failure_preserved": true,
+  "independent_git_checkout_exact_weight_and_optimizer_replay": true,
+  "independent_git_checkout_numeric_logits_replay": {
+    "adamuon": {
+      "bitwise": true,
+      "different_entries": 0,
+      "max_abs_difference": 0.0,
+      "numeric_atol": 3e-05,
+      "numeric_rtol": 0.0001,
+      "numerically_equivalent": true,
+      "same_top1": true
+    },
+    "adamw": {
+      "bitwise": true,
+      "different_entries": 0,
+      "max_abs_difference": 0.0,
+      "numeric_atol": 3e-05,
+      "numeric_rtol": 0.0001,
+      "numerically_equivalent": true,
+      "same_top1": true
+    },
+    "muon": {
+      "bitwise": true,
+      "different_entries": 0,
+      "max_abs_difference": 0.0,
+      "numeric_atol": 3e-05,
+      "numeric_rtol": 0.0001,
+      "numerically_equivalent": true,
+      "same_top1": true
+    },
+    "normuon": {
+      "bitwise": true,
+      "different_entries": 0,
+      "max_abs_difference": 0.0,
+      "numeric_atol": 3e-05,
+      "numeric_rtol": 0.0001,
+      "numerically_equivalent": true,
+      "same_top1": true
+    },
+    "pre_ns": {
+      "bitwise": true,
+      "different_entries": 0,
+      "max_abs_difference": 0.0,
+      "numeric_atol": 3e-05,
+      "numeric_rtol": 0.0001,
+      "numerically_equivalent": true,
+      "same_top1": true
+    }
+  },
+  "metrics": {
+    "adamuon": {
+      "checkpoint_sha256": "0e7951713283163578ed0c81d181272eb0c3c80b21733250d9d8da9ffa8b5130",
+      "dev_multiclass_brier": 0.9704306125640869,
+      "dev_nll": 4.326905727386475,
+      "dev_top1_accuracy": 0.1259765625,
+      "num_real_dev_targets": 1024,
+      "train_full_loop_wall_seconds": 41.722124353,
+      "train_optimizer_only_wall_seconds": 0.19927998300002514
+    },
+    "adamw": {
+      "checkpoint_sha256": "e3e4422b45bca8ac99cc3b6d28a981f302383ba42059e7a121f580e5ecbea253",
+      "dev_multiclass_brier": 0.9573508352041245,
+      "dev_nll": 4.053318619728088,
+      "dev_top1_accuracy": 0.1259765625,
+      "num_real_dev_targets": 1024,
+      "train_full_loop_wall_seconds": 42.726017354999996,
+      "train_optimizer_only_wall_seconds": 0.09003514100004395
+    },
+    "muon": {
+      "checkpoint_sha256": "ccbb36ff45fdddb8d7baede8e92a404d0f131d8c2b571ee4b3840f0317a5e4a6",
+      "dev_multiclass_brier": 0.9656628221273422,
+      "dev_nll": 4.259767770767212,
+      "dev_top1_accuracy": 0.125,
+      "num_real_dev_targets": 1024,
+      "train_full_loop_wall_seconds": 41.83271158300002,
+      "train_optimizer_only_wall_seconds": 0.19752497799998991
+    },
+    "normuon": {
+      "checkpoint_sha256": "69adc03a8632e1a87fdc94d04d9a75f95ac81108b173d1e01736a6dcaa4c85a4",
+      "dev_multiclass_brier": 0.9660022556781769,
+      "dev_nll": 4.264448642730713,
+      "dev_top1_accuracy": 0.123046875,
+      "num_real_dev_targets": 1024,
+      "train_full_loop_wall_seconds": 40.83493134099999,
+      "train_optimizer_only_wall_seconds": 0.1976747469999509
+    },
+    "pre_ns": {
+      "checkpoint_sha256": "ca37b5ac760250f7d090f7404c509957e1c480ea49dca57237fc0ba7a207f03c",
+      "dev_multiclass_brier": 0.9689401537179947,
+      "dev_nll": 4.289845585823059,
+      "dev_top1_accuracy": 0.126953125,
+      "num_real_dev_targets": 1024,
+      "train_full_loop_wall_seconds": 40.55777845799997,
+      "train_optimizer_only_wall_seconds": 0.20075291199981393
+    }
+  },
+  "numeric_replay_precision_gate": "EXISTING_3E-5_ABS_1E-4_REL_NOT_BITWISE_PROOF",
+  "protected_TEST": "NOT_ACCESSED",
+  "qualification": "NO_ARCHITECTURE_OR_OPTIMIZER_SUPERIORITY_CLAIM",
+  "remaining": [
+    "Only one seed",
+    "Only one LR per optimizer",
+    "Previously exposed source DEV",
+    "No paired seed uncertainty",
+    "Per-optimizer FLOPs are not matched",
+    "No full PNDS formalization"
+  ],
+  "same_source_sample_receipt": {
+    "batch": 4,
+    "context": 256,
+    "sample_bytes_sha256": "414403bbc33bd11e1290fd1732ab8a5bc556313145057751ab2848931ff65a77",
+    "sample_order_sha256": "19ef5c540bc84233e1fc78ddf1aa36c97144530d4670213f448b99918a3d9579",
+    "steps": 32,
+    "targets": 32768
+  },
+  "seed": 1701,
+  "study": "TAOPILOT003",
+  "tier": "INTERNAL_EXPOSED_DEV_SINGLE_SEED_FIXED_LR",
+  "train_tokens_per_arm": 32768,
+  "train_updates": 32
+}
