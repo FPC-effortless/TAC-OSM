@@ -1,0 +1,215 @@
+name: LANGMEM088 matched640 slow read bias+1 versus original +0
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'research/mathematical-engineering/langmem088/**'
+      - 'research/phone_queue/langmem088.json'
+      - 'scripts/langmem088_*'
+      - 'tests/test_langmem088.py'
+      - '.github/workflows/langmem088.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  registered-launch:
+    if: github.head_ref == 'research/langmem088-slow-read-bias-matched640-2026-10-30' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    outputs:
+      launch: ${{ steps.activate.outputs.launch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - id: activate
+        shell: bash
+        run: |
+          if [[ "$(git log -1 --format=%s)" == "LANGMEM088-TRAIN:"* ]]; then
+            echo "launch=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "launch=false" >> "$GITHUB_OUTPUT"
+            echo "Source/code/report update only: never automatically refit or reopen unseen DEV."
+          fi
+
+  true-640step-source-FIT-only-bias-plus1:
+    needs: registered-launch
+    if: needs.registered-launch.outputs.launch == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [1701,1702,1703]
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact CPU source dependencies
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Original source parity, matched parameter/initial bias and actual 086/087 source tests
+        run: |
+          mkdir -p bias088-evidence
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langmem088.json > bias088-evidence/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/langmem088/FAIR_COMPARISON.json \
+            --phase preflight > bias088-evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langmem088.py tests/test_langmem087.py tests/test_langmem086.py
+      - name: FIT ONLY on original genuine publisher14 owners and identical original087 640 source sample order
+        run: |
+          PYTHONPATH=src:. python scripts/langmem088_fit_bias.py \
+            --seed ${{ matrix.seed }} --output bias088-evidence/TRAINED
+          python - <<'PY'
+          import json,hashlib,pathlib
+          root=pathlib.Path('bias088-evidence/TRAINED')
+          r=json.loads((root/'FIT_RECEIPT.json').read_text())
+          assert r['study']=='LANGMEM088' and r['trained_steps']==640
+          assert r['true_FIT_targets']==655360 and r['bias_delta_initial']==1.0
+          assert r['no_new_trainable_parameters'] and r['model_parameters_trainable']==100521
+          assert r['model_persistent_tensor_state_bytes']==1920
+          assert r['checkpoint_and_optimizer_cold_replay_bitwise']
+          assert r['unseen_DEV_accessed_before_fit_seal'] is False
+          assert hashlib.sha256((root/'MODEL.pt').read_bytes()).hexdigest()==r['checkpoint_sha256']
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          PY
+      - name: Archive actual FIT-only sealed bias+1 optimizer, RNG, model and byte-sampler receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGMEM088-FIT-plus1-seed${{ matrix.seed }}
+          path: bias088-evidence/
+          retention-days: 90
+          if-no-files-found: warn
+
+  first-source-DEV-after-ALL-fits-sealed:
+    needs: [registered-launch,true-640step-source-FIT-only-bias-plus1]
+    if: needs.registered-launch.outputs.launch == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [1701,1702,1703]
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: CPU exact source dependency
+        run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore all matched baseline+biased exact original checkpoint source archives
+        run: |
+          mkdir -p baseline087 bias088 new088
+          gh run download 40984392435 -R FPC-effortless/TAC-OSM \
+            --name 'LANGMEM087-640-seed${{ matrix.seed }}' --dir baseline087
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --name 'LANGMEM088-FIT-plus1-seed${{ matrix.seed }}' --dir bias088
+          test -f baseline087/TRAINED/MODEL.pt
+          test -f bias088/TRAINED/MODEL.pt
+          test -f bias088/TRAINED/FIT_RECEIPT.json
+      - name: ONLY AFTER 3 fitted bias checkpoints sealed - first two Rust chapter original bytes
+        run: |
+          curl --fail --silent --show-error --location --retry 2 \
+            https://raw.githubusercontent.com/rust-lang/book/2771df165f092a4fbb9f46b5b2e7450f19010adb/src/ch05-01-defining-structs.md \
+            --output new088/ch05-01-defining-structs.md
+          curl --fail --silent --show-error --location --retry 2 \
+            https://raw.githubusercontent.com/rust-lang/book/2771df165f092a4fbb9f46b5b2e7450f19010adb/src/ch08-01-vectors.md \
+            --output new088/ch08-01-vectors.md
+      - name: Actual matched nextbyte source evaluation, learned read mixture and isolated old-slow one-query contribution
+        run: |
+          mkdir -p eval088
+          PYTHONPATH=src:. python scripts/langmem088_eval.py \
+            --seed ${{ matrix.seed }} \
+            --baseline-dir baseline087/TRAINED \
+            --biased-dir bias088/TRAINED \
+            --documents new088 \
+            --output eval088/EVAL_RECEIPT.json
+          python - <<'PY'
+          import json
+          r=json.load(open('eval088/EVAL_RECEIPT.json'))
+          assert r['study']=='LANGMEM088' and r['trained_640_steps_per_arm'] is True
+          assert r['original_nextbyte_targets_per_seed']==3584
+          assert r['all_arms_trainable_parameters']==100521
+          assert r['both_models_frozen_and_sha_verified_before_new_DEV'] is True
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          assert len(r['source_new_docs'])==2
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGMEM088-FIRST-NEW-DEV-seed${{ matrix.seed }}
+          path: eval088/
+          retention-days: 90
+          if-no-files-found: warn
+
+  strictly-paired-three-seed-aggregate:
+    needs: first-source-DEV-after-ALL-fits-sealed
+    if: always() && needs.registered-launch.outputs.launch == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Restore original three genuine source paired reports
+        run: |
+          mkdir -p original-results report
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGMEM088-FIRST-NEW-DEV-seed*' --dir original-results
+      - name: Require exactly equal real publisher labels, provenance and NLL/old-slow contributions
+        run: |
+          python scripts/langmem088_aggregate.py \
+            --results original-results --output report/RESULTS.json
+          python - <<'PY'
+          import json,os
+          r=json.load(open('report/RESULTS.json'))
+          assert r['study']=='LANGMEM088' and r['seeds']==[1701,1702,1703]
+          assert r['same_true_source_labels_clocks_across_models']
+          assert r['true_nextbyte_positions_per_seed']==3584
+          assert r['new_extra_parameters']==0 and r['matched_training_steps']==640
+          assert r['protected_TEST']=='NOT_ACCESSED' and r['gpu_minutes']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGMEM088 genuine 640-update matched source bias+1 vs original bias+0',file=f)
+              print('Same 100521p model, original 14 PSF FIT same sampler and same two first-new Rust chapters. Old slow intervention one-step, direct current-write preserved.',file=f)
+              print('| Arm | Mean real NLL | Old slow zero minus full NLL | Actual slow mixture share |',file=f)
+              print('|---|---:|---:|---:|',file=f)
+              for name,m in r['metrics'].items():
+                  x=m['overall']
+                  print(f"| {name} | {x['nll']:.6f} | {x['old_slow_zero_minus_full_nll']:+.6f} | {x['slow_mix_share']:.3%} |",file=f)
+              print('No historical-fact recall, no trained fast-only comparator, no new architecture superiority, no TEST or GPU.',file=f)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGMEM088-THREE-SEED-FRESH-SOURCE-AGGREGATE
+          path: report/
+          retention-days: 90
+          if-no-files-found: warn
