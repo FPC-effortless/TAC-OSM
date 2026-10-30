@@ -1,0 +1,38 @@
+name: LANGMATH095 no-fit mathematics and persistence
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmath095/**'
+      - 'tests/test_langmath095_*.py'
+      - '.github/workflows/langmath095.yml'
+      - 'research/phone_queue/langmath095-no-fit.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  no-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==1.26.4' 'pytest>=8,<9'
+      - run: python -m pip install 'torch==2.5.1' --index-url https://download.pytorch.org/whl/cpu
+      - run: python scripts/phone_lab.py plan research/phone_queue/langmath095-no-fit.json
+      - name: Source forward, gradient, scan and persistence checks
+        run: python -m unittest discover -s tests -p 'test_langmath095_*.py' -v
+      - name: Existing architecture-independent probe contract
+        run: python -m pytest -q tests/test_research_probe_agnostic.py
+      - run: python research/mathematical-engineering/langmath095/audit.py --output ci-artifacts/langmath095.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langmath095-no-fit
+          path: ci-artifacts/langmath095.json
