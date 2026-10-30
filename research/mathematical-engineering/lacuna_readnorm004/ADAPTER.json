@@ -1,0 +1,16 @@
+{
+  "study": "LACUNA-READNORM004",
+  "native_adapter": "research/mathematical-engineering/langmem086/probe_adapter086.py:adapter086",
+  "inherited_read_consumers": "scripts/lacuna_retrieval003.py:override_slow_read",
+  "new_evaluator_transform": "scripts/lacuna_readnorm004.py:dual_norm",
+  "native_inputs": ["observed byte prefix", "original StreamState086", "explicit source owner"],
+  "transform_inputs": ["candidate historical vector[8]", "original history vector[8]", "observed current-write vector[8]"],
+  "no_future_label_input": true,
+  "paired_sources": "ALREADY_EXPOSED_RETRIEVAL003_DEV",
+  "fresh_evaluation": false,
+  "counterfactual_state": "discard; original trajectory always advances",
+  "historical_address": "evaluator privilege for supplied-key conditions",
+  "remaining_magnitude_change": "mixed fast/slow read norm may change and is measured",
+  "unimplemented": ["full_parameter_AD", "IEEE_proof", "independent_qualification"],
+  "all_prior_failed_gates_preserved": true
+}
