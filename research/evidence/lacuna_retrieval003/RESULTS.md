@@ -45,7 +45,7 @@ alone does not establish correct-address-specific native matrix recall.
 ## Original decoder: next-byte loss
 
 Positive values below mean original NLL minus intervention NLL, i.e. improvement.
-Each intervention keeps the original native read magnitude and current write.
+Each intervention keeps the native historical-read magnitude and current write.
 Patched next states are discarded; original source trajectory always advances.
 Specifically, the **old contribution** has matched magnitude. Adding the fixed
 current contribution can change the total read norm through their angle; the

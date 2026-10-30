@@ -5,11 +5,24 @@ on:
     paths:
       - 'scripts/lacuna_retrieval003.py'
       - 'tests/test_lacuna_retrieval003.py'
+      - 'scripts/verify_lacuna_retrieval003_saved.py'
+      - 'research/evidence/lacuna_retrieval003/**'
       - 'research/mathematical-engineering/lacuna_retrieval003/**'
       - '.github/workflows/lacuna-retrieval003.yml'
 permissions:
   contents: read
 jobs:
+  original-saved-evidence:
+    if: github.head_ref == 'research/lacuna-retrieval003-2026-10-30' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Independently verify original ZIP, prefix cohort, scores and gates
+        if: hashFiles('research/evidence/lacuna_retrieval003/ORIGINAL_ARTIFACT.zip') != ''
+        run: python scripts/verify_lacuna_retrieval003_saved.py research/evidence/lacuna_retrieval003
   registered-launch:
     if: github.head_ref == 'research/lacuna-retrieval003-2026-10-30' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
     runs-on: ubuntu-24.04
