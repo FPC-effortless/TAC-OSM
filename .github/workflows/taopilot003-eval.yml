@@ -54,8 +54,9 @@ jobs:
       - name: Install read-only scoring dependencies
         run: |
           python -m pip install --quiet numpy==2.3.3 torch pytest
-      - name: Restore original model/optimizer and score frozen previously-exposed publisher DEV
+      - name: Verify exact model weights and optimizer, bounded logits; score exposed publisher DEV
         run: |
+          python -m pytest -q tests/test_tao003_pilot.py
           python scripts/tao003_pilot.py evaluate --directory research/evidence/taopilot003/seed1701
           python scripts/validate_research_parity.py \
             --manifest research/evidence/taopilot003/seed1701/FINAL_COMPARISON.json \
