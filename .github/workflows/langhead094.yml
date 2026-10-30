@@ -1,0 +1,149 @@
+name: LANGHEAD094 longer TAC tied versus GRU and diagonal SSM on Rust Book heldout publisher
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'research/mathematical-engineering/langhead094/**'
+      - 'research/replay-bundles/LANGHEAD094/**'
+      - 'research/phone_queue/langhead094.json'
+      - '.github/workflows/langhead094.yml'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    outputs:
+      fit: ${{ steps.intent.outputs.fit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - id: intent
+        shell: bash
+        run: |
+          if [[ -s research/mathematical-engineering/langhead094/TRAINED_NEW_DEV_RESULTS.json ]]; then
+            echo 'fit=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'fit=true' >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install pytest==8.4.2 numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Original publisher FIT plan, 100K parameter gate and causal tests
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python scripts/phone_lab.py plan research/phone_queue/langhead094.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langhead094/FAIR_COMPARISON.json --phase preflight
+          PYTHONPATH=src:. python -m pytest -q research/mathematical-engineering/langhead094/test_model093.py tests/test_research_probe_agnostic.py
+  train:
+    needs: preflight
+    if: needs.preflight.outputs.fit == 'true' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [original, tied_dot, gru2, selective_ssm]
+        seed: [1701, 1702, 1703, 1704, 1705]
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Original source hash and prospective parity preflight before fitting
+        run: |
+          python scripts/phone_lab.py plan research/phone_queue/langhead094.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langhead094/FAIR_COMPARISON.json --phase preflight
+      - name: Train source-authenticated FIT and seal before new DEV access
+        run: |
+          python research/mathematical-engineering/langhead094/run093.py --arm '${{ matrix.arm }}' --seed '${{ matrix.seed }}' --out result
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGHEAD094-${{ matrix.arm }}-${{ matrix.seed }}
+          path: result/
+          retention-days: 90
+  archive:
+    needs: [preflight,train]
+    if: needs.train.result == 'success' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: LANGHEAD094-*
+          path: langhead094-downloads
+      - name: Preserve all 25 original complete checkpoints and one exact verified set of new publisher document bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          store=research/replay-bundles/LANGHEAD094
+          mkdir -p "$store"
+          cp -a langhead094-downloads/LANGHEAD094-original-1701/DEV_SOURCE "$store/DEV_SOURCE"
+          for arm in original tied_dot gru2 selective_ssm; do
+            for seed in 1701 1702 1703 1704 1705; do
+              src="langhead094-downloads/LANGHEAD094-${arm}-${seed}"
+              test -s "$src/MODEL.pt"
+              test -s "$src/RESULTS.json"
+              for name in zlib bisect tomllib; do
+                cmp "$src/DEV_SOURCE/Doc/library/${name}.rst" "$store/DEV_SOURCE/Doc/library/${name}.rst"
+              done
+              mkdir -p "$store/${arm}-${seed}"
+              cp "$src/MODEL.pt" "$src/RESULTS.json" "$store/${arm}-${seed}/"
+            done
+          done
+          python research/mathematical-engineering/langhead094/aggregate093.py --directory "$store" --output research/mathematical-engineering/langhead094/TRAINED_NEW_DEV_RESULTS.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/replay-bundles/LANGHEAD094 research/mathematical-engineering/langhead094/TRAINED_NEW_DEV_RESULTS.json
+          git commit -m 'LANGHEAD094: preserve 25 original 192-step weights, publisher sources, scored rows, replay'
+          git push origin "HEAD:${{ github.head_ref }}"
+  replay:
+    needs: preflight
+    if: needs.preflight.outputs.fit == 'false'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Independent second fresh-checkout 25 checkpoint source and full per-token inference replay
+        run: |
+          python research/mathematical-engineering/langhead094/aggregate093.py --directory research/replay-bundles/LANGHEAD094 --output /tmp/LANGHEAD094_REPLAY.json
