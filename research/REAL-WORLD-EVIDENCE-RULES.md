@@ -438,3 +438,32 @@ API submission using the owner-supplied credential is in scope for this named
 run; the protected Actions workflow is not being weakened or repurposed. Pin
 source bytes/licenses and cohort before fit; seal all45 original checkpoints
 before first held-out scoring. Existing historical evidence remains unchanged.
+
+## Owner-directed CODEVALUE004 generalization study —2026-10-30
+
+After reviewing CODEVALUE003, the owner said "Proceed" with the proposed fixed
+corpus-expansion x learning-rate-schedule study, unchanged TAC/GRU, DEV-only
+checkpoint selection, count predictors refit to each corpus and a newly frozen
+transfer cohort. CODEVALUE004 only may train the original499623p TAC and500165p
+GRU in four cells(small/broad x constant/cosine), seeds1701–1703,5120 updates at
+B8x128, with five predeclared DEV checkpoint candidates. All24 fits receive equal
+sample/selection budgets conditional on corpus. Corpus expansion changes size
+and content together; it does not identify a pure diversity effect.
+
+This is the separate owner500K internal-language track, not satisfaction of the
+global100K or matched-FLOP architecture-superiority contracts. The narrow validator
+must reject missing/extra cells/seeds, changed counts/exposure, unregistered
+selection candidates and unmatched actual sample schedules. No architectural
+superiority, independent certification, protected TEST, reward qualification or
+checkpoint promotion is authorized. The exact original graph is inherited;
+composed whole-model PNDS/IEEE/AD certification remains OPEN.
+
+The current instruction authorizes one bounded private/no-internet dual-T4 Kaggle
+allocation through the supplied credential, at most240 aggregate GPU-minutes,
+with a7020-second runtime deadline and7080-second platform timeout. Both physical
+T4s must be observed and used with balanced frozen task shards. No automatic
+submission/retry loop or additional allocation is authorized. The protected
+Actions workflow is not changed. Preserve all120 original checkpoints, the24
+DEV-only selections and failures; seal selections before new transfer prediction.
+A predictive-generalization pass is not a commercial proof. Existing CODEVALUE003
+source/checkpoints/scores remain unchanged.

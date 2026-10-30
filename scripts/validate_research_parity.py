@@ -120,6 +120,47 @@ def check_codevalue003(m, phase):
             rows=[r["measured"] for r in models if r["seed"]==seed]
             shared(rows,"sample_sha256",seed)
 
+# Owner2026-10-30 approved the next fixed CODEVALUE004 generalization study.
+CODEVALUE004_CONTRACT = "owner-2026-10-30-codevalue004-generalization-500k"
+CODEVALUE004_CELLS = ("small_constant","small_cosine","broad_constant","broad_cosine")
+
+def checked_codevalue004(m):
+    return (m.get("study_id")=="CODEVALUE004"
+            and m.get("parameter_budget_contract")==CODEVALUE004_CONTRACT
+            and m.get("study_type")=="single_model_training"
+            and m.get("execution_level")=="internal_research"
+            and m.get("no_architecture_superiority_claim") is True)
+
+def check_codevalue004(m,phase):
+    demand(checked_codevalue004(m),"CODEVALUE004 exact owner scope required")
+    counts={"tac":499623,"gru":500165}
+    expected={(a,c,s) for a in counts for c in CODEVALUE004_CELLS for s in (1701,1702,1703)}
+    models=m.get("models",[])
+    demand(len(models)==24 and {(r.get("architecture"),r.get("cell"),r.get("seed")) for r in models}==expected,
+           "CODEVALUE004 complete fixed24-model factorial matrix required")
+    b=m.get("budget",{})
+    demand((b.get("training_updates"),b.get("batch_size"),b.get("context_bytes"))==(5120,8,128),
+           "CODEVALUE004 fixed5120x8x128 exposure required")
+    demand(b.get("checkpoint_candidates")==[320,640,1280,2560,5120],"fixed DEV checkpoint candidates required")
+    demand(b.get("extra_tuning_trials")==0,"no unregistered tuning trials")
+    for row in models:
+        n=counts[row["architecture"]]
+        demand(row.get("trainable_parameters")==n and row.get("deployed_parameters")==n,
+               "CODEVALUE004 exact inherited model count required")
+        if phase=="final":
+            r=row.get("measured",{})
+            demand(r.get("steps")==5120 and r.get("targets")==5242880,"CODEVALUE004 incomplete fit")
+            demand(r.get("selected_step") in b["checkpoint_candidates"],"invalid selected checkpoint")
+            digest(r.get("sample_sha256"),"CODEVALUE004 actual paired source schedule")
+            digest(r.get("selected_checkpoint_sha256"),"CODEVALUE004 DEV-selected checkpoint")
+            demand(0<=r.get("cold_replay_max_abs_difference",1)<=1e-6,"CODEVALUE004 cold replay failed")
+            demand(0<=r.get("future_poison_max_abs_difference",1)<=1e-5,"CODEVALUE004 prefix causality failed")
+    if phase=="final":
+        for corpus in ("small","broad"):
+            for seed in (1701,1702,1703):
+                receipts=[r["measured"] for r in models if r["cell"].startswith(corpus+"_") and r["seed"]==seed]
+                shared(receipts,"sample_sha256",seed)
+
 def check_500k_model_size(trainable,deployed,label):
     positive_num(trainable,label+".trainable_parameters",whole=True)
     positive_num(deployed,label+".deployed_parameters",whole=True)
@@ -269,6 +310,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 "status":"PASS_DIAGNOSTIC_ONLY"}
     if kind=="single_model_training":
         if m.get("study_id")=="CODEVALUE003":check_codevalue003(m,phase)
+        if m.get("study_id")=="CODEVALUE004":check_codevalue004(m,phase)
         demand(m.get("registered_before_first_fit") is True,
                "single-model fit must be preregistered")
         source=m.get("real_world_source")
@@ -290,6 +332,8 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 check_langscale074_model(model,f"models[{i}]")
             elif checked_langscale070(m):
                 check_langscale070_model(model,f"models[{i}]")
+            elif checked_codevalue004(m):
+                check_500k_model_size(model.get("trainable_parameters"),model.get("deployed_parameters"),f"models[{i}]")
             elif checked_codevalue003(m):
                 check_500k_model_size(model.get("trainable_parameters"),model.get("deployed_parameters"),f"models[{i}]")
             elif checked_new_scale(m):
@@ -330,6 +374,8 @@ def _check_manifest_parity_only(m,phase="preflight"):
                         "trainable_parameters":receipt.get("trainable_parameters"),
                         "deployed_parameters":receipt.get("deployed_parameters")},
                         f"models[{i}].measured")
+                elif checked_codevalue004(m):
+                    check_500k_model_size(receipt.get("trainable_parameters"),receipt.get("deployed_parameters"),f"models[{i}].measured")
                 elif checked_codevalue003(m):
                     check_500k_model_size(receipt.get("trainable_parameters"),receipt.get("deployed_parameters"),f"models[{i}].measured")
                 elif checked_new_scale(m):

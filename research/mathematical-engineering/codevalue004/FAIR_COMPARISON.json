@@ -1,0 +1,256 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "CODEVALUE004",
+  "study_type": "single_model_training",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "parameter_budget_contract": "owner-2026-10-30-codevalue004-generalization-500k",
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Fixed owner-directed2x2 corpus-expansion/LR-schedule study, unchanged TAC/GRU. Exposure-matched internal engineering measurements; no training-FLOP-matched architecture superiority.",
+  "real_world_source": {
+    "name": "Original real publisher CPython plus eight expanded FIT publishers, exposed DEV and five newly frozen transfer projects",
+    "observed_real_outcomes": true,
+    "sha256": "0b2ed6fd3fa4f751e5ba7d97a19ac150d8dc31a262ef470d5f057f415843e4ef",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF-2.0/MIT/Apache-2.0/BSD-3-Clause original notices archived; multi-notice roots explicitly reviewed",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/commercial-value/codevalue004/SOURCE_RECEIPT.json"
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "0b2ed6fd3fa4f751e5ba7d97a19ac150d8dc31a262ef470d5f057f415843e4ef",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "TRANSFER_DEV_is_internal_DEV": true
+  },
+  "causal_protocol": "Only prefix bytes reach models. No filenames, publisher IDs, gold suffixes or cross-file state. DEV selection may read DEV scores; never transfer scores.",
+  "checkpoint_policy": "Seal all120 checkpoint hashes and24 DEV-only selections before transfer prediction; preserve all model/AdamW/CPU+CUDA/Python/NumPy/sampler states and cold replay.",
+  "budget": {
+    "training_updates": 5120,
+    "batch_size": 8,
+    "context_bytes": 128,
+    "checkpoint_candidates": [
+      320,
+      640,
+      1280,
+      2560,
+      5120
+    ],
+    "extra_tuning_trials": 0,
+    "training_FLOPs": "UNMATCHED_INCOMPLETE_OPERATOR_COVERAGE",
+    "max_allocated_GPU_minutes": 240
+  },
+  "models": [
+    {
+      "name": "tac-small_constant",
+      "architecture": "tac",
+      "cell": "small_constant",
+      "seed": 1701,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-small_constant",
+      "architecture": "tac",
+      "cell": "small_constant",
+      "seed": 1702,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-small_constant",
+      "architecture": "tac",
+      "cell": "small_constant",
+      "seed": 1703,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-small_cosine",
+      "architecture": "tac",
+      "cell": "small_cosine",
+      "seed": 1701,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-small_cosine",
+      "architecture": "tac",
+      "cell": "small_cosine",
+      "seed": 1702,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-small_cosine",
+      "architecture": "tac",
+      "cell": "small_cosine",
+      "seed": 1703,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-broad_constant",
+      "architecture": "tac",
+      "cell": "broad_constant",
+      "seed": 1701,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-broad_constant",
+      "architecture": "tac",
+      "cell": "broad_constant",
+      "seed": 1702,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-broad_constant",
+      "architecture": "tac",
+      "cell": "broad_constant",
+      "seed": 1703,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-broad_cosine",
+      "architecture": "tac",
+      "cell": "broad_cosine",
+      "seed": 1701,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-broad_cosine",
+      "architecture": "tac",
+      "cell": "broad_cosine",
+      "seed": 1702,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "tac-broad_cosine",
+      "architecture": "tac",
+      "cell": "broad_cosine",
+      "seed": 1703,
+      "trainable_parameters": 499623,
+      "deployed_parameters": 499623
+    },
+    {
+      "name": "gru-small_constant",
+      "architecture": "gru",
+      "cell": "small_constant",
+      "seed": 1701,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-small_constant",
+      "architecture": "gru",
+      "cell": "small_constant",
+      "seed": 1702,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-small_constant",
+      "architecture": "gru",
+      "cell": "small_constant",
+      "seed": 1703,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-small_cosine",
+      "architecture": "gru",
+      "cell": "small_cosine",
+      "seed": 1701,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-small_cosine",
+      "architecture": "gru",
+      "cell": "small_cosine",
+      "seed": 1702,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-small_cosine",
+      "architecture": "gru",
+      "cell": "small_cosine",
+      "seed": 1703,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-broad_constant",
+      "architecture": "gru",
+      "cell": "broad_constant",
+      "seed": 1701,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-broad_constant",
+      "architecture": "gru",
+      "cell": "broad_constant",
+      "seed": 1702,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-broad_constant",
+      "architecture": "gru",
+      "cell": "broad_constant",
+      "seed": 1703,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-broad_cosine",
+      "architecture": "gru",
+      "cell": "broad_cosine",
+      "seed": 1701,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-broad_cosine",
+      "architecture": "gru",
+      "cell": "broad_cosine",
+      "seed": 1702,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    },
+    {
+      "name": "gru-broad_cosine",
+      "architecture": "gru",
+      "cell": "broad_cosine",
+      "seed": 1703,
+      "trainable_parameters": 500165,
+      "deployed_parameters": 500165
+    }
+  ],
+  "literature": [
+    "Loshchilov&Hutter2017 SGDR cosine schedules are established, not a TAC invention: https://arxiv.org/abs/1608.03983",
+    "Loshchilov&Hutter2019 AdamW: https://arxiv.org/abs/1711.05101",
+    "Hoffmann etal2022 data/exposure tradeoffs: https://arxiv.org/abs/2203.15556"
+  ],
+  "pnds": "Exact inherited graph; full composed PNDS/IEEE/AD certification remains OPEN"
+}
