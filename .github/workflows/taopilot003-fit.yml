@@ -1,0 +1,70 @@
+name: TAOPILOT003 authentic five-arm fixed-LR FIT (internal research)
+
+on:
+  push:
+    branches:
+      - 'research/tao003-real-language-pilot-2026-10-30'
+    paths:
+      - '.github/workflows/taopilot003-fit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taopilot003-real-fit
+  cancel-in-progress: false
+
+jobs:
+  fit-authentic-publisher:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install CPU-only experiment requirements
+        run: |
+          python -m pip install --quiet numpy==2.3.3 torch pytest
+      - name: Enforce original registered prospectively frozen FIT gates
+        run: |
+          python -m pytest -q tests/test_tao003_pilot.py tests/test_tao002_prefit.py tests/test_optimizer_tao.py
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/taopilot003/FAIR_COMPARISON.json --phase preflight
+      - name: Run genuine PSF-publisher FIT; 5 same-model optimizer arms, 32 steps each
+        run: |
+          python scripts/tao003_pilot.py train --directory research/evidence/taopilot003/seed1701
+      - name: Require five original model/optimizer/RNG checkpoints and their receipts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import hashlib
+          root=Path('research/evidence/taopilot003/seed1701')
+          summary=json.loads((root/'FIT_MATRIX.json').read_text())
+          expected={'adamw','muon','adamuon','normuon','pre_ns'}
+          assert set(summary['arms'])==expected
+          assert len({v['trained_model_hash'] for v in summary['arms'].values()})>1
+          for name in expected:
+              p=root/name/'MODEL.pt'
+              receipt=json.loads((root/name/'FIT_RECEIPT.json').read_text())
+              assert p.stat().st_size>50000
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==receipt['checkpoint_sha256']
+              assert receipt['trained_steps']==32 and receipt['targets_seen']==32768
+              assert receipt['cold_optimizer_restored'] and receipt['cold_logits_bitwise']
+          print('ALL_FIVE_ORIGINAL_CHECKPOINTS_PRESENT_AND_HASH_VERIFIED')
+          PY
+      - name: Commit original checkpoints directly to research branch (never master)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f research/evidence/taopilot003/seed1701
+          git diff --cached --exit-code --quiet && { echo 'No trained files were generated'; exit 1; } || true
+          git commit -m "evidence(taopilot003): preserve all five original trained optimizer checkpoints"
+          git push origin HEAD:research/tao003-real-language-pilot-2026-10-30
