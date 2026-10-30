@@ -92,7 +92,7 @@ jobs:
           if-no-files-found: warn
   three-original-checkpoint-source-paired-aggregate:
     needs: original-verified-crosspublisher-no-fit
-    if: always()
+    if: always() && github.head_ref == 'research/langmem085-selective-byte-memory-crosspublisher-2026-10-30'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
