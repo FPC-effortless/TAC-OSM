@@ -1,0 +1,49 @@
+name: LANGPERSIST096 real lexical and general capability research
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langpersist096/**'
+      - '!research/mathematical-engineering/langpersist096/results/**'
+      - 'tests/test_langpersist096_*.py'
+      - '.github/workflows/langpersist096.yml'
+      - 'research/phone_queue/langpersist096-real-state-utility.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-real-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONPATH: src
+      PREREGISTRATION_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5' 'pytest>=8,<9'
+      - run: python -m pip install 'torch==2.5.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Install isolated executable-code judge
+        run: sudo apt-get update -qq && sudo apt-get install -y bubblewrap
+      - run: python scripts/phone_lab.py plan research/phone_queue/langpersist096-real-state-utility.json
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langpersist096/FAIR_COMPARISON.json --phase preflight
+      - name: Software, information-boundary and source-streaming checks
+        run: python -m pytest -q tests/test_langpersist096_*.py tests/test_research_probe_agnostic.py
+      - name: Frozen real-data lexical and general capability study
+        run: >-
+          python research/mathematical-engineering/langpersist096/run.py
+          --cache /tmp/langpersist096-cache
+          --output ci-artifacts/langpersist096/experiment
+          --preregistration-commit "$PREREGISTRATION_COMMIT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langpersist096-research-${{ github.run_id }}
+          path: ci-artifacts/langpersist096/
+          if-no-files-found: warn
