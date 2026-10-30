@@ -36,7 +36,7 @@ jobs:
     needs: registered-launch
     if: needs.registered-launch.outputs.launch == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 50
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -165,7 +165,7 @@ jobs:
           if-no-files-found: warn
 
   strictly-paired-three-seed-aggregate:
-    needs: first-source-DEV-after-ALL-fits-sealed
+    needs: [registered-launch,first-source-DEV-after-ALL-fits-sealed]
     if: always() && needs.registered-launch.outputs.launch == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
