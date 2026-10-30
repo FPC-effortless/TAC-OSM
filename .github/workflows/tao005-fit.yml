@@ -92,3 +92,52 @@ jobs:
           done
           echo "FAIL_TO_PRESERVE_ORIGINAL_CHECKPOINTS" >&2
           exit 1
+
+  independent-report-after-all-original-seeds:
+    needs: original-fits-per-seed
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/tao004-optimizer-lr-selection-2026-10-30
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify separate Git checkout contains all 25 original checkpoints
+        run: |
+          set -euo pipefail
+          for seed in 1701 1702 1703 1704 1705; do
+            for arm in adamw muon adamuon normuon pre_ns; do
+              test -s "research/evidence/taofinal005/seed$seed/$arm/MODEL.pt"
+              test -s "research/evidence/taofinal005/seed$seed/$arm/FIT_RECEIPT.json"
+            done
+            test -s "research/evidence/taofinal005/seed$seed/FIT_MATRIX.json"
+          done
+          echo 'PASS_GIT_SEPARATE_CHECKOUT_25_FULL_ORIGINALS'
+      - name: Install CPU source evaluator
+        run: python -m pip install --quiet numpy==2.3.3 torch pytest
+      - name: Independently replay 25 originals; report ONLY two frozen previously-exposed report DEV owners
+        run: |
+          python -m pytest -q tests/test_tao005_five_seed.py
+          python scripts/tao005_five_seed.py report \
+            --directory research/evidence/taofinal005
+          python scripts/validate_research_parity.py \
+            --manifest research/evidence/taofinal005/FINAL_COMPARISON.json \
+            --phase final
+      - name: Preserve first five-seed report, paired uncertainty and all prior failures
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f research/evidence/taofinal005/REPORT_RESULTS.json
+          git add -f research/evidence/taofinal005/FINAL_COMPARISON.json
+          git commit -m "evidence(taofinal005): independent five-seed authentic publisher report and exact checkpoint gate"
+          git fetch origin research/tao004-optimizer-lr-selection-2026-10-30
+          git rebase origin/research/tao004-optimizer-lr-selection-2026-10-30
+          git push origin HEAD:research/tao004-optimizer-lr-selection-2026-10-30
