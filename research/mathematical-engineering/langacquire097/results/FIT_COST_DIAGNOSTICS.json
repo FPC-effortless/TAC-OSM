@@ -1,0 +1,1329 @@
+{
+  "schema": "langacquire097.read-only-actual-fit-cost-summary.v1",
+  "training_source_commit": "d21c7e7b385ca164eac9046fafca43fc9a3762b1",
+  "fits": 40,
+  "legs": 10,
+  "all_fit_steps": 10240,
+  "sum_recorded_fit_loop_seconds": 16988.24781485,
+  "sum_recorded_inside_process_seconds": 17126.653907942,
+  "sum_recorded_child_wall_seconds": 17146.645738835,
+  "sum_recorded_leg_elapsed_seconds": 17146.808823676,
+  "scope": "Actual CPU single-thread training with complete per-step TorchDispatch operator tracing, gradient checks, receipt generation and checkpoint IO. Not uninstrumented inference speed or absolute FLOPs. Sum across concurrent legs is not elapsed calendar time. Recorded peaks are per-process max RSS, never sum them. No NN code imported, no model forwards or optimizers invoked by this descriptive audit.",
+  "DEV_read": false,
+  "models": [
+    {
+      "family": "gru",
+      "objective": "full",
+      "seed": 1701,
+      "receipt_sha256": "3eec5df25534e4c1a9a8765c0c0133396d2084ef80ae1498a383c27ebcf9ddbe",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130486,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 130486,
+      "training_loop_seconds": 126.32730085100002,
+      "inside_process_seconds": 130.04583908600011,
+      "child_wall_seconds": 130.605847779,
+      "optimizer_seconds": 0.9182037420002871,
+      "peak_rss_bytes": 408985600,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "full",
+      "seed": 1701,
+      "receipt_sha256": "be50b71d1de7334ff93cf4b9a3d0ad9b30b2051d732d8b71cb40fa22d62fcf61",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130486,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 130486,
+      "training_loop_seconds": 159.87747279799987,
+      "inside_process_seconds": 163.58515339500013,
+      "child_wall_seconds": 164.047401777,
+      "optimizer_seconds": 1.056670408997661,
+      "peak_rss_bytes": 404852736,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "full",
+      "seed": 1701,
+      "receipt_sha256": "31e46b0d32ef8a160e4b5f57eb8e367cfab78ae18ae07746f1d00d800dd0eac7",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130486,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 130486,
+      "training_loop_seconds": 1582.627897073,
+      "inside_process_seconds": 1586.393792548,
+      "child_wall_seconds": 1587.028127527,
+      "optimizer_seconds": 5.73739738999933,
+      "peak_rss_bytes": 558501888,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "full",
+      "seed": 1701,
+      "receipt_sha256": "6324498caebcc24fd7376c6e58dd0296add6d7e32d6afc3d7f54464e8ac3f516",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130486,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 130486,
+      "training_loop_seconds": 12.59580368700017,
+      "inside_process_seconds": 16.046198502999687,
+      "child_wall_seconds": 16.46007769200014,
+      "optimizer_seconds": 1.979058627003269,
+      "peak_rss_bytes": 409706496,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "query",
+      "seed": 1701,
+      "receipt_sha256": "7809d33e041120d2f56d3c9e7389f9a05f77dd7254ba29046fba58fdf9402ffb",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130486,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12905,
+      "training_loop_seconds": 121.71263956100006,
+      "inside_process_seconds": 125.24118335200001,
+      "child_wall_seconds": 125.66811787000006,
+      "optimizer_seconds": 0.876059080999994,
+      "peak_rss_bytes": 409288704,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "query",
+      "seed": 1701,
+      "receipt_sha256": "998d31c144e2f889abf35fa51e6cca43e846979682d75d47e741c9ac49dc1eed",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130486,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12905,
+      "training_loop_seconds": 159.09691847199997,
+      "inside_process_seconds": 162.523095043,
+      "child_wall_seconds": 163.0281106120001,
+      "optimizer_seconds": 1.0455586680018314,
+      "peak_rss_bytes": 405479424,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "query",
+      "seed": 1701,
+      "receipt_sha256": "547e4e249dff72c4474c01885894e48c5ef5c21596f26bc05846167482d70da5",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130486,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12905,
+      "training_loop_seconds": 1580.176996021,
+      "inside_process_seconds": 1583.943972474,
+      "child_wall_seconds": 1584.548372622,
+      "optimizer_seconds": 5.773741849999254,
+      "peak_rss_bytes": 558161920,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "query",
+      "seed": 1701,
+      "receipt_sha256": "242efa1b05c8ce7999384f2900bd1f8d1fbe5c174110c6aa0af53ad34efe0dae",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130486,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12905,
+      "training_loop_seconds": 12.692650105999974,
+      "inside_process_seconds": 16.15613120099988,
+      "child_wall_seconds": 16.608675090000133,
+      "optimizer_seconds": 2.014893545997893,
+      "peak_rss_bytes": 408338432,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "full",
+      "seed": 1702,
+      "receipt_sha256": "0dfc7065e6c25017e4250be2629ae75b035d8e09217f64776b699d2b52c7dd19",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131083,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131083,
+      "training_loop_seconds": 121.67847835499992,
+      "inside_process_seconds": 125.25021312500007,
+      "child_wall_seconds": 125.7808511589999,
+      "optimizer_seconds": 0.8991769560009288,
+      "peak_rss_bytes": 408137728,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "full",
+      "seed": 1702,
+      "receipt_sha256": "6bc95b3a29db67d7f5457a71e3dee1a1f6a34c1badf19896eb7d3a2c35ce3a6f",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131083,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131083,
+      "training_loop_seconds": 162.41145062500004,
+      "inside_process_seconds": 165.96793206999996,
+      "child_wall_seconds": 166.44449413400002,
+      "optimizer_seconds": 1.0623594180005966,
+      "peak_rss_bytes": 405426176,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "full",
+      "seed": 1702,
+      "receipt_sha256": "4f19dbb387e7c27a159a6149fc198ce1ea2737e0a8694e5dcd3e792bbe580d53",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131083,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131083,
+      "training_loop_seconds": 1563.415220097,
+      "inside_process_seconds": 1567.121702635,
+      "child_wall_seconds": 1567.714033691,
+      "optimizer_seconds": 5.845329990998891,
+      "peak_rss_bytes": 558526464,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "full",
+      "seed": 1702,
+      "receipt_sha256": "febc5185bd550df1cb039f58522ca8ddcc4c5ee5e91a2eac5ea18b8c40d1ce47",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131083,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131083,
+      "training_loop_seconds": 13.178211553999972,
+      "inside_process_seconds": 16.81570708000004,
+      "child_wall_seconds": 17.26432634999992,
+      "optimizer_seconds": 2.1025427570025386,
+      "peak_rss_bytes": 409591808,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "query",
+      "seed": 1702,
+      "receipt_sha256": "7e0365f9a83fe06b939b64cfedf2e3f666a49b0665bfdf776b2446dd30a8093f",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131083,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 13251,
+      "training_loop_seconds": 72.5065826309999,
+      "inside_process_seconds": 75.190126018,
+      "child_wall_seconds": 75.5854134220001,
+      "optimizer_seconds": 0.5480237680005757,
+      "peak_rss_bytes": 409358336,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "query",
+      "seed": 1702,
+      "receipt_sha256": "5f4c97f1976741c78c4cbbfa9bc22f999b124065e268279a259a0904c1334cfb",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131083,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 13251,
+      "training_loop_seconds": 92.11439109000003,
+      "inside_process_seconds": 94.7849068779999,
+      "child_wall_seconds": 95.17030935499997,
+      "optimizer_seconds": 0.6302332960015065,
+      "peak_rss_bytes": 403222528,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "query",
+      "seed": 1702,
+      "receipt_sha256": "3b7b575fc7a40b0c4d12d01930b0031df9cc71452285cb5dd2182e0cef29ae4a",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131083,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 13251,
+      "training_loop_seconds": 963.3853028820001,
+      "inside_process_seconds": 966.3077132960001,
+      "child_wall_seconds": 966.812280628,
+      "optimizer_seconds": 4.3163928169993255,
+      "peak_rss_bytes": 557580288,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "query",
+      "seed": 1702,
+      "receipt_sha256": "0a76290e3538a9d0e17450fd93de29ca314464c25eb0dde62be8298e70fb619b",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131083,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 13251,
+      "training_loop_seconds": 9.338698287999932,
+      "inside_process_seconds": 12.010584303999849,
+      "child_wall_seconds": 12.441970211999887,
+      "optimizer_seconds": 1.1769596339984219,
+      "peak_rss_bytes": 409157632,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "full",
+      "seed": 1703,
+      "receipt_sha256": "8446fa332659465173872d70b24a1cf556712125f8f27bc8e6717a0ed835f40e",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131352,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131352,
+      "training_loop_seconds": 116.4715963340002,
+      "inside_process_seconds": 119.833930925,
+      "child_wall_seconds": 120.26289891800002,
+      "optimizer_seconds": 0.8590226780022476,
+      "peak_rss_bytes": 409579520,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "full",
+      "seed": 1703,
+      "receipt_sha256": "2534c3bc83070df382d9a6312ca2d54d493920f0e4194395de0e132c5ff6233a",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131352,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131352,
+      "training_loop_seconds": 152.95692674500015,
+      "inside_process_seconds": 156.30093634600007,
+      "child_wall_seconds": 156.68936952800004,
+      "optimizer_seconds": 1.0065651329987304,
+      "peak_rss_bytes": 405856256,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "full",
+      "seed": 1703,
+      "receipt_sha256": "24800d29c5749d017d50cde25a94d26dda2c525d604c6ce550ae34982456696d",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131352,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131352,
+      "training_loop_seconds": 1484.312281617,
+      "inside_process_seconds": 1487.864881847,
+      "child_wall_seconds": 1488.340508278,
+      "optimizer_seconds": 5.273493002999842,
+      "peak_rss_bytes": 557772800,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "full",
+      "seed": 1703,
+      "receipt_sha256": "f7d1ae22cd64d8202f66eb04cacb32dc4dc018b411ffb46318cfcf82b9e41d37",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131352,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131352,
+      "training_loop_seconds": 12.596616574000109,
+      "inside_process_seconds": 15.964892244999874,
+      "child_wall_seconds": 16.35826474999999,
+      "optimizer_seconds": 1.9762642219989175,
+      "peak_rss_bytes": 409759744,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "query",
+      "seed": 1703,
+      "receipt_sha256": "34c2a5c5a6059baae5fe0006b2d27132fd9f938cb61c58639a44ade118b7f33a",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131352,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 13302,
+      "training_loop_seconds": 73.44081375799988,
+      "inside_process_seconds": 76.19424435099995,
+      "child_wall_seconds": 76.65261713900009,
+      "optimizer_seconds": 0.5481477200009977,
+      "peak_rss_bytes": 405532672,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "query",
+      "seed": 1703,
+      "receipt_sha256": "6a2531d7bd9bf7559fafb2ecd09265bd5fe4fba983e9e9516017893733e15dc8",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131352,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 13302,
+      "training_loop_seconds": 95.48740590400007,
+      "inside_process_seconds": 98.29111343399995,
+      "child_wall_seconds": 98.765580989,
+      "optimizer_seconds": 0.654594528001553,
+      "peak_rss_bytes": 403185664,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "query",
+      "seed": 1703,
+      "receipt_sha256": "52aceaa1de3c69a25d3357fe42f008508696d0ce43a1d89922d6609c1645ba8b",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131352,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 13302,
+      "training_loop_seconds": 986.4287511320001,
+      "inside_process_seconds": 989.547360469,
+      "child_wall_seconds": 990.048456169,
+      "optimizer_seconds": 4.510662216000696,
+      "peak_rss_bytes": 556625920,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "query",
+      "seed": 1703,
+      "receipt_sha256": "95a6578e5d55aec98262dc96a0f1a9c0537fe3187577d87045c71344d8a12199",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131352,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 13302,
+      "training_loop_seconds": 9.721616857000072,
+      "inside_process_seconds": 12.562473904999933,
+      "child_wall_seconds": 13.04604124299999,
+      "optimizer_seconds": 1.2378035079984784,
+      "peak_rss_bytes": 408698880,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "full",
+      "seed": 1704,
+      "receipt_sha256": "fda6ccad6f22d4579e4f7972f61d0574de5d4c6b3d631c6ed70dde5bba4bb197",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131190,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131190,
+      "training_loop_seconds": 131.9643758440002,
+      "inside_process_seconds": 135.88735245300018,
+      "child_wall_seconds": 136.600169369,
+      "optimizer_seconds": 0.999723431997154,
+      "peak_rss_bytes": 408121344,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "full",
+      "seed": 1704,
+      "receipt_sha256": "2f9a5513f1b51ce9fc514baaf16a0df2b2905dd0b2682155ba03549410b75d0d",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131190,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131190,
+      "training_loop_seconds": 172.5032469189996,
+      "inside_process_seconds": 176.4691529239999,
+      "child_wall_seconds": 177.17478426000025,
+      "optimizer_seconds": 1.1708436379990417,
+      "peak_rss_bytes": 406114304,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "full",
+      "seed": 1704,
+      "receipt_sha256": "de5765400a2f8610514b8d29fee3283f2ac1ffe454f249044b470d346090313a",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131190,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131190,
+      "training_loop_seconds": 1735.4891325899998,
+      "inside_process_seconds": 1740.150209122,
+      "child_wall_seconds": 1740.907158902,
+      "optimizer_seconds": 8.029320056998586,
+      "peak_rss_bytes": 559124480,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "full",
+      "seed": 1704,
+      "receipt_sha256": "8fb2faaf9e0c95386e992e2134f328e9d5f6bfb541df2e7fdd1d6cb92cb459b3",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131190,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 131190,
+      "training_loop_seconds": 14.560901458999979,
+      "inside_process_seconds": 18.821588068999972,
+      "child_wall_seconds": 19.58054549899998,
+      "optimizer_seconds": 2.369571485999586,
+      "peak_rss_bytes": 409620480,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "query",
+      "seed": 1704,
+      "receipt_sha256": "f3692317bf4424f33321793fbd721ddd9fcfcd89217552c866cd567b69d91d31",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131190,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12930,
+      "training_loop_seconds": 94.3733158770001,
+      "inside_process_seconds": 97.83343333800008,
+      "child_wall_seconds": 98.31911974900004,
+      "optimizer_seconds": 0.6911621720005314,
+      "peak_rss_bytes": 410025984,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "query",
+      "seed": 1704,
+      "receipt_sha256": "449e6d8b623fa9875d1d4490cae4e7bd88b2b5cc7a320bef94a6ae7ac498d63a",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131190,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12930,
+      "training_loop_seconds": 118.83939627199993,
+      "inside_process_seconds": 122.25202384699992,
+      "child_wall_seconds": 122.72454289100006,
+      "optimizer_seconds": 0.793935108998312,
+      "peak_rss_bytes": 404922368,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "query",
+      "seed": 1704,
+      "receipt_sha256": "40a923bdeea205c0d5623984ceecb5f41edcc2f9b9e1504b1c0876e88c8d0138",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131190,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12930,
+      "training_loop_seconds": 1269.4397794029999,
+      "inside_process_seconds": 1273.4688939500002,
+      "child_wall_seconds": 1274.0957900330002,
+      "optimizer_seconds": 5.361778903001991,
+      "peak_rss_bytes": 558583808,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "query",
+      "seed": 1704,
+      "receipt_sha256": "741d5df15ab21839151c4bfa57b51c661bd1c9a391c8240c0d262d21ee45af28",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 131190,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12930,
+      "training_loop_seconds": 12.142478632999882,
+      "inside_process_seconds": 15.5956530630001,
+      "child_wall_seconds": 16.056319530999872,
+      "optimizer_seconds": 1.534417812001493,
+      "peak_rss_bytes": 409055232,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "full",
+      "seed": 1705,
+      "receipt_sha256": "c0936d5368025f25f1f12f0ac0973740e53de135481aed771aa376a2b6519b4c",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130627,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 130627,
+      "training_loop_seconds": 119.22587228599991,
+      "inside_process_seconds": 122.61201550099986,
+      "child_wall_seconds": 123.01017523100018,
+      "optimizer_seconds": 0.8632609999997385,
+      "peak_rss_bytes": 408817664,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "full",
+      "seed": 1705,
+      "receipt_sha256": "9d55b93cc9c672bbca36e1e7621e0c7314a3f764f445372434f1af190dc9e101",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130627,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 130627,
+      "training_loop_seconds": 153.70507975600003,
+      "inside_process_seconds": 157.0736089070001,
+      "child_wall_seconds": 157.4747305049998,
+      "optimizer_seconds": 1.0186437999982445,
+      "peak_rss_bytes": 405803008,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "full",
+      "seed": 1705,
+      "receipt_sha256": "d014be12c54a69f02934fe8fc7c734607a3f785f24eea453e1087deae91247b4",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130627,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 130627,
+      "training_loop_seconds": 1536.918049221,
+      "inside_process_seconds": 1540.4930789969999,
+      "child_wall_seconds": 1540.987059908,
+      "optimizer_seconds": 5.382157530999962,
+      "peak_rss_bytes": 558542848,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "full",
+      "seed": 1705,
+      "receipt_sha256": "50cdc38930321fe84e91049cfdab013783857fc94ae4ef680e786a81a340c9f0",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130627,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 130627,
+      "training_loop_seconds": 12.329653431999986,
+      "inside_process_seconds": 15.760379999999941,
+      "child_wall_seconds": 16.15383546399994,
+      "optimizer_seconds": 1.9756250240009194,
+      "peak_rss_bytes": 410259456,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "query",
+      "seed": 1705,
+      "receipt_sha256": "eac10506d84fb617e29277a0f653f3e84bb605f33c08ce9b3d625f72ce26a909",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130627,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12933,
+      "training_loop_seconds": 119.40492776199994,
+      "inside_process_seconds": 122.89887231400007,
+      "child_wall_seconds": 123.38340561599989,
+      "optimizer_seconds": 0.8926871429998755,
+      "peak_rss_bytes": 408858624,
+      "model_tensor_bytes": 402644,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "query",
+      "seed": 1705,
+      "receipt_sha256": "7606dbec4f7f1cc2b296aafcb617331717c7090dc29d6b89b1a38a1b72afecb0",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130627,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12933,
+      "training_loop_seconds": 159.7351579199999,
+      "inside_process_seconds": 163.26145028300016,
+      "child_wall_seconds": 163.70445882299987,
+      "optimizer_seconds": 1.060939911000787,
+      "peak_rss_bytes": 406319104,
+      "model_tensor_bytes": 401616,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "query",
+      "seed": 1705,
+      "receipt_sha256": "b797f59636d5d41e3cd5e3158d84d3d77c40e0826278ea890c789c901c4ab31a",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130627,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12933,
+      "training_loop_seconds": 1640.343708004,
+      "inside_process_seconds": 1643.923145988,
+      "child_wall_seconds": 1644.441421856,
+      "optimizer_seconds": 5.888407880999921,
+      "peak_rss_bytes": 558833664,
+      "model_tensor_bytes": 410276,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "query",
+      "seed": 1705,
+      "receipt_sha256": "2dffc2583fbecd01e48d0417c2637af66c4b702a865142b1141da944f9495a0d",
+      "actual_steps": 256,
+      "actual_examples": 1024,
+      "observed_input_bytes": 130627,
+      "dense_compute_positions": 278528,
+      "supervised_targets": 12933,
+      "training_loop_seconds": 12.720716459999949,
+      "inside_process_seconds": 16.208964655999807,
+      "child_wall_seconds": 16.66007426400006,
+      "optimizer_seconds": 2.0106191299958027,
+      "peak_rss_bytes": 409681920,
+      "model_tensor_bytes": 401936,
+      "hardware": {
+        "cpu_devices": 4,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "cuda_used": false,
+        "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+        "torch_threads": 1,
+        "torch_version": "2.5.1+cpu"
+      }
+    }
+  ],
+  "summary": [
+    {
+      "family": "tac",
+      "objective": "full",
+      "seeds": 5,
+      "training_loop_seconds": {
+        "mean": 1580.5525161195999,
+        "minimum": 1484.312281617,
+        "maximum": 1735.4891325899998
+      },
+      "inside_process_seconds": {
+        "mean": 1584.4047330298,
+        "minimum": 1487.864881847,
+        "maximum": 1740.150209122
+      },
+      "child_wall_seconds": {
+        "mean": 1584.9953776611999,
+        "minimum": 1488.340508278,
+        "maximum": 1740.907158902
+      },
+      "optimizer_seconds": {
+        "mean": 6.053539594399322,
+        "minimum": 5.273493002999842,
+        "maximum": 8.029320056998586
+      },
+      "peak_rss_bytes": {
+        "mean": 558493696,
+        "minimum": 557772800,
+        "maximum": 559124480
+      }
+    },
+    {
+      "family": "tac",
+      "objective": "query",
+      "seeds": 5,
+      "training_loop_seconds": {
+        "mean": 1287.9549074884,
+        "minimum": 963.3853028820001,
+        "maximum": 1640.343708004
+      },
+      "inside_process_seconds": {
+        "mean": 1291.4382172354,
+        "minimum": 966.3077132960001,
+        "maximum": 1643.923145988
+      },
+      "child_wall_seconds": {
+        "mean": 1291.9892642616,
+        "minimum": 966.812280628,
+        "maximum": 1644.441421856
+      },
+      "optimizer_seconds": {
+        "mean": 5.170196733400237,
+        "minimum": 4.3163928169993255,
+        "maximum": 5.888407880999921
+      },
+      "peak_rss_bytes": {
+        "mean": 557957120,
+        "minimum": 556625920,
+        "maximum": 558833664
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "full",
+      "seeds": 5,
+      "training_loop_seconds": {
+        "mean": 123.13352473400005,
+        "minimum": 116.4715963340002,
+        "maximum": 131.9643758440002
+      },
+      "inside_process_seconds": {
+        "mean": 126.72587021800004,
+        "minimum": 119.833930925,
+        "maximum": 135.88735245300018
+      },
+      "child_wall_seconds": {
+        "mean": 127.25198849120002,
+        "minimum": 120.26289891800002,
+        "maximum": 136.600169369
+      },
+      "optimizer_seconds": {
+        "mean": 0.9078775616000712,
+        "minimum": 0.8590226780022476,
+        "maximum": 0.999723431997154
+      },
+      "peak_rss_bytes": {
+        "mean": 408728371.2,
+        "minimum": 408121344,
+        "maximum": 409579520
+      }
+    },
+    {
+      "family": "gru",
+      "objective": "query",
+      "seeds": 5,
+      "training_loop_seconds": {
+        "mean": 96.28765591779998,
+        "minimum": 72.5065826309999,
+        "maximum": 121.71263956100006
+      },
+      "inside_process_seconds": {
+        "mean": 99.47157187460002,
+        "minimum": 75.190126018,
+        "maximum": 125.24118335200001
+      },
+      "child_wall_seconds": {
+        "mean": 99.92173475920004,
+        "minimum": 75.5854134220001,
+        "maximum": 125.66811787000006
+      },
+      "optimizer_seconds": {
+        "mean": 0.7112159768003948,
+        "minimum": 0.5480237680005757,
+        "maximum": 0.8926871429998755
+      },
+      "peak_rss_bytes": {
+        "mean": 408612864,
+        "minimum": 405532672,
+        "maximum": 410025984
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "full",
+      "seeds": 5,
+      "training_loop_seconds": {
+        "mean": 160.29083536859994,
+        "minimum": 152.95692674500015,
+        "maximum": 172.5032469189996
+      },
+      "inside_process_seconds": {
+        "mean": 163.87935672840004,
+        "minimum": 156.30093634600007,
+        "maximum": 176.4691529239999
+      },
+      "child_wall_seconds": {
+        "mean": 164.36615604080004,
+        "minimum": 156.68936952800004,
+        "maximum": 177.17478426000025
+      },
+      "optimizer_seconds": {
+        "mean": 1.0630164795988548,
+        "minimum": 1.0065651329987304,
+        "maximum": 1.1708436379990417
+      },
+      "peak_rss_bytes": {
+        "mean": 405610496,
+        "minimum": 404852736,
+        "maximum": 406114304
+      }
+    },
+    {
+      "family": "ssm",
+      "objective": "query",
+      "seeds": 5,
+      "training_loop_seconds": {
+        "mean": 125.05465393159997,
+        "minimum": 92.11439109000003,
+        "maximum": 159.7351579199999
+      },
+      "inside_process_seconds": {
+        "mean": 128.222517897,
+        "minimum": 94.7849068779999,
+        "maximum": 163.26145028300016
+      },
+      "child_wall_seconds": {
+        "mean": 128.678600534,
+        "minimum": 95.17030935499997,
+        "maximum": 163.70445882299987
+      },
+      "optimizer_seconds": {
+        "mean": 0.837052302400798,
+        "minimum": 0.6302332960015065,
+        "maximum": 1.060939911000787
+      },
+      "peak_rss_bytes": {
+        "mean": 404625817.6,
+        "minimum": 403185664,
+        "maximum": 406319104
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "full",
+      "seeds": 5,
+      "training_loop_seconds": {
+        "mean": 13.052237341200044,
+        "minimum": 12.329653431999986,
+        "maximum": 14.560901458999979
+      },
+      "inside_process_seconds": {
+        "mean": 16.6817531793999,
+        "minimum": 15.760379999999941,
+        "maximum": 18.821588068999972
+      },
+      "child_wall_seconds": {
+        "mean": 17.163409950999995,
+        "minimum": 16.15383546399994,
+        "maximum": 19.58054549899998
+      },
+      "optimizer_seconds": {
+        "mean": 2.080612423201046,
+        "minimum": 1.9756250240009194,
+        "maximum": 2.369571485999586
+      },
+      "peak_rss_bytes": {
+        "mean": 409787596.8,
+        "minimum": 409591808,
+        "maximum": 410259456
+      }
+    },
+    {
+      "family": "transformer",
+      "objective": "query",
+      "seeds": 5,
+      "training_loop_seconds": {
+        "mean": 11.323232068799962,
+        "minimum": 9.338698287999932,
+        "maximum": 12.720716459999949
+      },
+      "inside_process_seconds": {
+        "mean": 14.506761425799914,
+        "minimum": 12.010584303999849,
+        "maximum": 16.208964655999807
+      },
+      "child_wall_seconds": {
+        "mean": 14.962616067999988,
+        "minimum": 12.441970211999887,
+        "maximum": 16.66007426400006
+      },
+      "optimizer_seconds": {
+        "mean": 1.5949387259984178,
+        "minimum": 1.1769596339984219,
+        "maximum": 2.014893545997893
+      },
+      "peak_rss_bytes": {
+        "mean": 408986419.2,
+        "minimum": 408338432,
+        "maximum": 409681920
+      }
+    }
+  ],
+  "objective_legs": [
+    {
+      "seed": 1701,
+      "objective": "full",
+      "elapsed_seconds": 1898.1591418669998,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    },
+    {
+      "seed": 1701,
+      "objective": "query",
+      "elapsed_seconds": 1889.86916201,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    },
+    {
+      "seed": 1702,
+      "objective": "full",
+      "elapsed_seconds": 1877.220359971,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    },
+    {
+      "seed": 1702,
+      "objective": "query",
+      "elapsed_seconds": 1150.0230406179999,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    },
+    {
+      "seed": 1703,
+      "objective": "full",
+      "elapsed_seconds": 1781.6670112929999,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    },
+    {
+      "seed": 1703,
+      "objective": "query",
+      "elapsed_seconds": 1178.52570125,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    },
+    {
+      "seed": 1704,
+      "objective": "full",
+      "elapsed_seconds": 2074.2843477710003,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    },
+    {
+      "seed": 1704,
+      "objective": "query",
+      "elapsed_seconds": 1511.2120884160001,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    },
+    {
+      "seed": 1705,
+      "objective": "full",
+      "elapsed_seconds": 1837.641910269,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    },
+    {
+      "seed": 1705,
+      "objective": "query",
+      "elapsed_seconds": 1948.206060211,
+      "optimizer_steps_all_models": 1024,
+      "DEV_predictions_started": false
+    }
+  ]
+}

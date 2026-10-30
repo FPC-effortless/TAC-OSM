@@ -1,6 +1,11 @@
 # LANGACQUIRE097: teach acquisition and later use
 
-This is an internal research experiment, not a capability result. It follows
+This completed internal research experiment found no registered joint lexical-reuse
+or ARC rule-transfer gain. All 40 genuine fits and fresh-process prediction replays
+completed; see [actual results](results/ACTUAL_RESEARCH_RESULTS.md), including partial
+predictive positives, negative utility results, mathematical limitations and source
+receipts. The completed postfit evaluation request is closed to avoid repeat
+inference on report-only changes. It follows
 LANGPERSIST096's negative lexical-reuse and general-capability findings without
 changing that experiment's questions, outputs or checkpoints.
 
@@ -30,8 +35,8 @@ constructed complete-operator profiling showed it exceeded the CPU job limit.
 Execution has two stages. First, source-authenticated FIT-only profiles record
 all ATen forward/backward operator signatures, shapes and counts with zero
 optimizer steps. Their original receipts and the mathematical companion are
-reviewed and pinned. `REGISTER.json` keeps fitting disabled until those gates
-are complete. Ten CPU jobs each seal four fits, one objective per seed. A separate
+reviewed and pinned. `REGISTER.json` kept fitting disabled until those gates
+were complete; the actual fits are pinned to the original training commit. Ten CPU jobs each seal four fits, one objective per seed. A separate
 assembly verifies all forty original checkpoint and receipt hashes, then groups
 them into five eight-model seed seals. DEV prediction requires that full matrix.
 
