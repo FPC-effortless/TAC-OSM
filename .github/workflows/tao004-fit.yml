@@ -1,0 +1,80 @@
+name: TAOTUNE004 genuine publisher 15-trial LR sweep on free CPU
+
+on:
+  push:
+    branches: ['research/tao004-optimizer-lr-selection-2026-10-30']
+    paths: ['.github/workflows/tao004-fit.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taotune004-fit
+  cancel-in-progress: false
+
+jobs:
+  fit-all-fifteen-originals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install free CPU experimental dependencies
+        run: python -m pip install --quiet numpy==2.3.3 torch pytest
+      - name: Enforce genuine publisher source / prospective 100k model / equal LR trial count
+        run: |
+          python -m pytest -q tests/test_tao004_tune.py tests/test_optimizer_tao.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/taotune004/FAIR_COMPARISON.json \
+            --phase preflight
+      - name: Execute exactly 15 real FIT runs without reading any DEV owner
+        run: |
+          python scripts/tao004_tune.py fit \
+            --directory research/evidence/taotune004/seed1701
+      - name: Verify 15 real source model/optimizer/RNG checkpoint hashes before publication
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          root=Path("research/evidence/taotune004/seed1701")
+          matrix=json.loads((root/"FIT_MATRIX.json").read_text())
+          assert matrix["original_checkpoints_complete"] is True
+          assert matrix["dev_access"] is False
+          assert set(matrix["matrix"])=={"adamw","muon","adamuon","normuon","pre_ns"}
+          found=0
+          for mode in matrix["matrix"]:
+              assert set(matrix["matrix"][mode])=={"0","1","2"}
+              for i in range(3):
+                  folder=root/mode/f"lr{i}"
+                  model=folder/"MODEL.pt"
+                  receipt=json.loads((folder/"FIT_RECEIPT.json").read_text())
+                  assert model.stat().st_size>50000
+                  assert hashlib.sha256(model.read_bytes()).hexdigest()==receipt["checkpoint_sha256"]
+                  assert receipt["trained_steps"]==32
+                  assert receipt["targets_seen"]==32768
+                  assert receipt["cold_model_exact"] and receipt["cold_optimizer_steps"]==32
+                  assert receipt["dev_access_before_original_git_seal"] is False
+                  found+=1
+          assert found==15
+          print("ALL_15_ORIGINAL_SOURCE_TRAINED_CHECKPOINTS_SHA_VERIFIED")
+          PY
+      - name: Commit all 15 original trained checkpoints into Git before any DEV selection
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f research/evidence/taotune004/seed1701
+          git diff --cached --quiet && { echo "TRAINED_FILES_MISSING"; exit 1; } || true
+          git commit -m "evidence(taotune004): preserve all fifteen genuine publisher original optimizer trials"
+          git fetch origin research/tao004-optimizer-lr-selection-2026-10-30
+          git rebase origin/research/tao004-optimizer-lr-selection-2026-10-30
+          git push origin HEAD:research/tao004-optimizer-lr-selection-2026-10-30
