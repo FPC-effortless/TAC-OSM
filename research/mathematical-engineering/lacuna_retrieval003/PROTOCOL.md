@@ -53,6 +53,9 @@ Thus the query-to-raw-history rule is explicit, prefix-only cosine attention
 diagnostic reference, not an exact-match oracle: colliding keys can retrieve
 different continuations. Report historical target attention mass, key rank,
 equal-key multiplicity and native matrix singular values/effective rank.
+Also separate the transported target event from all other old writes under
+the supplied key; report target/interference norms, their ratio, read/value
+cosine, and different-context key cosines>.9. These remain evaluator telemetry.
 
 Decode every historical read through the same frozen byte-code cosine readout:
 softmax(8*byte_codes*normalize(read)); report actual past-byte NLL/top1. Its

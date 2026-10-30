@@ -1,0 +1,65 @@
+name: Lacuna retrieval003 controlled frozen read diagnosis
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'scripts/lacuna_retrieval003.py'
+      - 'tests/test_lacuna_retrieval003.py'
+      - 'research/mathematical-engineering/lacuna_retrieval003/**'
+      - '.github/workflows/lacuna-retrieval003.yml'
+permissions:
+  contents: read
+jobs:
+  registered-launch:
+    if: github.head_ref == 'research/lacuna-retrieval003-2026-10-30' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    outputs:
+      launch: ${{ steps.launch.outputs.launch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - id: launch
+        run: |
+          if [[ "$(git log -1 --format=%s)" == "RETRIEVAL003:"* ]]; then
+            echo 'launch=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'launch=false' >> "$GITHUB_OUTPUT"
+            echo 'Engineering/report update: no scientific scoring repeated.'
+          fi
+  original-frozen-new-document-diagnostic:
+    needs: registered-launch
+    if: needs.registered-launch.outputs.launch == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Source plans, actual source adapter checks and original replay
+        run: |
+          mkdir -p evidence
+          python scripts/phone_lab.py plan research/phone_queue/lacuna-retrieval003.json > evidence/PLAN.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/lacuna_retrieval003/FAIR_COMPARISON.json --phase preflight > evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_lacuna_retrieval003.py tests/test_replay_langmem086087.py tests/test_research_probe_agnostic.py
+          python scripts/replay_langmem086087.py --output evidence/ORIGINAL_REPLAY.json
+      - name: Frozen original trajectory and controlled reads; no fitting or TEST
+        run: python scripts/lacuna_retrieval003.py --output evidence/RESULTS.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LACUNA-RETRIEVAL003-ORIGINAL-NEW-DOCUMENT-DIAGNOSTIC
+          path: evidence/
+          retention-days: 90
