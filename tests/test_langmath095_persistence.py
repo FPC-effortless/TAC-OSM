@@ -127,6 +127,74 @@ class PersistenceEngineeringTests(unittest.TestCase):
         result = self.run_probe(fixture_adapter(observe=observe, predict=predict))
         self.assertEqual(result["checks"]["no_source_replay_after_acquisition"]["status"], "FAIL")
 
+    def test_mutable_list_closure_reference_is_poisoned_in_place(self):
+        hidden = []
+        def observe(state, event):
+            hidden.append(event)
+            return {"memory": state["memory"] + event, "clock": state["clock"] + 1}
+        def predict(state, query):
+            return {"score": state["memory"] + np.asarray(hidden[-1])}
+        result = probe_persistence(fixture_adapter(observe=observe, predict=predict),
+            [[1., 2.], [3., 4.]], self.query, resource_costs=accounting())
+        self.assertEqual(result["checks"]["no_source_replay_after_acquisition"]["status"], "FAIL")
+        self.assertEqual(hidden[-1], [-3., -4.])
+
+    def test_immutable_tuple_payload_is_partial_poison_coverage(self):
+        result = probe_persistence(fixture_adapter(), [(1., 2.), (3., 4.)],
+                                   self.query, resource_costs=accounting())
+        check = result["checks"]["no_source_replay_after_acquisition"]
+        self.assertEqual(check["status"], "INCONCLUSIVE")
+        self.assertEqual(check["mutated_input_leaves"], 0)
+        self.assertEqual(check["unpoisoned_input_leaves"], 4)
+
+    def test_scalar_event_payload_is_partial_poison_coverage(self):
+        result = probe_persistence(fixture_adapter(), [1., 2.], self.query,
+                                   resource_costs=accounting())
+        check = result["checks"]["no_source_replay_after_acquisition"]
+        self.assertEqual(check["status"], "INCONCLUSIVE")
+        self.assertEqual(check["unpoisoned_input_leaves"], 2)
+
+    def test_shared_acquisition_array_is_not_poisoned_twice(self):
+        event = np.array([1., 2.])
+        poisoned, coverage = persistence._poison([event, event])
+        self.assertIs(poisoned[0], poisoned[1])
+        np.testing.assert_array_equal(event, [-1., -2.])
+        self.assertEqual(coverage["mutated_input_leaves"], 1)
+
+    def test_thin_view_meters_full_unique_numpy_allocation(self):
+        def observe(state, event):
+            backing = np.ones(1_000_000, dtype=np.float64)
+            return {"memory": backing[:2], "clock": 1}
+        result = self.run_probe(fixture_adapter(observe=observe))
+        self.assertEqual(result["resources"]["state_array_payload_bytes"], 16)
+        self.assertEqual(result["resources"]["resident_array_bytes"], 8_000_000)
+        self.assertGreaterEqual(result["resources"]["total_state_bytes"], 8_000_000)
+        backing = np.ones(100)
+        inventory = persistence._inventory({"a": backing[:2], "b": backing[50:52]})
+        self.assertEqual(inventory["resident_array_bytes"], 800)
+
+    def test_opaque_buffer_backing_cannot_pass_complete_accounting(self):
+        def observe(state, event):
+            return {"memory": np.frombuffer(bytearray(16), dtype=np.float64) + event,
+                    "clock": 1}
+        # Keep the buffer-backed view itself, rather than an owning result.
+        def buffer_observe(state, event):
+            value = np.frombuffer(bytearray(16), dtype=np.float64)
+            value[:] = event
+            return {"memory": value, "clock": 1}
+        result = self.run_probe(fixture_adapter(observe=buffer_observe))
+        self.assertEqual(result["checks"]["state_inventory"]["status"], "INCONCLUSIVE")
+        self.assertEqual(result["checks"]["complete_resource_accounting"]["status"], "INCONCLUSIVE")
+        self.assertIsNone(result["resources"]["resident_array_bytes"])
+        self.assertIsNone(result["resources"]["total_state_bytes"])
+
+    def test_external_state_view_cannot_pass_inventory(self):
+        external = np.zeros(100)
+        result = self.run_probe(fixture_adapter(
+            state_views=lambda state: {"memory": state["memory"], "external": external}))
+        self.assertEqual(result["checks"]["state_inventory"]["status"], "INCONCLUSIVE")
+        self.assertEqual(result["checks"]["state_inventory"]["external_state_views"], 1)
+
     def test_nonfinite_prediction_fails(self):
         result = self.run_probe(fixture_adapter(predict=lambda state, query: {"score": np.array([np.nan])}))
         self.assertEqual(result["status"], "FAIL")

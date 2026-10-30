@@ -50,6 +50,12 @@ partition, publisher and license. Receipt assertions alone do not authenticate
 a publisher. No network fetch, arbitrary adapter import or protected TEST
 access is performed. See `checkpoints.py` for the strict receipt fields.
 
+CI also runs `existing_checkpoint.py` against the hash-pinned historical
+CODEVALUE003 seed1701 checkpoint at step10240. Its byte input is constructed:
+this diagnoses trained weights and source numerical parity, **not** real-data
+prediction quality, learned structures or useful persistence. The original
+checkpoint is read-only and its internal qualification is unchanged.
+
 Named gradients include zero, missing and nonfinite tensors. Real CPU source
 parity is separate from still-open CUDA FP16/loss-scaling obligations. The
 10M model remains window-reset only; the registered window probe does not
