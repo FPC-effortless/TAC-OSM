@@ -1,0 +1,142 @@
+name: HYBGEOM091 CPU original-source 6-arm 5-seed trainable study
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'research/mathematical-engineering/hybgeom091/**'
+      - 'research/replay-bundles/HYBGEOM091/**'
+      - 'research/phone_queue/hybgeom091.json'
+      - '.github/workflows/hybgeom091.yml'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    outputs:
+      fit: ${{ steps.intent.outputs.fit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - id: intent
+        shell: bash
+        run: |
+          if [[ -s research/mathematical-engineering/hybgeom091/TRAINED_EXPOSED_DEV_RESULTS.json ]]; then
+            echo 'fit=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'fit=true' >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install pytest==8.4.2 numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - run: |
+          python scripts/phone_lab.py plan research/phone_queue/hybgeom091.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/hybgeom091/FAIR_COMPARISON.json --phase preflight
+          PYTHONPATH=src:. python -m pytest -q research/mathematical-engineering/hybgeom091/test_model091.py tests/test_research_probe_agnostic.py
+  train:
+    needs: preflight
+    if: needs.preflight.outputs.fit == 'true' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [original, fixed_euclidean, contextual_euclidean, contextual_spd, hybrid, hybrid_contextual_spd]
+        seed: [1701, 1702, 1703, 1704, 1705]
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify internal research gate and platform
+        run: |
+          python scripts/phone_lab.py plan research/phone_queue/hybgeom091.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/hybgeom091/FAIR_COMPARISON.json --phase preflight
+      - name: Authentic publisher FIT training and exposed DEV evaluation
+        run: |
+          python research/mathematical-engineering/hybgeom091/run091.py --arm '${{ matrix.arm }}' --seed '${{ matrix.seed }}' --out 'result'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HYBGEOM091-${{ matrix.arm }}-${{ matrix.seed }}
+          path: result/
+          retention-days: 90
+  archive:
+    needs: [preflight, train]
+    if: needs.train.result == 'success' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: HYBGEOM091-*
+          path: hybgeom091-downloads
+      - name: Commit all original source-verified checkpoint bytes into unmerged research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research/replay-bundles/HYBGEOM091
+          for arm in original fixed_euclidean contextual_euclidean contextual_spd hybrid hybrid_contextual_spd; do
+            for seed in 1701 1702 1703 1704 1705; do
+              src="hybgeom091-downloads/HYBGEOM091-${arm}-${seed}"
+              test -s "$src/MODEL.pt"
+              test -s "$src/RESULTS.json"
+              cp -r "$src" "research/replay-bundles/HYBGEOM091/${arm}-${seed}"
+            done
+          done
+          python research/mathematical-engineering/hybgeom091/aggregate091.py \
+            --directory research/replay-bundles/HYBGEOM091 \
+            --output research/mathematical-engineering/hybgeom091/TRAINED_EXPOSED_DEV_RESULTS.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/replay-bundles/HYBGEOM091 research/mathematical-engineering/hybgeom091/TRAINED_EXPOSED_DEV_RESULTS.json
+          git commit -m 'HYBGEOM091-ARCHIVE: preserve 30 original CPU fits and exposed DEV diagnostics'
+          git push origin "HEAD:${{ github.head_ref }}"
+  replay:
+    needs: preflight
+    if: needs.preflight.outputs.fit == 'false'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Independent clean-Git check of full originals, optimizer and per-token metrics
+        run: |
+          python research/mathematical-engineering/hybgeom091/aggregate091.py \
+            --directory research/replay-bundles/HYBGEOM091 --output /tmp/hybgeom091-REPLAY.json
