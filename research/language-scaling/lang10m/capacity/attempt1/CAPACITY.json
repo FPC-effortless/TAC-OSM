@@ -1,0 +1,832 @@
+{
+  "FIT_manifest_sha256": "364ad09d4429bc73d310a6420d2abaed6823a354f1ab5b63d982ed90c0b681b6",
+  "allocated_GPU_minutes_upper_bound": 0.5004289491333338,
+  "automatic_retry": false,
+  "cuda_version": "12.8",
+  "elapsed_seconds": 15.012867303999997,
+  "evidence_level": "UNTRAINED_ENGINEERING_ONLY",
+  "global_deadline_seconds": 300,
+  "heldout_inputs": 0,
+  "model_sha256": "d4d72f2191b67e9ceb0b5ce0c1bb1ca347b10df21a6154b80b9b6f213c54a92c",
+  "optimizer_steps": 0,
+  "physical_T4s": [
+    [
+      "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "Tesla T4",
+      "15360"
+    ],
+    [
+      "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "Tesla T4",
+      "15360"
+    ]
+  ],
+  "precisions": [
+    "fp32",
+    "amp_fp16"
+  ],
+  "results": [
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 4,
+      "context": 512,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.08595757000000503,
+        0.08573078799997802,
+        0.0750422260000505,
+        0.07267879699998048,
+        0.072618948000013
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 27291.301300132298,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 653647360,
+      "peak_cuda_reserved_bytes": 713031680,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540001,
+      "source_windows": [
+        {
+          "array": "doc_020",
+          "offset": 2166,
+          "tokens_sha256": "acd35903ead1a30f4698925b10ead41c187f9327e4f3933b956ac4fba12619ae"
+        },
+        {
+          "array": "doc_153",
+          "offset": 5397,
+          "tokens_sha256": "4d9194fe455fed7c4687be6919a1c634f2346b4df281396fd6ee15c299bf9814"
+        },
+        {
+          "array": "doc_148",
+          "offset": 1782,
+          "tokens_sha256": "cd2966e305c95824289a37ea2322cb5fee0e7be5a7d891e9ab56d3d1d5514ff9"
+        },
+        {
+          "array": "doc_024",
+          "offset": 2784,
+          "tokens_sha256": "43c88580bbf9ee1eef5018c479c1f4330b33f5bb064bcdd0ccc34bfb52d763c4"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.33071517944336,
+        8.33071517944336,
+        8.33071517944336,
+        8.33071517944336,
+        8.33071517944336
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weight_sha256_before": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 4,
+      "context": 512,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "amp_fp16",
+      "seed": 540001,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 8,
+      "context": 128,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.06223214400000643,
+        0.0570713660000024,
+        0.04920160299997178,
+        0.048616246999984014,
+        0.05277129400002423
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 19404.489114849635,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 350745088,
+      "peak_cuda_reserved_bytes": 398458880,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540001,
+      "source_windows": [
+        {
+          "array": "doc_127",
+          "offset": 2518,
+          "tokens_sha256": "7c77fa91f72fc41605abd7bed632a7da282e17796364a02ccddaf0cf91a6bfd3"
+        },
+        {
+          "array": "doc_207",
+          "offset": 291,
+          "tokens_sha256": "8c5f37b8ab5703dd9b2ec8f2e76647d937eabe94d982a981edf8bd3b40e13ef0"
+        },
+        {
+          "array": "doc_108",
+          "offset": 1289,
+          "tokens_sha256": "b73d63c5ee0d49a045394abb2df48f2ae8a885f2c385b674c3f731a010ee882a"
+        },
+        {
+          "array": "doc_014",
+          "offset": 7235,
+          "tokens_sha256": "c11c284c9e8245abbde89ce465fe567d3186efefdda5bcea16dffbde59a57768"
+        },
+        {
+          "array": "doc_157",
+          "offset": 155,
+          "tokens_sha256": "188bfaea3cd1a440a80afc937d25532bda691faf732310d3613a1ebf428a7e8b"
+        },
+        {
+          "array": "doc_166",
+          "offset": 1307,
+          "tokens_sha256": "39cf2a8d8b5d5ed8ef4062306ab0df1b48994eb6add20528c16e37b480cf5629"
+        },
+        {
+          "array": "doc_180",
+          "offset": 2859,
+          "tokens_sha256": "38ae7268a241f1cebe28dd1490d6b6d5b94d0982f509dc3cfd8fc7379821b4df"
+        },
+        {
+          "array": "doc_052",
+          "offset": 6590,
+          "tokens_sha256": "1026bc02e51b09923fa9f75251612757ef6260b95e0d704353cea4d5a2569c0d"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.327289581298828,
+        8.327289581298828,
+        8.327289581298828,
+        8.327289581298828,
+        8.327289581298828
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weight_sha256_before": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 8,
+      "context": 128,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "amp_fp16",
+      "seed": 540001,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 2,
+      "context": 512,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.05717841500000986,
+        0.05655172399997355,
+        0.05639653499997621,
+        0.05655609799998729,
+        0.05803644499997063
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 18105.91671299937,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 371275264,
+      "peak_cuda_reserved_bytes": 438304768,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540001,
+      "source_windows": [
+        {
+          "array": "doc_127",
+          "offset": 2406,
+          "tokens_sha256": "93c250f4be91fa034ce74790bb3f1955c9e6a63a6366e587deaa1f4265f22443"
+        },
+        {
+          "array": "doc_207",
+          "offset": 160,
+          "tokens_sha256": "c14aa83a5e22718de48a3246de98735690ef0f9a550f5b36756137afb8712053"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.328125,
+        8.328125,
+        8.328125,
+        8.328125,
+        8.328125
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weight_sha256_before": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 2,
+      "context": 512,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "amp_fp16",
+      "seed": 540001,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 4,
+      "context": 128,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.04695598900002551,
+        0.04849671700003455,
+        0.04929299399998399,
+        0.04793852500000639,
+        0.04860312399995337
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 10557.41567000577,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 203169792,
+      "peak_cuda_reserved_bytes": 243269632,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540001,
+      "source_windows": [
+        {
+          "array": "doc_147",
+          "offset": 208,
+          "tokens_sha256": "df48f88624aa10779bf0f8b2cf6abf021e3c784768d5b2cb0691775fcfc06cf4"
+        },
+        {
+          "array": "doc_084",
+          "offset": 4902,
+          "tokens_sha256": "7069ff318fe58723d02e29c4a24e55e4f7d8ecf9f3218b9835a5878b07164551"
+        },
+        {
+          "array": "doc_148",
+          "offset": 1917,
+          "tokens_sha256": "4712fc74bb5e35e9fa1b1a57c21baa5e8a0f0d41234cf8598dc6cc5eb2284e8a"
+        },
+        {
+          "array": "doc_120",
+          "offset": 1747,
+          "tokens_sha256": "0502efd2b1a79aba1a1fc1b42c2f6d49340e0768ef495fa4a8de9026a0f00d70"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.331883430480957,
+        8.331883430480957,
+        8.331883430480957,
+        8.331883430480957,
+        8.331883430480957
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weight_sha256_before": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 4,
+      "context": 128,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "amp_fp16",
+      "seed": 540001,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 2,
+      "context": 128,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.050649482000039825,
+        0.05025144699999373,
+        0.04904077899999493,
+        0.0486486080000077,
+        0.05406665200001726
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 5094.380665297696,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 141223424,
+      "peak_cuda_reserved_bytes": 205520896,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540001,
+      "source_windows": [
+        {
+          "array": "doc_176",
+          "offset": 1456,
+          "tokens_sha256": "2a800272ea58a84a9ca8097053b0f557bf929c5acf1dd14f7104fc479bf9f24d"
+        },
+        {
+          "array": "doc_169",
+          "offset": 3805,
+          "tokens_sha256": "3af884005c85315e25ae43710cfdb189a58b85e3deead9ab0087861c3c055c9a"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.316346168518066,
+        8.316346168518066,
+        8.316346168518066,
+        8.316346168518066,
+        8.316346168518066
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weight_sha256_before": "b683f917a7f0e472889c06a51cee6b3b7ad8d56e7506ac88874defcc5513996a",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 2,
+      "context": 128,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 0,
+      "physical_uuid": "GPU-761f0fdd-c411-7253-e7c3-e94558f2a628",
+      "precision": "amp_fp16",
+      "seed": 540001,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 2,
+      "context": 1024,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.12225055699997256,
+        0.07637583800004677,
+        0.07989746699996658,
+        0.07396658599998318,
+        0.07463490400004957
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 26814.763066805837,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 673684992,
+      "peak_cuda_reserved_bytes": 744488960,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_143",
+          "offset": 321,
+          "tokens_sha256": "6f924b5c58c2bc8d578e96cb92008b7e773fd7e1ebfcedf2beed30a1780babd7"
+        },
+        {
+          "array": "doc_035",
+          "offset": 857,
+          "tokens_sha256": "f610514486cd33380e944328301ea506229ecda3c927ca664f66392b9948897f"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.336650848388672,
+        8.336650848388672,
+        8.336650848388672,
+        8.336650848388672,
+        8.336650848388672
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 2,
+      "context": 1024,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 4,
+      "context": 256,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.0640829829999916,
+        0.054792044999999234,
+        0.05553785200004313,
+        0.06049581899998202,
+        0.057866966999995384
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 17695.760691934687,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 360368128,
+      "peak_cuda_reserved_bytes": 425721856,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_199",
+          "offset": 875,
+          "tokens_sha256": "33dd960ebc0116ae06f854dcccf4df5d9fb5a7c342515ac6b8a2f4e956b04985"
+        },
+        {
+          "array": "doc_000",
+          "offset": 762,
+          "tokens_sha256": "a7dbda8194ff33e08f260798421a76fb68de7bf93a7a8e7144ce283b22709efc"
+        },
+        {
+          "array": "doc_157",
+          "offset": 123,
+          "tokens_sha256": "2fcdd2a1f8d21aa301ad35e4cd0b9261997f3ebfb9e5f41976d996710886aab6"
+        },
+        {
+          "array": "doc_094",
+          "offset": 3183,
+          "tokens_sha256": "2b90b841d93cc0059cb45f1239bb4d6651f1dc3aca1b96d69a989f96674bdd6e"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.323692321777344,
+        8.323692321777344,
+        8.323692321777344,
+        8.323692321777344,
+        8.323692321777344
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 4,
+      "context": 256,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 1,
+      "context": 1024,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.06381409799996618,
+        0.06472065799999882,
+        0.06566068600000108,
+        0.0666478779999693,
+        0.06860944699997162
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 15595.328991841225,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 382640640,
+      "peak_cuda_reserved_bytes": 438304768,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_199",
+          "offset": 770,
+          "tokens_sha256": "2a88e83441239463620c5298e165254eaeb7a77403889f7cf5454879c6600c19"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.331101417541504,
+        8.331101417541504,
+        8.331101417541504,
+        8.331101417541504,
+        8.331101417541504
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 1,
+      "context": 1024,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 2,
+      "context": 256,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.054692047000003186,
+        0.05702259600002435,
+        0.05562797199996794,
+        0.0570104159999687,
+        0.05712985400003845
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 8980.815014580512,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 208908800,
+      "peak_cuda_reserved_bytes": 239075328,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_071",
+          "offset": 1525,
+          "tokens_sha256": "4478db163aa777fc7b74709dd0626ff5ae9abd3dc79c59db792089e65fc2c65c"
+        },
+        {
+          "array": "doc_034",
+          "offset": 833,
+          "tokens_sha256": "43d33555b354a51a43d68e6aaa43b3abe80b4faa7a7c2094ab945a041beb5852"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.32364273071289,
+        8.32364273071289,
+        8.32364273071289,
+        8.32364273071289,
+        8.32364273071289
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 2,
+      "context": 256,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 1,
+      "context": 128,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.052821692999998504,
+        0.0517490699999712,
+        0.05229066699996565,
+        0.05376670399999739,
+        0.053166685000007874
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 2423.246827775922,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 134457856,
+      "peak_cuda_reserved_bytes": 174063616,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_033",
+          "offset": 6852,
+          "tokens_sha256": "5147de75708fa1cf8fd5a3094c3e37672531cdb1a0c87b69f189e8703e2bcf74"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.320284843444824,
+        8.320284843444824,
+        8.320284843444824,
+        8.320284843444824,
+        8.320284843444824
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 1,
+      "context": 128,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "physical_slot": 1,
+      "physical_uuid": "GPU-832ba3ce-1da1-6865-20e9-85e86400d0ce",
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    }
+  ],
+  "shapes": [
+    [
+      1,
+      128
+    ],
+    [
+      2,
+      128
+    ],
+    [
+      4,
+      128
+    ],
+    [
+      8,
+      128
+    ],
+    [
+      2,
+      256
+    ],
+    [
+      4,
+      256
+    ],
+    [
+      2,
+      512
+    ],
+    [
+      4,
+      512
+    ],
+    [
+      1,
+      1024
+    ],
+    [
+      2,
+      1024
+    ]
+  ],
+  "status": "MATRIX_COMPLETE_WITH_FAILED_CASES",
+  "study": "LANG10M001_CAPACITY",
+  "token_arrays_sha256": "0b101e80f568cf27ed67cffec811647ff2236c0079aa379475bd2256028c27c5",
+  "tokenizer_sha256": "62f67cedcc526400299fd500227a65fb2f1d0dd9611d823d46b35e1f8d04b52c",
+  "torch_version": "2.11.0+cu128",
+  "trained_language_quality": "NOT_MEASURED",
+  "worker_exit_codes": [
+    0,
+    0
+  ]
+}

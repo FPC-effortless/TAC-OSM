@@ -1,0 +1,66 @@
+{
+  "AMP_backward_precision_training_readiness": "OPEN: unscaled AMP has zero gradient tensors where FP32 has none; GradScaler/full-gradient parity not measured",
+  "AMP_cases_with_zero_gradient_tensors": [
+    {
+      "batch": 4,
+      "context": 512,
+      "zero_gradient_parameter_tensors_on_fixture": 2
+    },
+    {
+      "batch": 8,
+      "context": 128,
+      "zero_gradient_parameter_tensors_on_fixture": 2
+    },
+    {
+      "batch": 2,
+      "context": 512,
+      "zero_gradient_parameter_tensors_on_fixture": 2
+    },
+    {
+      "batch": 4,
+      "context": 128,
+      "zero_gradient_parameter_tensors_on_fixture": 2
+    },
+    {
+      "batch": 2,
+      "context": 1024,
+      "zero_gradient_parameter_tensors_on_fixture": 2
+    },
+    {
+      "batch": 4,
+      "context": 256,
+      "zero_gradient_parameter_tensors_on_fixture": 2
+    },
+    {
+      "batch": 1,
+      "context": 1024,
+      "zero_gradient_parameter_tensors_on_fixture": 2
+    },
+    {
+      "batch": 2,
+      "context": 256,
+      "zero_gradient_parameter_tensors_on_fixture": 1
+    }
+  ],
+  "adequate_full_pretraining_corpus": false,
+  "cases_verified": 20,
+  "combined_quota_ceiling_GPU_minutes": 12,
+  "independently_qualified": false,
+  "max_FP32_untrained_diagnostic_loss_change_from_baseline": 0.0,
+  "model_sha256": "ae62392d6d454ceaa96d403c17fc1d6f8436a20a6055a7aca77a5f29a1ad4252",
+  "neural_optimizer_updates": 0,
+  "new_predictions_during_verification": 0,
+  "original_initial_weight_hash_matches": 20,
+  "physical_T4_UUIDs": [
+    "GPU-dc30c7c5-0c2c-b358-a87f-84bcf912b23f",
+    "GPU-b9c47e04-7c9c-1717-6fa8-482254038a5e"
+  ],
+  "profile_sha256": "36c606d1bd64d654022504e25b05284404d05da1121a9a30d02a47111721683f",
+  "quota_reservation": "60s initial allocation debit +300s repair platform timeout, both with2 GPUs",
+  "timed_profile_GPU_minutes_excluding_platform_startup": 1.1010464980000014,
+  "trained_language_quality": "NOT_MEASURED",
+  "variant": "LANG10M001",
+  "verification": "PASS20_ORIGINAL_NO_UPDATE_CASES_AND_SOURCE_WINDOWS",
+  "weights_unchanged_cases": 20,
+  "pilot_one_pass_token_instances": 1170938
+}

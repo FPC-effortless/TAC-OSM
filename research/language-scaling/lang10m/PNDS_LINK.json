@@ -1,0 +1,34 @@
+{
+  "id": "LANG10M001",
+  "indexed_in_historical_registry": false,
+  "status": "DRAFT_PARTIAL_UPPER_ONLY",
+  "source": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "commit": "4efcae2332e0cba272254502950c52820695f730",
+    "path": "research/language-scaling/lang10m/model.py",
+    "pull_request": 658,
+    "original_commit": "5432befbcd36bb8237ae6929433abb4bd2d9003e",
+    "model_sha256": "ae62392d6d454ceaa96d403c17fc1d6f8436a20a6055a7aca77a5f29a1ad4252",
+    "precision_policy": "Evidence projection reuses exact parameters/RNG and promotes its result to FP32 under AMP for same-dtype concept solve; tested exact FP32 forward/backward fixture equality. Upper block mathematics unchanged."
+  },
+  "math": {
+    "repository": "FPC-effortless/pnds-lean",
+    "pull_request": 94,
+    "lean_path": "PNDS/LANG10M001.lean",
+    "python_path": "foundation/v1/lang10m001_reference.py",
+    "python_tests": "foundation/v1/test_lang10m001_reference.py"
+  },
+  "verified_properties": [
+    "Partial Lean scalar-affine algebra build observed PASS at PNDS PR94 head a6b4fba95595d45de692dccf4b2c4b63390d5646",
+    "Partial NumPy upper-block constructed reference tests observed PASS; not whole-model source parity"
+  ],
+  "open_obligations": [
+    "Extend strict 17-variant registry and reciprocal index without weakening historical validation",
+    "Full typed first-stage associative/aligned/wave/concept graph and state/mask semantics",
+    "Actual-source PyTorch\u2194NumPy output and backward gradient parity",
+    "Lean full composed graph verification and finite-precision analysis",
+    "Actual trained language capability remains unmeasured; tokenizer pilot and no-update capacity measured. AMP training backward precision/loss scaling still OPEN."
+  ],
+  "no_training": true,
+  "no_capability_claim": true
+}

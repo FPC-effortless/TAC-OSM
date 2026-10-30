@@ -1,0 +1,44 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANG10M001_CAPACITY",
+  "study_type": "noncomparative_diagnostic",
+  "execution_level": "internal_research",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "No-optimizer forward/backward10M capacity matrix on authenticated FIT-only pilot token windows; no learned language quality or model-fit claim.",
+  "real_world_source": {
+    "name": "Authenticated219-file FIT code/documentation pilot, tokenizer fixed before no-update profiling",
+    "observed_real_outcomes": true,
+    "sha256": "21e647d02de1fae0e70f276836c40ef1680eba91585ae331c2118088d0002a81",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "Original PSF/MIT/BSD/Apache FIT notices archived per publisher",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/language-scaling/lang10m/tokenizer/FIT_MANIFEST.json"
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "21e647d02de1fae0e70f276836c40ef1680eba91585ae331c2118088d0002a81",
+    "partitions": [
+      "FIT"
+    ]
+  },
+  "causal_protocol": "Source-owned FIT token windows, no filename/publisher features, context targets used only to construct gradients; no heldout inputs or parameter update.",
+  "checkpoint_policy": "No trained checkpoint. Exact state_dict hashes before/after each complete case must agree. Original profiler outputs and failed cases preserved.",
+  "budget": {
+    "optimizer_steps": 0,
+    "max_allocated_GPU_minutes": 12,
+    "deadline_seconds": 300
+  },
+  "model_parameters": 10001188,
+  "math_status": "PNDS PR94 partial upper-reference tests/build PASS; full composed graph/IEEE/AD OPEN"
+}

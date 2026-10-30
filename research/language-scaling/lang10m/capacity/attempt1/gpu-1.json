@@ -1,0 +1,337 @@
+{
+  "optimizer_steps": 0,
+  "physical_slot": "1",
+  "results": [
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 2,
+      "context": 1024,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.12225055699997256,
+        0.07637583800004677,
+        0.07989746699996658,
+        0.07396658599998318,
+        0.07463490400004957
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 26814.763066805837,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 673684992,
+      "peak_cuda_reserved_bytes": 744488960,
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_143",
+          "offset": 321,
+          "tokens_sha256": "6f924b5c58c2bc8d578e96cb92008b7e773fd7e1ebfcedf2beed30a1780babd7"
+        },
+        {
+          "array": "doc_035",
+          "offset": 857,
+          "tokens_sha256": "f610514486cd33380e944328301ea506229ecda3c927ca664f66392b9948897f"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.336650848388672,
+        8.336650848388672,
+        8.336650848388672,
+        8.336650848388672,
+        8.336650848388672
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 2,
+      "context": 1024,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 4,
+      "context": 256,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.0640829829999916,
+        0.054792044999999234,
+        0.05553785200004313,
+        0.06049581899998202,
+        0.057866966999995384
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 17695.760691934687,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 360368128,
+      "peak_cuda_reserved_bytes": 425721856,
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_199",
+          "offset": 875,
+          "tokens_sha256": "33dd960ebc0116ae06f854dcccf4df5d9fb5a7c342515ac6b8a2f4e956b04985"
+        },
+        {
+          "array": "doc_000",
+          "offset": 762,
+          "tokens_sha256": "a7dbda8194ff33e08f260798421a76fb68de7bf93a7a8e7144ce283b22709efc"
+        },
+        {
+          "array": "doc_157",
+          "offset": 123,
+          "tokens_sha256": "2fcdd2a1f8d21aa301ad35e4cd0b9261997f3ebfb9e5f41976d996710886aab6"
+        },
+        {
+          "array": "doc_094",
+          "offset": 3183,
+          "tokens_sha256": "2b90b841d93cc0059cb45f1239bb4d6651f1dc3aca1b96d69a989f96674bdd6e"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.323692321777344,
+        8.323692321777344,
+        8.323692321777344,
+        8.323692321777344,
+        8.323692321777344
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 4,
+      "context": 256,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 1,
+      "context": 1024,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.06381409799996618,
+        0.06472065799999882,
+        0.06566068600000108,
+        0.0666478779999693,
+        0.06860944699997162
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 15595.328991841225,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 382640640,
+      "peak_cuda_reserved_bytes": 438304768,
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_199",
+          "offset": 770,
+          "tokens_sha256": "2a88e83441239463620c5298e165254eaeb7a77403889f7cf5454879c6600c19"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.331101417541504,
+        8.331101417541504,
+        8.331101417541504,
+        8.331101417541504,
+        8.331101417541504
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 1,
+      "context": 1024,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 2,
+      "context": 256,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.054692047000003186,
+        0.05702259600002435,
+        0.05562797199996794,
+        0.0570104159999687,
+        0.05712985400003845
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 8980.815014580512,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 208908800,
+      "peak_cuda_reserved_bytes": 239075328,
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_071",
+          "offset": 1525,
+          "tokens_sha256": "4478db163aa777fc7b74709dd0626ff5ae9abd3dc79c59db792089e65fc2c65c"
+        },
+        {
+          "array": "doc_034",
+          "offset": 833,
+          "tokens_sha256": "43d33555b354a51a43d68e6aaa43b3abe80b4faa7a7c2094ab945a041beb5852"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.32364273071289,
+        8.32364273071289,
+        8.32364273071289,
+        8.32364273071289,
+        8.32364273071289
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 2,
+      "context": 256,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    },
+    {
+      "additional_AdamW_moment_bytes_estimate_NOT_ALLOCATED": 80009504,
+      "all_gradients_finite": true,
+      "amp_loss_scaling": "NONE_NO_OPTIMIZER_PROFILE",
+      "batch": 1,
+      "context": 128,
+      "deployed_parameters": 10001188,
+      "elapsed_forward_backward_seconds": [
+        0.052821692999998504,
+        0.0517490699999712,
+        0.05229066699996565,
+        0.05376670399999739,
+        0.053166685000007874
+      ],
+      "full_model_streaming": false,
+      "max_logit_abs_precision_difference": 0.0,
+      "mean_logit_abs_precision_difference": 0.0,
+      "measured_repeats": 5,
+      "median_tokens_per_second_forward_backward": 2423.246827775922,
+      "missing_gradients": [],
+      "nonfinite_numeric_fields_serialized_as_null": true,
+      "observed_logit_dtype": "torch.float32",
+      "optimizer_steps": 0,
+      "peak_cuda_allocated_bytes": 134457856,
+      "peak_cuda_reserved_bytes": 174063616,
+      "precision": "fp32",
+      "precision_gate": true,
+      "relative_loss_precision_difference": 0.0,
+      "seed": 540002,
+      "source_windows": [
+        {
+          "array": "doc_033",
+          "offset": 6852,
+          "tokens_sha256": "5147de75708fa1cf8fd5a3094c3e37672531cdb1a0c87b69f189e8703e2bcf74"
+        }
+      ],
+      "status": "PASS_NO_UPDATE_PROFILE",
+      "trainable_parameters": 10001188,
+      "untrained_FIT_loss_numerical_diagnostic_NOT_LANGUAGE_QUALITY": [
+        8.320284843444824,
+        8.320284843444824,
+        8.320284843444824,
+        8.320284843444824,
+        8.320284843444824
+      ],
+      "warmups": 2,
+      "weight_sha256_after": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weight_sha256_before": "6125540c55a1ddbe9d4df2cac648fd4c1c84ea7fb27969173e1e1436ecd7fc58",
+      "weights_unchanged": true,
+      "zero_gradient_parameter_tensors_on_fixture": 0
+    },
+    {
+      "batch": 1,
+      "context": 128,
+      "exception": "RuntimeError",
+      "message": "linalg.solve: Expected A and B to have the same dtype, but found A of type Float and B of type Half instead",
+      "optimizer_steps": 0,
+      "precision": "amp_fp16",
+      "seed": 540002,
+      "status": "FAIL"
+    }
+  ],
+  "status": "WORKER_MATRIX_COMPLETE"
+}
