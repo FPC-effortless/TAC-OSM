@@ -1,0 +1,493 @@
+{
+  "all_checkpoints_original_replayed": true,
+  "baseline_fit_only_p3": {
+    "by_publisher": {
+      "click": {
+        "exact4": 1,
+        "nll": 2.1515252715388504,
+        "offers": 16,
+        "top1": 0.4931640625
+      },
+      "httpx": {
+        "exact4": 2,
+        "nll": 2.284560859076951,
+        "offers": 16,
+        "top1": 0.5107421875
+      },
+      "requests": {
+        "exact4": 2,
+        "nll": 2.538975691429455,
+        "offers": 16,
+        "top1": 0.455078125
+      }
+    },
+    "exact": {
+      "2": 17,
+      "4": 5,
+      "6": 0
+    },
+    "nll": 2.3250206073484185,
+    "offers": 48,
+    "oracle_net_keys": {
+      "2": 17,
+      "4": 15,
+      "6": 0
+    },
+    "targets": 3072,
+    "top1": 0.486328125
+  },
+  "commercial_value_proved": false,
+  "decision": "UTILITY_GATE_FAIL",
+  "dev_source_blobs": [
+    {
+      "git_blob": "9a58b1602532f9bee41afb0dfadaa7eb548e98c1",
+      "path": "src/requests/adapters.py",
+      "repo": "psf/requests",
+      "sha256": "28871e72c72a6a6eab78e097465e03c0fe235fc25c97cb1de7b7edd7b291d9c4"
+    },
+    {
+      "git_blob": "b387bc36df7bc064b502adcb3c1a4527dd401fda",
+      "path": "src/requests/sessions.py",
+      "repo": "psf/requests",
+      "sha256": "ca44c8f145864a5b4e7c7d3b1caa25947ee44c11b0e168620556901a67244f0e"
+    },
+    {
+      "git_blob": "2249231f8c3b912c731ff160344d3672e2f11738",
+      "path": "httpx/_client.py",
+      "repo": "encode/httpx",
+      "sha256": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d"
+    },
+    {
+      "git_blob": "67d74bf86bfc80e22d9a4a3153572845accd9039",
+      "path": "httpx/_models.py",
+      "repo": "encode/httpx",
+      "sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b"
+    },
+    {
+      "git_blob": "a70fd58ce202974a1aef37fc1db73c2ee39c7491",
+      "path": "src/click/types.py",
+      "repo": "pallets/click",
+      "sha256": "043e50aaae21fbc91ac0198e2332659aae31cd38407f8c02bda38b652043371d"
+    },
+    {
+      "git_blob": "bcf8906e7098a3cf82bdd87855c410e86f4f4279",
+      "path": "src/click/decorators.py",
+      "repo": "pallets/click",
+      "sha256": "eede85f905a8c2d2e1e85ffa97ee18578638c8d4dca85404bbd8b7ef3233ebcb"
+    }
+  ],
+  "gpu_minutes": 0,
+  "limitations": [
+    "No user-accepted completion data, no actual time saved or sales",
+    "Exact-match oracle ignores distraction",
+    "Reset 128-byte windows are not long-history streaming or Android",
+    "3 publishers 2 files each, repeated seeds are not independent source data",
+    "Only fixed source/code training, no matching full FLOPs, SSM not Mamba3",
+    "No customer pricing/energy/export/SDK/product qualification"
+  ],
+  "p3_logical_estimate_bytes": 333011,
+  "physical_mobile_test": "NOT_RUN",
+  "results": {
+    "gru": {
+      "exact4_mean": 0.3333333333333333,
+      "nll_mean": 2.604304066962666,
+      "oracle4_net_keys_mean": 1,
+      "seeds": [
+        {
+          "by_publisher": {
+            "click": {
+              "exact4": 0,
+              "nll": 2.4171790033578873,
+              "offers": 16,
+              "top1": 0.431640625
+            },
+            "httpx": {
+              "exact4": 1,
+              "nll": 2.6301689743995667,
+              "offers": 16,
+              "top1": 0.3935546875
+            },
+            "requests": {
+              "exact4": 0,
+              "nll": 2.78577122092247,
+              "offers": 16,
+              "top1": 0.37109375
+            }
+          },
+          "checkpoint_sha256": "cdf2ed558b01c33ddd525de24a2439e59c8ef8d4505298171098bfdc8151c128",
+          "exact": {
+            "2": 8,
+            "4": 1,
+            "6": 0
+          },
+          "full_window_forward_p50_ms": 4.08580999999586,
+          "full_window_forward_p95_ms": 4.166967000003297,
+          "nll": 2.611039732893308,
+          "offers": 48,
+          "oracle_net_keys": {
+            "2": 8,
+            "4": 3,
+            "6": 0
+          },
+          "seed": 1701,
+          "targets": 3072,
+          "top1": 0.3987630208333333,
+          "weights_bytes": 2000660
+        },
+        {
+          "by_publisher": {
+            "click": {
+              "exact4": 0,
+              "nll": 2.3905980736017227,
+              "offers": 16,
+              "top1": 0.416015625
+            },
+            "httpx": {
+              "exact4": 0,
+              "nll": 2.6546291410923004,
+              "offers": 16,
+              "top1": 0.3671875
+            },
+            "requests": {
+              "exact4": 0,
+              "nll": 2.7379785776138306,
+              "offers": 16,
+              "top1": 0.3662109375
+            }
+          },
+          "checkpoint_sha256": "e21a5af99cf8da70970fca6bb17f4150e323a283b4317b995963d4f528f61f58",
+          "exact": {
+            "2": 7,
+            "4": 0,
+            "6": 0
+          },
+          "full_window_forward_p50_ms": 4.053245499999747,
+          "full_window_forward_p95_ms": 4.415561000001844,
+          "nll": 2.5944019307692847,
+          "offers": 48,
+          "oracle_net_keys": {
+            "2": 7,
+            "4": 0,
+            "6": 0
+          },
+          "seed": 1702,
+          "targets": 3072,
+          "top1": 0.3831380208333333,
+          "weights_bytes": 2000660
+        },
+        {
+          "by_publisher": {
+            "click": {
+              "exact4": 0,
+              "nll": 2.4149496108293533,
+              "offers": 16,
+              "top1": 0.4189453125
+            },
+            "httpx": {
+              "exact4": 0,
+              "nll": 2.5822921693325043,
+              "offers": 16,
+              "top1": 0.3955078125
+            },
+            "requests": {
+              "exact4": 0,
+              "nll": 2.8251698315143585,
+              "offers": 16,
+              "top1": 0.380859375
+            }
+          },
+          "checkpoint_sha256": "9b7816ad2a952d8d880d1c1c3e97ea67fd1d65c84c48bcdd756ab2341dfc6617",
+          "exact": {
+            "2": 8,
+            "4": 0,
+            "6": 0
+          },
+          "full_window_forward_p50_ms": 4.009811000003083,
+          "full_window_forward_p95_ms": 4.680159000002959,
+          "nll": 2.6074705372254052,
+          "offers": 48,
+          "oracle_net_keys": {
+            "2": 8,
+            "4": 0,
+            "6": 0
+          },
+          "seed": 1703,
+          "targets": 3072,
+          "top1": 0.3984375,
+          "weights_bytes": 2000660
+        }
+      ],
+      "top1_mean": 0.3934461805555555
+    },
+    "ssm": {
+      "exact4_mean": 0,
+      "nll_mean": 3.0115928086969586,
+      "oracle4_net_keys_mean": 0,
+      "seeds": [
+        {
+          "by_publisher": {
+            "click": {
+              "exact4": 0,
+              "nll": 2.80300173163414,
+              "offers": 16,
+              "top1": 0.2822265625
+            },
+            "httpx": {
+              "exact4": 0,
+              "nll": 3.0222004055976868,
+              "offers": 16,
+              "top1": 0.2705078125
+            },
+            "requests": {
+              "exact4": 0,
+              "nll": 3.276769459247589,
+              "offers": 16,
+              "top1": 0.2568359375
+            }
+          },
+          "checkpoint_sha256": "82d7f408708011667854b2a12041915fafb1012ad2a3facb69765f3dffa69a29",
+          "exact": {
+            "2": 5,
+            "4": 0,
+            "6": 0
+          },
+          "full_window_forward_p50_ms": 8.39947249999895,
+          "full_window_forward_p95_ms": 8.58067500000459,
+          "nll": 3.0339905321598053,
+          "offers": 48,
+          "oracle_net_keys": {
+            "2": 5,
+            "4": 0,
+            "6": 0
+          },
+          "seed": 1701,
+          "targets": 3072,
+          "top1": 0.2698567708333333,
+          "weights_bytes": 1999128
+        },
+        {
+          "by_publisher": {
+            "click": {
+              "exact4": 0,
+              "nll": 2.689427465200424,
+              "offers": 16,
+              "top1": 0.28515625
+            },
+            "httpx": {
+              "exact4": 0,
+              "nll": 2.961791157722473,
+              "offers": 16,
+              "top1": 0.26171875
+            },
+            "requests": {
+              "exact4": 0,
+              "nll": 3.3510490357875824,
+              "offers": 16,
+              "top1": 0.2587890625
+            }
+          },
+          "checkpoint_sha256": "2f4a19b662d4488ef11ee86c366fa8957ddb223e0bf9d1dd349fc484b7c9420f",
+          "exact": {
+            "2": 6,
+            "4": 0,
+            "6": 0
+          },
+          "full_window_forward_p50_ms": 7.960211999996858,
+          "full_window_forward_p95_ms": 8.047822999998289,
+          "nll": 3.0007558862368264,
+          "offers": 48,
+          "oracle_net_keys": {
+            "2": 6,
+            "4": 0,
+            "6": 0
+          },
+          "seed": 1702,
+          "targets": 3072,
+          "top1": 0.2685546875,
+          "weights_bytes": 1999128
+        },
+        {
+          "by_publisher": {
+            "click": {
+              "exact4": 0,
+              "nll": 2.7282252609729767,
+              "offers": 16,
+              "top1": 0.2998046875
+            },
+            "httpx": {
+              "exact4": 0,
+              "nll": 3.004011392593384,
+              "offers": 16,
+              "top1": 0.26953125
+            },
+            "requests": {
+              "exact4": 0,
+              "nll": 3.2678593695163727,
+              "offers": 16,
+              "top1": 0.2734375
+            }
+          },
+          "checkpoint_sha256": "0faa04011581664eb49bd7459bf4edd238f9be6bbe61b47e741b4d6c9c3f6fce",
+          "exact": {
+            "2": 4,
+            "4": 0,
+            "6": 0
+          },
+          "full_window_forward_p50_ms": 7.942084500001556,
+          "full_window_forward_p95_ms": 8.085239999999771,
+          "nll": 3.0000320076942444,
+          "offers": 48,
+          "oracle_net_keys": {
+            "2": 4,
+            "4": 0,
+            "6": 0
+          },
+          "seed": 1703,
+          "targets": 3072,
+          "top1": 0.2809244791666667,
+          "weights_bytes": 1999128
+        }
+      ],
+      "top1_mean": 0.2731119791666667
+    },
+    "tac": {
+      "exact4_mean": 0.6666666666666666,
+      "nll_mean": 2.4847456597619586,
+      "oracle4_net_keys_mean": 2,
+      "seeds": [
+        {
+          "by_publisher": {
+            "click": {
+              "exact4": 0,
+              "nll": 2.291012942790985,
+              "offers": 16,
+              "top1": 0.453125
+            },
+            "httpx": {
+              "exact4": 0,
+              "nll": 2.5409248769283295,
+              "offers": 16,
+              "top1": 0.4130859375
+            },
+            "requests": {
+              "exact4": 0,
+              "nll": 2.8252752125263214,
+              "offers": 16,
+              "top1": 0.3525390625
+            }
+          },
+          "checkpoint_sha256": "2341b3e6befad992b3339622c0b9e4074b6263cb8a8b6e7b6082cd96b26d61f6",
+          "exact": {
+            "2": 8,
+            "4": 0,
+            "6": 0
+          },
+          "full_window_forward_p50_ms": 3.023405499998688,
+          "full_window_forward_p95_ms": 3.2993559999994204,
+          "nll": 2.5524043440818787,
+          "offers": 48,
+          "oracle_net_keys": {
+            "2": 8,
+            "4": 0,
+            "6": 0
+          },
+          "seed": 1701,
+          "targets": 3072,
+          "top1": 0.40625,
+          "weights_bytes": 1998492
+        },
+        {
+          "by_publisher": {
+            "click": {
+              "exact4": 0,
+              "nll": 2.1868568807840347,
+              "offers": 16,
+              "top1": 0.45703125
+            },
+            "httpx": {
+              "exact4": 0,
+              "nll": 2.49105404317379,
+              "offers": 16,
+              "top1": 0.40234375
+            },
+            "requests": {
+              "exact4": 0,
+              "nll": 2.697099447250366,
+              "offers": 16,
+              "top1": 0.3583984375
+            }
+          },
+          "checkpoint_sha256": "e4c95b838a6a9ec468b7c145fdd7f45db0f343f0c7eda209bdf643c7ef0c737b",
+          "exact": {
+            "2": 9,
+            "4": 0,
+            "6": 0
+          },
+          "full_window_forward_p50_ms": 3.029552500002808,
+          "full_window_forward_p95_ms": 3.242711000005727,
+          "nll": 2.4583367904027305,
+          "offers": 48,
+          "oracle_net_keys": {
+            "2": 9,
+            "4": 0,
+            "6": 0
+          },
+          "seed": 1702,
+          "targets": 3072,
+          "top1": 0.4059244791666667,
+          "weights_bytes": 1998492
+        },
+        {
+          "by_publisher": {
+            "click": {
+              "exact4": 1,
+              "nll": 2.2061245888471603,
+              "offers": 16,
+              "top1": 0.451171875
+            },
+            "httpx": {
+              "exact4": 0,
+              "nll": 2.4397420287132263,
+              "offers": 16,
+              "top1": 0.427734375
+            },
+            "requests": {
+              "exact4": 1,
+              "nll": 2.6846209168434143,
+              "offers": 16,
+              "top1": 0.39453125
+            }
+          },
+          "checkpoint_sha256": "b2caaaee181c4c4b56919c6c308b1e26be0a99738a1aaf76d8312dcc72a0b535",
+          "exact": {
+            "2": 10,
+            "4": 2,
+            "6": 0
+          },
+          "full_window_forward_p50_ms": 3.0959254999984864,
+          "full_window_forward_p95_ms": 3.327744000003463,
+          "nll": 2.443495844801267,
+          "offers": 48,
+          "oracle_net_keys": {
+            "2": 10,
+            "4": 6,
+            "6": 0
+          },
+          "seed": 1703,
+          "targets": 3072,
+          "top1": 0.4244791666666667,
+          "weights_bytes": 1998492
+        }
+      ],
+      "top1_mean": 0.4122178819444445
+    }
+  },
+  "revenue_proved": false,
+  "scoring_targets_per_model": 3072,
+  "source_type": "real licensed publisher source code, new first-open DEV, not protected blind TEST",
+  "study": "CODEVALUE002",
+  "tac_primary4_group_wins": 0,
+  "tac_primary4_seed_wins": 0,
+  "training_FLOPs": "NOT_MATCHED",
+  "training_target_bytes_per_model": 327680
+}
