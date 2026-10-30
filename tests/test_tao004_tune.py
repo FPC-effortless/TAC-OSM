@@ -25,7 +25,7 @@ def test_tao004_manifest_and_trial_parity():
 def test_tao004_pinned_real_publisher_fit_order():
     docs,rows,sched=tune.fit_original_batches()
     assert len(docs)==14 and len(rows)==32 and sched["targets"]==32768
-    assert rows[0][0][0].startswith("Doc/")
+    assert rows[0][1][0][0].startswith("Doc/")
     assert len(sched["sample_order_sha256"])==64
 
 
