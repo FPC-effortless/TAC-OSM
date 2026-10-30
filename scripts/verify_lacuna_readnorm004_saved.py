@@ -10,7 +10,10 @@ def verify(folder):
     receipt=json.loads((folder/'ARTIFACT_RECEIPT.json').read_text());raw=(folder/'ORIGINAL_ARTIFACT.zip').read_bytes()
     assert hashlib.sha256(raw).hexdigest()==receipt['zip_sha256'],'original ZIP'
     with zipfile.ZipFile(io.BytesIO(raw)) as archive:result=json.loads(archive.read('RESULTS.json'))
-    assert result==json.loads((folder/'RESULTS.json').read_text()),'original output modified'
+    if (folder/'RESULTS.json').exists():
+        assert result==json.loads((folder/'RESULTS.json').read_text()),'original output modified'
+    summary={k:v for k,v in result.items() if k!='rows'}
+    assert summary==json.loads((folder/'SUMMARY.json').read_text()),'saved summary modified'
     previous=json.loads((ROOT/'research/evidence/lacuna_retrieval003/RESULTS.json').read_text())
     old={(r['seed'],r['owner'],r['clock'],r['bin_begin']):r for r in previous['rows']}
     rows=result['rows'];seen=set()

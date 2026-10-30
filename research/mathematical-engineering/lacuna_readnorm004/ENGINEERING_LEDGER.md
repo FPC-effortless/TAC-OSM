@@ -14,3 +14,10 @@
 - New study is registered with reciprocal source-pinned PNDS bridge90. Full
   neural IEEE/AD, independent qualification and canonical legacy-index migration
   remain OPEN. Prior failed scientific gates stay unchanged.
+- Corrected scoped PNDS proofCI41010497977 and bridgeCI41010648702passed.
+- Original004run41010825969 completed on e2a997d882e536dc706c21c88a8219ad57458b5d.
+  All678cells reproduced003scores exactly. Bothnorm tolerances passed, no
+  degeneracies; one new privileged short-age Dsignal, tiny wrong-key margin.
+- Full local suite1639passed/4skipped; existing profilerwarning only. Saved
+  artifact/summary verification recomputes without model execution. Original
+  33.9MBraw JSON is retained exactly inGit-backed ZIP, not duplicated as a blob.

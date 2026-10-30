@@ -108,3 +108,17 @@ This extends the diagnosis, not the stopped training sweep. Bank matching is
 not whole-model autonomous state parity; evaluator extra memory is disclosed.
 001/002/088 original negatives remain unchanged. Scoped PNDS89passed; full
 neural IEEE/AD and independent qualification remain OPEN.
+
+## Separate paired follow-up: LACUNA-READNORM004
+
+[TAC645](https://github.com/FPC-effortless/TAC-OSM/pull/645)/[PNDS90](https://github.com/FPC-effortless/pnds-lean/pull/90)
+completed the historical+total slow-read norm control on exposed003DEV, same
+678measurements and original checkpoints. All integrity checks passed and
+original003historical-only scores reproduced exactly. One new exploratory
+signal passes: supplied-key/raw-history D at8–31bytes, gain0.005613 against
+original but only0.00007078 against wrong address. No older bin or autonomous
+query condition passes. Both norms are preserved; mixed fast/slow norm can
+still change. This does not reopen any previous gate or the trained sweep.
+[Original run41010825969](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41010825969)
+and [full result/limitations](../evidence/lacuna_readnorm004/RESULTS.md) preserve
+the positive signal, small control margin, failing strata and prior negatives.
