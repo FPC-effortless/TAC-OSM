@@ -311,6 +311,17 @@ def evaluate(directory: Path):
     if output.exists():
         raise FileExistsError("first read-only DEV results immutable")
     output.write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n")
+    # Final measured checkpoint identifiers are attached only after all five
+    # actual Git-backed source model/replay identities have been verified.
+    final_manifest = json.loads((REG / "FAIR_COMPARISON.json").read_text())
+    for row in final_manifest["models"]:
+        sha = original_manifest["arms"][row["name"]]["checkpoint_sha256"]
+        row["measured"] = {"trainable_parameters": SIZE, "deployed_parameters": SIZE,
+                           "checkpoint_sha256": sha}
+    final_gate = check_manifest(final_manifest, "final")
+    if final_gate["status"] != "PASS_SINGLE_MODEL":
+        raise ValueError("postfit measured parameter/checkpoint gate failed")
+    (directory / "FINAL_COMPARISON.json").write_text(json.dumps(final_manifest, indent=2, sort_keys=True) + "\n")
     print(json.dumps({"phase": "DEV_SCORED", "metrics": metrics,
                       "target_sha256": result["dev_target_sha256"]}), flush=True)
 
