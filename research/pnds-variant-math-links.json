@@ -1,7 +1,7 @@
 {
   "schema": "pnds.tac_osm.variant_math_links.v1",
   "foundation_version": "1.0.0",
-  "coverage": "17_indexed_historical_versions_only_not_full_archive",
+  "coverage": "17_historical_plus_LANG10M001_provisional_no_fit_partial",
   "canonical_authority": {
     "mathematics": "FPC-effortless/pnds-lean",
     "source_and_evidence": "FPC-effortless/TAC-OSM"
@@ -532,6 +532,37 @@
       "lean_full_graph_proved": false,
       "python_source_equivalence_verified": false,
       "real_world_capability_inferred": false
+    },
+    {
+      "id": "LANGUAGE-LANG10M001",
+      "lane": "language",
+      "version": "LANG10M001",
+      "state_kind": "parallel_affine_associative_wave_concept_plus_causal_upper_recurrence",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "5432befbcd36bb8237ae6929433abb4bd2d9003e",
+        "pull_request": 658,
+        "evidence_path": null,
+        "bridge_path": "research/language-scaling/lang10m/README.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 94,
+        "lean_path": "PNDS/LANG10M001.lean",
+        "lean_symbol": "PNDS.LANG10M001.scalarStep",
+        "python_path": "foundation/v1/lang10m001_reference.py",
+        "python_symbol": "reference_upper_block",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "partial_upper_recurrent_scalar_and_numpy_block",
+      "formula": "h_t = a_t h_(t-1)+(1-a_t) offer_t; upper output z'=z+sigmoid(gain)*W_out*tanh(u+g(u,hprev)*hprev), plus SwiGLU residual",
+      "operator_contracts": [],
+      "formalization_status": "PARTIAL_UPPER_BLOCK_NOT_WHOLE_MODEL_UNTRAINED",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false,
+      "tokenizer_fitted": false,
+      "gpu_profile_measured": false
     }
   ],
   "prospective_training_candidates": [
