@@ -41,7 +41,7 @@ jobs:
             --pattern 'LANGLAYER040-CPU-state48_no_graph-seed*' --dir fresh-checkpoints
           test "$(find fresh-checkpoints -name FIT_AND_EXPOSED_DEV_RECEIPT.json -type f | wc -l)" -eq 15
           gh run download 41021358840 -R FPC-effortless/TAC-OSM \
-            --name LANGPARALLEL097-original-ten-model-source-replay --dir original-study
+            --name LANGPARALLEL097-original-fifteen-model-source-replay --dir original-study
           test -s original-study/langparallel097-results/DEV_SOURCE/src/ch01-01-installation.md
       - name: Re-run all original 10 actual publisher source forecasts and reproducibility aggregate
         run: |
