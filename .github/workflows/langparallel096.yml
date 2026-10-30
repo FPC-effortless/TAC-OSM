@@ -1,0 +1,93 @@
+name: LANGPARALLEL096 actual parallel layered vs nonlayered frozen model comparison
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'research/mathematical-engineering/langparallel096/**'
+      - 'research/phone_queue/langparallel096.json'
+      - '.github/workflows/langparallel096.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  historical-no-fit:
+    if: github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install pytest==8.4.2 numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: No-fit scientific source/phone-lab and causal-scan architecture invariants
+        run: |
+          set -euo pipefail
+          python scripts/phone_lab.py plan research/phone_queue/langparallel096.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langparallel096/FAIR_COMPARISON.json --phase preflight
+          PYTHONPATH=src:. python -m pytest -q research/mathematical-engineering/langparallel096/test_parallel096.py tests/test_research_probe_agnostic.py
+      - name: Download original authentic publisher trained checkpoints (never refit)
+        run: |
+          set -euo pipefail
+          mkdir -p original-artifacts
+          gh run download 40785939365 -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGLAYER035-CPU-tac_context026-seed*' --dir original-artifacts
+          gh run download 40795790808 -R FPC-effortless/TAC-OSM \
+            --pattern 'LANGLAYER039-CPU-seed*' --dir original-artifacts
+          test "$(find original-artifacts -name FIT_AND_EXPOSED_DEV_RECEIPT.json -type f | wc -l)" -eq 10
+      - name: Freeze original Rust Book publisher bytes with pinned Git blobs
+        run: |
+          PYTHONPATH=src:. python - <<'PY'
+          from pathlib import Path
+          import sys
+          sys.path.insert(0,'research/mathematical-engineering/langparallel096')
+          from frozen_compare096 import source_docs
+          target=Path('langparallel096-results')
+          print({n:len(raw) for n,raw in source_docs(target).items()})
+          PY
+      - name: Evaluate 10 original parallel models on identical source byte target ordinals
+        run: |
+          set -euo pipefail
+          for seed in 1701 1702 1703 1704 1705; do
+            for arm in flat_parallel layered_parallel; do
+              PYTHONPATH=src:. python research/mathematical-engineering/langparallel096/frozen_compare096.py \
+                --arm "$arm" --seed "$seed" --root original-artifacts \
+                --source-root langparallel096-results/DEV_SOURCE \
+                --output "langparallel096-results/$arm-$seed/RESULTS.json"
+            done
+          done
+          PYTHONPATH=src:research/mathematical-engineering/langparallel096:. python \
+            research/mathematical-engineering/langparallel096/aggregate096.py \
+            --root langparallel096-results \
+            --output research/mathematical-engineering/langparallel096/FROZEN_RESULTS.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGPARALLEL096-original-ten-model-source-replay
+          path: |
+            research/mathematical-engineering/langparallel096/FROZEN_RESULTS.json
+            langparallel096-results/
+          retention-days: 90
+      - name: Commit exact original no-fit scores on unmerged evidence branch
+        run: |
+          set -euo pipefail
+          test -s research/mathematical-engineering/langparallel096/FROZEN_RESULTS.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mathematical-engineering/langparallel096/FROZEN_RESULTS.json
+          git commit -m 'LANGPARALLEL096: preserve 10 original parallel layered/flat scores and paired CPU times'
+          git push origin "HEAD:${{ github.head_ref }}"
