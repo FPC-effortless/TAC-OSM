@@ -34,7 +34,12 @@ def validate_fit_manifest(path: Path) -> list[Path]:
             raise ValueError("DEV, TEST and unknown partitions are forbidden")
         if not all(entry.get(k) for k in ("path", "sha256", "license", "publisher", "commit")):
             raise ValueError("source identity, license, commit and SHA256 required")
-        source = Path(entry["path"]).expanduser().resolve(strict=True)
+        source = Path(entry["path"]).expanduser()
+        if not source.is_absolute():
+            source = path.resolve().parent / source
+        source = source.resolve(strict=True)
+        if not source.is_file():
+            raise ValueError("FIT source must be a regular file")
         if source in seen or "," in str(source):
             raise ValueError("repeated or non-representable FIT path")
         seen.add(source)
@@ -66,6 +71,8 @@ def train(manifest_path: Path, model_prefix: Path) -> dict:
         split_by_whitespace=False,
         input_sentence_size=0,
         shuffle_input_sentence=False,
+        num_threads=1,
+        max_sentence_length=max(4096,max(len(line.encode("utf-8")) for p in paths for line in p.read_bytes().decode("utf-8").splitlines())+16),
         unk_id=0,
         bos_id=1,
         eos_id=2,
@@ -78,12 +85,24 @@ def train(manifest_path: Path, model_prefix: Path) -> dict:
     for probe in ("def f(x):\n    return x + 1\n", " café 🧠\n", "\tif value is None:\n"):
         if processor.decode(processor.encode(probe)) != probe:
             raise ValueError("tokenizer does not roundtrip exact source text")
+    source_stats=[]
+    for path in paths:
+        text=path.read_bytes().decode("utf-8")
+        ids=processor.encode(text)
+        if processor.decode(ids)!=text:
+            raise ValueError("tokenizer does not roundtrip original FIT source: "+str(path))
+        source_stats.append({"path":str(path.relative_to(manifest_path.resolve().parent)) if path.is_relative_to(manifest_path.resolve().parent) else str(path),
+            "sha256":sha256(path),"utf8_bytes":len(text.encode("utf-8")),"tokens":len(ids)})
     receipt = {
         "variant": "LANG10M001",
         "status": "TOKENIZER_ONLY",
         "partition": "FIT",
         "vocabulary": VOCAB,
         "model_type": MODEL_TYPE,
+        "sentencepiece_version":spm.__version__,
+        "training_recipe":args,
+        "source_roundtrip_stats":source_stats,
+        "all_FIT_sources_exact_roundtrip":True,
         "normalization": NORMALIZATION,
         "byte_fallback": True,
         "fit_manifest_sha256": sha256(manifest_path),

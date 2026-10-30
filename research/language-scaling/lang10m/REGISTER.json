@@ -1,6 +1,6 @@
 {
   "variant": "LANG10M001",
-  "status": "NO_FIT_CANDIDATE_AWAITING_CI_AND_PNDS",
+  "status": "CONSTRUCTOR_VERIFIED_TOKENIZER_FITTED_CAPACITY_PREFLIGHT_PENDING",
   "execution_level": "internal_research",
   "owner_direction": "2026-10-30 proceed with tokenized language TAC scaling recommendation, preserving running CODEVALUE004",
   "source_parent": "c5bc32976c298439eb04b7b342213f6946ac09f2",
@@ -12,13 +12,16 @@
   "base_path": "research/mathematical-engineering/context026/context_transition.py",
   "implementation": "research/language-scaling/lang10m/model.py",
   "intended_parameters": 10001188,
-  "actual_instantiated_parameters": "AWAITING_RUNNING_CONSTRUCTOR_CHECK",
+  "actual_instantiated_parameters": 10001188,
   "tokenizer": {
     "method": "SentencePiece byte-fallback BPE",
     "vocab": 4096,
-    "fit": "REGISTERED_REAL_FIT_ONLY_NO_TRAINING",
+    "fit": "AUTHENTICATED_FIT_ONLY219_FILES_COMPLETE",
     "normalization": "identity",
-    "tokenizer_fitted": false
+    "tokenizer_fitted": true,
+    "pilot_UTF8_bytes": 3630713,
+    "pilot_tokens": 1170938,
+    "adequate_for_full10M_pretraining": false
   },
   "architecture": {
     "embed": 48,
@@ -40,19 +43,20 @@
     "no_protected_test": true,
     "no_architecture_superiority_claim": true,
     "pr657_unmodified": true,
-    "codevalue003_unmodified": true
+    "codevalue003_unmodified": true,
+    "no_neural_training": true
   },
   "cpu_tests": [
     "parameter count",
     "source-control FIT boundary",
     "causality suffix-poison",
-    "actual nonzero gradient paths"
+    "Selected original/upper gradient connectivity and finiteness; whole-graph equivalence remains OPEN"
   ],
   "gpu_profile": {
     "script": "research/language-scaling/lang10m/profile_no_fit.py",
-    "execution": "NOT_RUN",
+    "execution": "REGISTERED_NOT_SUBMITTED",
     "requires": "separate explicit Kaggle allocation two real T4 UUIDs",
-    "operator_quota": "UNALLOCATED"
+    "operator_quota": "OWNER_CONTINUE_ONE_PRIVATE_NO_UPDATE_DUAL_T4_PROFILE_MAX12_GPU_MINUTES"
   },
   "research_gate": {
     "global_param_policy": "100k band unchanged; owner-scoped 10M training exception must be registered separately",

@@ -1,13 +1,14 @@
 # LANG10M001 — tokenized 10M TAC prefit research candidate
 
-**Status:** no-fit implementation; exact source-grounded parameter-count and
-causal/gradient CI checks must pass before any measured-engineering claim.
-No tokenizer FIT, neural training, GPU allocation, new predictions on authentic
-data, checkpoint, protected TEST, or qualified language gain from this branch.
+**Status:** actual constructor verified at10,001,188 parameters. A4K tokenizer
+is fitted on219 authenticated FIT-only code/documentation files, with exact
+roundtrips on every source. The no-update dual-T4 capacity matrix is registered
+in PROFILE_PLAN.json; submission/runtime evidence is recorded separately when
+available. No neural optimizer update or trained-language result exists.
 
 ## Scope and separation
 
-- This variant is independent of **CODEVALUE004** (PR #657), which is running
+- This variant is independent of **CODEVALUE004** (PR #657), which completed
   its frozen 500K corpus×LR factorial protocol. Neither its source graph nor its
   24-model Kaggle run is changed or resubmitted here.
 - Parent is the frozen CODEVALUE003 implementation (PR #656); existing scores,
@@ -115,3 +116,48 @@ The anti-cheat diagnostics registered here cover only implemented CPU source
 tests. Every future trained-data pipeline must separately audit raw
 publisher bytes, partitioning, tokenizer FIT boundary, causal masks,
 sampling, optimizer, checkpoint replay and training data provenance.
+
+
+## Authenticated tokenizer pilot and bounded capacity continuation
+
+CODEVALUE004 completed on two verified T4s before any new allocation. Its
+predeclared TAC broader-corpus+cosine generalization comparison passed, mainly
+because of corpus expansion; the isolated TAC cosine effect was small/uncertain.
+All four TAC utility screens still failed. This informs data priorities, not a
+commercial or architecture-superiority claim. CODEVALUE004 source/run/protocol
+remain unchanged by this independent branch.
+
+The pilot corpus comprises93 authentic FIT code files(2338018 UTF-8 bytes) and
+126 documentation files(1292695 bytes) from the same authorized FIT publishers.
+No CODEVALUE004 selectionDEV/transfer sources were read for fitting. Original
+commits/blobs/SHA256 and complete license texts are preserved. The tokenizer is
+SentencePiece0.2.1,4096-piece BPE with byte fallback, identity normalization,
+fixed special IDs,no dummy prefix/whitespace stripping,no sampling/shuffling
+and one trainer thread. All219 source strings roundtrip exactly. Its source
+manifest and output hashes,full model/vocabulary and compression receipt are in
+`tokenizer/`. The3.63MB pilot yields1170938 tokens: about3.09 UTF-8 bytes/token
+for code and3.13 for documentation. This is FIT compression, not held-out
+language quality or a sufficient unique corpus for10M pretraining.
+
+`capacity_profile.py` runs only forward/backward computations on authenticated
+FIT token windows. It constructs no optimizer and hashes every completed case's
+weights before/after. Both distinct physical T4s must exist and are used by
+concurrent frozen seed/shape shards. Ten B×T shapes cover contexts128/256/512/1024
+and microbatches1/2/4/8 where registered. Compare FP32 and AMP-FP16 on identical
+weights/source windows within each device, with finite gradients and explicit
+precision tolerances. Use2 warmups and5 synchronized measurements. No GradScaler
+training stability is established: this is an unscaled, no-optimizer profile.
+Record OOM/numerical/unsupported cases, peak allocated/reserved VRAM and tokens/s.
+Any AdamW moment-memory addition is an estimate, not a measured optimizer state.
+The one private offline allocation has a300-second deadline,360-second platform
+timeout and12 aggregate GPU-minute ceiling, with no automatic retry. Partial
+failure evidence must be retained; capacity tests cannot establish intelligence.
+
+The PNDS partial upper reference and broader build passed at PR94's observed
+head. Full typed first-stage graph, composed source parity, gradients, finite
+precision and historical-registry migration remain OPEN. No full-model math
+certification or independently qualified result follows from those jobs.
+Actual neural pretraining still needs a separately frozen adequate corpus,
+matched10M controls/tokenizer/exposure/selection/evaluation budgets, replay and
+an owner-scoped training registration. Neither an illustrative200M-token target
+nor a successful capacity profile automatically launches that training.
