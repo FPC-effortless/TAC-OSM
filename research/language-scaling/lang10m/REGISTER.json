@@ -1,0 +1,70 @@
+{
+  "variant": "LANG10M001",
+  "status": "NO_FIT_CANDIDATE_AWAITING_CI_AND_PNDS",
+  "execution_level": "internal_research",
+  "owner_direction": "2026-10-30 proceed with tokenized language TAC scaling recommendation, preserving running CODEVALUE004",
+  "source_parent": "c5bc32976c298439eb04b7b342213f6946ac09f2",
+  "ancestry": [
+    "CONTEXT026",
+    "LANGLAYER038",
+    "LANGSCALE070"
+  ],
+  "base_path": "research/mathematical-engineering/context026/context_transition.py",
+  "implementation": "research/language-scaling/lang10m/model.py",
+  "intended_parameters": 10001188,
+  "actual_instantiated_parameters": "AWAITING_RUNNING_CONSTRUCTOR_CHECK",
+  "tokenizer": {
+    "method": "SentencePiece byte-fallback BPE",
+    "vocab": 4096,
+    "fit": "REGISTERED_REAL_FIT_ONLY_NO_TRAINING",
+    "normalization": "identity",
+    "tokenizer_fitted": false
+  },
+  "architecture": {
+    "embed": 48,
+    "dim": 280,
+    "base_associative": "8x8",
+    "aligned_banks": "2x16x8",
+    "waves": 8,
+    "base_concepts": "6x16",
+    "upper_blocks": 4,
+    "upper_state": 128,
+    "upper_ffn": 1024,
+    "output_ffn": 1214,
+    "streaming": false
+  },
+  "scope": {
+    "no_training": true,
+    "no_optimizer_steps": true,
+    "no_gpu_allocation": true,
+    "no_protected_test": true,
+    "no_architecture_superiority_claim": true,
+    "pr657_unmodified": true,
+    "codevalue003_unmodified": true
+  },
+  "cpu_tests": [
+    "parameter count",
+    "source-control FIT boundary",
+    "causality suffix-poison",
+    "actual nonzero gradient paths"
+  ],
+  "gpu_profile": {
+    "script": "research/language-scaling/lang10m/profile_no_fit.py",
+    "execution": "NOT_RUN",
+    "requires": "separate explicit Kaggle allocation two real T4 UUIDs",
+    "operator_quota": "UNALLOCATED"
+  },
+  "research_gate": {
+    "global_param_policy": "100k band unchanged; owner-scoped 10M training exception must be registered separately",
+    "pnds": "FULL_SOURCE_EQUIVALENT_MATH_OPEN",
+    "compare": "REQUIRES_MATCHED_10M_CONTROLS_AND_REAL_DATA",
+    "performance": "UNKNOWN"
+  },
+  "next_steps": [
+    "complete no-fit CI",
+    "reciprocal PNDS math record",
+    "real FIT source audit and tokenizer fit",
+    "separate dual T4 no-fit profile",
+    "register matched train/eval only after runtime evidence"
+  ]
+}
