@@ -19,3 +19,9 @@ Before any087fit/newDEV:
  4x256 originalforward/backward nooptimizer CPUprofile2.240sec,100521counts.
 
 No outcome tuning, no087optimizer/DEV access occurred during these corrections.
+
+Corrected PNDS Lean kernel/axiom and Python CI40984197814 PASSED at
+proof5cefe03434af0248b0cce483518d4e89bb3a5217 before any087optimizer.
+34targetedchecks after both scopedimports PASSED; fullsuite after086scope
+1602passed/4skipped. Original publisher dual-license filenames/blobmetadata
+verified before fit; corrected license URLs (no source DEV content read).
