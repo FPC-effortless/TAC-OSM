@@ -72,3 +72,11 @@ neural integration/training requires separate PNDS graph/formulation, matched
 95k–105k/<=1% learnedcounts, exposure/compute/state and freshDEV. No operator
 screen bypasses those gates. Existing bias088 stays separate. Full IEEE/AD,
 causal semantic utility and independent qualification remain OPEN.
+
+Implementation correspondence: vendored PNDS split_slow source is exact
+5cefe03434af0248b0cce483518d4e89bb3a5217/foundation/v1/langmem087_historical.py,
+with existing Lean module LangMem087Historical residual_decomposition. Every128
+source clocks compare actual full-model update against that independent Python.
+AD check uses the native argmax class, which is known before future labels.
+Forensic disagreement/context/writer tables are evaluator diagnostics, not
+claimed bounded deployed inputs. Their erasure scores are mechanics only.
