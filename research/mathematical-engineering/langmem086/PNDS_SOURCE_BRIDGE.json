@@ -1,0 +1,38 @@
+{
+  "schema": "tac-pnds.source-bridge.v1",
+  "study": "LANGMEM086",
+  "type": "SINGLE_TRAINED100K_AUTONOMOUS_QUERY_DUAL_CLIPPED_TAC",
+  "ancestry": [
+    "LANGMEM078",
+    "LANGMEM083",
+    "LANGMEM084",
+    "LANGMEM085"
+  ],
+  "tac": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "source_commit": "8f82adda80c67d3eec0fa778b35af62c6f9160c7",
+    "pull_request": null,
+    "source_paths": [
+      "research/mathematical-engineering/langmem086/compact_tac.py",
+      "research/mathematical-engineering/langmem086/probe_adapter.py",
+      "scripts/langmem086_run.py"
+    ],
+    "all_original078_checkpoints_unchanged": true
+  },
+  "pnds": {
+    "repository": "FPC-effortless/pnds-lean",
+    "proof_commit": "0fd3c5006326a98107de2d02c63a6107226615b9",
+    "pull_request": 83,
+    "lean_path": "PNDS/LangMem086Autonomous.lean",
+    "lean_symbol": "PNDS.LangMem086.update_read_unit",
+    "python_path": "foundation/v1/langmem086_autonomous.py",
+    "python_symbol": "clipped_update",
+    "full_typed_graph_record": "foundation/v1/LANGMEM086_GRAPH.md"
+  },
+  "exact_source_contract": "New100521p model observes source bytes and owns1920B tensor state. Learned query consumes current lexical context and prior upper state. Fast clipped residual and slow weak residual updates share previous learned writer and explicit byte+learned residual value. No evaluator key or historical target enters forward. Fixed trained-model read lesions, FIT sampled-byte prior and same-payload ring reference.",
+  "mathematical_status": "FULL_TYPED_GRAPH_RECORD_WITH_PARTIAL_REAL_OPERATOR_AND_LOCAL_GRADIENT_CHECKS",
+  "source_PyTorch_IEEE_AD_equivalence": "OPEN",
+  "learned_retrieval_success_established": false,
+  "independently_qualified": false,
+  "two_repository_canonical_index_status": "OPEN_COORDINATED_MERGE_REQUIRED_LEGACY17_INDEX_UNCHANGED"
+}

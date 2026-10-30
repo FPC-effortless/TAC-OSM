@@ -143,3 +143,10 @@ Route: source-controlled phone planner chooses GitHub Actions CPU, estimated
 4×256 forward/backward profile took2.38 CPU seconds with zero optimizer updates;
 160 steps plus bounded evaluation fits this conservative CPU budget. Zero GPU
 quota; no Kaggle fallback or accelerator use is permitted.
+
+To prevent report/bridge commits from silently refitting models or rereading
+fresh DEV, source workflow launches training only on reviewed commits whose
+subject begins `LANGMEM086-TRAIN:` on this exact owner branch. Normal later
+commits run the no-fit guard and skip training/evaluation. This marker does
+not bypass any preflight/model/source gate. If a reporter fails after actual
+fits, recover sealed artifacts read-only; do not retrain to fix reporting.
