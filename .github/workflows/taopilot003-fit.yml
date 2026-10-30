@@ -67,4 +67,9 @@ jobs:
           git add -f research/evidence/taopilot003/seed1701
           git diff --cached --exit-code --quiet && { echo 'No trained files were generated'; exit 1; } || true
           git commit -m "evidence(taopilot003): preserve all five original trained optimizer checkpoints"
+          # Rebase onto any intervening research workflow/doc commits; never
+          # force-push. This is necessary when companion replay CI was added
+          # while the original CPU training job was still running.
+          git fetch origin research/tao003-real-language-pilot-2026-10-30
+          git rebase origin/research/tao003-real-language-pilot-2026-10-30
           git push origin HEAD:research/tao003-real-language-pilot-2026-10-30
