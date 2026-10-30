@@ -50,3 +50,18 @@ fresh unseen DEV remain required. No GPU minutes or protected TEST are used.
 
 Execution evidence and final statuses will be appended without replacing
 original087/088 findings, source artifacts, failed attempts or draft PRs.
+
+## Measured execution outcome
+
+Original screen Actions40997601362 PASS (36engineering checks plus original
+replay and all registered FIT screens). Detailed results:
+[research/evidence/lacuna_survival001/RESULTS.md](../evidence/lacuna_survival001/RESULTS.md).
+Numerical contribution norms survive (57%at128,12%at512), but old-event
+removal improves rather than worsens average NLL in every age bin. No age
+passes the registered utility gate. Random lookback beats tested entropy/proxy
+triggers at exactly equal224queries per owner. Actual targeted-unlearning truth
+is missing, cross-layer/budgeted learned graphs do not yet exist, and learned
+swaprounding/conservation is not implemented. Later neural fits therefore stay
+STOPPED/OPEN, not mislabeled as executed or as architectural impossibilities.
+ARCHFUSE's eight operator families were screened, not fitted or fused. All
+eligible P0 work completed; the trained research program remains conditional.
