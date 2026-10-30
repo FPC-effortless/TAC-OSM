@@ -1,0 +1,49 @@
+name: HYBGEOM090 original frozen TAC hybrid geometry no-fit FIT screen
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'research/mathematical-engineering/hybgeom090/**'
+      - 'research/phone_queue/hybgeom090.json'
+      - '.github/workflows/hybgeom090.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-source-no-fit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Pinned CPU dependencies
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Registered no-fit plan and source parity gate
+        run: |
+          mkdir -p hybgeom090-evidence
+          python scripts/phone_lab.py plan research/phone_queue/hybgeom090.json > hybgeom090-evidence/PLAN.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/hybgeom090/FAIR_COMPARISON.json --phase preflight > hybgeom090-evidence/PREFLIGHT.json
+      - name: Operator, native-source integration, archive integrity, source-boundary diagnostics
+        run: |
+          PYTHONPATH=src:. python -m pytest -q research/mathematical-engineering/hybgeom090/test_hybgeom090.py tests/test_replay_langmem086087.py tests/test_research_probe_agnostic.py
+      - name: Original frozen 3-seed matched FIT byte screen; no training, no real timestamps
+        run: |
+          PYTHONPATH=src:. python research/mathematical-engineering/hybgeom090/fit_diagnostics090.py --output hybgeom090-evidence/RESULTS.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HYBGEOM090-FROZEN-ORIGINAL-FIT-NOFIT
+          path: hybgeom090-evidence/
+          retention-days: 90
