@@ -36,9 +36,18 @@ def evidence(seed):
   raise ValueError('original trained model wrong run or arm')
  if receipt['weights_sha256']!=digest_state(cp['state']):raise ValueError('original trained weights hash mismatch')
  original=CompactDualClippedTAC086().eval();optimized=OptimizedCompactTAC095().eval()
- origstate={k.removeprefix('core.'):v for k,v in cp['state'].items()}
- if len(origstate)!=len(cp['state']) or not all(k.startswith('core.') for k in cp['state']):
-  raise ValueError('original model checkpoint namespace')
+ # The original TiedHeadTAC093 wrapper always registers one fixed byte
+ # permutation buffer even for its original arm. Verify it explicitly;
+ # this is not a trained weight and was never read by the original model.
+ original_fixed=cp['state'].get('shuffled')
+ expected_fixed=(torch.arange(256)*73+41)%256
+ if original_fixed is None or not torch.equal(original_fixed,expected_fixed):
+  raise ValueError('original wrapper fixed buffer mismatch')
+ actual_keys=set(cp['state'])-{'shuffled'}
+ if not actual_keys or any(not key.startswith('core.') for key in actual_keys):
+  raise ValueError('original learned core namespace')
+ origstate={k[len('core.'):]:v for k,v in cp['state'].items() if k.startswith('core.')}
+ if len(origstate)!=len(actual_keys):raise ValueError('original core key collision')
  original.load_state_dict(origstate,strict=True)
  optimized.load_state_dict(origstate,strict=True)
  if set(original.state_dict())!=set(optimized.state_dict()) or any(
