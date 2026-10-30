@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Frozen FIT repeated-context attribution; future labels never select the cohort."""
-import argparse,json,time,resource
+import argparse,json,time,resource,sys
 from pathlib import Path
 import numpy as np
 import torch
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from scripts.lacuna_survival001 import ROOT,OWNERS,patch,nll,decode
 from scripts.replay_langmem086087 import fit_sources,load_source,original_checkpoints,weights
 BINS=((8,32),(32,128),(128,256),(256,513))
@@ -57,7 +58,7 @@ def run(out):
   means=[sum(x['old_event_removal_minus_full_nll'] for x in rr if x[k]==v)/sum(x[k]==v for x in rr) for k,vals in [('seed',(1701,1702,1703)),('owner',OWNERS)] for v in vals if any(x[k]==v for x in rr)]
   gate='INCONCLUSIVE_LOW_SUPPORT' if len(cells)<20 else 'NOT_PASSED'
   if gate!='INCONCLUSIVE_LOW_SUPPORT' and m['old_event_removal_minus_full_nll']>=.001 and m['old_event_removal_minus_full_nll']>m['wrong_event_removal_minus_full_nll'] and len(means)==5 and min(means)>0:gate='PROVISIONAL_POSITIVE_FIT_ONLY';passed.append(lo)
-  summary.append({'bin_begin':lo,'bin_end_exclusive':hi,'measurement_count':len(rr),'distinct_source_query_cells':len(cells),'unavailable_or_no_controls':len(allrows)-len(rr),'metrics':m,'utility_screen':gate})
+  summary.append({'bin_begin':lo,'bin_end_exclusive':hi,'measurement_count':len(rr),'distinct_source_query_cells':len(cells),'unavailable_or_no_controls':sum(x['bin_begin']==lo for x in availability)-len(rr),'metrics':m,'utility_screen':gate})
  result={'study':'LACUNA-MATCHED002','status':'PASS_FROZEN_FIT_COHORT_SCREEN','cohort_selected_from_observed_prefix_only':True,'same_source_cells_reused_across_seeds':True,'summary':summary,'rows':rows,'availability':availability,'source_checks':checks,'new_training_steps':0,'GPU_minutes':0,'DEV_scoring':False,'protected_TEST':False,'cpu_seconds':time.process_time()-started,'peak_RSS_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,'provisional_positive_bins':passed,'original001_gate_unchanged':True,'independently_qualified':False}
  out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(result,indent=2,sort_keys=True,allow_nan=False)+'\n');print(json.dumps({'summary':summary,'cpu_seconds':result['cpu_seconds'],'positive_bins':passed}))
 if __name__=='__main__':
