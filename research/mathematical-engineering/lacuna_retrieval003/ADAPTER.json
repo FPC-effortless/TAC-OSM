@@ -1,0 +1,13 @@
+{
+  "study": "LACUNA-RETRIEVAL003",
+  "native_adapter": "research/mathematical-engineering/langmem086/probe_adapter086.py:adapter086",
+  "native_inputs": ["tokens:int64[B,T] observed bytes", "owners:distinct explicit strings", "original StreamState086"],
+  "prediction_boundary": "observed x[0:t+1] only; target x[t+1] enters scorer after every prediction",
+  "evaluator_adapter": "scripts/lacuna_retrieval003.py:override_slow_read",
+  "native_read_consumers": {"fast": "last8", "slow": "last8", "norm": "96:104"},
+  "counterfactual_state_policy": "discard; never advance native trajectory with patched state",
+  "historical_address": "evaluator supplied, prefix context selected, encodes no historical value byte",
+  "actor_capability_from_privileged_conditions": false,
+  "unimplemented_probes": ["full_parameter_AD", "formal_IEEE", "independent_qualification"],
+  "all_prior_failed_utility_gates_preserved": true
+}

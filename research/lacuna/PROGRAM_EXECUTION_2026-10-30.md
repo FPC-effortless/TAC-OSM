@@ -88,3 +88,23 @@ All eligibleP0checks are executed; trained integrations remain unstarted under
 the registered utility/data/math/budget prerequisites. Do not equate component
 screens with learned swaprounding, actual stale-fact unlearning or full-model
 architectural comparisons. No scientific negative is omitted or redefined.
+# Follow-up: LACUNA-RETRIEVAL003 (separate prospective protocol)
+
+The undefined query/raw-history comparison and readout/amplitude controls were
+resolved in [draft639](https://github.com/FPC-effortless/TAC-OSM/pull/639).
+Protocol f18085cd4d6e1c5cb86644c61393a49575cd8d3e preceded acquisition of two new
+CPython DEV source documents. Three preserved640checkpoints completed the
+four-condition storage/address diagnostic, with explicit wrong-address/value
+shuffles and256Bbank payloads. All source integrity checks passed.
+
+[Original run41007483485](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41007483485)
+and [full report](../evidence/lacuna_retrieval003/RESULTS.md):678measurements,
+226distinct source/query/bin cells,154current positions shared across3seeds.
+Supplied-key raw-history byte recovery21–35% exceeds supplied-key compressed
+matrix5–6%, but no condition passes the registered next-byte utility gate.
+Favorable short-age averages and failed strata/controls are preserved.
+
+This extends the diagnosis, not the stopped training sweep. Bank matching is
+not whole-model autonomous state parity; evaluator extra memory is disclosed.
+001/002/088 original negatives remain unchanged. Scoped PNDS89passed; full
+neural IEEE/AD and independent qualification remain OPEN.
