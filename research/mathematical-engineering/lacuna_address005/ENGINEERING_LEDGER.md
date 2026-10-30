@@ -14,3 +14,13 @@
   trajectory advances, all intervention states discarded. Missing controls and
   degeneracies retained and block relevant direction gates; no adaptive retries.
 - Original prior utility gates and stopped training sweep remain unchanged.
+- Original scientific run41015666434 passed integrity on first execution,
+  source8e2b160cc014448384a52c3521db6b4456677ba6. Primary status inconclusive
+  because219measurements lack age-matched irrelevant control; core observed
+  correct-minus-wrong margin0.00001715below0.001. No numerical fallback.
+- Initial full local suite1650passed/4skipped/1failed and sourceCI41015666492
+  failed on missing future report-verifier path. Added the verifier; targeted
+  reference checks2passed and final full local suite1651passed/4skipped. This
+  repaired reporting integration only; no inference/scientific gates changed.
+- Original ZIP, full rows/vectors and compact summary retained; read-only source,
+  cohort, norm, balance and gate recomputation passed. No empirical rerun.

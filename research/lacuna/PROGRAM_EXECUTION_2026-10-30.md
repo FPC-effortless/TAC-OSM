@@ -122,3 +122,19 @@ still change. This does not reopen any previous gate or the trained sweep.
 [Original run41010825969](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41010825969)
 and [full result/limitations](../evidence/lacuna_readnorm004/RESULTS.md) preserve
 the positive signal, small control margin, failing strata and prior negatives.
+
+## Fresh-source LACUNA-ADDRESS005
+
+[TAC650](https://github.com/FPC-effortless/TAC-OSM/pull/650)/[PNDS93](https://github.com/FPC-effortless/pnds-lean/pull/93)
+ran six registered PSF/Rust documents with frozen original models, historical,
+total-slow and mixed-read norms matched. All integrity checks passed. Primary
+correct-versus-wrong delta0.00001715NLL is below required0.001 and negative in
+two document groups. All document support minima were met, but219primary
+measurements lacked a required same-age irrelevant control: formal primary
+INCONCLUSIVE_SUPPORT_OR_CONTROL, preserved without posthoc exclusions. Older
+bins and autonomous-query/all-query utility gates did not pass. Native query
+context hits0.162% versus uniform random2.378% under the tested key scheme.
+[Original run41015666434](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41015666434)
+and [full report](../evidence/lacuna_address005/RESULTS.md) retain7794matched
+measurements/2598source cells and17280all-query measurements/5760source positions.
+Old gates stay unchanged, these sources are now exposed, and training staysstopped.
