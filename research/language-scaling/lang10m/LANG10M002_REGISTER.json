@@ -1,0 +1,101 @@
+{
+  "study": "LANG10M002",
+  "status": "DRAFT_UNTRAINED_CORPUS_AND_CONTROLS",
+  "execution_level": "internal_research",
+  "parent": "LANG10M001",
+  "source_branch": "research/lang10m002-controls-corpus-2026-10-30",
+  "unchanged_originals": [
+    "CODEVALUE003",
+    "CODEVALUE004",
+    "LANG10M001 tokenizer and GPU measurements"
+  ],
+  "objective": "Determine whether tokenized TAC can learn general language from diverse authentic data and compare fairly to 10M GRU, simple selective diagonal SSM and causal Transformer.",
+  "arms": [
+    {
+      "name": "tac",
+      "parameters": 10001188,
+      "implementation": "model.py"
+    },
+    {
+      "name": "gru",
+      "parameters": 9995660,
+      "implementation": "controls.py"
+    },
+    {
+      "name": "selective_diagonal_ssm",
+      "parameters": 10002288,
+      "implementation": "controls.py",
+      "not_mamba": true
+    },
+    {
+      "name": "causal_transformer",
+      "parameters": 10001940,
+      "implementation": "controls.py"
+    }
+  ],
+  "parameter_match_rule": "abs(n / 10001188 - 1) <= 0.01, same for deployed params, actual constructor audit before fit",
+  "tokenizer": {
+    "pilot": "LANG10M001 BPE4096 v1 fitted on code/docs",
+    "training_candidate": "FUTURE BPE4096 v2, fit only larger authentic mixed FIT, freeze model SHA before matched arms",
+    "eval_metric": "bits per UTF8 byte; token NLL alone cannot compare tokenizers"
+  },
+  "training_budget": {
+    "optimizer_steps": "UNSET",
+    "tokens_per_model": "UNSET",
+    "seed_count": "UNSET",
+    "LR_schedule": "UNSET",
+    "training_FLOPs": "UNMEASURED",
+    "T4_runtime": "UNMEASURED",
+    "no_GPU_allocation": true
+  },
+  "corpus": {
+    "schema": "original-source-v1",
+    "FIT_min_token_positions_planning": 50000000,
+    "full_run_reference_tokens": 200000000,
+    "source_licensing": "INCOMPLETE",
+    "near_dedup": "OPEN",
+    "publisher_boundary": "REQUIRED",
+    "dev_transfer_partitions": "NOT_YET_FROZEN",
+    "unique_text_evidence": "NOT_ESTABLISHED"
+  },
+  "precision": {
+    "reference": "FP32",
+    "AMP": "OPEN_ZERO_GRADIENT_TENSORS_UNSCALED",
+    "stability": "NOT_TRAINED"
+  },
+  "source_splits": {
+    "FIT": "original authenticated publisher material only",
+    "SELECT_DEV": "separate publishers",
+    "TRANSFER_DEV": "separate unseen publishers, never used for fit or checkpoint selection",
+    "TEST": "PROTECTED_NOT_OPENED"
+  },
+  "preflight": [
+    "Actual counts and per-arm causal masks",
+    "FIT-only tokenizer training and source receipts",
+    "license/PII/opt-out audit",
+    "exact and near-duplicate exclusion including prior published benchmarks",
+    "same token sample windows and labels across all arms",
+    "identical training updates/batch/context and DEV selection access",
+    "cost/FLOP/throughput receipts and optimizer precision parity",
+    "checkpoint model+optimizer+RNG+sampler and cold replay",
+    "PNDS partial mathematical obligations disclosed"
+  ],
+  "metrics": [
+    "bits/UTF8 byte",
+    "token weighted NLL",
+    "calibration",
+    "document-level transfer",
+    "training and decoding throughput",
+    "peak VRAM",
+    "memory retention/long context",
+    "parameter efficiency",
+    "learning curves"
+  ],
+  "no_fit": true,
+  "no_runtime_training": true,
+  "no_revenue_claim": true,
+  "no_architecture_superiority_claim": true,
+  "global_100k_rule": "Unchanged; separate owner-scoped 10M training exception and parity manifest required before any optimizer updates",
+  "pnds": "LANG10M001 partial only; new controls do not have whole-model formalization; OPEN",
+  "decision": "No 10M fit until data, source, parity, math, numerical and compute gates registered."
+}
