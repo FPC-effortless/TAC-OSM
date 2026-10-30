@@ -1,13 +1,13 @@
 {
   "schema": "langacquire097.postfit-review.v1",
-  "evaluation_enabled": false,
+  "evaluation_enabled": true,
   "review_attempt": 1,
   "training_run_id": 41137837235,
   "training_source_commit": "d21c7e7b385ca164eac9046fafca43fc9a3762b1",
   "initialization_run_id": 41137176363,
   "initialization_artifact_name": "langacquire097-preflight-41137176363",
   "initialization_archive_sha256": "f750810ce2222f4f22fb1fa4981a91fb537a094330c9f98578e9edbe577d6abf",
-  "reviewed_driver_sha256": null,
+  "reviewed_driver_sha256": "3a0efcdceeefd84f83375095598de4567ae4f025a7dad3c8df569afa87d698ed",
   "no_new_model_fits": true,
   "model_weights_data_scorer_thresholds_unchanged": true,
   "reason": "The original postfit parser only recognizes ATen names and rejects two zero-tensor profiler markers emitted by AdamW. Preserve all original training weights and traces; repair only their format interpretation.",
@@ -22,5 +22,14 @@
   "max_evaluation_minutes": 40,
   "whole_model_proof": "OPEN",
   "architecture_superiority_eligible": false,
-  "general_intelligence_established": false
+  "general_intelligence_established": false,
+  "pre_evaluation_checkpoint_audit": {
+    "path": "research/mathematical-engineering/langacquire097/results/PRE_EVALUATION_CHECKPOINT_AUDIT.json",
+    "sha256": "a306595f1ae53adae282075f12dba7b61de91d75f5b701c7f0c002f364fa5346",
+    "status": "PASS_ALL_40_ORIGINAL_CHECKPOINTS",
+    "fits_verified": 40,
+    "new_optimizer_steps": 0
+  },
+  "original_evaluation_failed_before_DEV": true,
+  "original_evaluation_job_id": 124357486230
 }

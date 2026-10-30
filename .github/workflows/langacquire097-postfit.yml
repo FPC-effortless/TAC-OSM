@@ -49,10 +49,19 @@ jobs:
           assert cfg['initialization_run_id']==41137176363
           if requested:
               assert hashlib.sha256(open('scripts/langacquire097_postfit_review.py','rb').read()).hexdigest()==cfg['reviewed_driver_sha256']
+              entry=cfg['pre_evaluation_checkpoint_audit'];raw=open(entry['path'],'rb').read()
+              assert hashlib.sha256(raw).hexdigest()==entry['sha256']
+              audit=json.loads(raw)
+              assert audit['status']=='PASS_ALL_40_ORIGINAL_CHECKPOINTS' and len(audit['fits'])==40 and not audit['errors']
+              assert audit['source_commit']==cfg['training_source_commit']
+              assert audit['model_forward_calls']==0 and audit['optimizer_steps']==0
           with open(os.environ['GITHUB_OUTPUT'],'a') as out:
               out.write('evaluate='+str(bool(requested)).lower()+'\n')
           print('Evaluation-only review requested:',bool(requested),'; new fits prohibited')
           PY
+      - name: Confirm the registered bounded CPU evaluation route
+        if: steps.route.outputs.evaluate == 'true'
+        run: python scripts/phone_lab.py plan research/phone_queue/langacquire097-evaluate.json > /tmp/langacquire097-postfit-plan.json
       - name: Verify all ten original fit jobs succeeded
         if: steps.route.outputs.evaluate == 'true'
         env:
@@ -74,6 +83,9 @@ jobs:
                   assert job['status']=='completed' and job['conclusion']=='success',job['name']
                   found.add(match.groups())
           assert found==expected,'All original fit jobs are required before review'
+          original_evaluation=[j for j in jobs if j['name']=='evaluate']
+          assert len(original_evaluation)==1 and original_evaluation[0]['status']=='completed'
+          assert original_evaluation[0]['conclusion']=='failure','Preserve the original rejected verifier attempt before a separate review'
           print('All10 original objective legs succeeded; require tensor/checkpoint verification next')
           cfg=json.load(open('research/mathematical-engineering/langacquire097/POSTFIT_REVIEW.json'))
           artifacts=get('/actions/runs/41137176363/artifacts?per_page=100')['artifacts']
@@ -119,6 +131,8 @@ jobs:
           out=Path('ci-artifacts/postfit-review/review-source');out.mkdir(parents=True,exist_ok=True)
           for name in ('scripts/langacquire097_postfit_review.py','tests/test_langacquire097_postfit_review.py','.github/workflows/langacquire097-postfit.yml','research/mathematical-engineering/langacquire097/POSTFIT_REVIEW.json'):
               shutil.copyfile(name,out/Path(name).name)
+          plan=Path('/tmp/langacquire097-postfit-plan.json')
+          if plan.is_file():shutil.copyfile(plan,out/'PHONE_EVALUATION_PLAN.json')
           root=Path('original-source').resolve()
           if root.exists():
               tracked=set(subprocess.check_output(['git','ls-files','-z'],cwd=root).decode().split('\0'))-{''}
@@ -138,6 +152,19 @@ jobs:
                   shutil.copyfile(source,target)
                   recorded[name]={'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'bytes':target.stat().st_size}
               (out/'ORIGINAL_TRACKED_SOURCE_FILES.json').write_text(json.dumps({'training_source_commit':'d21c7e7b385ca164eac9046fafca43fc9a3762b1','files':recorded},indent=2,sort_keys=True)+'\n')
+          fits=Path('/tmp/langacquire097-original-fits')
+          records={}
+          if fits.exists():
+              for leg in sorted(fits.iterdir()):
+                  assert leg.is_dir() and not leg.is_symlink()
+                  for source in sorted(leg.iterdir()):
+                      if not source.is_file():continue
+                      assert not source.is_symlink() and source.suffix in ('.json','.log')
+                      name=source.relative_to(fits).as_posix()
+                      target=out/'original-fit-leg-records'/name;target.parent.mkdir(parents=True,exist_ok=True)
+                      shutil.copyfile(source,target)
+                      records[name]={'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'bytes':target.stat().st_size}
+              (out/'ORIGINAL_FIT_LEG_RECORDS.json').write_text(json.dumps({'training_run_id':41137837235,'files':records},indent=2,sort_keys=True)+'\n')
           data=Path('/tmp/langacquire097-postfit-data')
           if data.exists():
               frozen=json.loads(Path('original-source/research/mathematical-engineering/langacquire097/FROZEN_INPUTS.json').read_text())
