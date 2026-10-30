@@ -1,0 +1,33 @@
+name: LANG10M002 no-fit matched controls and corpus gate
+on:
+  pull_request:
+    paths:
+      - 'research/language-scaling/lang10m/controls.py'
+      - 'research/language-scaling/lang10m/corpus_gate.py'
+      - 'research/language-scaling/lang10m/test_controls_and_corpus.py'
+      - 'research/language-scaling/lang10m/LANG10M002*'
+      - '.github/workflows/lang10m002-no-fit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  constructed-no-fit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: CPU-only test dependencies
+        run: |
+          python -m pip install pytest==8.4.2 numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify actual parameter parity, causal prefix, gradients and source boundary
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m pytest -q research/language-scaling/lang10m/test_controls_and_corpus.py
