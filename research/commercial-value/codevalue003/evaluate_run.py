@@ -130,9 +130,9 @@ def summarize(out):
                 diffs.extend(tac[f]-rate(byfile[f]) for f in files)
             gains.append(float(np.mean(diffs)))
         lo,hi=np.quantile(gains,[.025,.975])
-        groupwins=sum(np.mean([tac[f]-rate(byfile[f]) for f in files])>0 for files in groups.values())
+        groupwins=int(sum(np.mean([tac[f]-rate(byfile[f]) for f in files])>0 for files in groups.values()))
         b_rate=np.mean([rate(r) for r in byfile.values()])
-        seedwins=sum(r['exact4_rate']>b_rate for r in models['tac'])
+        seedwins=int(sum(r['exact4_rate']>b_rate for r in models['tac']))
         ci[b]={'mean_gain':float(np.mean([tac[f]-rate(byfile[f]) for f in tac])),
                'paired_hierarchical95ci':[float(lo),float(hi)],'publisher_wins':groupwins,
                'seed_wins':seedwins,'uncertainty_limit':'Conditional on three observed seed realizations; publisher/file bootstrap does not integrate optimization-seed uncertainty.'}

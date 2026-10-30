@@ -133,3 +133,29 @@ def test_bootstrap_verifies_both_kaggle_mount_forms(tmp_path,monkeypatch,auto_un
     exec(compile(script,'bootstrap-test','exec'),{})
     assert calls[0][1]['max_seconds']==7020
     assert (working/'offline-bundle/data/SOURCE_RECEIPT.json').is_file()
+
+def test_complete_summary_serializes_numpy_derived_counts(tmp_path):
+    from evaluate_run import summarize
+    from core import ARMS,SEEDS,MILESTONES
+    folder=tmp_path/'scores';folder.mkdir()
+    def write(name,predictor,partition,file,seed=None,step=None):
+        row={'predictor':predictor,'source':{'file':file,'partition':partition,
+             'group':f'publisher-{int(file)//2}'},'targets':10,
+             'nll_sum':9 if step==10240 else 10,'top1':5,
+             'offers':[{'exact':{'4':int(predictor not in ('p3','wb6'))}}]}
+        if seed is not None:row['seed']=seed;row['step']=step
+        (folder/(name+'.json')).write_text(json.dumps(row))
+    for arm in ARMS:
+        for seed in SEEDS:
+            for step in MILESTONES:
+                for file in range(6):write(f'{arm}-{seed}-{step}-dev{file}',arm,'DEV',str(file),seed,step)
+            for file in range(20,30):write(f'{arm}-{seed}-transfer{file}',arm,'TRANSFER_DEV',str(file),seed,10240)
+    for baseline in ('p3','wb6'):
+        for file in range(20,30):write(f'{baseline}-{file}',baseline,'TRANSFER_DEV',str(file))
+    summarize(tmp_path)
+    result=json.loads((tmp_path/'RESULTS.json').read_text())
+    assert result['status']=='COMPLETE_INTERNAL_RESEARCH'
+    assert result['tac_exact4_transfer_gains']['p3']['publisher_wins']==5
+    assert result['tac_exact4_transfer_gains']['p3']['seed_wins']==3
+    assert result['utility_screen']=='PASS_CONSIDER_HUMAN_PILOT'
+    assert result['commercial_viability_proved'] is False

@@ -1,9 +1,11 @@
 # CODEVALUE003: longer500K code-language training on dual T4s
 
-Status: implementation checked; private Kaggle submission is recorded separately
-in SUBMISSION.json when accepted. No training result is inferred from packaging,
-local tests or a queued kernel. All CODEVALUE002 original results/checkpoints
-remain unchanged. PR656 is the source/evidence review, not a model promotion.
+Status: all9 fits and45 checkpoints completed; all392 score files recovered.
+The remote kernel ended in ERROR during final JSON summary serialization;
+local recovery fixed only NumPy win-count integer conversion, without retraining
+or producing new predictions. See [RESULTS.md](RESULTS.md), [RECOVERY.json](RECOVERY.json)
+and the unchanged remote [RUNTIME.json](RUNTIME.json). Utility screen: FAIL.
+Original CODEVALUE002 evidence remains unchanged.
 
 The owner requested longer training and better language/usefulness tests, then
 provided a Kaggle credential on2026-10-30. This named follow-up uses exactly the
