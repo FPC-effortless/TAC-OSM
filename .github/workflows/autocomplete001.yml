@@ -1,0 +1,84 @@
+name: AUTOCOMPLETE001 authentic Flask code autocomplete value screen
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'research/commercial-value/**'
+      - '.github/workflows/autocomplete001.yml'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install CPU-only scientific dependencies
+        run: |
+          python -m pip install pytest==8.4.2 numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Constructed source/denominator/prequential gate; not a commercial score
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          PYTHONPATH=src:. python -m pytest -q research/commercial-value/test_autocomplete001.py
+  original_frozen_eval:
+    needs: preflight
+    if: github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM' && github.event.pull_request.head.ref == 'research/commercial-autocomplete001-2026-10-30'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: write
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install CPU-only scientific dependencies
+        run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: No-fit real source checks and original checkpoint predictions
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -s research/commercial-value/AUTOCOMPLETE001_RESULTS.json ]; then
+            echo "Original sealed no-fit report already committed; no repeated evaluation"
+          else
+            python research/commercial-value/autocomplete001.py --output research/commercial-value/AUTOCOMPLETE001_RESULTS.json
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: AUTOCOMPLETE001-original-no-fit-results
+          path: research/commercial-value/AUTOCOMPLETE001_RESULTS.json
+          retention-days: 90
+      - name: Commit original evidence to separate draft branch; never merge
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/commercial-value/AUTOCOMPLETE001_RESULTS.json
+          if git ls-files --error-unmatch research/commercial-value/AUTOCOMPLETE001_RESULTS.json >/dev/null 2>&1; then
+            echo "Already archived report unchanged"
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/commercial-value/AUTOCOMPLETE001_RESULTS.json
+            git commit -m "AUTOCOMPLETE001: archive original Flask code prediction scores; no fit"
+            git push origin "HEAD:${{ github.head_ref }}"
+          fi
