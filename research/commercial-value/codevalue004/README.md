@@ -1,9 +1,10 @@
 # CODEVALUE004: generalization before architecture expansion
 
-Status: preregistered implementation under validation; submission and observations
-are recorded in SUBMISSION.json if Kaggle accepts the run. CODEVALUE003 is an
-unchanged historical reference. This study changes training data and learning
-rate scheduling, not the model graph or memory capacity.
+Status: completed successfully on two physically verified T4s. All24 fits,
+120 checkpoints and24 DEV-only selections passed artifact verification.
+Primary generalization gate PASS; all TAC utility screens FAIL. See
+[RESULTS.md](RESULTS.md) and [VERIFICATION.json](VERIFICATION.json).
+CODEVALUE003 remains unchanged; no protocol or checkpoint was rewritten.
 
 ## Fixed experiment
 
