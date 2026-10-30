@@ -3,7 +3,7 @@ import sys,torch,hashlib,pytest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'research/mathematical-engineering/langmem085'))
-from operators import ARMS,AGES,write,prospective_wrong_keys,context_key,byte_book,decode
+from operators085 import ARMS,AGES,write,prospective_wrong_keys,context_key,byte_book,decode
 
 def test_five_256byte_no_train_value_and_key_arms():
     assert ARMS==('source','overwrite','partial025','residual_clip035','selective')
