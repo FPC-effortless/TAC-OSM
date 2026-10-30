@@ -40,7 +40,7 @@ jobs:
         run: |
           python scripts/phone_lab.py plan research/phone_queue/langhead094.json
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langhead094/FAIR_COMPARISON.json --phase preflight
-          PYTHONPATH=src:. python -m pytest -q research/mathematical-engineering/langhead094/test_model093.py tests/test_research_probe_agnostic.py
+          PYTHONPATH=src:. python -m pytest -q research/mathematical-engineering/langhead094/test_model094.py tests/test_research_probe_agnostic.py
   train:
     needs: preflight
     if: needs.preflight.outputs.fit == 'true' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
