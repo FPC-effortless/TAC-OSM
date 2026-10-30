@@ -24,7 +24,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 3
+      - name: Detect new scientific inputs in the head commit
+        id: changes
+        env:
+          REQUESTED_EVENT: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import os, re, subprocess
+          commit = os.environ['PREREGISTRATION_COMMIT']
+          if re.fullmatch('[0-9a-f]{40}', commit) is None:
+              raise ValueError('a complete source commit is required')
+          changed = subprocess.check_output(
+              ['git', 'diff-tree', '--root', '--no-commit-id', '--name-only', '-r', commit],
+              text=True).splitlines()
+          root = 'research/mathematical-engineering/langpersist096/'
+          scientific = any(
+              (path.startswith(root) and not path.startswith(root + 'results/'))
+              or path.startswith('tests/test_langpersist096_')
+              or path == 'research/phone_queue/langpersist096-real-state-utility.json'
+              for path in changed)
+          # PR path filters inspect the cumulative diff. Report/workflow-only
+          # commits still run software checks; explicit dispatch runs the study.
+          run = os.environ['REQUESTED_EVENT'] == 'workflow_dispatch' or scientific
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('research=' + str(run).lower() + '\n')
+          print('New model evaluation required:', run)
+          PY
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -37,6 +63,7 @@ jobs:
       - name: Software, information-boundary and source-streaming checks
         run: python -m pytest -q tests/test_langpersist096_*.py tests/test_research_probe_agnostic.py
       - name: Frozen real-data lexical and general capability study
+        if: steps.changes.outputs.research == 'true'
         run: >-
           python research/mathematical-engineering/langpersist096/run.py
           --cache /tmp/langpersist096-cache
