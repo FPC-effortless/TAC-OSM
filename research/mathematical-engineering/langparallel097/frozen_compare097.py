@@ -123,7 +123,7 @@ def run(arm,seed,root,output,source_root):
  torch.set_num_threads(2);torch.manual_seed(seed)
  model,original=artifacts(root,arm,seed)
  docs=load_docs(source_root)
- results={'study':'LANGPARALLEL096','experiment':'FROZEN_HISTORICAL_NO_NEW_FIT',
+ results={'study':'LANGPARALLEL097','experiment':'FROZEN_HISTORICAL_NO_NEW_FIT',
   'original':original,'source_commit':COMMIT,'evaluation_publisher':'rust-lang/book',
   'evaluation_source_published_before_current_study':True,'evaluation_previously_exposed_in_OTHER_studies':True,
   'source_docs':{n:{'git_blob':DOCS[n],'sha256':sha(raw),'source_bytes':len(raw)} for n,raw in docs.items()},
