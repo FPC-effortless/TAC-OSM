@@ -12,27 +12,53 @@ ROOT=HERE.parents[2]
 
 BOOTSTRAP='''"""CODEVALUE003 private offline exact-source dual-T4 run."""
 import hashlib
+import json
 from pathlib import Path
 import runpy
+import shutil
 import sys
 import zipfile
 
 EXPECTED_ARCHIVE_SHA256 = {archive_sha!r}
-candidates=list(Path('/kaggle/input').rglob('bundle.zip'))
-matching=[p for p in candidates if hashlib.sha256(p.read_bytes()).hexdigest()==EXPECTED_ARCHIVE_SHA256]
-if len(matching)!=1:raise RuntimeError('expected one exact reviewed offline dataset archive')
+EXPECTED_MANIFEST_SHA256 = {manifest_sha!r}
 root=Path('/kaggle/working/offline-bundle')
 if root.exists():raise RuntimeError('refuse to overwrite extracted original bundle')
-root.mkdir()
-with zipfile.ZipFile(matching[0]) as z:
-    for info in z.infolist():
-        if not (root/info.filename).resolve().is_relative_to(root.resolve()):
-            raise RuntimeError('unsafe archive path')
-    z.extractall(root)
-script=root/'repo/research/kaggle_workloads/codevalue003.py'
-sys.argv=[str(script),'--bundle-root',str(root),'--output','/kaggle/working/CODEVALUE003']
-runpy.run_path(str(script),run_name='__main__')
+candidates=list(Path('/kaggle/input').rglob('bundle.zip'))
+matching=[p for p in candidates if hashlib.sha256(p.read_bytes()).hexdigest()==EXPECTED_ARCHIVE_SHA256]
+if len(matching)==1:
+    root.mkdir(parents=True)
+    with zipfile.ZipFile(matching[0]) as z:
+        for info in z.infolist():
+            if not (root/info.filename).resolve().is_relative_to(root.resolve()):
+                raise RuntimeError('unsafe archive path')
+        z.extractall(root)
+else:
+    manifests=list(Path('/kaggle/input').rglob('BUNDLE_MANIFEST.json'))
+    matched=[p for p in manifests if hashlib.sha256(p.read_bytes()).hexdigest()==EXPECTED_MANIFEST_SHA256]
+    if len(matched)!=1:raise RuntimeError('expected exact reviewed manifest in Kaggle auto-unpacked dataset')
+    shutil.copytree(matched[0].parent,root)
+manifest_path=root/'BUNDLE_MANIFEST.json'
+if hashlib.sha256(manifest_path.read_bytes()).hexdigest()!=EXPECTED_MANIFEST_SHA256:
+    raise RuntimeError('reviewed bundle manifest mismatch')
+manifest=json.loads(manifest_path.read_text())
+for name,digest in manifest['files'].items():
+    path=(root/name).resolve()
+    if not path.is_relative_to(root.resolve()) or not path.is_file():raise RuntimeError('missing/escaped bundle file')
+    if hashlib.sha256(path.read_bytes()).hexdigest()!=digest:raise RuntimeError('reviewed bundle file changed')
+script=root/'repo/research/commercial-value/codevalue003/coordinator.py'
+sys.path.insert(0,str(script.parent))
+namespace=runpy.run_path(str(script))
+namespace['run'](root/'data',Path('/kaggle/working/CODEVALUE003'),max_seconds={max_seconds})
 '''
+
+
+def bootstrap(archive, max_seconds=7140):
+    archive=Path(archive)
+    with zipfile.ZipFile(archive) as z:
+        manifest_sha=hashlib.sha256(z.read('BUNDLE_MANIFEST.json')).hexdigest()
+    return BOOTSTRAP.format(archive_sha=hashlib.sha256(archive.read_bytes()).hexdigest(),
+                            manifest_sha=manifest_sha,max_seconds=max_seconds)
+
 
 
 def files():
@@ -76,7 +102,7 @@ def package(data,out,user,require_clean=True):
                   'title':'CODEVALUE003 private offline code and runner',
                   'licenses':[{'name':'other'}]}
     (dataset/'dataset-metadata.json').write_text(json.dumps(dataset_meta,indent=2)+'\n')
-    (kernel/'main.py').write_text(BOOTSTRAP.format(archive_sha=archive_sha))
+    (kernel/'main.py').write_text(bootstrap(archive))
     metadata={'id':user+'/tacosm-codevalue003-long-t4x2-v1','title':'CODEVALUE003 longer500K code language T4x2',
               'code_file':'main.py','language':'python','kernel_type':'script',
               'is_private':'true','enable_gpu':'true','enable_internet':'false',

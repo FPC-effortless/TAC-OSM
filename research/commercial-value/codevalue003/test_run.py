@@ -112,3 +112,24 @@ def test_package_excludes_credentials_and_pins_archive(tmp_path):
     assert metadata['machine_shape']=='NvidiaTeslaT4'
     dataset_metadata=json.loads((staged/'dataset/dataset-metadata.json').read_text())
     assert 6<=len(dataset_metadata['title'])<=50
+
+@pytest.mark.parametrize('auto_unpacked',[False,True])
+def test_bootstrap_verifies_both_kaggle_mount_forms(tmp_path,monkeypatch,auto_unpacked):
+    from package_run import package,bootstrap
+    import runpy
+    import shutil
+    import zipfile
+    data=tmp_path/'data';data.mkdir();(data/'SOURCE_RECEIPT.json').write_text('{}')
+    stage=tmp_path/'stage';package(data,stage,'testaccount',require_clean=False)
+    archive=stage/'dataset/bundle.zip'
+    input_root=tmp_path/'input';input_root.mkdir()
+    if auto_unpacked:
+        with zipfile.ZipFile(archive) as z:z.extractall(input_root/'dataset')
+    else:shutil.copy(archive,input_root/'bundle.zip')
+    working=tmp_path/'working';working.mkdir()
+    calls=[]
+    monkeypatch.setattr(runpy,'run_path',lambda path:{'run':lambda *a,**kw:calls.append((a,kw))})
+    script=bootstrap(archive,max_seconds=7020).replace('/kaggle/input',str(input_root)).replace('/kaggle/working',str(working))
+    exec(compile(script,'bootstrap-test','exec'),{})
+    assert calls[0][1]['max_seconds']==7020
+    assert (working/'offline-bundle/data/SOURCE_RECEIPT.json').is_file()
