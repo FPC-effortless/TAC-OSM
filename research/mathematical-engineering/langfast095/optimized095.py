@@ -94,6 +94,7 @@ class OptimizedCompactTAC095(nn.Module):
         if tokens.min()<0 or tokens.max()>255:raise ValueError('byte vocabulary')
         # LANGFAST095: identical schema and finiteness checks, without allocating
         # nine all-zero reference tensors during every single-byte decode.
+        if not owners or len(set(owners))!=len(owners) or any(type(o) is not str or not o for o in owners):raise ValueError('explicit unique owners')
         expected_shapes={'fast_memory':(8,8),'slow_memory':(8,8),'aligned':(2,8,8),
             'wave':(4,2),'basis':(48,),'concepts':(4,8),'lexical':(3,32),
             'previous_writer':(8,),'upper':(32,)}
