@@ -1,10 +1,10 @@
 {
   "study": "CODEVALUE003",
-  "status": "DRAFT_BLOCKED_NOT_TRAINED",
+  "status": "REGISTERED_VALIDATED_AWAITING_SUBMISSION",
   "execution_level": "internal_research",
   "parent_commit": "e73cfeb68f7a462ed25bdaf4ac164f6235b41bd1",
   "owner_request": "2026-10-30: Run CODEVALUE002 follow-up on Kaggle dual T4s with longer training and better language/commercial usefulness tests.",
-  "parameter_budget_contract": "owner-2026-10-30-codevalue003-500k-proposed",
+  "parameter_budget_contract": "owner-2026-10-30-codevalue003-500k",
   "objective": "Determine whether longer optimization improves unseen-project code prediction enough to justify a human utility pilot.",
   "arms": {
     "tac": {
@@ -198,12 +198,14 @@
       "gru",
       "ssm"
     ],
-    "timeout_outcome": "INCOMPLETE; retain latest complete checkpoints, receipts and worker logs; no full-cohort aggregate"
+    "timeout_outcome": "INCOMPLETE; retain latest complete checkpoints, receipts and worker logs; no full-cohort aggregate",
+    "hard_deadline_seconds": 7140,
+    "quota_authorization": "Owner explicitly requested this dual-T4 experiment and supplied Kaggle credential2026-10-30; direct API launch is in scope; no additional allocations or automatic retries."
   },
   "evaluation": {
     "exposed_dev": "Full-file next-byte learning curves at every frozen checkpoint; no selection on transfer cohort.",
-    "fresh_transfer": "Candidate five publishers/two files each pinned in TRANSFER_SOURCES.json. Byte SHA256 verification, license text archival, historical exposure and duplicate audits pending.",
-    "fresh_transfer_status": "METADATA_PINNED_CONTENT_AND_EXPOSURE_AUDIT_PENDING",
+    "fresh_transfer": "Five additional publisher projects/two files each, exact bytes verified in SOURCE_RECEIPT.json; historical exposure audit INCONCLUSIVE, no strict blind claim.",
+    "fresh_transfer_status": "PINNED_BYTE_VERIFIED_LICENSE_ARCHIVED_SAMPLED_DUPLICATE_SCREEN_PASS",
     "fresh_transfer_labels_open": "Source metadata API may return encoded content; no strict-blind claim. Scoring only after all nine final checkpoints sealed, once; no subsequent tuning.",
     "protected_TEST": "NOT_OPENED",
     "scoring": "Every byte after first 64 bytes of each file, once. Causal windows 128 bytes, score final 64; final partial block masks missing targets; reset per window and per file. Same windows and masks for all predictors.",
@@ -234,7 +236,9 @@
       "p50/p95 synchronized greedy suggestion latency",
       "peak CPU RSS and allocated/reserved GPU memory",
       "checkpoint size and logical classical count storage"
-    ]
+    ],
+    "generation_context": "Rolling128-byte prefix, recompute the original window-reset model after each emitted byte; no native streaming claim.",
+    "latency": "Batch1 sixteen measured offers aftereight warmup offers on firstDEV file per model; batched timing reported separately."
   },
   "baselines": {
     "required": [
@@ -269,19 +273,16 @@
       "numeric training-compute receipts and scope",
       "all failed seeds and timeouts retained"
     ],
-    "unimplemented_checks": "INCONCLUSIVE; cannot be represented as PASS"
+    "unimplemented_checks": "INCONCLUSIVE; cannot be represented as PASS",
+    "partial_compute_profile": "Prefit original B8x128 forward+backward torch.profiler supported FLOPs only; incomplete operator coverage; no matched-FLOP or architecture-superiority claim."
   },
-  "blockers": [
-    "Kaggle authentication and account username not available in current environment; protected GitHub secret configuration cannot be inspected with current token (403).",
-    "Candidate transfer commit/blob/license metadata pinned; actual byte hashes, license text archival, historical exposure and duplicate audits pending.",
-    "Reviewed runnable offline training/evaluation bundle and private Kaggle data source not yet implemented.",
-    "FAIR_COMPARISON preflight is not satisfied: scope-specific500K authorization needs validator integration; numerical compute-budget receipts absent.",
-    "Protected Kaggle execution workflow still requires signed evidence unconditionally despite internal_research amendment; needs reviewed integration."
-  ],
+  "blockers": [],
   "qualification": {
     "no_architecture_superiority_claim": true,
     "commercial_viability_proved": false,
     "independently_qualified": false,
     "pnds": "Reuse exact parent architecture; whole-model composed Lean/IEEE/AD certification remains OPEN."
-  }
+  },
+  "source_receipt": "research/commercial-value/codevalue003/SOURCE_RECEIPT.json",
+  "source_cohort_sha256": "f3d485d9097ed63dee8bec98704f982b6426ffbba099278d411aca8a350fa3bf"
 }

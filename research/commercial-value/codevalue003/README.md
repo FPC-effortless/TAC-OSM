@@ -1,99 +1,107 @@
-# CODEVALUE003: longer 500K code-language training on dual T4s
+# CODEVALUE003: longer500K code-language training on dual T4s
 
-**Status: draft protocol, blocked; no Kaggle submission or new training.**
-This change does not include a runnable training/evaluation bundle. The owner
-requested a longer dual-T4 follow-up to CODEVALUE002 on 2026-10-30. Existing
-CODEVALUE002 scores, checkpoints, code and negative commercial result are intact.
+Status: implementation checked; private Kaggle submission is recorded separately
+in SUBMISSION.json when accepted. No training result is inferred from packaging,
+local tests or a queued kernel. All CODEVALUE002 original results/checkpoints
+remain unchanged. PR656 is the source/evidence review, not a model promotion.
 
-## Proposed experiment
+The owner requested longer training and better language/usefulness tests, then
+provided a Kaggle credential on2026-10-30. This named follow-up uses exactly the
+original499623p TAC,500165p GRU and499782p simple selective SSM, three paired
+seeds, original PSF CPython code, B8x128 and10240 AdamW updates/model. That is
+10,485,760 next-byte training labels per model,32 times the old exposure. All
+three models restart from scratch, retain a constant learning rate and have no
+tuning. Keeping the corpus/architecture fixed isolates longer optimization;
+overfitting to the small repeated corpus is a possible negative outcome.
 
-Run the exact 499,623p graph-free upper48 TAC and original 500,165p GRU /
-499,782p simple selective SSM from scratch on the original pinned CPython code.
-Three paired seeds; batch8 x128 next-byte targets; 10,240 updates/model, or
-10,485,760 labels each (32 times CODEVALUE002 exposure). Keep checkpoints at
-320, 1,280, 2,560, 5,120 and 10,240, not just a final training loss. The constant
-AdamW schedule is deliberately fixed before results, with no tuning. This first
-question isolates longer training, rather than changing architecture and corpus
-at the same time. The small repeated corpus may overfit: that is a result to
-measure, not a reason to hide failed learning curves.
+## Runtime and original evidence
 
-Use exactly two physically verified T4s in two worker processes. GPU0 receives
-seeds1701/1703; GPU1 receives1702; each worker trains each arm sequentially.
-This uses both GPUs, though the final third-seed tail will be imbalanced.
-Cap allocation at120 minutes (240 aggregate GPU-minutes). This is a ceiling,
-not a measured runtime prediction. Partial runs retain checkpoint/log evidence
-and cannot produce a complete-cohort success claim or automatic resubmission.
+Two physically observed, distinct-UUID T4s are mandatory, with real CUDA probes.
+GPU0 trains seeds1701/1703; GPU1 trains1702; each performs all three arms
+sequentially. The final seed tail is imbalanced. The coordinator enforces a7140
+second end-to-end deadline, below the120 minute allocation/240 GPU-minute ceiling.
+No accelerator fallback, automatic retry or automatic extra allocation exists.
 
-## Stronger evaluation
+Save complete model, AdamW, Python/NumPy/torch CPU/CUDA RNG and sampler state at
+updates320/1280/2560/5120/10240:45 original checkpoints. Hash the actual sampled
+owners/offsets/bytes, verify the replayed schedule for every arm/seed, and cold-load
+the model on the same device to compare predictions. Restore RNG after the cold
+constructor so auditing does not change training. The final gate verifies all
+nine actual parameter counts and paired sample receipts. Seal all45 checkpoints
+before opening any DEV bytes for scoring. Failure/timeout preserves original
+completed checkpoints and logs and cannot yield a complete-cohort success claim.
 
-The six Requests/HTTPX/Click files are exposed DEV. Score their full files at
-each checkpoint, rather than only the first3,072 targets. Freeze the final
-10,240-update endpoint in advance; intermediate checkpoints are descriptive.
+`SOURCE_RECEIPT.json` pins30 actual publisher files with original commit, blob,
+size and SHA256:14 FIT,6 exposedDEV and10 transferDEV. Nine original license texts
+are archived in the private dataset. Exact duplication and a sampled64-byte
+shingle overlap screen passed. Historical exposure across all prior archives is
+INCONCLUSIVE; semantic copying is not ruled out. TransferDEV is internal DEV,
+not protected or access-separated blind TEST. Publisher identities were frozen
+before content checks. No held-out scores were used to choose the protocol.
 
-TRANSFER_SOURCES.json pins ten candidate files from Django, FastAPI, Rich,
-Pydantic and pytest by publisher commit, blob, size and SPDX license metadata.
-Actual byte SHA256 checks, license text archiving, cross-study exposure and
-exact/near-duplicate audits remain pending. GitHub contents responses may
-include encoded content; no access-separated blind TEST claim is made.
-Freeze all exclusions before fitting and score this transfer cohort only after
-all nine final checkpoints are sealed. Never use it for tuning.
+## Evaluation
 
-Score every eligible target once with identical causal windows/masks for all
-predictors; offer512 fixed completions per file (5,120 offers on the candidate
-transfer cohort, versus48 previously). Report NLL/bits-per-byte, top1/top5,
-calibration, exact2/4/8/16/32-byte completions and correct-prefix lengths. Use
-free-running generation; gold suffixes cannot feed later suggestion bytes.
-Pair publisher/file clustered bootstrap intervals and publish each seed/group;
-thousands of adjacent bytes are not thousands of independent trials.
+For every model checkpoint, score all exposed Requests/HTTPX/Click targets from
+byte64 onward. Score final models on ten additional files from Django, FastAPI,
+Rich, Pydantic and pytest, once after sealing. Each target is scored once with
+identical windows/masks:64-byte burn-in plus up to64 scored targets. Partial
+final blocks count only genuine targets. Reset state between windows/files.
+The final10240 endpoint is primary; checkpoint curves are descriptive, never a
+best-transfer-checkpoint selection.
 
-Compare against no suggestion, unchanged FIT-only P3 and a fixed variable-order
-count predictor, in addition to the neural controls. Disclose that count models
-read the full FIT corpus while neural models sample windows. Synchronize CUDA
-for p50/p95 generation latency and report runtime memory as well as tensor size.
-Include rejection/distraction key-cost scenarios alongside optimistic oracle
-keystrokes. These are simulations, not observed developer productivity.
+Offer512 deterministic, unique suggestions per file:5120 on transferDEV plus
+3072 on exposedDEV. Autoregressively generate32 bytes from a rolling128-byte
+observed/generated prefix; gold suffixes are never fed back. Retain generated
+bytes and score exact2/4/8/16/32 and longest correct prefix, NLL, bits/byte,
+top1/top5, Brier score and ECE10. Compare no suggestion, original FIT-only P3
+(tau4), fixed interpolated Witten–Bell order6 and the two neural controls.
+Classical models read every FIT byte; neural sampled exposure is disclosed.
 
-A transfer utility pass requires positive exact4 gain over both count models
-with lower paired95% confidence bound above zero, wins in at least4/5 publishers
-and2/3 seeds, and positive net keys under the rejection-cost4 scenario.
-A pass motivates a separately registered human pilot. It proves neither
-profitability nor general English language ability. A natural-prose lane and
-semantic/executable code-task assessment remain separate follow-ups.
+Record synchronized batched timing separately from genuine batch1 p50/p95
+suggestion latency (16 measured offers after8 warmups, firstDEV file/model).
+Report process RSS, GPU allocated/reserved peaks, tensor/checkpoint size and
+logical classical count-store estimates. T4 latency is not Android performance.
 
-## Executed preparation and remaining blockers
+The exact4 utility screen requires mean TAC gain over BOTH count models, lower
+paired95% publisher/file hierarchical bootstrap bound above zero, wins in>=4/5
+publishers and>=2/3 seeds, and positive net keys under a four-key wrong-suggestion
+cost. Bootstrap uncertainty is conditional on the three observed seed runs.
+Publish each seed/file/group and preserve every failed gate. Oracle/rejection
+key costs are simulations, not observed developer productivity.
 
-`CONSTRUCTED_MODEL_AUDIT.json` records actual inherited model counts, prefix
-future-poison invariance, deterministic repeat predictions, finite logits and
-connected finite gradients on random constructed bytes. No optimizer exists in
-this audit. This is untrained engineering evidence, not learned language quality.
+## Gates, scope and reproducibility
 
-`COMPUTE_DECISION.json` is the actual phone planner receipt. It selects dual T4s
-and correctly remains BLOCKED_EVIDENCE_OR_DESIGN: no registered workload,
-private Kaggle data reference or complete scientific registration exists.
-REGISTER.json is a **draft protocol**, not FAIR_COMPARISON approval.
+The owner-scoped500K exception is limited to this exact study and matrix; global
+100K rules remain unchanged. `FAIR_COMPARISON.json` passes internal preflight and
+forbids architectural-superiority claims. Supported prefit operator FLOPs are
+recorded on actual B8x128 FIT input, but complete operator/backward coverage and
+matched training FLOPs are NOT established. The study is exposure-matched
+internal engineering evidence, not a compute-matched architecture comparison.
+The original graph is unchanged; whole-model composed PNDS/IEEE/AD certification
+remains OPEN. No protected TEST, independent certification or checkpoint
+promotion is authorized. Direct API submission is specifically authorized by
+the current owner request/credential; protected GitHub workflow rules are not
+weakened. This is a single bounded submission, not background ongoing research.
 
-The current cloud environment reports no configured Kaggle secret. GitHub auth
-works, but inspecting repository/environment secrets and variables returns403.
-Existing protected GitHub secrets might exist; their presence is unknown.
-Never put a Kaggle key in chat, an issue, a PR or git.
-
-Before submission, implement/review the offline dataset bundle, workload,
-evaluator and watchdog; verify provenance and actual-sample compute receipts;
-register FAIR_COMPARISON and integrate this owner-scoped500K exception without
-weakening the global100K rule. The inherited architecture is unchanged; full
-composed PNDS/IEEE/AD mathematical certification stays OPEN. No broad architecture
-superiority claim is eligible with unmatched training FLOPs or without an adequate
-attention control. The protected dispatch workflow currently requires signed
-prefit evidence even for internal research; reconcile it with the existing
-internal_research amendment through review, not a bypass.
-
-Reproduce the completed no-fit checks from the repository root:
+Local validation includes inherited-model count/causality/gradient checks,
+scoring denominator and autoregressive future-poison tests, paired sampler
+compatibility, fail-closed size/scope/final-receipt tests and architecture-agnostic
+probe tests. Constructed tests provide zero trained-capability evidence.
 
 ```sh
-python research/commercial-value/codevalue003/audit_models.py
+python -m pytest -q research/commercial-value/codevalue003/test_run.py tests/test_research_parity_gate.py tests/test_research_probe_agnostic.py
+python scripts/validate_research_parity.py --manifest research/mathematical-engineering/codevalue003/FAIR_COMPARISON.json --phase preflight
 python scripts/phone_lab.py plan research/phone_queue/codevalue003-long-code-t4x2.json
 ```
 
-No model promotion, protected TEST, merge, commercial certification or human
-messages are authorized by this protocol. Findings must remain internally
-measured, not independently qualified.
+`prepare_sources.py` verifies/archives immutable publisher bytes and licenses.
+`package_run.py` creates a credential-free whitelisted source/data ZIP pinned to
+an exact clean Git commit, private dataset metadata and an archive-hash-checked
+offline bootstrap. All original model weights, receipts, logs, seal, full per-file
+scores and RESULTS.json remain in Kaggle outputs for download/archival.
+
+A utility-screen pass would motivate a separately registered randomized human
+pilot. General English modeling, executable code correctness, actual developer
+time/acceptance, physical device performance, willingness to pay and fully loaded
+training/serving costs are not measured here. Commercial viability remains open
+regardless of a lower next-byte loss.

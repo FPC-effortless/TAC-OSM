@@ -413,3 +413,28 @@ merge, release or TEST access follows automatically.
 ## Narrow owner-directed LANGLAYER040 factorial research — 2026-10-29
 
 The owner directed a genuine-source ~500K upper graph × state-width factorial after LANGLAYER039. Only LANGLAYER040's two missing arms at 499623 and 499848 active/deployed learned parameters are newly authorized under the 500K language scale. The global 100K policy remains. Original five-seed 035/039 checkpoints are frozen; the new arms use identical 14 publisher CPython FIT document owners, seeds 1701–1705, 320 AdamW updates, batch8 and 128 next-byte targets per example. Four previously exposed DEV docs only. Protected TEST/GPU/production/independent certification remain closed. All 10 real trained checkpoints, optimizer/RNG/source hash and cold replay must be complete before aggregation; no failures are dropped. Decoder width varies to conserve the parameter budget; this factorial measures allocation, not pure fixed-decoder causal changes. Training FLOPs are NOT matched. Complete composed Lean, IEEE and formal AD remain open.
+
+## Owner-directed CODEVALUE003 longer500K language run —2026-10-30
+
+The owner explicitly requested a longer CODEVALUE002 follow-up on Kaggle dual
+T4s and supplied credentials for that purpose. For **CODEVALUE003 only**, retain
+the exact existing499623p TAC,500165p GRU and499782p simple selective SSM, three
+seeds1701–1703, identical original CPython sampling,10240 AdamW updates atB8x128,
+no tuning. This is the separate owner500K language track, never compliance with
+the global100K contract. The named validator scope allows these nine original
+model fits as internal, exposure-matched engineering measurements, with every
+arm count within1%, checkpoint replay and final actual paired sample receipts.
+
+Training FLOPs are explicitly NOT matched; incomplete supported-operator
+profiles cannot qualify architecture superiority. This study must not claim
+architectural superiority, independent qualification, general English ability,
+commercial viability, reward certification, checkpoint promotion or protected
+TEST access. Exact unchanged graph inheritance leaves composed PNDS/IEEE/AD
+certification OPEN. All other studies keep their existing size/resource rules.
+
+The current owner request authorizes one private offline dual-T4 allocation,
+with at most240 aggregate GPU-minutes and no automatic retries. Direct Kaggle
+API submission using the owner-supplied credential is in scope for this named
+run; the protected Actions workflow is not being weakened or repurposed. Pin
+source bytes/licenses and cohort before fit; seal all45 original checkpoints
+before first held-out scoring. Existing historical evidence remains unchanged.
