@@ -1,0 +1,83 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGACQUIRE097",
+  "study_type": "within_family_objective_program",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Forty source-pinned fits across four independently gated same-family objective comparisons; genuine lexical reuse primary and ARC rule-transfer mechanism diagnostic secondary.",
+  "real_world_source": {
+    "name": "Original licensed CPython code bytes primary; human-authored ARC benchmark secondary",
+    "observed_real_outcomes": true,
+    "sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF-2.0 original code; Apache-2.0 ARC secondary benchmark",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/langacquire097/SOURCE_PROVENANCE.json",
+    "primary_evidence": "Genuine original code continuation",
+    "secondary_diagnostic": "ARC public authored puzzles; not naturally observed operational outcomes"
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "c44e95dd75524d152a9d84d277554805cba6a00f4db642f48e2139472a2c8d41",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ]
+  },
+  "causal_protocol": "Frozen acquired-state interventions and format-matched past-only binding shuffle, futureY unavailable to query actor.",
+  "checkpoint_policy": "All40models sealed beforeDEV; original optimizer/RNG/checkpoints and failures retained.",
+  "seeds": [
+    1701,
+    1702,
+    1703,
+    1704,
+    1705
+  ],
+  "family_manifests": {
+    "tac": "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_TAC.json",
+    "gru": "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_GRU.json",
+    "ssm": "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_SSM.json",
+    "transformer": "research/mathematical-engineering/langacquire097/FAIR_COMPARISON_TRANSFORMER.json"
+  },
+  "cross_family_compute_parity": "INELIGIBLE_NOT_MEASURED_OR_MATCHED",
+  "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
+  "selection": "PrimaryfamilyTAC; no best-family, checkpoint orseed selection",
+  "execution_budget": {
+    "backend": "github_actions_cpu",
+    "profile_max_minutes": 15,
+    "max_fit_minutes_per_seed": 40,
+    "max_fit_minutes_all_seeds": 200,
+    "evaluate_max_minutes": 40,
+    "max_total_minutes": 255,
+    "gpu_minutes": 0
+  },
+  "profile_policy": "Missing exact profiles/bindings blocks every family preflight and optimizer; fill only from original no-fit GHA artifact before firstfit.",
+  "literature_gap": {
+    "unresolved_TAConly_question": "Can the exact compact TAC learn causally useful acquired state when later targets backpropagate through earlier writes?",
+    "what_is_not_being_rediscovered": "Episodic recurrent learning, backpropagation through time, memory augmentation and in-context adaptation are established.",
+    "established_work": [
+      {
+        "paper": "Santoro etal., Memory-Augmented Neural Networks, ICML2016",
+        "established_result": "Episodic learning with addressable external memory",
+        "url": "https://proceedings.mlr.press/v48/santoro16.html"
+      },
+      {
+        "paper": "Dai etal., Transformer-XL, ACL2019",
+        "established_result": "Recurrent context beyond fixed-length language-model segments",
+        "url": "https://aclanthology.org/P19-1285/"
+      }
+    ]
+  }
+}

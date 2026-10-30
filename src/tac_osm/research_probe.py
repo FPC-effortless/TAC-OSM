@@ -146,6 +146,10 @@ def _replay(adapter: ResearchProbeAdapter, model: nn.Module,
                 "event_index": t,
                 "components": {
                     k: {**_stats(now[k]), "change_l2": _norm(now[k] - before[k])}
+                    if now[k].shape == before[k].shape else
+                    {**_stats(now[k]), "previous_shape": list(before[k].shape),
+                     "change_l2": None,
+                     "change_status": "INCONCLUSIVE_SHAPE_CHANGED"}
                     for k in now},
             })
         prev = now

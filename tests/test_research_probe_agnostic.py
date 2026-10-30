@@ -248,6 +248,37 @@ def test_batch_isolation_no_support_returns_inconclusive_not_verdict():
     assert result["status"] == "INCONCLUSIVE_UNINSTRUMENTED"
 
 
+def test_growing_native_cache_keeps_actual_shapes_and_unknown_shape_delta():
+    """A growing attention/history cache must not be padded into fake state."""
+    class GrowingCache(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.head = nn.Linear(4, 2)
+
+    sample = {"signal": torch.randn(2, 3, 4)}
+    adapter = ResearchProbeAdapter(
+        name="constructed-growing-cache",
+        validate=lambda model, record: None,
+        steps=lambda record: record["signal"].shape[1],
+        start=lambda model, record: {"cache": record["signal"].new_zeros(2, 0, 4)},
+        advance=lambda model, state, record, t: {
+            "cache": torch.cat((state["cache"], record["signal"][:, t:t + 1]), 1)},
+        forecast=lambda model, state, record: {"logits": model.head(state["cache"].sum(1))},
+        state_views=lambda state: state,
+        patch_state=lambda state, name, value: {**state, name: value},
+        batch_size=lambda record: record["signal"].shape[0],
+    )
+    report = probe_memory(GrowingCache(), sample, adapter)
+    assert report["query_does_not_write_state"]
+    assert report["events"] == 3
+    for index, event in enumerate(report["timeline"]):
+        component = event["components"]["cache"]
+        assert component["previous_shape"] == [2, index, 4]
+        assert component["shape"] == [2, index + 1, 4]
+        assert component["change_l2"] is None
+        assert component["change_status"] == "INCONCLUSIVE_SHAPE_CHANGED"
+
+
 def test_generic_local_runtime_accepts_unusual_one_cell_memory_state():
     result = probe_runtime(GatedEpisode(), episode(), gated_adapter(), warmups=0, repeats=2)
     assert result["state_bytes_batch"] == 3 * 6 * 4

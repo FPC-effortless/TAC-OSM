@@ -1,0 +1,69 @@
+{
+  "schema": "tac-pnds.source-bridge.v1",
+  "study": "LANGACQUIRE097",
+  "type": "MATCHED_100K_CAUSAL_EPISODIC_OBJECTIVE_FOUR_ARCHITECTURES",
+  "ancestry": [
+    "LANGMEM086",
+    "LANGHEAD094",
+    "LANGPERSIST096"
+  ],
+  "tac": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "source_commit": null,
+    "source_commit_status": "PENDING_ROOT_PROSPECTIVE_SOURCE_COMMIT_BEFORE_FIT",
+    "preserved_legacy_source_commit": "5027a96261e78a0a5a67be63d98e5e3f0847dd72",
+    "source_paths": [
+      "research/mathematical-engineering/langmem086/compact_tac.py",
+      "research/mathematical-engineering/langhead094/model094.py",
+      "research/mathematical-engineering/langacquire097/models.py",
+      "research/mathematical-engineering/langacquire097/objective.py",
+      "research/mathematical-engineering/langacquire097/probe_adapter.py"
+    ],
+    "source_sha256": {
+      "research/mathematical-engineering/langmem086/compact_tac.py": "7179908fa3672879f3c2046ec4521f0b9f783d5c696aaba82c4c2cd0b6ebc9b1",
+      "research/mathematical-engineering/langhead094/model094.py": "ba7693db65c7a5690954c3e1365134e0ad81f160ea6e00b46844385bc8717acd",
+      "research/mathematical-engineering/langacquire097/models.py": "1a5ac7dad159258fc0c89bd8ec9bf6ac30ebb2a120b22401f3486b104b515a4e",
+      "research/mathematical-engineering/langacquire097/objective.py": "be2014d299ca97cb97bbd3e7d5f69312d80e18f0a13818e81d3a5facbe78014a",
+      "research/mathematical-engineering/langacquire097/probe_adapter.py": "569ae907504d4d0bb880f65ee0a468cb657109d2609e9a76abfa159b7ac40577"
+    },
+    "trained_checkpoint_paths": [],
+    "historical_checkpoints_unchanged": true
+  },
+  "pnds": {
+    "repository": "FPC-effortless/pnds-lean",
+    "proof_commit": null,
+    "pull_request": null,
+    "lean_path": "PNDS/LANGACQUIRE097.lean",
+    "lean_namespace": "PNDS.LANGACQUIRE097",
+    "python_path": "foundation/v1/langacquire097_reference.py",
+    "python_tests": "foundation/v1/test_langacquire097_reference.py",
+    "full_typed_graph_record": "foundation/v1/LANGACQUIRE097_GRAPH.md",
+    "source_link": "foundation/v1/langacquire097-source-link.json",
+    "inherited_tac086_operator_record": {
+      "proof_commit": "0fd3c5006326a98107de2d02c63a6107226615b9",
+      "pull_request": 83,
+      "lean_path": "PNDS/LangMem086Autonomous.lean",
+      "python_path": "foundation/v1/langmem086_autonomous.py",
+      "full_typed_graph_record": "foundation/v1/LANGMEM086_GRAPH.md"
+    }
+  },
+  "exact_source_contract": "Reuse complete086TAC and094GRU/SSM with metadata/layout bridges; explicit two-layer standard causal Transformer. Sameobservedbyteepisodes; full versusqueryonlytargetmasks; no detach at acquisition. Model receives observed byteIDs, ownstate,owner; target/mask/evaluator remaintrainingloss or scorer only.",
+  "mathematical_status": "FULL_TYPED_GRAPH_RECORD_PARTIAL_CHUNK_MASK_CHAIN_RULE_FORMULATION",
+  "verification": {
+    "python_reference": "PASS_8_CONSTRUCTED_TESTS",
+    "lean_build": "PENDING_CI_NO_LOCAL_LEAN",
+    "source_probe_tests": "PASS_9_CONSTRUCTED_ACTUAL_MODEL_ADAPTER_AND_FP64_FINITE_DIFFERENCE_TESTS",
+    "generic_probe_tests": "PASS_19_CONSTRUCTED_ARCHITECTURE_AGNOSTIC_TESTS",
+    "source_mask_forward_backward_equivalence": "CONSTRUCTED_TESTS_REQUIRED_IN_TAC_CI",
+    "original_data_trained_gradient_audit": "NOT_RUN_NO_NEW_FIT",
+    "source_PyTorch_IEEE_AD_equivalence": "OPEN",
+    "full_composed_model_proof": "OPEN",
+    "learned_useful_acquisition": "NOT_ESTABLISHED",
+    "general_intelligence": "NOT_ESTABLISHED",
+    "source_query_state_gradient": "PASS_ALL_FOUR_ARMS_LOCAL_AD_VS_FINITE_DIFFERENCE_ATOL_1e-7_RTOL_1e-4"
+  },
+  "reciprocal_canonical_registry_status": "PENDING_APPEND_BOTH_REPOSITORIES_AFTER_SOURCE_PIN",
+  "evidence_level": "INTERNAL_RESEARCH_NOT_INDEPENDENT_QUALIFICATION",
+  "capability_claim": false,
+  "promotion_permitted": false
+}
