@@ -16,3 +16,8 @@
   historical-registry migration remain OPEN; reciprocal study bridge is pinned.
 - Prior SURVIVAL001/MATCHED002 failed utility gates remain immutable. Every result
   here is a separate conditional read experiment; it never authorizes the sweep.
+- Original diagnostic run41007483485 completed successfully on execution commit
+  a74627fc1d8d1eaf209ff6eb5be828fdbf326768.678measurements/226source-query-bin
+  cells; all tolerances pass; no utility arm. Original ZIP retained and reports
+  recomputed read-only. This cohort is now exposed DEV; no rescore for reporting.
+- Final local full suite1626passed/4skipped, existing profilerwarning only.

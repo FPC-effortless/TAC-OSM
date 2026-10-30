@@ -26,6 +26,7 @@ def verify(folder):
         if source['path'] != 'LICENSE':
             docs[source['path']] = raw
     rows = [row for row in result['rows'] if row['status'] == 'MEASURED']
+    predictions = {}
     for row in rows:
         raw = docs[row['owner']]
         t,j,b = row['clock'],row['historical_clock'],row['wrong_clock']
@@ -37,6 +38,13 @@ def verify(folder):
         assert row['historical_continuation_matches_next_byte'] == int(raw[j] == raw[t+1])
         for arm in row['arms'].values():
             assert abs(row['original_nll']-arm['next_byte_nll']-arm['original_minus_arm_nll']) < 1e-12
+        # Same current context gives the same supplied key across age bins.
+        # All four main predictions must therefore be independent of selected j.
+        key = row['seed'],row['owner'],t
+        main = [row['original_nll']]+[row['arms'][a]['next_byte_nll'] for a in ('A','B','C','D')]
+        if key in predictions:
+            assert main == predictions[key], 'historical-target selection changed current prediction'
+        predictions[key] = main
     for summary in result['summary']:
         rr = [r for r in rows if r['bin_begin']==summary['bin_begin']]
         cells = {(r['owner'],r['clock']) for r in rr}
