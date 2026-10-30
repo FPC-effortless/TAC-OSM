@@ -28,6 +28,14 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           persist-credentials: true
+      - id: frozen-mode
+        shell: bash
+        run: |
+          if [[ -s research/mathematical-engineering/langparallel096/FROZEN_RESULTS.json ]]; then
+            echo 'first=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'first=true' >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
@@ -41,6 +49,7 @@ jobs:
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langparallel096/FAIR_COMPARISON.json --phase preflight
           PYTHONPATH=src:. python -m pytest -q research/mathematical-engineering/langparallel096/test_parallel096.py tests/test_research_probe_agnostic.py
       - name: Download original authentic publisher trained checkpoints (never refit)
+        if: steps.frozen-mode.outputs.first == 'true'
         run: |
           set -euo pipefail
           mkdir -p original-artifacts
@@ -50,6 +59,7 @@ jobs:
             --pattern 'LANGLAYER039-CPU-seed*' --dir original-artifacts
           test "$(find original-artifacts -name FIT_AND_EXPOSED_DEV_RECEIPT.json -type f | wc -l)" -eq 10
       - name: Freeze original Rust Book publisher bytes with pinned Git blobs
+        if: steps.frozen-mode.outputs.first == 'true'
         run: |
           PYTHONPATH=src:. python - <<'PY'
           from pathlib import Path
@@ -60,6 +70,7 @@ jobs:
           print({n:len(raw) for n,raw in source_docs(target).items()})
           PY
       - name: Evaluate 10 original parallel models on identical source byte target ordinals
+        if: steps.frozen-mode.outputs.first == 'true'
         run: |
           set -euo pipefail
           for seed in 1701 1702 1703 1704 1705; do
@@ -75,7 +86,7 @@ jobs:
             --root langparallel096-results \
             --output research/mathematical-engineering/langparallel096/FROZEN_RESULTS.json
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.frozen-mode.outputs.first == 'true'
         with:
           name: LANGPARALLEL096-original-ten-model-source-replay
           path: |
@@ -83,6 +94,7 @@ jobs:
             langparallel096-results/
           retention-days: 90
       - name: Commit exact original no-fit scores on unmerged evidence branch
+        if: steps.frozen-mode.outputs.first == 'true'
         run: |
           set -euo pipefail
           test -s research/mathematical-engineering/langparallel096/FROZEN_RESULTS.json
