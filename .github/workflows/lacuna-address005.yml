@@ -1,0 +1,92 @@
+name: Lacuna address005 fresh-source address specificity
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'scripts/lacuna_address005.py'
+      - 'tests/test_lacuna_address005.py'
+      - 'scripts/verify_lacuna_address005_saved.py'
+      - 'research/evidence/lacuna_address005/**'
+      - 'research/mathematical-engineering/lacuna_address005/**'
+      - '.github/workflows/lacuna-address005.yml'
+permissions:
+  contents: read
+jobs:
+  original-saved-evidence:
+    if: github.head_ref == 'research/lacuna-address005-2026-10-30' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Independently verify original ZIP, prefix cohort, scores and gates
+        if: hashFiles('research/evidence/lacuna_address005/ORIGINAL_ARTIFACT.zip') != ''
+        run: python scripts/verify_lacuna_address005_saved.py research/evidence/lacuna_address005
+  registered-launch:
+    if: github.head_ref == 'research/lacuna-address005-2026-10-30' && github.event.pull_request.head.repo.full_name == 'FPC-effortless/TAC-OSM'
+    runs-on: ubuntu-24.04
+    outputs:
+      launch: ${{ steps.launch.outputs.launch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - id: launch
+        run: |
+          if [[ "$(git log -1 --format=%s)" == "ADDRESS005:"* ]]; then
+            echo 'launch=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'launch=false' >> "$GITHUB_OUTPUT"
+            echo 'Engineering/report update: no scientific scoring repeated.'
+          fi
+  original-frozen-fresh-source-specificity:
+    needs: registered-launch
+    if: needs.registered-launch.outputs.launch == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CUDA_VISIBLE_DEVICES: ''
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Source plans, actual source adapter checks and original replay
+        run: |
+          mkdir -p evidence
+          python scripts/phone_lab.py plan research/phone_queue/lacuna-address005.json > evidence/PLAN.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/lacuna_address005/FAIR_COMPARISON.json --phase preflight > evidence/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_lacuna_address005.py tests/test_lacuna_retrieval003.py tests/test_lacuna_readnorm004.py tests/test_replay_langmem086087.py tests/test_research_probe_agnostic.py
+          python scripts/replay_langmem086087.py --output evidence/ORIGINAL_REPLAY.json
+          python scripts/verify_lacuna_retrieval003_saved.py research/evidence/lacuna_retrieval003
+      - name: Require successful source-pinned scoped PNDS proof checks
+        run: |
+          python - <<'PY'
+          import hashlib,json,urllib.request
+          from pathlib import Path
+          bridge=json.loads(Path('research/mathematical-engineering/lacuna_address005/PNDS_SOURCE_BRIDGE.json').read_text())
+          assert hashlib.sha256(Path(bridge['source_path']).read_bytes()).hexdigest()==bridge['source_sha256']
+          url=f"https://api.github.com/repos/FPC-effortless/pnds-lean/actions/runs/{bridge['scoped_ci']}"
+          with urllib.request.urlopen(url,timeout=30) as response: receipt=json.load(response)
+          assert receipt['head_sha']==bridge['pnds_proof_commit']
+          assert receipt['status']=='completed' and receipt['conclusion']=='success'
+          Path('evidence/PNDS_CI.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          PY
+      - name: Fresh six-source specificity and native-query diagnostic; no fitting or TEST
+        run: python scripts/lacuna_address005.py --output evidence/RESULTS.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LACUNA-ADDRESS005-ORIGINAL-FRESH-SOURCE
+          path: evidence/
+          retention-days: 90
