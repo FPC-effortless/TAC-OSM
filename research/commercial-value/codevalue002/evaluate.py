@@ -233,7 +233,7 @@ def evaluate(archive, out):
          "No customer pricing/energy/export/SDK/product qualification"]
     }
     out.parent.mkdir(parents=True,exist_ok=True)
-    out.write_text(json.dumps(out,sort_keys=True,indent=2,allow_nan=False)+"\n")
+    out.write_text(json.dumps(outcome,sort_keys=True,indent=2,allow_nan=False)+"\n")
     print(json.dumps({"status":outcome["decision"],"p3":{"nll":baseline["nll"],"oracle4":p3keys},
        "tac":{"nll":tac["nll_mean"],"oracle4_mean":tac["oracle4_net_keys_mean"]},
        "models":{a:{"nll":v["nll_mean"],"keys":v["oracle4_net_keys_mean"]} for a,v in result_models.items()}}),flush=True)
