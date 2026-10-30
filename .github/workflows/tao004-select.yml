@@ -1,0 +1,74 @@
+name: TAOTUNE004 independent selection from 15 original Git checkpoints
+
+on:
+  push:
+    branches: ['research/tao004-optimizer-lr-selection-2026-10-30']
+    paths: ['.github/workflows/tao004-select.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taotune004-score
+  cancel-in-progress: false
+
+jobs:
+  original-replay-and-registered-tuning-dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Require every real original trained trial committed in Git first
+        run: |
+          set -euo pipefail
+          good=0
+          for i in $(seq 1 160); do
+            git fetch --quiet origin \
+              'refs/heads/research/tao004-optimizer-lr-selection-2026-10-30:refs/remotes/origin/research/tao004-optimizer-lr-selection-2026-10-30'
+            if git cat-file -e \
+              'refs/remotes/origin/research/tao004-optimizer-lr-selection-2026-10-30:research/evidence/taotune004/seed1701/FIT_MATRIX.json' 2>/dev/null; then
+              good=1
+              break
+            fi
+            sleep 20
+          done
+          test "$good" = 1 || { echo 'FAIL: NO_15_GIT_BACKED_ORIGINAL_FITS'; exit 1; }
+          git checkout -B research/tao004-optimizer-lr-selection-2026-10-30 \
+            refs/remotes/origin/research/tao004-optimizer-lr-selection-2026-10-30
+          for mode in adamw muon adamuon normuon pre_ns; do
+            for i in 0 1 2; do
+              test -s "research/evidence/taotune004/seed1701/$mode/lr$i/MODEL.pt"
+              test -s "research/evidence/taotune004/seed1701/$mode/lr$i/FIT_RECEIPT.json"
+            done
+          done
+          echo 'PASS: ALL_15_GIT_COMMITTED_ORIGINALS'
+      - name: Install read-only research runner
+        run: python -m pip install --quiet numpy==2.3.3 torch pytest
+      - name: Restore each model+optimizer; score ONLY two frozen exposed tuning DEV owners
+        run: |
+          python -m pytest -q tests/test_tao004_tune.py
+          python scripts/tao004_tune.py tune --directory research/evidence/taotune004/seed1701
+          python scripts/validate_research_parity.py \
+            --manifest research/evidence/taotune004/seed1701/FINAL_COMPARISON.json \
+            --phase final
+      - name: Preserve all trials and frozen selection, never evaluation-report DEV
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f research/evidence/taotune004/seed1701/TUNING_RESULTS.json
+          git add -f research/evidence/taotune004/seed1701/FINAL_COMPARISON.json
+          git commit -m "evidence(taotune004): independent original model/optimizer replay and frozen LR choice"
+          git fetch origin research/tao004-optimizer-lr-selection-2026-10-30
+          git rebase origin/research/tao004-optimizer-lr-selection-2026-10-30
+          git push origin HEAD:research/tao004-optimizer-lr-selection-2026-10-30
