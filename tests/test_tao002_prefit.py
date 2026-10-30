@@ -50,3 +50,15 @@ def test_tao002_prefit_never_steps_or_backprops(monkeypatch):
     assert report["dev_bytes_accessed"] is False
     assert report["protected_TEST_accessed"] is False
     assert report["full_matched_comparison_gate"] != "PASS"
+
+
+def test_tao002_committed_receipt_matches_reconstructed_original_preflight():
+    import json
+    frozen_path = ROOT / "research/mathematical-engineering/tao002/ORIGINAL_PREFIT_RECEIPT.json"
+    frozen = json.loads(frozen_path.read_text())
+    calculated = tao002_prefit.prefit()
+    assert frozen["fit_performed"] is False
+    assert frozen["optimizer_steps"] == 0
+    for key in calculated:
+        assert frozen[key] == calculated[key]
+    assert frozen["source_ci_run_url"].endswith("/41009870520")
