@@ -1,90 +1,201 @@
-# LANGMEM087 stage A: more training improves language loss, not consistent slow-state usefulness
+# LANGMEM087 stage A — longer training does not establish consistent slow-state usefulness
 
-All six original continuations, nine first-new-document evaluations and strict aggregate passed. Internally measured, not independently qualified. No training equations or original checkpoints changed. Additional training alone did **not** establish useful old slow-memory content on this cohort. Bias, longer-context credit, stronger writes, dropout, auxiliary supervision and read-before-write retraining were designed as later stages and were **not run**.
+All six continuations, nine checkpoint evaluations and the aggregate passed.
+Additional training improved next-byte prediction relative to 160 updates,
+but removing older slow-state content slightly **improved** average NLL at
+every tested duration. Small favorable owner and stream-position results are
+preserved below. This is internal research, not independent qualification.
 
-## Primary results: one fixed fresh cohort
+Only training duration changed. The original 100,521-parameter architecture,
+optimizer, data sampler, 256-byte windows, gates and loss stayed unchanged.
+Slow-read bias, longer-context credit assignment, stronger writes, dropout,
+historical supervision and read-before-write retraining were **not run**.
 
-Three original100521p LANGMEM086 seeds, exact160→640→1280optimizer/data-order continuation. Same3584distinct genuine next-byte positions per checkpoint, two new Rust chapters, t256..2047 perowner; repeated across3seeds/3durations (32256predictions, not32256independent source targets). NLL in nats/byte, lower is better. The160baseline here is newly measured on087documents/windows; it is not directly comparable with086’s different-cohort2.6879NLL.
+## Primary results
 
-| Updates | Sampled FIT targets/seed | NLL | Top1 accuracy | ΔNLL removing old slow content |
+Three original LANGMEM086 seeds continued from their exact 160-update model
+and AdamW checkpoints to 640 and 1,280 updates. All nine checkpoints sealed
+before either new Rust chapter was acquired. Each checkpoint predicted the
+same 3,584 distinct source positions: clocks 256–2,047 in each chapter.
+The 32,256 predictions across seeds and durations are repeated measurements,
+not 32,256 independent text samples. NLL is in nats per byte; lower is better.
+
+| Updates | Sampled FIT targets per seed | NLL | Top-1 accuracy | ΔNLL removing old slow content |
 | --- | --- | --- | --- | --- |
 | 160 | 163,840 | 2.823832 | 25.04% | -0.001585 |
 | 640 | 655,360 | 2.696131 | 30.11% | -0.001454 |
-| 1280 | 1,310,720 | 2.717111 | 32.22% | -0.001769 |
+| 1,280 | 1,310,720 | 2.717111 | 32.22% | -0.001769 |
 
-Δ=intervenedNLL−fullNLL. Positive would support the original read; negative means removal helped. Sampled FIT targets include repeated source exposures, not unique new text. All durations were registered in advance;640was not selected as an early-stopped winner.
+ΔNLL means intervention minus full-model NLL. A positive value would favor
+the original read; a negative value means removal helped. FIT counts include
+repeated source exposures. All durations were preregistered; 640 updates was
+not selected through early stopping. This new 160-update baseline uses a
+different cohort/window from LANGMEM086, so its NLL is not directly comparable
+with that experiment's 2.6879.
 
-All three seeds improve NLL from160to640, then worsen from640to1280 (+0.022490,+0.015348,+0.025102 respectively). Accuracy continues to increase. This divergence does not identify a calibration or overfitting mechanism by itself.
+All three seeds improved from 160 to 640 updates, then worsened from 640 to
+1,280: +0.022490, +0.015348 and +0.025102 NLL. Accuracy continued to rise.
+This divergence alone does not identify a calibration or overfitting mechanism.
 
-## Attribution and measured pathway statistics
+## Old-state versus current-write attribution
 
-| Updates | Δfast_zero | Δslow_zero | Δboth_zero | Δold_slow_permuted | Δcurrent_slow_write_zero | Mean slow mixture | Mean slow write gain |
+At each original prediction state, freeze the query, previous writer, value,
+gates, mixture and other prior state. Decompose the slow update as:
+
+```
+S_new = H + C
+H = rho * S_old * (I - eta * k * k^T)
+C = eta * v * k^T
+```
+
+The old-state removal control reads `C` only, preserving the direct current
+write. Current-write removal reads `H` only; this is not a read of `S_old`
+before writing. The old-state permutation control replaces `S_old` with a
+cyclic permutation of its value rows in `H`, while preserving `C`. All original
+matrix writes and non-upper states remain bitwise unchanged. Counterfactual
+upper states are discarded; every next query uses the original trajectory.
+These are immediate read interventions, potentially outside the training
+distribution, rather than persistent erasures or separately trained models.
+Nonlinear NLL effects need not add.
+
+| Updates | Δfast read off | Δslow read off | Δboth off | Δold slow permuted | Δcurrent slow write off | Mean slow share | Mean slow gain |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 160 | +0.050507 | -0.001571 | +0.057156 | +0.000106 | +0.000011 | 16.06% | 0.005363 |
 | 640 | +0.177994 | -0.001470 | +0.185915 | -0.000090 | -0.000020 | 9.71% | 0.004468 |
-| 1280 | +0.290594 | -0.001803 | +0.308855 | -0.001818 | -0.000063 | 14.35% | 0.003646 |
+| 1,280 | +0.290594 | -0.001803 | +0.308855 | -0.001818 | -0.000063 | 14.35% | 0.003646 |
 
-For fixed original priorstate, key, observed current value, query and gates, S_new=H+C, H=rho*S_old(I−eta*kkᵀ), C=eta*vkᵀ. old_slow_zero reads C only, retaining currentwrite; current_slow_write_zero reads H only (this is **not** S_old read-before-write). old_slow_permuted uses a cyclic value-row permutation of S_old in H and preserves original C. Every original matrixwrite/nonupperstate is bitwise unchanged. Counterfactual upperstate is discarded; next query uses original trajectory. NLL effects are nonlinear and need not add.
+Dependence on the fast read grew. That lesion includes its current write, so
+it does not establish historical fast-byte recovery. Mean slow write gains
+decreased. Mixtures and gains above are measured after training on this DEV
+cohort, not illustrative equal-logit initial weights.
 
-Fast-read dependence grows strongly, but those lesions include the current fastwrite and therefore do not prove historical fast-byte retrieval. Mean slow gains decrease; mean slow mixture remains roughly10–16%, not a zeroed branch. These are measured postfit DEV mixtures/gains, not equal-logit initial softmax illustrations.
+## Seed variation and favorable exceptions
 
-## All seed results and positive exceptions
-
-| Seed | Updates | Full NLL | Δold_slow_zero | Δold_slow_permuted |
+| Seed | Updates | Full NLL | Δold slow removed | Δold slow permuted |
 | --- | --- | --- | --- | --- |
 | 1701 | 160 | 2.845761 | -0.003343 | +0.000344 |
 | 1701 | 640 | 2.756813 | -0.002136 | +0.001091 |
-| 1701 | 1280 | 2.779303 | -0.001377 | +0.000982 |
+| 1701 | 1,280 | 2.779303 | -0.001377 | +0.000982 |
 | 1702 | 160 | 2.815620 | -0.000513 | +0.000162 |
 | 1702 | 640 | 2.664074 | +0.000198 | +0.000522 |
-| 1702 | 1280 | 2.679422 | -0.000595 | -0.000763 |
+| 1702 | 1,280 | 2.679422 | -0.000595 | -0.000763 |
 | 1703 | 160 | 2.810115 | -0.000900 | -0.000187 |
 | 1703 | 640 | 2.667507 | -0.002422 | -0.001883 |
-| 1703 | 1280 | 2.692609 | -0.003335 | -0.005671 |
+| 1703 | 1,280 | 2.692609 | -0.003335 | -0.005671 |
 
-At1280all3seed-average oldslow removal deltas are negative. At640seed1702 has a small positive +0.000198delta, while the other two are negative. Individualowner oldslow benefits exist:640seed1701/ch07 +0.000382,640seed1702/ch09 +0.000980,1280seed1701/ch07 +0.004365; other owner/seed cells do not provide a consistent benefit. Original full by-owner values are retained in JSON.
+At 1,280 updates, removing old slow content helps all three seed averages.
+At 640 updates, seed 1702 has a small favorable original-read effect
+(+0.000198), while the other two do not. Favorable owner cells are also retained:
+640/1701/ch07 (+0.000382), 640/1702/ch09 (+0.000980), and
+1,280/1701/ch07 (+0.004365). Complete owner results are in the aggregate JSON.
 
-At1280, mean oldslow removal delta is +0.002053 over streamclocks256..511, +0.000467 over512..1023, and −0.003843 over1024..2047. These are **streampositions, not historical content ages**. This preserves small favorable strata without representing them as long-term recall. Two source owners and repeated targets are insufficient for broad iid significance claims.
+At 1,280 updates, the mean old-state removal delta is +0.002053 for stream
+clocks 256–511, +0.000467 for 512–1,023, and −0.003843 for 1,024–2,047.
+These are stream positions, not ages of retrieved content. They preserve
+small positive strata without establishing long-term recall. Two source
+owners and shared targets do not support broad significance claims.
 
-## Autonomous querying and simple references
+## Autonomous query and simple references
 
-| Updates | FIT-only prior NLL |1928B ring NLL | Query-context top1 hits when a match exists |
+| Updates | FIT-only prior NLL | 1,928-byte ring NLL | Context top-1 hits when a match exists |
 | --- | --- | --- | --- |
-| 160 | 3.408396 | 2.952908 |0/52 per seed |
-| 640 | 3.413822 | 2.957271 |0/52 per seed |
-| 1280 | 3.415586 | 2.959052 |0/52 per seed |
+| 160 | 3.408396 | 2.952908 | 0/52 per seed |
+| 640 | 3.413822 | 2.957271 | 0/52 per seed |
+| 1,280 | 3.415586 | 2.959052 | 0/52 per seed |
 
-224logged query diagnostics/checkpoint,52matchingcontextcases; same sourcepositions repeated acrossseeds. No historical address/key/target enters model forward. Nearest original-writer-key cosine is only a4bytecontext proxy: sign, transformed keys and distributed coding limit negative interpretation.0hits does not prove no information. No auxiliary historical-byte decoder or factual-retrieval success was established.
+There were 224 diagnostic queries per checkpoint, with 52 matching-context
+cases. The model received no evaluator-supplied historical address or target.
+Ranking original writer keys by cosine is only a four-byte context proxy;
+sign changes, transformed addresses and distributed coding limit its negative
+interpretation. Zero hits do not prove absence of information. No historical
+byte decoder or factual-retrieval success was established.
 
-No equally trained fast-only neural control was fitted. Consequently this stage does not meet all three proposed criteria for convincing slow-memory usefulness, and cannot establish clipping/architecture superiority. The ring is a storage reference, not a matched trained architecture.
+A separately trained fast-only comparator was not fitted. This stage therefore
+does not meet all three proposed criteria for convincing slow-memory
+usefulness or establish architectural superiority. The ring is a storage
+reference, rather than a matched trained neural architecture.
 
-## Source, training and cost
+## Sources, training and resource use
 
-Original14PSF CPython FIT owners, original frozen sourceSHA911981cc63fd5436e0495cb067784e53475971131c811b7026e07d97a886d2d4. Exact sampled-window hashes in FIT_PLAN.json; original160checkpointSHA/optimizer lineage in PARENTS.json. AdamWlr.001,wd.01,globalgradclip1,4x256; no other change/tuning. Model resets at each training window, so extra updates do not add a >256byte training credit horizon.
+FIT used the original 14 PSF CPython owners and exact frozen source/sampler
+hashes in `FIT_PLAN.json`. Original checkpoint pins are in `PARENTS.json`.
+AdamW learning rate 0.001, weight decay 0.01, gradient clipping 1, and batches
+of four 256-byte windows stayed unchanged. State resets at each training
+window; more updates do not create a training credit horizon beyond 256 bytes.
 
-Rust Project book Git2771df165f092a4fbb9f46b5b2e7450f19010adb, MIT OR Apache2.0. Gitblob/size and license metadata frozen before fitting, raw content acquired only after last1280seal. RawSHA256recorded afterward:
+The two new Rust Project book chapters are from commit
+`2771df165f092a4fbb9f46b5b2e7450f19010adb`, licensed MIT OR Apache-2.0.
+Git blob, size and license metadata were frozen before fitting. Raw content
+was acquired after all checkpoints sealed; SHA256 was recorded afterward:
 
-- `src/ch07-01-packages-and-crates.md`: 3806bytes, SHA256`7141297fcc8bd0d0cb4e850b9f853574ddbb15b48a8b56c615539979c8a9e27e`.
-- `src/ch09-01-unrecoverable-errors-with-panic.md`: 8520bytes, SHA256`edce46b44eee961106ca49be8b1ce306e400c767304e9005b8763c141a444d1d`.
+- `src/ch07-01-packages-and-crates.md`: 3,806 bytes; SHA256 `7141297fcc8bd0d0cb4e850b9f853574ddbb15b48a8b56c615539979c8a9e27e`.
+- `src/ch09-01-unrecoverable-errors-with-panic.md`: 8,520 bytes; SHA256 `edce46b44eee961106ca49be8b1ce306e400c767304e9005b8763c141a444d1d`.
 
-Different chapters from085/086, sameRustpublisher; limited new-document transfer fromPSF FIT, not broad independent generalization. No rawSHA was falsely represented as independently frozen before fit.
+These are different chapters from LANGMEM085/086, but from the same publisher.
+This is limited new-document transfer from PSF FIT, not broad independent
+qualification. No post-seal SHA256 was represented as independently frozen
+before fitting.
 
-Additional fit processCPU6417.143sec=106.95CPUmin across6continuations; evaluation processCPU1041.950sec=17.37CPUmin across9evaluations, below conservative180+75CPUmin budgets. Different batchlosses are not heldout-learning curves. All optimizer steps and finite connected gradients checked; all35top-level parameter groups have nonzero finite norms at recorded segment endpoints.
+Additional fitting took 6,417.143 process-CPU seconds (106.95 minutes) across
+six continuations. Evaluation took 1,041.950 seconds (17.37 minutes) across
+nine checkpoints, below conservative budgets of 180 and 75 CPU minutes.
+Different training batches are not a held-out learning curve.
 
-Persistent model tensors1920B/owner+8Bclock+UTF8ownermetadata; shared learned weights402084B, fixed codebuffer8192B. Ring1928B=16Bheader+1912bytepayload, plus2048Bsharedfloat64FITprior; transientcounts/workspace separate. Ring reaches capacity late in2048observedsteps. No total-memory Pareto claim. Peak evalRSS344510464–345436160B.
+Persistent model tensors use 1,920 bytes per owner, plus an 8-byte clock and
+UTF-8 owner metadata. Shared learned weights use 402,084 bytes; the fixed code
+buffer uses 8,192 bytes. The ring uses 1,928 bytes (16-byte header and
+1,912-byte payload), plus a shared 2,048-byte FIT prior. Workspace is separate.
+It reaches capacity late in the stream. No total-memory Pareto claim is made.
+Peak evaluation RSS was 344,510,464–345,436,160 bytes.
 
-Diagnostic-wrapper fullforward1.192–1.827ms/observedbyte; includes explicit split/trace bookkeeping. Ringquery2.532–3.375ms/query, excludesappend; workunits differ and neither is a hardware deployment or equalcompute efficiency comparison. Actual timings and percheckpointcounts retained.
+Diagnostic-wrapper forward timing was 1.192–1.827 ms per observed byte,
+including split/trace bookkeeping. Ring queries took 2.532–3.375 ms each,
+excluding append. These differ in work and units; they do not establish
+production latency or an equal-compute efficiency advantage.
 
-## Engineering, mathematical scope and original artifacts
+## Verification and original evidence
 
-All actual100521prefit/final gates and original parent/sampler/optimizer chains passed. All six new continuations passed cold bitwise logits/state and optimizer-step reload checks; the original160receipts preserve their original logits-replay checks. Original diagnostic default matches native086 graph bitwise for every evaluatedcheckpoint.18actualsourcefuturepoison pairs passed; maximumstream/bulk128prefixerror1.144409e−5<3e−5; old/current spliterror1.490116e−8<1e−6; weights frozen throughout. Unsupported diagnostic dimensions remain INCONCLUSIVE.
+Actual 100,521-parameter gates, parent/sampler/optimizer chains and all six
+continuation cold logits/state/optimizer-step replays passed. Original
+160-update receipts retain their original logits-replay checks. Every update
+had finite connected gradients; all 35 parameter groups had nonzero finite
+norms at recorded continuation endpoints. Default diagnostic predictions and
+state matched the original native graph bitwise for every checkpoint.
+All 18 source future-poison pairs passed. Maximum prefix error was
+1.144409e-5 (limit 3e-5); split error was 1.490116e-8 (limit 1e-6).
+Weights remained frozen during evaluation. Unsupported probes remain
+INCONCLUSIVE.
 
-Full local suite1602passed/4skipped after scoped086import;34targeted checks after both038/086scopes passed. First import-collision sourceCI40983854617 and first proofCI40983914975 failures preserved in ENGINEERING_LEDGER.md. Corrected scoped Lean/Python CI40984197814 and bridge40984526086passed. Actual source Float64 split/read/localderivativeerrors6.78e−21/4.34e−19/1.74e−13. Full graph IEEE/AD, semantic goals, independent reward/ACL qualification and canonical registry merge remain OPEN.
+Local verification passed 1,602 tests with four skipped after the scoped
+LANGMEM086 import fix, plus 34 targeted checks after scoping both imports.
+Initial import-collision CI `40983854617` and proof CI `40983914975` failures
+are preserved in `ENGINEERING_LEDGER.md`. Corrected Lean/Python CI
+`40984197814` and bridge CI `40984526086` passed. Actual-source Float64 split,
+read and local derivative errors were 6.78e-21, 4.34e-19 and 1.74e-13.
+Full neural IEEE/AD proof, semantic goals, independent reward/ACL qualification
+and coordinated canonical-registry append remain OPEN.
 
-Original fit + first-new-DEV + aggregate Actions: https://github.com/FPC-effortless/TAC-OSM/actions/runs/40984392435 . Registered source9d6cda3be8e200fd607bf6f8bb39fa381587bc22; explicit launch535fbfafe6202f5a8aaf53629150372e60bd7cb1. Draft TAC630, PNDS84. Aggregate artifact12948075104, ZIP SHA2569338ad3c168bd2aacad2b5f63883a9f67b0be8fe9167bb7ce6cf92226dd7e0d3. All original artifactIDs/ZIPdigests in LANGMEM087_ORIGINAL_ARTIFACTS.json, all checkpointSHAs in aggregate.
+Original fit, first-DEV and aggregate run:
+https://github.com/FPC-effortless/TAC-OSM/actions/runs/40984392435
 
-Independent workspace download verified all3evaluation ZIPs and aggregate ZIPSHA; all9actualMODEL.ptSHA checks and original parent chains passed. Read-only reaggregation is exact JSON equality to both original artifact and original Actions log; no further fit, inference or DEV text read was required. See REPRODUCE.md. Normal latercommits skip fits/DEV; no restart to improve outcome.
+Registered source: `9d6cda3be8e200fd607bf6f8bb39fa381587bc22`.
+Explicit launch: `535fbfafe6202f5a8aaf53629150372e60bd7cb1`.
+Drafts: TAC #630 and PNDS #84. Aggregate artifact: `12948075104`;
+ZIP SHA256: `9338ad3c168bd2aacad2b5f63883a9f67b0be8fe9167bb7ce6cf92226dd7e0d3`.
+Full artifact IDs/digests and checkpoint hashes are saved beside this report.
+Downloaded evaluation/aggregate ZIP hashes, all nine checkpoint files and
+parent chains passed verification. Read-only reaggregation equals both the
+original artifact and Actions log exactly, without further fitting, inference
+or DEV-text access. See `REPRODUCE.md`. Report commits do not restart training.
 
 ## Research decision
 
-More updates alone do not resolve slow-memory usefulness in this tested256byte training task. Keep the existing architecture and1280negative evidence. Proceed prospectively to a separately matched credit-horizon and/or trainable slow-read preference study with fresh DEV and a fully trained fast-only comparator; do not tune on087chapters. No claim that larger training scales, different tasks, slow memory in general or alternate read/write alignment cannot work. Original models/data/failures preserved, no GPU quota, protected TEST, model promotion or merges.
+More updates alone do not resolve consistent slow-state usefulness in this
+256-byte training task. Keep the architecture and preserve the negative
+1,280-update evidence. A separately registered credit-horizon and/or trainable
+slow-read preference study with fresh DEV and a matched trained fast-only
+control remains warranted. Do not tune on these now-exposed chapters.
+This result does not rule out larger training scales, stronger task pressure,
+other read/write alignment or compressed associative memory in general.
+Original artifacts and failures remain intact. No GPU quota, protected TEST,
+checkpoint promotion or merges were used.
