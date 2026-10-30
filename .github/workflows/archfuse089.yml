@@ -1,0 +1,31 @@
+name: ARCHFUSE089 CPU no-fit operator falsifiers
+
+on:
+  push:
+    branches:
+      - research/archfuse089-operator-falsifiers-2026-10-30
+    paths:
+      - "tests/test_archfuse089.py"
+      - "research/mathematical-engineering/archfuse089/**"
+      - ".github/workflows/archfuse089.yml"
+
+  pull_request:
+    branches:
+      - research/langmem087-duration-old-slow-controls-2026-10-30
+
+permissions:
+  contents: read
+
+jobs:
+  operator-falsifiers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install CPU no-fit dependencies
+        run: python -m pip install --quiet pytest torch
+      - name: Verify operator controls and actual original model unchanged
+        run: python -m pytest tests/test_archfuse089.py -q -rs
