@@ -1,0 +1,166 @@
+name: LANGCAP105 owner-authorized real-source exploratory fits (no external signoff)
+on:
+  pull_request:
+    paths:
+      - 'research/langcap105/**'
+      - '.github/workflows/langcap105-owner-fit.yml'
+permissions:
+  contents: read
+concurrency:
+  group: langcap105-owner-fit-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  prepare-authentic-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    outputs:
+      full_matrix: ${{ steps.matrix.outputs.full_matrix }}
+      smoke_matrix: ${{ steps.matrix.outputs.smoke_matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Freeze exactly six model configurations and eighteen independent fits
+        id: matrix
+        run: |
+          python - <<'PY'
+          import json,os
+          p=json.load(open('research/langcap105/OWNER_PROTOCOL.json'))
+          assert p['owner_authorized'] is True
+          assert p['independent_attestation'] is False
+          assert p['dev_scoring_in_training'] is False
+          assert p['fit']['steps']==2560
+          rows=[{'scale':s,'arm':a['arm'],'seed':seed}
+                for s,group in p['models'].items()
+                for a in group['configurations'] for seed in p['seeds']]
+          smoke=[r for r in rows if r['seed']==10301]
+          assert len(rows)==18 and len(smoke)==6
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('full_matrix='+json.dumps({'include':rows},separators=(',',':'))+'\n')
+              f.write('smoke_matrix='+json.dumps({'include':smoke},separators=(',',':'))+'\n')
+          print({'planned_full_fits':len(rows),'planned_smoke_checks':len(smoke)})
+          PY
+      - uses: actions/checkout@v4
+        with:
+          repository: python/cpython
+          ref: 60403a5409ff2c3f3b07dd2ca91a7a3e096839c7
+          path: ci-input/cpython
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Authenticate original CPython bytes and file-level groups
+        run: python research/langcap103/source.py --source-dir ci-input/cpython --out ci-artifacts/langcap105-source
+      - name: Independently exclude every DEV file before model can read corpus
+        run: >-
+          python research/langcap104/stage_fit_only.py
+          --receipt ci-artifacts/langcap105-source/SOURCE_RECEIPT.json
+          --full-archive ci-artifacts/langcap105-source/corpus.tar
+          --output ci-artifacts/langcap105-FIT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LANGCAP105-authentic-FIT-only-inputs
+          path: |
+            ci-artifacts/langcap105-FIT/FIT_ONLY.tar
+            ci-artifacts/langcap105-source/SOURCE_RECEIPT.json
+          if-no-files-found: error
+          retention-days: 30
+  smoke:
+    needs: prepare-authentic-fit
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.prepare-authentic-fit.outputs.smoke_matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGCAP105-authentic-FIT-only-inputs
+          path: ci-input/FIT-only
+      - name: Real-source eight-step optimizer smoke, checkpoint and no-DEV attestation
+        run: |
+          python research/langcap105/train_owner.py \
+            --source-receipt ci-input/FIT-only/ci-artifacts/langcap105-source/SOURCE_RECEIPT.json \
+            --fit-archive ci-input/FIT-only/ci-artifacts/langcap105-FIT/FIT_ONLY.tar \
+            --scale '${{ matrix.scale }}' --arm '${{ matrix.arm }}' \
+            --seed ${{ matrix.seed }} --smoke --max-steps 8 \
+            --output ci-artifacts/langcap105-smoke
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGCAP105-smoke-${{ matrix.scale }}-${{ matrix.arm }}
+          path: ci-artifacts/langcap105-smoke/
+          if-no-files-found: warn
+          retention-days: 14
+  fit:
+    needs: [prepare-authentic-fit, smoke]
+    if: needs.smoke.result == 'success'
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.prepare-authentic-fit.outputs.full_matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGCAP105-authentic-FIT-only-inputs
+          path: ci-input/FIT-only
+      - name: Fit actual learned TAC, Transformer or GRU on verified CPython FIT bytes
+        run: |
+          python research/langcap105/train_owner.py \
+            --source-receipt ci-input/FIT-only/ci-artifacts/langcap105-source/SOURCE_RECEIPT.json \
+            --fit-archive ci-input/FIT-only/ci-artifacts/langcap105-FIT/FIT_ONLY.tar \
+            --scale '${{ matrix.scale }}' --arm '${{ matrix.arm }}' \
+            --seed ${{ matrix.seed }} \
+            --output ci-artifacts/langcap105-fit
+      - name: Preserve learned parameters, optimizer, RNG, losses even after failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGCAP105-fit-${{ matrix.scale }}-${{ matrix.arm }}-${{ matrix.seed }}
+          path: ci-artifacts/langcap105-fit/
+          if-no-files-found: warn
+          retention-days: 90
+  audit:
+    needs: fit
+    if: needs.fit.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: LANGCAP105-fit-*
+          path: ci-input/all-fits
+      - name: Check all 18 trained checkpoints, SHA, loss curves and science classification
+        run: |
+          python research/langcap105/audit.py --fitsdir ci-input/all-fits \
+            --protocol research/langcap105/OWNER_PROTOCOL.json \
+            --output ci-artifacts/langcap105/FULL_FIT_AUDIT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGCAP105-full-FIT-audit
+          path: ci-artifacts/langcap105/
+          retention-days: 90
