@@ -1,0 +1,1780 @@
+{
+  "actual_trained_models": 3,
+  "capability_gates": [
+    {
+      "domain": "lexical",
+      "group": "positive",
+      "nonzero_carried_exact_in_every_seed": false,
+      "positive_intervals": false,
+      "required_exact_attribution_effects": [
+        "carry_minus_reset_exact",
+        "carry_minus_donor_exact"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "domain": "arc",
+      "group": "unknown_rule",
+      "nonzero_carried_exact_in_every_seed": false,
+      "positive_intervals": false,
+      "required_exact_attribution_effects": [
+        "carry_minus_reset_exact",
+        "carry_minus_binding_shuffle_exact"
+      ],
+      "status": "FAIL"
+    }
+  ],
+  "effects": [
+    {
+      "modality": "code",
+      "name": "heldout_language_training_nll_gain",
+      "supported_effect": {
+        "ci95": [
+          3.69818115234375,
+          3.9236243888735767
+        ],
+        "cluster_equal_mean": 3.7901374921202655,
+        "clusters": 4,
+        "mean": 3.790137492120266
+      }
+    },
+    {
+      "modality": "documentation_prose_with_code_examples",
+      "name": "heldout_language_training_nll_gain",
+      "supported_effect": {
+        "ci95": [
+          3.362387736162378,
+          3.4998507753842407
+        ],
+        "cluster_equal_mean": 3.433386176548622,
+        "clusters": 18,
+        "mean": 3.433386176548622
+      }
+    },
+    {
+      "cases": 32,
+      "domain": "lexical",
+      "metric": "nll",
+      "name": "training_nll_gain",
+      "status": "MEASURED",
+      "supported_effect": {
+        "ci95": [
+          1.3304446078836918,
+          3.0515097696334124
+        ],
+        "cluster_equal_mean": 2.267418641286592,
+        "clusters": 4,
+        "mean": 2.267418641286592
+      },
+      "unavailable_cases": 0
+    },
+    {
+      "cases": 32,
+      "domain": "lexical",
+      "metric": "nll",
+      "name": "reset_minus_carry",
+      "status": "MEASURED",
+      "supported_effect": {
+        "ci95": [
+          -0.033946817119916275,
+          0.17898228702445826
+        ],
+        "cluster_equal_mean": 0.07251773495227098,
+        "clusters": 4,
+        "mean": 0.07251773495227098
+      },
+      "unavailable_cases": 0
+    },
+    {
+      "cases": 32,
+      "domain": "lexical",
+      "metric": "nll",
+      "name": "donor_minus_carry",
+      "status": "MEASURED",
+      "supported_effect": {
+        "ci95": [
+          0.040301753828922905,
+          0.23842425582309562
+        ],
+        "cluster_equal_mean": 0.15285709096739689,
+        "clusters": 4,
+        "mean": 0.15285709096739689
+      },
+      "unavailable_cases": 0
+    },
+    {
+      "cases": 32,
+      "domain": "lexical",
+      "metric": "exact",
+      "name": "carry_minus_reset_exact",
+      "status": "MEASURED",
+      "supported_effect": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "cluster_equal_mean": 0.0,
+        "clusters": 4,
+        "mean": 0.0
+      },
+      "unavailable_cases": 0
+    },
+    {
+      "cases": 32,
+      "domain": "lexical",
+      "metric": "exact",
+      "name": "carry_minus_donor_exact",
+      "status": "MEASURED",
+      "supported_effect": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "cluster_equal_mean": 0.0,
+        "clusters": 4,
+        "mean": 0.0
+      },
+      "unavailable_cases": 0
+    },
+    {
+      "cases": 8,
+      "domain": "arc",
+      "metric": "nll",
+      "name": "training_nll_gain",
+      "status": "MEASURED",
+      "supported_effect": {
+        "ci95": [
+          -0.28005655486679976,
+          4.754884855930381
+        ],
+        "cluster_equal_mean": 2.418813979059147,
+        "clusters": 8,
+        "mean": 2.4188139790591476
+      },
+      "unavailable_cases": 0
+    },
+    {
+      "cases": 8,
+      "domain": "arc",
+      "metric": "nll",
+      "name": "reset_minus_carry",
+      "status": "MEASURED",
+      "supported_effect": {
+        "ci95": [
+          0.019685066192566103,
+          1.2942427114117887
+        ],
+        "cluster_equal_mean": 0.6613733294652775,
+        "clusters": 8,
+        "mean": 0.6613733294652775
+      },
+      "unavailable_cases": 0
+    },
+    {
+      "cases": 8,
+      "domain": "arc",
+      "metric": "nll",
+      "name": "donor_minus_carry",
+      "status": "INCONCLUSIVE",
+      "supported_effect": {
+        "ci95": [
+          -0.0696801367836694,
+          0.3495989963412285
+        ],
+        "cluster_equal_mean": 0.09770679416962795,
+        "clusters": 3,
+        "mean": 0.09770679416962795
+      },
+      "unavailable_cases": 5
+    },
+    {
+      "cases": 8,
+      "domain": "arc",
+      "metric": "exact",
+      "name": "carry_minus_reset_exact",
+      "status": "MEASURED",
+      "supported_effect": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "cluster_equal_mean": 0.0,
+        "clusters": 8,
+        "mean": 0.0
+      },
+      "unavailable_cases": 0
+    },
+    {
+      "cases": 8,
+      "domain": "arc",
+      "metric": "exact",
+      "name": "carry_minus_donor_exact",
+      "status": "INCONCLUSIVE",
+      "supported_effect": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "cluster_equal_mean": 0.0,
+        "clusters": 3,
+        "mean": 0.0
+      },
+      "unavailable_cases": 5
+    },
+    {
+      "cases": 8,
+      "domain": "arc",
+      "metric": "exact",
+      "name": "carry_minus_binding_shuffle_exact",
+      "status": "MEASURED",
+      "supported_effect": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "cluster_equal_mean": 0.0,
+        "clusters": 8,
+        "mean": 0.0
+      },
+      "unavailable_cases": 0
+    }
+  ],
+  "episode_summary": [
+    {
+      "condition": "carry",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "positive",
+      "nll": 5.5509373644987745,
+      "outcomes": 96,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "reset",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "positive",
+      "nll": 5.550991361339887,
+      "outcomes": 96,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "donor",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "positive",
+      "nll": 5.550762474536896,
+      "outcomes": 96,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "corrupt",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "positive",
+      "nll": 5.550147905945778,
+      "outcomes": 96,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "carry",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "negative",
+      "nll": 5.543801953395207,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "reset",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "negative",
+      "nll": 5.543317556381226,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "donor",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "negative",
+      "nll": 5.5449584523836775,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "corrupt",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "negative",
+      "nll": 5.544554154078166,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "carry",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "uniform",
+      "nll": 5.530671576658885,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "reset",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "uniform",
+      "nll": 5.529899497826894,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "donor",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "uniform",
+      "nll": 5.5303208728631335,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "corrupt",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "uniform",
+      "nll": 5.528394003709157,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "carry",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.0,
+      "group": "unknown_rule",
+      "nll": 5.5759652853012085,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "reset",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.0,
+      "group": "unknown_rule",
+      "nll": 5.573271214962006,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "donor",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.0,
+      "group": "unknown_rule",
+      "nll": 5.569183773464626,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 3,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 3,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 3,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 15
+    },
+    {
+      "condition": "corrupt",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.0,
+      "group": "unknown_rule",
+      "nll": 5.574894467989604,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "binding_shuffle",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.0,
+      "group": "unknown_rule",
+      "nll": 5.576137999693553,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9903
+        }
+      ],
+      "stage": "initial",
+      "unavailable": 0
+    },
+    {
+      "condition": "carry",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "positive",
+      "nll": 3.2835187232121825,
+      "outcomes": 96,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "reset",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "positive",
+      "nll": 3.3560364581644535,
+      "outcomes": 96,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "donor",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "positive",
+      "nll": 3.4363758141795793,
+      "outcomes": 96,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "corrupt",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "positive",
+      "nll": 3.349188263217608,
+      "outcomes": 96,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 32,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "carry",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "negative",
+      "nll": 3.8187552243471146,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "reset",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "negative",
+      "nll": 3.941531670590242,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "donor",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "negative",
+      "nll": 4.102582961941759,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "corrupt",
+      "domain": "lexical",
+      "exact_rate": 0.0,
+      "format_rate": 1.0,
+      "group": "negative",
+      "nll": 3.990898609161377,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "carry",
+      "domain": "lexical",
+      "exact_rate": 0.22916666666666666,
+      "format_rate": 1.0,
+      "group": "uniform",
+      "nll": 1.6019623978160478,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 3,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "reset",
+      "domain": "lexical",
+      "exact_rate": 0.25,
+      "format_rate": 1.0,
+      "group": "uniform",
+      "nll": 1.446987527058809,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "donor",
+      "domain": "lexical",
+      "exact_rate": 0.25,
+      "format_rate": 1.0,
+      "group": "uniform",
+      "nll": 1.437343979504173,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "corrupt",
+      "domain": "lexical",
+      "exact_rate": 0.25,
+      "format_rate": 1.0,
+      "group": "uniform",
+      "nll": 1.4677565247693565,
+      "outcomes": 48,
+      "per_seed_exact": [
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9901
+        },
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9902
+        },
+        {
+          "correct": 4,
+          "measured_cases": 16,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "carry",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.08333333333333333,
+      "group": "unknown_rule",
+      "nll": 3.1571513062420613,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "reset",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.041666666666666664,
+      "group": "unknown_rule",
+      "nll": 3.818524635707339,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "donor",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.0,
+      "group": "unknown_rule",
+      "nll": 0.2357218397470812,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 3,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 3,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 3,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 15
+    },
+    {
+      "condition": "corrupt",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.0,
+      "group": "unknown_rule",
+      "nll": 3.8968258748451867,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    },
+    {
+      "condition": "binding_shuffle",
+      "domain": "arc",
+      "exact_rate": 0.0,
+      "format_rate": 0.0,
+      "group": "unknown_rule",
+      "nll": 3.0577256648102775,
+      "outcomes": 24,
+      "per_seed_exact": [
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9901
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9902
+        },
+        {
+          "correct": 0,
+          "measured_cases": 8,
+          "seed": 9903
+        }
+      ],
+      "stage": "trained",
+      "unavailable": 0
+    }
+  ],
+  "language_summary": [
+    {
+      "FIT_bigram_reference_nll": 2.4616961957634254,
+      "bits_per_byte": 8.000440663032025,
+      "modality": "code",
+      "nextbyte_accuracy": 0.0037841796875,
+      "nll": 5.545482888817787,
+      "stage": "initial"
+    },
+    {
+      "FIT_bigram_reference_nll": 2.829124560666051,
+      "bits_per_byte": 8.002995289346861,
+      "modality": "documentation_prose_with_code_examples",
+      "nextbyte_accuracy": 0.004448784722222222,
+      "nll": 5.5472536208453,
+      "stage": "initial"
+    },
+    {
+      "FIT_bigram_reference_nll": 2.4616961957634254,
+      "bits_per_byte": 2.532428098862784,
+      "modality": "code",
+      "nextbyte_accuracy": 0.5348714192708334,
+      "nll": 1.7553453966975212,
+      "stage": "trained"
+    },
+    {
+      "FIT_bigram_reference_nll": 2.829124560666051,
+      "bits_per_byte": 3.0496660789834444,
+      "modality": "documentation_prose_with_code_examples",
+      "nextbyte_accuracy": 0.42872902199074076,
+      "nll": 2.113867444296678,
+      "stage": "trained"
+    }
+  ],
+  "optimizer_steps_per_model": 2048,
+  "parameters_per_model": 10000000,
+  "references": [
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-6459ac6ad97f0802c703fa2b2e432b2f2b9dd11666682b2dd0f6f2913579015f",
+      "nll": 4.575498839187346
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-90c93231b081a0be9dffbfd7d87b144ff4f993e4e96e9d7008d48e26ee5da614",
+      "nll": 4.756911087840446
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-4282ebf00f7b40e05b00157bb728be0bc385fa591531959e34b78e7a6635aab3",
+      "nll": 3.0999589892312804
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "positive",
+      "id": "097-2333faa483f9b5990688ad0b6d997e17a4c17ecfcafb6116ffa3a0fd09b7d727",
+      "nll": 0.0012881888300538098
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-21db37b0a2551b4fa646102f519528fe67a131a1113765d7a964fec29031f554",
+      "nll": 6.963966887282383
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "positive",
+      "id": "097-624e0059e0b3230df2bac0deb07f6f2aedd68ac791a654e2a3b3a32a135c077e",
+      "nll": 0.2780862377341283
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-f0b8595a4807c8febb805fedaf4632ffe2575d8f3c4cd90afa53129803efd452",
+      "nll": 9.899036147950813
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "positive",
+      "id": "097-b75e6517a68ce6df0a81f5e4c7d7f89f69c6cd31cf294578737d5c30baa9d5aa",
+      "nll": 0.6756241727202951
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-9f3e4fdb6b8f016d4dda6bbffa65b338a22c6683b137e0aae35f7628d2a756b8",
+      "nll": 7.2331381036347295
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-1e22a0cb185a2c554dc19efe205cba43d8a2dca123e013b356dd26ed8e6dba91",
+      "nll": 7.154615356913663
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "negative",
+      "id": "097-fd6e8f70bb50dd061fb1f40edcf57e8adf5725c00229f36b345a96175da4e6d2",
+      "nll": 0.7069757883588463
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-ae665c7bda651dd738f41a247bdc0d30186e552a488953f6f79c6211ffea682b",
+      "nll": 3.847758679793685
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-722aae72a1c8b3594076dcfb6fdf590492dfe4360563aee6f424f5a52d717cf0",
+      "nll": 0.01212793850508447
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-59bb7193b7e1c3408231e0d8ba90245dbf5c9fbb4b49f9b681b15714659daa3b",
+      "nll": 4.8546262944146505
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-9287303004a99e05880c96f76bfd7c1c806610672b031550bedf2b858f66dd5e",
+      "nll": 0.02712667909558136
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-9ffe18356545794fcf55edc16a0a16911a73c6bdcf8e3027c3c6a5927ddeef0d",
+      "nll": 7.7264016804693405
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-e0f0ace003d61d29f26e1a8d686ef3984082cc802c27d0b34b3cdeae52e4cab2",
+      "nll": 3.4920297760456873
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-e77584c7a4841b4ff4c84f8e29ed76314f23d3451c400eb88694847c512cb6cb",
+      "nll": 1.4355894859172633
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-8c588d12b0b11d264ecbe2e9d76a1f5463b90b133de9d2dbbede060d79bb35be",
+      "nll": 3.42775665473451
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-b616a4fd16c6d7c905f7f7c2665081b626ef8d9923fa0f9c6f9ea1d294910652",
+      "nll": 6.220708289210882e-05
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "positive",
+      "id": "097-31685cb1bd893560d37b98ffb38007cf68854b5f8910143cdf5489c3da85cf5a",
+      "nll": 0.8876997945491604
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-0484a04d40dd9bf63e9d240f17ef149c6a3479caf1f27d4df7de0a9244d4f75b",
+      "nll": 3.679019685197648
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-54e43fda1561e02a82c8d6d4bb247211122bd85a59d058345e9f9a203ef7b53d",
+      "nll": 6.248559243144059
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-8240c9e93335b03c4c4501e5f6a098b29e997f64a31a50f1cb9eef639a0943f4",
+      "nll": 15.138302717859917
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-2d6f57b64b62fb913842a2aa09ff580243af78d732ce9cc683347b33ce689a0f",
+      "nll": 3.6886233393731334
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-3699653f4be502a9c53e45bff913d71b6faf54a95e937096d57481251eaef199",
+      "nll": 3.0594698334953576
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-3c871d0f7993ea9b5a79f2297985f008da1a5ff913ade7f9328d50c4f5ac9961",
+      "nll": 3.1744741793764426
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-9a75f13e43c09bc8686c2270896703f22826fbb4a07ade4a83b5e305ff19fac1",
+      "nll": 1.353437071687885
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "uniform",
+      "id": "097-39ba252fbf491db51b4a06fa7fabec5dedfc5d139a487d8e988ac5f3e54222d1",
+      "nll": 0.12276368021855023
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-b1a300b45929f2600f14c9764ba8e0216aa5ee37f5f385955336f3081f61269b",
+      "nll": 8.708632475406356
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-269d12c73778caba01023e22f7e58a003b6736efcb879b343cd4d960b003e6e4",
+      "nll": 0.6361448136743038
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-e4156b15da4ee0b49f049f16247ad4693af0c4d5c30474dfa0929bbb7bbdc1d4",
+      "nll": 0.07531700538996376
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-f89f32be89e6d21aeb880becf496af9e2dd52d61aaffe4d4958464705d3021cf",
+      "nll": 3.5731262549602505
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-0908fe577bc4d75f959d49e45e1d36b211890adbf1ab047e471531424f6d673f",
+      "nll": 4.59084329336733
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "positive",
+      "id": "097-46a7f34d306d9642b94541f556360edeb7f6089d33e1c725d82b6c1bdf75d8a1",
+      "nll": 0.015469638477478795
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-e121f7d81388f788e365a456a28212e5f851385d985cdf600030b6d99ded3bbe",
+      "nll": 4.181861708990789
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "positive",
+      "id": "097-ae599834bdb23b6cf3e2f990c7693a2e3711b58603cebb5ce83c3359f83b306f",
+      "nll": 0.015469638477478795
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "positive",
+      "id": "097-8fbe6eb52e2abecf7bba13eabca31c488e8e9f605cdf1e06249324535f9909ab",
+      "nll": 0.03117482627229281
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-33696b4fcbed76417ba9bbf46716df1ed4efbfb0ac1962f7f3b8b6422266131c",
+      "nll": 2.800628354666051
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "positive",
+      "id": "097-18709221f9d8a39f894bf564090baef4c494c715abb69800fbc70481ed3ff28b",
+      "nll": 0.003158223691742068
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-ad9c90ede419177499fecba1845e77d4669948741767b9934c7321690f71c0dd",
+      "nll": 12.83350673154023
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-75d8a346d9e108233050f477ba1d922ce87ed7c0c52ff2eed1d907745e1345dd",
+      "nll": 0.024115265079368356
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-b80f7f9f31d499ea546d39dfe34431e375622511c3d2c4f090f3e0a4100b1881",
+      "nll": 5.3764810536499255
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-52216834d965e1c5c57bad7c3e01669ea86e1b0b088138431b34d2332a9c6351",
+      "nll": 0.0013143779339541558
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "uniform",
+      "id": "097-2c16e198480f1c3feeb0fc809fca652683d474b64df14bc66e9b24df26cb0a2b",
+      "nll": 0.002983182440181578
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-0050e6d122a59ae2a0f30b398165054270989c3ad9ae3852a1e479b30a6c66b7",
+      "nll": 5.058409389085574
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-9fb37b60f1e6d275ba8090cae4e838fbb4c9f8f6ca54482d0183c7359426946f",
+      "nll": 0.3733645168463088
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-0b4892fc0e6f3c11a4a885565089c9b548923656be9b29afc49a14631b28971a",
+      "nll": 8.729251762609092
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-6d325b11a21e1bb8a54a76932b129ed3978553647a2d98be6003539ba304758b",
+      "nll": 3.5105621400828233
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-17d8452151758f77a63727c7943cbe9bc442a2a9b5bd8847416a8bb53105b46d",
+      "nll": 1.989504760361101
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-7b7565c613864df0019896b23c5fd259d16b2684228b855eced4f0d81e1aec79",
+      "nll": 3.491545246384422
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-5c84a2c631cb8739b8a961e9cac64648b9d361ef099c15755a98ffd2b4368085",
+      "nll": 3.678630810308976
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-36685b34c8249b98594fe0a6ca90d29787b536d0c94e9c94f364960c5fdbfc00",
+      "nll": 6.909993703226015
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-2fdf01f0e985c2b13521c3f9d8d7a1d09f016d71ae249b47a48f7fedb83e5383",
+      "nll": 16.267100913963148
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-5286c46145d3a51073ca18d03e77f38ed1875cfc0ba8c1e14eeda5ae9b4cf268",
+      "nll": 3.5105621400828233
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "positive",
+      "id": "097-8da88270cfe0366eae415bee8c29f9c286c89b47a8ee1db5871c258ec8b9b66f",
+      "nll": 7.198189121294365
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "negative",
+      "id": "097-0274f56b6e5369aea534e24aa0d5c573551adf8f9861f2ab5ed3081a342c3829",
+      "nll": 0.0013228604358303682
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-0686a8b356331baca726966bcc89b3a6b8ed9168072feb60a13694808b3342c1",
+      "nll": 6.807430166475174
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-516b24b121008c74f97366603a83add2eb3cb0d49a24eefa56094a5be39f59c5",
+      "nll": 9.3457608881735
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "negative",
+      "id": "097-de9aed33e5bc848ac66656b04d8813c26091a1536ab0689c489da73b2e7024e5",
+      "nll": 4.030050211516704
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "uniform",
+      "id": "097-66d11775a474c10c3696d4e176f23347880e1dffe481b40d74526cfef9162c6c",
+      "nll": 0.041662167924332964
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "uniform",
+      "id": "097-63be99233dfdc383fea3a36ece477924eafb9b8e337395eb73c9fa4f7476a0c1",
+      "nll": 0.10167086729572399
+    },
+    {
+      "domain": "lexical",
+      "exact": 1,
+      "group": "uniform",
+      "id": "097-6e5d6bf491b9e3cb08bac7ce189f0db588308419e805c4a67f0692d50e77277c",
+      "nll": 0.42624099776837776
+    },
+    {
+      "domain": "lexical",
+      "exact": 0,
+      "group": "uniform",
+      "id": "097-3e248efe559e6a9adab1c3c98c01024a4b637b8ee6a61421000b38dba2b9e5e4",
+      "nll": 0.07682634943526202
+    },
+    {
+      "domain": "arc",
+      "exact": 0,
+      "format_valid": 1,
+      "id": "097-c7cb64ab160da13d45bcc7e42b7f46d3aa8b81bd0be6fd571de4ae686d2c6a29"
+    },
+    {
+      "domain": "arc",
+      "exact": 0,
+      "format_valid": 1,
+      "id": "097-bc3fc9d94ef696f907c973d05a79c84790a21e6df900582b9e51364a46bbb248"
+    },
+    {
+      "domain": "arc",
+      "exact": 0,
+      "format_valid": 1,
+      "id": "097-3d251f85f3606da64734fbc745db6c6e486dc89d2024991d01c2c7672607c33a"
+    },
+    {
+      "domain": "arc",
+      "exact": 0,
+      "format_valid": 1,
+      "id": "097-4a74dc2ee7b02a99dd0ac9c713daa24e16a644b7eda2f17663657695281e6788"
+    },
+    {
+      "domain": "arc",
+      "exact": 1,
+      "format_valid": 1,
+      "id": "097-dcef5c5649e08be658f15a7d8d81c36efb04ac5b91f0e1c433b2b591d33ab2b6"
+    },
+    {
+      "domain": "arc",
+      "exact": 0,
+      "format_valid": 1,
+      "id": "097-02b9d30a515525289360a1cb2f8587d02bd9cd755adae59f4d513c63eaf3bc34"
+    },
+    {
+      "domain": "arc",
+      "exact": 0,
+      "format_valid": 1,
+      "id": "097-53c07fb59c33e14541b39364a1aae5a83070456075a04a20797a4c421c812b10"
+    },
+    {
+      "domain": "arc",
+      "exact": 0,
+      "format_valid": 1,
+      "id": "097-00f3d97bb2c5c137b62dcf4da0774a4f621583f99f39e22e26fd284810c2b505"
+    }
+  ],
+  "replays": [
+    {
+      "checkpoint_sha256": "65de88c067a9bca8a7327817292003a26eec957a091d9aa178df82a6e567333b",
+      "seed": 9901,
+      "stage": "initial",
+      "state_sha256": "9ee6cea375702e3833a8d0feef090a7531e3c2ee26e1cfb4c2b88ab1869870d4",
+      "status": "PASS"
+    },
+    {
+      "checkpoint_sha256": "b0cf0d278c785c124ceee2b782e104acc814ed87d3c18c44c789b7689b24ab83",
+      "seed": 9901,
+      "stage": "trained",
+      "state_sha256": "1432431c69b98bc2c1b9dcad526b1644e9fbe7ef0e665fa4234bcf3a3fb9b651",
+      "status": "PASS"
+    },
+    {
+      "checkpoint_sha256": "d769ff7160cbcec2b62cf2203fbe07337592f2948793d89318390fa15c48a8c1",
+      "seed": 9902,
+      "stage": "initial",
+      "state_sha256": "17050d8fc53d06a11eb05cd44166cec44c8182411caadd703b349bd32394a1f9",
+      "status": "PASS"
+    },
+    {
+      "checkpoint_sha256": "fa7329e1038918f050ace1088f3c901ff4f2bfd38e15f19bba3749c9a1b6280a",
+      "seed": 9902,
+      "stage": "trained",
+      "state_sha256": "b11a5d87238244ce5fa23ffbad54925efe7ce9a367ce1c495355919a33d27157",
+      "status": "PASS"
+    },
+    {
+      "checkpoint_sha256": "1898aea5b7095f1e252977c6176952df68c61c78c07645c0df1ad14527059619",
+      "seed": 9903,
+      "stage": "initial",
+      "state_sha256": "6a1864160ee2295715e20568fa0cc58f9c80c483e38faf421d6984cb5819dc03",
+      "status": "PASS"
+    },
+    {
+      "checkpoint_sha256": "cf856c624f5566dd6d59e251077a909e851074c7a1f3dbdb4f4d89047bc54ae3",
+      "seed": 9903,
+      "stage": "trained",
+      "state_sha256": "c62c542a08b1fe1e77cdda1259ff9b50c5db2f9ab47cf856e1919902e5a2d99a",
+      "status": "PASS"
+    }
+  ],
+  "scope": "Three trained exact10M pilots; public exposed DEV, no AGI/architecture superiority qualification",
+  "seeds": [
+    9901,
+    9902,
+    9903
+  ]
+}
