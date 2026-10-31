@@ -75,13 +75,15 @@ def train(a):
  tokenizer_sha=C.sha(tokenizer_path)
  assert tokenizer_sha==profile['tokenizer_receipts_sha256'][str(a.seed)],'Actual tokenizer receipt differs from prefit profile'
  C.setup(a.seed);tokenizer=C.read(tokenizer_path);m=C.make_model(a.arm,tokenizer)
+ original_initial=C.local('initials').restore(C,m,a.arm,a.seed,a.initial,profile)
  assert m.counts()['trainable']==row['trainable_parameters'] and m.counts()['deployed']==row['deployed_parameters']
  assert C.state_digest(m)==pr['weights_before'],'Exact prefit initialization changed'
  a.output.mkdir(parents=True);initial=C.state_digest(m)
  metadata={'arm':a.arm,'seed':a.seed,'lane':a.lane,'recipe':C.RECIPE,'tokenizer_receipt':tokenizer,
   'implementation_sha256':profile['implementation_sha256'],'source_hashes':actual_source,
   'training_recipe_sha256':C.digest(C.RECIPE),'tokenizer_receipt_sha256':tokenizer_sha,
-  'model_sha256':initial,'optimizer_steps':0,'stage':'INITIAL_BEFORE_DEV'}
+  'model_sha256':initial,'optimizer_steps':0,'stage':'INITIAL_BEFORE_DEV',
+  'original_initialization':original_initial}
  initial_sha=C.checkpoint(a.output/'INITIAL_MODEL.pt',m,None,metadata)
  opt=torch.optim.AdamW(m.parameters(),lr=C.RECIPE['learning_rate'],betas=tuple(C.RECIPE['betas']),eps=C.RECIPE['eps'],weight_decay=C.RECIPE['weight_decay'],foreach=False)
  meter=C.local('meter');journal=[];ledgers={};sample_order=[];losses=[];observed=0;charged=0;started=time.perf_counter();cpu=time.process_time()
@@ -169,4 +171,4 @@ def train(a):
 
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);p.add_argument('--fit',type=Path,required=True);p.add_argument('--tokenizers',type=Path,required=True)
- p.add_argument('--arm',required=True);p.add_argument('--seed',type=int,required=True);p.add_argument('--lane',required=True);p.add_argument('--output',type=Path,required=True);train(p.parse_args())
+ p.add_argument('--arm',required=True);p.add_argument('--seed',type=int,required=True);p.add_argument('--lane',required=True);p.add_argument('--initial',type=Path,required=True);p.add_argument('--output',type=Path,required=True);train(p.parse_args())

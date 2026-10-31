@@ -31,13 +31,27 @@ A failed fit remains ineligible for sealing and evaluation.
 
 PROFILE_INDEX.json is preserved byte-for-byte. The new
 PROFILE_INDEX_ACCOUNTING_V2.json explicitly inherits its zero-update model
-measurements and records the four instrumentation/source changes. It does not
+measurements and records the first four instrumentation/source changes. The
+subsequent V3 index also binds exact original initialization restoration. It does not
 pretend these measurements were made on new hardware or erase prior updates.
 Before corrected optimization, Linux CI must recheck all 69 exact original
 FIT inputs, initial tensor identities, gradients and full forward/backward
-operator fingerprints. The original initializations were generated on Linux;
-a local Windows attempt failed initial tensor identity and is not accepted as
-profile reproduction. No weights or tolerances were changed to pass it.
+operator fingerprints. Both a local Windows attempt and Linux run41173763458
+failed seeded constructor identity before fitting. Original native tensors on
+Windows differed by up to2.3841858e-7; this is not an acceptable exact identity.
+No weights or tolerances were changed to pass it.
+
+All69 canonical original initial archives from the fixed parameter/exposure
+lane of run41169500006 were downloaded and their original ZIP digests checked.
+ORIGINAL_INITIALIZATIONS.json binds each actual INITIAL_MODEL.pt SHA256. V3
+loads these original pre-update tensors and Torch/Python RNG states, verifies
+the NumPy seed key state, original metadata, source/recipe/tokenizer bindings,
+and exact frozen tensor digest. The discarded first updates are not resumed.
+Both lanes use the same original initialization for each architecture/seed.
+Unknown or changed archive bytes fail before model execution. The registry is
+itself byte-bound by the separately hashed V3 profile. No performance selection
+was used. Initial model bytes are preserved; the failed updated bytes remain
+unavailable.
 
 Local Windows verification: 203 reference, candidate, causal-interface, parity,
 probe and accounting tests passed. The new constructed optimizer regressions

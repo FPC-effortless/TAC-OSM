@@ -162,6 +162,10 @@ def validate_program(manifest, phase="preflight", *, root=None):
     raw = p.read_bytes()
     need(hashlib.sha256(raw).hexdigest() == manifest["operator_profile_sha256"], "frozen profile changed")
     profile = json.loads(raw)
+    if 'original_initializations_sha256' in profile:
+        original = root/'research/mathematical-engineering/langmath101/ORIGINAL_INITIALIZATIONS.json'
+        need(hashlib.sha256(original.read_bytes()).hexdigest() == profile['original_initializations_sha256'],
+             'original initialization archive registry changed')
     need(profile.get("schema") == "langmath101.owner-two-lane-profile.v1", "actual prefit profile schema required")
     need(profile.get("optimizer_steps") == 0, "prefit profile must not update optimizer")
     need(profile.get("source_sha256") == source["sha256"], "profile source mismatch")

@@ -62,17 +62,6 @@ jobs:
           python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
           python scripts/phone_lab.py plan research/phone_queue/langmath101-profile.json
           python "$STUDY/readiness.py"
-          python - <<'PY'
-          import importlib.util,json,os,sys
-          from pathlib import Path
-          study=Path(os.environ['STUDY']);spec=importlib.util.spec_from_file_location('lm101_prefit_common',study/'common.py');C=importlib.util.module_from_spec(spec);sys.modules[spec.name]=C;spec.loader.exec_module(C)
-          profile=C.read(study/'profiles/PROFILE_INDEX.json')
-          for row in profile['models']:
-              C.setup(row['seed']);model=C.make_model(row['architecture'],C.read(study/'profiles'/str(row['seed'])/'TOKENIZER.json'))
-              assert C.state_digest(model)==row['weights_before'],row['architecture']+': runner initialization differs from exact frozen profile'
-              del model
-          print({'exact_runner_initializations_verified':len(profile['models']),'optimizer_steps':0})
-          PY
       - uses: actions/download-artifact@v4
         if: steps.route.outputs.fit == 'true'
         with:
@@ -80,9 +69,16 @@ jobs:
           run-id: 41153068368
           name: langtrain099-FIT-only
           path: /tmp/langmath101-FIT
+      - uses: actions/download-artifact@v4
+        if: steps.route.outputs.fit == 'true'
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41169500006
+          pattern: langmath101-fit-*-parameter_exposure_matched
+          path: /tmp/langmath101-original-inits
       - name: Recheck every frozen real FIT profile before corrected optimization
         if: steps.route.outputs.fit == 'true'
-        run: python "$STUDY/check_frozen_profiles.py" --fit /tmp/langmath101-FIT --output ci-artifacts/FROZEN_PROFILE_RECHECK.json
+        run: python "$STUDY/check_frozen_profiles.py" --fit /tmp/langmath101-FIT --initials /tmp/langmath101-original-inits --output ci-artifacts/FROZEN_PROFILE_RECHECK.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -117,8 +113,14 @@ jobs:
         run: |
           python scripts/phone_lab.py plan research/phone_queue/langmath101-seed-${{ matrix.seed }}.json
           python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41169500006
+          name: langmath101-fit-${{ matrix.architecture }}-${{ matrix.seed }}-parameter_exposure_matched
+          path: /tmp/langmath101-original-init
       - name: Original-source optimization with actual per-update arithmetic
-        run: python "$STUDY/train.py" --manifest "$STUDY/FAIR_COMPARISON.json" --fit /tmp/langmath101-FIT --tokenizers "$STUDY/profiles" --arm '${{ matrix.architecture }}' --seed ${{ matrix.seed }} --lane '${{ matrix.lane }}' --output ci-artifacts/fit
+        run: python "$STUDY/train.py" --manifest "$STUDY/FAIR_COMPARISON.json" --fit /tmp/langmath101-FIT --tokenizers "$STUDY/profiles" --initial /tmp/langmath101-original-init/INITIAL_MODEL.pt --arm '${{ matrix.architecture }}' --seed ${{ matrix.seed }} --lane '${{ matrix.lane }}' --output ci-artifacts/fit
       - uses: actions/upload-artifact@v4
         if: always()
         with:

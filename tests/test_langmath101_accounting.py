@@ -81,3 +81,39 @@ def test_failure_after_optimizer_before_ledger_preserves_actual_update(tmp_path,
     assert saved['metadata']['stage'] == 'FAILED_RETAINED_NOT_EVALUABLE'
     assert all(torch.equal(v, saved['model'][k]) for k, v in model.state_dict().items())
     assert any(not torch.equal(before[k], v) for k, v in saved['model'].items())
+
+def test_restore_exact_original_initialization_and_reject_changed_archive(tmp_path):
+    import random
+    import numpy as np
+    loader, gate, meter = load('initials'), load('owner_two_lane'), load('meter')
+    np.random.seed(1); torch.manual_seed(1)
+    model = torch.nn.Linear(3, 2)
+    state_digest = lambda m: meter._native_budget().state_dict_digest(m.state_dict())
+    original = state_digest(model); sources = {'source.py': 'frozen'}
+    path = tmp_path/'INITIAL_MODEL.pt'
+    recipe = {'fixture_only': True}
+    torch.save({'model':model.state_dict(),'optimizer':None,'metadata':{
+        'arm':'fixture','seed':1,'lane':'parameter_exposure_matched','optimizer_steps':0,
+        'stage':'INITIAL_BEFORE_DEV','recipe':recipe,'training_recipe_sha256':gate.digest(recipe),
+        'tokenizer_receipt_sha256':'fixture_tokenizer','source_hashes':sources,
+        'implementation_sha256':gate.digest(sources),'model_sha256':original},
+        'rng':{'torch':torch.random.get_rng_state(),'python':random.getstate(),
+               'numpy_keys':torch.tensor(np.random.get_state()[1].astype(np.int64))}},path)
+    sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+    registry = tmp_path/'ORIGINAL_INITIALIZATIONS.json'
+    registry.write_text(json.dumps({'run_id':1,'archives':[{
+        'name':'langmath101-fit-fixture-1-parameter_exposure_matched','artifact_id':2,
+        'initial_checkpoint_sha256':sha(path),'archive_sha256':'fixture_archive'}]}))
+    profile = {'original_initializations_sha256':sha(registry),
+        'models':[{'architecture':'fixture','seed':1,'weights_before':original}],
+        'training_recipe_sha256':gate.digest(recipe),'tokenizer_receipts_sha256':{'1':'fixture_tokenizer'},
+        'source_hashes':sources}
+    C = SimpleNamespace(HERE=tmp_path,read=lambda p:json.loads(Path(p).read_text()),
+        sha=sha,RECIPE=recipe,digest=gate.digest,state_digest=state_digest)
+    with torch.no_grad(): model.weight.add_(0.1)
+    assert state_digest(model) != original
+    restored = loader.restore(C,model,'fixture',1,path,profile)
+    assert restored['initial_weights_sha256'] == state_digest(model) == original
+    with path.open('ab') as stream: stream.write(b'changed')
+    with pytest.raises(ValueError,match='checkpoint bytes differ'):
+        loader.restore(C,model,'fixture',1,path,profile)
