@@ -73,8 +73,11 @@ The first nine 1M fits passed direct checkpoint and first-loss replay checks.
 The three 10M TAC fits then completed and passed the same checks; preserve that
 stage in `results/TWELVE_CHECKPOINT_AUDIT.json`. All twelve trained models also
 passed 24 FP32/FP64 source/equation cases in `results/TWELVE_TRAINED_GRAPH_AUDIT.json`.
-The six 10M Transformer/GRU fits are still running/queued. A final all-18 audit
-is required before declaring this cohort complete.
+All three 10M Transformers then completed and passed the same checks.
+`results/FIFTEEN_CHECKPOINT_AUDIT.json` and `results/FIFTEEN_TRAINED_GRAPH_AUDIT.json`
+preserve the fifteen-model / thirty-case milestone. Only the three 10M GRU fits
+remain running. A final all-18 audit is required before declaring this cohort
+complete.
 
 `results/AUDITOR_NEGATIVE_CONTROLS.json` records six deliberately corrupted
 temporary copies rejected by this auditor: nonfinite weights, incorrect AdamW
