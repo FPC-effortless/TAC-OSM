@@ -112,14 +112,23 @@
   "shortcuts_policy": "No answer in query; no source-ID to answer shortcut; evidence must be necessary by reviewed counterfactual deletion; preserve all rejected cases",
   "information_access_policy": "Equal observed evidence bytes and allowed external history; report bounded and unbounded memory regimes separately",
   "parameter_policy": {
-    "current_trainable_range": [
-      95000,
-      105000
+    "policy": "declared-target-v2",
+    "status": "SCALE_POLICY_APPROVED_NOT_MODEL_PREREGISTERED",
+    "size_freedom": "NO_GLOBAL_SIZE_CEILING",
+    "example_scale_targets": [
+      100000,
+      1000000,
+      10000000,
+      50000000,
+      100000000
     ],
+    "each_fit_requires_separate_registered_targets": true,
+    "per_model_target_band_fraction": 0.05,
     "between_arms_max_relative_gap": 0.01,
-    "larger_scale_requires_prior_formal_owner_amendment": true,
     "pretrained_deployed_weights_count": true,
-    "train_from_scratch_permitted": false
+    "train_from_scratch_permitted": "ONLY_AFTER_SEPARATE_SIGNED_REAL_DATA_AND_RESOURCE_PREFLIGHT",
+    "preregistered_trainable_target": null,
+    "preregistered_deployed_target": null
   },
   "training_policy": {
     "minimum_seeds": 3,
@@ -127,7 +136,9 @@
     "optimizer_updates": "NOT_REGISTERED",
     "training_flops": "NOT_REGISTERED",
     "tuning_budget": "NOT_REGISTERED",
-    "trainable_parameter_count": "NOT_YET_MEASURED"
+    "trainable_parameter_count": "NOT_YET_MEASURED",
+    "training_enabled": false,
+    "model_scale_registration": "PENDING"
   },
   "statistical_policy": {
     "paired_cases": true,
