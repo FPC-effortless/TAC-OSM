@@ -1,0 +1,211 @@
+name: LANGBASE107 owner-authorized Transformer fit
+
+on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - "research/langbase107/**"
+      - "research/phone_queue/langbase107-training.json"
+      - ".github/workflows/langbase107-owner-transformer-fit.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: langbase107-owner-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.event.pull_request.user.login == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Record blocked qualified planner and explicit exploratory authority
+        run: |
+          python scripts/phone_lab.py plan research/phone_queue/langbase107-training.json || test $? -eq 2
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          path=Path('research/langbase107/OWNER_PROTOCOL.json')
+          p=json.loads(path.read_text())
+          assert p['owner_authorized'] is True
+          assert p['independent_attestation'] is False
+          assert p['architecture_superiority_eligible'] is False
+          assert p['protected_test_newly_sealed'] is False
+          print({'authority':p['authorization_basis'],
+                 'protocol_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
+                 'qualified_research_gate_passed':False})
+          PY
+      - name: Freeze three seed fits
+        id: matrix
+        run: |
+          python - <<'PY'
+          import json, os
+          p=json.load(open('research/langbase107/OWNER_PROTOCOL.json'))
+          rows=[{'seed':seed} for seed in p['seeds']]
+          with open(os.environ['GITHUB_OUTPUT'],'a') as stream:
+              stream.write('matrix='+json.dumps({'include':rows},separators=(',',':'))+'\n')
+          PY
+      - uses: actions/checkout@v4
+        with:
+          repository: karpathy/char-rnn
+          ref: 6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e
+          path: ci-input/publisher
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Retrieve pinned publisher tree metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import urllib.request
+          url='https://api.github.com/repos/karpathy/char-rnn/git/trees/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e?recursive=1'
+          with urllib.request.urlopen(url,timeout=30) as response:
+              Path('ci-input/publisher-tree.json').write_bytes(response.read())
+          PY
+      - name: Verify original bytes and isolate TRAIN from heldout data
+        run: >-
+          python research/langdepth106/source.py
+          --source ci-input/publisher/data/tinyshakespeare/input.txt
+          --publisher-tree ci-input/publisher-tree.json
+          --publisher-readme ci-input/publisher/Readme.md
+          --output-dir ci-artifacts/langbase107-source
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LANGBASE107-TRAIN-only
+          path: ci-artifacts/langbase107-source/training/
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LANGBASE107-heldout-source
+          path: |
+            ci-artifacts/langbase107-source/evaluation/
+            ci-artifacts/langbase107-source/source_receipt.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Install pinned CPU runtime
+        run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install pytest
+      - name: Verify Transformer graph before optimization
+        env:
+          PYTHONPATH: "src:."
+        run: python -m pytest -q research/langbase107/test_model.py
+
+  smoke:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGBASE107-TRAIN-only
+          path: ci-input/training
+      - name: Run eight actual optimizer updates
+        env:
+          PYTHONPATH: "src:."
+        run: >-
+          python research/langbase107/train_owner.py
+          --train-bin ci-input/training/train.bin
+          --receipt ci-input/training/source_receipt.json
+          --seed 10601 --smoke --steps 8
+          --output ci-artifacts/langbase107-smoke
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGBASE107-smoke-attempt-${{ github.run_attempt }}
+          path: ci-artifacts/langbase107-smoke/
+          if-no-files-found: warn
+          retention-days: 90
+
+  fit:
+    needs: [prepare, smoke]
+    if: needs.smoke.result == 'success'
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGBASE107-TRAIN-only
+          path: ci-input/training
+      - name: Train the Transformer for 4096 registered updates
+        env:
+          PYTHONPATH: "src:."
+        run: >-
+          python research/langbase107/train_owner.py
+          --train-bin ci-input/training/train.bin
+          --receipt ci-input/training/source_receipt.json
+          --seed ${{ matrix.seed }}
+          --output ci-artifacts/langbase107-fit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGBASE107-fit-${{ matrix.seed }}-attempt-${{ github.run_attempt }}
+          path: ci-artifacts/langbase107-fit/
+          if-no-files-found: warn
+          retention-days: 90
+
+  evaluate:
+    needs: fit
+    if: needs.fit.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: LANGBASE107-fit-*
+          path: ci-input/fits
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGBASE107-heldout-source
+          path: ci-input/corpus
+      - name: Evaluate all three fixed final checkpoints once
+        env:
+          PYTHONPATH: "src:."
+        run: >-
+          python research/langbase107/evaluate_owner.py
+          --run-dir ci-input/fits
+          --corpus-dir ci-input/corpus
+          --output ci-artifacts/langbase107-evaluation
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGBASE107-final-evaluation-attempt-${{ github.run_attempt }}
+          path: ci-artifacts/langbase107-evaluation/
+          if-no-files-found: warn
+          retention-days: 90
+

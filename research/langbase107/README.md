@@ -21,12 +21,12 @@ token-at-a-time numerical agreement, finite connected gradients, bounded KV
 storage and the exact parameter geometry. These are engineering properties,
 not learned capability evidence.
 
-Training is intentionally not launched from this branch. The repository's
-prospective scientific gate requires authentic primary outcomes, complete
-matched training-compute accounting and an independently signed prefit
-source/reward/goal/access receipt. Tiny Shakespeare is a useful language
-diagnostic, but does not satisfy the primary real-outcome policy; its earlier
-LANGDEPTH106 TEST partition has also already been opened. A later authorized
-exploratory run must retain those limitations and cannot be promoted as a
-qualified architecture-superiority result.
+The qualified scientific lane remains blocked because it requires authentic
+primary outcomes, complete matched training-compute accounting and an
+independently signed prefit source/reward/goal/access receipt. The user's
+persisting authorization permits a separately labeled exploratory CPU lane:
+three Transformer fits use exactly the LANGDEPTH106 seeds, sampled TRAIN
+windows and 4,096-update exposure. Tiny Shakespeare remains a diagnostic, the
+earlier TEST partition has already been opened, and the resulting post-hoc
+comparison cannot be promoted as qualified architecture-superiority evidence.
 
