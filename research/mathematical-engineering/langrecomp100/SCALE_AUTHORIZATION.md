@@ -1,0 +1,3 @@
+# Owner-directed continuation of the existing10M experiment
+
+The owner requested a trained10,000,000-parameter model, then asked whether GRAPH011-style recomputation was used and instructed **“try it”** after its absence and the proposed gradient/memory test were explained. This authorizes this scoped execution comparison on the three existing099 checkpoints: exactly10M active/deployed parameters, native/recompute policies,16 new FIT-only updates per policy/seed. All96 new optimizer steps are genuine continuation trials, never mislabeled no-fit. No global100K waiver, new architecture/quality superiority, protected TEST, DEV rescoring, GPU quota, promotion or merge. Existing099 weights/results remain immutable.

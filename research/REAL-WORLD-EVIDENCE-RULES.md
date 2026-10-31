@@ -1,3 +1,12 @@
+## Owner-directed LANGRECOMP100 continuation — 2026-10-31
+
+The owner's “try it” applies activation recomputation to the existing trained
+10M models. Allow only the registered LANGRECOMP100 paired16-update FIT-only
+continuations, exactly10,000,000 active/deployed parameters, three fixed seeds
+and two execution policies. See its SCALE_AUTHORIZATION.md. All original-source,
+data, optimizer/replay, compute and no-promotion gates remain. Default100K and
+all historical099 evidence remain unchanged.
+
 ## Owner-directed LANGTRAIN099 scale exception — 2026-10-30
 
 The owner's explicit request to test a trained10,000,000-parameter model

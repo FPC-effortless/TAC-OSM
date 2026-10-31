@@ -1,0 +1,105 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGRECOMP100",
+  "study_type": "single_model_training",
+  "parameter_budget_contract": "owner-2026-10-31-langrecomp100-exact10m-continuation",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "geometry": {
+    "embed": 256,
+    "context": 376,
+    "key": 24,
+    "value": 32,
+    "ffn": 4335
+  },
+  "real_world_source": {
+    "name": "Authenticated licensed original code/documentation; authored ARC secondary only",
+    "observed_real_outcomes": true,
+    "sha256": "f587e98c45b28c8fd9cecdf4de60a72019599839993d92c75dac609e7c1c1d4f",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "Original PSF/BSD/MIT/Apache publisher licenses archived; ARC Apache-2.0 diagnostic",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/langtrain099/FROZEN_INPUTS.json"
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "f587e98c45b28c8fd9cecdf4de60a72019599839993d92c75dac609e7c1c1d4f",
+    "partitions": [
+      "FIT"
+    ]
+  },
+  "causal_protocol": "Only original authenticated099 FIT package and next16 sampler entries; no DEV/TEST access; explicit owner/clock/state inputs through checkpoint preserve gradients; identical original trained weights and AdamW moments before each policy.",
+  "checkpoint_policy": "Archive both original continuation policies per fixed seed with all optimizer/RNG state, exact per-step gradient/model/moment/logit/native-state digests, fresh-process actualFIT replays; retain every failure.",
+  "budget": {
+    "training_updates": 16,
+    "parent_optimizer_steps": 2048,
+    "batch_size": 4,
+    "tuning_trials": 0,
+    "fit_jobs": 3,
+    "policy_workers_per_job": 2,
+    "max_worker_seconds": 300,
+    "GPU_minutes": 0,
+    "new_optimizer_steps_total": 96
+  },
+  "models": [
+    {
+      "name": "native",
+      "seed": 9901,
+      "trainable_parameters": 10000000,
+      "deployed_parameters": 10000000
+    },
+    {
+      "name": "recompute",
+      "seed": 9901,
+      "trainable_parameters": 10000000,
+      "deployed_parameters": 10000000
+    },
+    {
+      "name": "native",
+      "seed": 9902,
+      "trainable_parameters": 10000000,
+      "deployed_parameters": 10000000
+    },
+    {
+      "name": "recompute",
+      "seed": 9902,
+      "trainable_parameters": 10000000,
+      "deployed_parameters": 10000000
+    },
+    {
+      "name": "native",
+      "seed": 9903,
+      "trainable_parameters": 10000000,
+      "deployed_parameters": 10000000
+    },
+    {
+      "name": "recompute",
+      "seed": 9903,
+      "trainable_parameters": 10000000,
+      "deployed_parameters": 10000000
+    }
+  ],
+  "execution_comparison": "same source/model with native vs nonreentrant full-forward activation checkpointing; extra compute measured, no architecture claim",
+  "parent_checkpoint_run": 41153068368,
+  "prior_art": [
+    {
+      "paper": "Chen et al. Training Deep Nets with Sublinear Memory Cost,2016",
+      "url": "https://arxiv.org/abs/1604.06174"
+    },
+    {
+      "implementation": "PyTorch non-reentrant checkpointing",
+      "url": "https://docs.pytorch.org/docs/stable/checkpoint.html"
+    }
+  ]
+}

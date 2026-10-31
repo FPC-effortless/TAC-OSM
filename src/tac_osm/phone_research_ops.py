@@ -22,7 +22,7 @@ SHA = re.compile(r"^[0-9a-f]{64}$")
 KAGGLE_ID = re.compile(r"^[a-z0-9][a-z0-9_-]{1,38}/[a-z0-9][a-z0-9-]{1,69}$")
 REG_PATH = re.compile(r"^research/mathematical-engineering/[a-z0-9_-]+/FAIR_COMPARISON\.json$")
 WORKLOAD = re.compile(r"^research/kaggle_workloads/[a-z0-9_-]+\.py$")
-DIAGNOSTICS = ("lab", "anticheat", "observatory", "scientific", "langmath095", "langmath098", "langtrain099")
+DIAGNOSTICS = ("lab", "anticheat", "observatory", "scientific", "langmath095", "langmath098", "langtrain099", "langrecomp100")
 CPU_JOB_LIMIT_MIN = 45
 GPU_JOB_LIMIT_MIN = 240
 

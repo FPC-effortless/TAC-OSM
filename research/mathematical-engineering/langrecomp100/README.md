@@ -1,0 +1,3 @@
+# LANGRECOMP100
+
+Owner-requested GRAPH011-inspired activation-recomputation test on the three original trained10M099 models. Six paired16-update FIT-only continuations compare ordinary autograd with standard non-reentrant whole-forward checkpointing. Check complete gradients/AdamW updates and original cold replays; measure Linux physical CPU peak RSS, logical forward-save accounting and warmed compute timings separately. Source/data/architecture unchanged, originals preserved. No DEV/TEST or new capability claim. Continuation is initially disabled pending source/proof gates. See PREREGISTRATION.md and REGISTER.json.
