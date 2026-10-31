@@ -1,0 +1,103 @@
+name: LANGCAP105 saved-checkpoint audit (zero fit)
+on:
+  pull_request:
+    paths:
+      - 'research/langcap105_verification/**'
+      - '.github/workflows/langcap105-checkpoint-audit.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: langcap105-checkpoint-audit-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  inspect-original-checkpoints:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: verification
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: ba9220163c777a7d9b6f765378810408baf00b1f
+          path: original
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/checkout@v4
+        with:
+          ref: 0b21f0feed5d6f89bb49218d8ca320cca6220850
+          path: equation-helpers
+          persist-credentials: false
+      - name: Install original CPU runtime for read-only tensor inspection
+        run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy
+      - name: Bind downloaded artifacts to original immutable training run
+        env:
+          GH_READ_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json,os,urllib.request,pathlib
+          base='https://api.github.com/repos/FPC-effortless/TAC-OSM/actions/runs/41229365510'
+          def get(url):
+              req=urllib.request.Request(url,headers={'Authorization':'Bearer '+os.environ['GH_READ_TOKEN'],'Accept':'application/vnd.github+json'})
+              with urllib.request.urlopen(req) as response:return json.load(response)
+          run=get(base)
+          assert run['head_sha']=='ba9220163c777a7d9b6f765378810408baf00b1f'
+          artifacts=get(base+'/artifacts?per_page=100')['artifacts']
+          selected=[a for a in artifacts if a['name'].startswith('LANGCAP105-fit-') or a['name']=='LANGCAP105-authentic-FIT-only-inputs']
+          assert selected
+          assert all(a['workflow_run']['head_sha']==run['head_sha'] and not a['expired'] for a in selected)
+          record={'original_run':41229365510,'training_commit':run['head_sha'],'artifacts':[
+              {k:a.get(k) for k in ('id','name','size_in_bytes','digest','expires_at')} for a in selected]}
+          out=pathlib.Path('ci-artifacts/langcap105-verification');out.mkdir(parents=True)
+          (out/'ARTIFACT_PROVENANCE.json').write_text(json.dumps(record,indent=2)+'\n')
+          print({'original_fit_artifacts_available':len(selected)-1,'optimizer_updates':0})
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGCAP105-authentic-FIT-only-inputs
+          run-id: 41229365510
+          github-token: ${{ github.token }}
+          path: inputs
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: LANGCAP105-fit-*
+          run-id: 41229365510
+          github-token: ${{ github.token }}
+          path: fits
+      - name: Inspect actual saved model, AdamW, RNG and causal predictions without fitting
+        run: |
+          python verification/research/langcap105_verification/checkpoints.py \
+            --source-root original --fits fits --fit-inputs inputs --allow-partial \
+            --output ci-artifacts/langcap105-verification/CHECKPOINT_AUDIT.json
+      - name: Compare trained source outputs, state and gradients with pinned PNDS equations
+        run: |
+          python verification/research/langcap105_verification/trained_equations.py \
+            --source-root original --helpers-root equation-helpers --fits fits --fit-inputs inputs \
+            --checkpoint-audit ci-artifacts/langcap105-verification/CHECKPOINT_AUDIT.json \
+            --output ci-artifacts/langcap105-verification/TRAINED_GRAPH_AUDIT.json
+      - name: Require original full-cohort audit when all eighteen checkpoints are available
+        run: |
+          python - <<'PY'
+          import json,subprocess,sys
+          p='ci-artifacts/langcap105-verification/'
+          report=json.load(open(p+'CHECKPOINT_AUDIT.json'))
+          if report['verified_fit_count']==18:
+              subprocess.run([sys.executable,'original/research/langcap105/audit.py','--fitsdir','fits',
+                '--protocol','original/research/langcap105/OWNER_PROTOCOL.json','--output',p+'ORIGINAL_FULL_FIT_AUDIT.json'],check=True)
+          else:
+              assert report['status']=='PARTIAL_COHORT_VERIFIED'
+              print('PARTIAL ONLY: original 10M fits still running/queued; no cohort-completed claim')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGCAP105-readonly-checkpoint-verification
+          path: ci-artifacts/langcap105-verification/
+          if-no-files-found: error
+          retention-days: 90

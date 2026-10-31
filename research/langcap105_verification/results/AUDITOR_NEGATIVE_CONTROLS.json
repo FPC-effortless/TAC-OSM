@@ -1,0 +1,36 @@
+{
+  "scope": "deliberately corrupted temporary copies of original small TAC artifact; no scientific capability evidence",
+  "original_checkpoint_sha256": "0349abe5ef722bdc9ff430d3842bb29b234be30c80948c05c4185bbcdff2342a",
+  "controls": [
+    {
+      "mutation": "nonfinite_weight",
+      "result": "REJECTED",
+      "reason": "Checkpoint parameter precision/finiteness differs"
+    },
+    {
+      "mutation": "wrong_optimizer_step",
+      "result": "REJECTED",
+      "reason": "AdamW update count differs"
+    },
+    {
+      "mutation": "nonfinite_loss",
+      "result": "REJECTED",
+      "reason": "Missing/nonfinite loss series"
+    },
+    {
+      "mutation": "false_qualification",
+      "result": "REJECTED",
+      "reason": "Scientific label differs"
+    },
+    {
+      "mutation": "wrong_exposure",
+      "result": "REJECTED",
+      "reason": "Exposure receipt differs"
+    },
+    {
+      "mutation": "unchanged_initial_weights",
+      "result": "REJECTED",
+      "reason": "Checkpoint equals fresh initialization"
+    }
+  ]
+}
