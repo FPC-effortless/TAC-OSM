@@ -17,5 +17,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate every original source-pinned variant and dual formulation reference
         run: python3 research/scripts/check_pnds_math_links.py
-      - name: Verify byte-equivalent semantic JSON in PNDS remote draft branch
+      - name: Verify existing PNDS snapshot and independently pinned candidate equations
         run: python3 research/scripts/check_pnds_remote_parity.py

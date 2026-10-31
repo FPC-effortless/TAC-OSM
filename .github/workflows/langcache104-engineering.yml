@@ -1,0 +1,46 @@
+name: LANGCACHE104 deep associative cache (ZERO UPDATES)
+on:
+  pull_request:
+    paths:
+      - 'research/langcache104/**'
+      - 'research/phone_queue/langcache104-engineering.json'
+      - '.github/workflows/langcache104-engineering.yml'
+permissions:
+  contents: read
+jobs:
+  engineering-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Plan bounded no-fit diagnostics
+        run: python scripts/phone_lab.py plan research/phone_queue/langcache104-engineering.json
+      - name: Install CPU verification runtime
+        run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install pytest numpy cryptography
+      - name: Existing scientific and software contracts
+        env:
+          PYTHONPATH: 'src:.'
+        run: |
+          python -m pytest -q tests/
+          python scripts/sync_test_count.py --check
+      - name: Actual construction, equations, gradients, causality and compact cache
+        env:
+          PYTHONPATH: 'src:.'
+        run: |
+          python research/langcache104/verify_math_pins.py
+          python research/langcache104/verify.py --out ci-artifacts/langcache104/ENGINEERING_VERIFICATION.json
+          python research/langcache104/construct_presets.py --out ci-artifacts/langcache104/CONSTRUCTION.json
+      - name: Preserve engineering receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGCACHE104-no-fit-engineering
+          path: ci-artifacts/langcache104/
+          retention-days: 90
