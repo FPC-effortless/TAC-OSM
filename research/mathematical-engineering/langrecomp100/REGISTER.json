@@ -1,7 +1,7 @@
 {
   "id": "LANGRECOMP100",
   "schema": "langrecomp100.exact10m-rematerialization.v1",
-  "continuation_enabled": false,
+  "continuation_enabled": true,
   "seeds": [
     9901,
     9902,
@@ -19,15 +19,15 @@
   "tuning_trials": 0,
   "math_gate": {
     "status": "PASS",
-    "run_id": 41159586682,
-    "job_id": 124413932846,
+    "run_id": 41160282676,
+    "job_id": 124416125905,
     "source_commit": "39eccbd0bc3e6af956d16d1d37b24eb5392047d4",
     "metadata_commit": "1d1f458148b101121ec9fd3bfeac71ea41915510",
     "lean_sha256": "c8c99eafef77dfab1c87dac186d747e1863971e2057d5fcf0006a374e9a48fb5",
     "scoped_generic_theorems": 4,
     "independent_reference_tests": 7,
     "full_PyTorch_IEEE_AD": "OPEN",
-    "source_checks_run": 41159588193
+    "source_checks_run": 41160280248
   },
   "parent_source": "068ed9bd5bd68c19b0fd98dcff9a42197c1e4d21",
   "parent_run": 41153068368,
@@ -83,5 +83,6 @@
       "reason": "Warmup measurement pack_hook returned input tensors directly; detached data views avoid retaining autograd references. Neural source, parent weights, recipe and batches unchanged."
     }
   ],
-  "maximum_new_optimizer_steps_across_attempts": 192
+  "maximum_new_optimizer_steps_across_attempts": 192,
+  "corrected_measurement_source_gate": "PASS_66_IN_ACTIONS"
 }
