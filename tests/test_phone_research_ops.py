@@ -169,14 +169,18 @@ def test_kaggle_staging_rejects_unavailable_gpu_workload(tmp_path):
                 kaggle_user="operator", destination=missing)
 
 
-def test_phone_scan_reports_both_queues_and_never_runs_gpu(tmp_path):
+def test_phone_scan_reports_all_registered_queues_and_never_runs_gpu(tmp_path):
     p = subprocess.run([sys.executable, str(ROOT / "scripts/phone_lab.py"),
                         "scan", "--out", str(tmp_path)],
                        cwd=ROOT, capture_output=True, text=True)
     assert p.returncode == 0, p.stderr
     status = json.loads((tmp_path / "progress.json").read_text())
-    assert status["total"] == 2
+    proposals = list((ROOT / "research/phone_queue").glob("*.json"))
+    assert status["total"] == len(proposals)
     data = {r["run_id"]: r for r in status["runs"]}
+    assert set(data) == {json.loads(path.read_text())["run_id"] for path in proposals}
+    assert all(not row["automatic_submissions"] and not row["approved_to_train"]
+               for row in data.values())
     assert data["phone-lab-diagnostics"]["backend"] == "github_actions"
     assert data["dual-t4-readiness"]["backend"] == "kaggle_t4x2"
     assert "Kaggle 2× T4" in (tmp_path / "progress.md").read_text()
