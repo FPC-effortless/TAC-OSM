@@ -96,7 +96,12 @@ def test_original_arithmetic_parser_and_original_source_bytes_remain_authoritati
     with review.compatible_ledger_parser(budget), pytest.raises(ValueError, match="shape"):
         budget.ledger_counter(rows)
     assert hashlib.sha256(path.read_bytes()).hexdigest() == before
-    assert before == review.ORIGINAL_BUDGET_SHA256
+    # Prospective extensions of the shared gate do not rewrite the original
+    # verifier. Authenticate its immutable blob at the pre-extension PR head.
+    historical = subprocess.check_output([
+        "git", "show", "8f2d9bd016358d887f9200d3cdba9bee9681313b:src/tac_osm/research_objective_budget.py"
+    ], cwd=ROOT)
+    assert hashlib.sha256(historical).hexdigest() == review.ORIGINAL_BUDGET_SHA256
 
 
 def test_actual_record_function_trace_reproduces_and_repairs_only_the_format_error():

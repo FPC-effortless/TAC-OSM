@@ -25,6 +25,11 @@ CONTRACTS = ("dataset_sha256", "train_split_sha256", "dev_split_sha256",
              "evaluation_contract_sha256")
 BUDGETS = ("steps", "examples_seen", "tokens_seen", "batch_size",
            "history_events", "dense_compute_tokens", "tuning_trials", "tuning_flops")
+LEGACY_STUDY = "research/mathematical-engineering/langacquire097"
+OPTIMIZER_MARKER_CONTRACT = "balanced-empty-optimizer-profiler-v1"
+PROFILER_ENTER = "profiler::_record_function_enter_new"
+PROFILER_EXIT = "profiler::_record_function_exit"
+PROFILER_MARKERS = frozenset((PROFILER_ENTER, PROFILER_EXIT))
 
 
 def canonical(value):
@@ -55,10 +60,21 @@ def _parameter_count(row):
     _require(row["deployed_parameters"] >= row["trainable_parameters"], "deployed parameters below active count")
 
 
-def ledger_counter(row):
+def ledger_counter(row, *, optimizer_marker_contract=None):
+    """Parse complete work, with an explicitly registered serialization extension.
+
+    Legacy callers still require ATen-only ledgers. Prospective studies may
+    recognize the two empty-tensor AdamW profiler markers; their positive,
+    balanced call counts remain part of every equality and digest comparison.
+    No arithmetic operator is discarded or assigned zero work.
+    """
+    _require(optimizer_marker_contract in (None, OPTIMIZER_MARKER_CONTRACT),
+             "unknown optimizer marker contract")
     entries = row["operators"] if isinstance(row, dict) else row
     _require(isinstance(entries, list) and entries, "complete nonempty operator ledger required")
     result = Counter()
+    markers = Counter()
+    arithmetic = 0
     for entry in entries:
         _require(isinstance(entry, dict), "operator row must be an object")
         stage, signature, calls = entry.get("stage"), entry.get("signature"), entry.get("calls")
@@ -67,38 +83,98 @@ def ledger_counter(row):
         _require(isinstance(signature, str), "operator signature missing")
         decoded = json.loads(signature)
         _require(isinstance(decoded, list) and len(decoded) == 3 and
-                 isinstance(decoded[0], str) and decoded[0].startswith("aten::"),
-                 "actual ATen signature required")
-        for tensors in decoded[1:]:
-            _require(isinstance(tensors, list), "input/output tensor signature missing")
-            for dtype, shape in tensors:
-                _require(isinstance(dtype, str) and isinstance(shape, list) and
-                         all(type(d) is int and d >= 0 for d in shape), "invalid tensor shape signature")
+                 isinstance(decoded[0], str), "actual ATen signature required")
+        name = decoded[0]
+        if name.startswith("aten::"):
+            arithmetic += 1
+            for tensors in decoded[1:]:
+                _require(isinstance(tensors, list), "input/output tensor signature missing")
+                for dtype, shape in tensors:
+                    _require(isinstance(dtype, str) and isinstance(shape, list) and
+                             all(type(d) is int and d >= 0 for d in shape), "invalid tensor shape signature")
+        else:
+            _require(optimizer_marker_contract == OPTIMIZER_MARKER_CONTRACT and name in PROFILER_MARKERS,
+                     "actual ATen signature required; unrecognized non-ATen operator: " + name)
+            _require(stage == "optimizer" and decoded[1] == [] and decoded[2] == [],
+                     "profiler compatibility requires empty tensor inputs/outputs in optimizer stage")
+            _require(set(entry) == {"stage", "signature", "calls"} and
+                     signature == canonical(decoded).decode(),
+                     "profiler marker rows require original canonical serialization")
+            markers[name] += calls
         key = stage, signature
         _require(key not in result, "duplicate operator ledger row")
         result[key] = calls
+    _require(arithmetic > 0, "complete nonempty arithmetic operator ledger required")
+    _require(markers[PROFILER_ENTER] == markers[PROFILER_EXIT], "unbalanced optimizer profiler marker counts")
     return result
 
 
-def verify_same_ledger(left, right, label, *, require_matrix=True):
-    a, b = ledger_counter(left), ledger_counter(right)
+def _registered_counter(row, optimizer_marker_contract):
+    # The no-keyword default preserves the immutable 097 postfit driver's
+    # temporary legacy-parser adapter, including its independent review scope.
+    if optimizer_marker_contract is None:
+        return ledger_counter(row)
+    return ledger_counter(row, optimizer_marker_contract=optimizer_marker_contract)
+
+
+def verify_same_ledger(left, right, label, *, require_matrix=True, optimizer_marker_contract=None):
+    a = _registered_counter(left, optimizer_marker_contract)
+    b = _registered_counter(right, optimizer_marker_contract)
     _require(a == b, label + ": complete operator signatures/shapes/counts differ")
     if require_matrix:
         _require(any(json.loads(sig)[0].split(".")[0] in ("aten::mm", "aten::bmm", "aten::addmm")
                      for _, sig in a), label + ": actual matrix computation missing")
 
 
-def source_bindings(root, model_paths):
-    """Fingerprint executable sources, excluding profiles/config values."""
+def _repository_file(root, relative):
+    _require(isinstance(relative, str) and relative and not Path(relative).is_absolute() and
+             Path(relative).as_posix() == relative and
+             all(part not in ("", ".", "..") for part in relative.split("/")),
+             "canonical repository-relative source path required")
+    path = root / relative
+    _require(path.resolve().is_relative_to(root), "source path escapes repository")
+    _require(all(not parent.is_symlink() for parent in (path, *path.parents) if parent.is_relative_to(root)),
+             "source path contains a symlink")
+    _require(path.is_file(), "required executable source file missing: " + relative)
+    return path
+
+
+def required_study_paths(root, study_directory, profile_entrypoint):
+    """Require the real, complete local study bundle instead of a legacy alias."""
+    root = Path(root).resolve()
+    _require(isinstance(study_directory, str) and
+             re.fullmatch(r"research/mathematical-engineering/[a-z0-9_]+", study_directory) is not None,
+             "canonical mathematical-engineering study directory required")
+    _require(isinstance(profile_entrypoint, str) and
+             re.fullmatch(r"[A-Za-z0-9_]+\.py", profile_entrypoint) is not None,
+             "bounded study-owned profile entrypoint required")
+    mandatory = {"models.py", "objective.py", "train.py", "resources.py", "data.py", profile_entrypoint}
+    directory = root / study_directory
+    names = mandatory | {path.name for path in directory.glob("*.py")}
+    paths = {study_directory + "/" + name for name in names}
+    for relative in paths:
+        _repository_file(root, relative)
+    return paths
+
+
+def source_bindings(root, model_paths, *, study_directory=LEGACY_STUDY, profile_entrypoint="profile097.py"):
+    """Fingerprint actual executable sources, excluding profiles/config values.
+
+    The positional legacy call retains its exact original six-study-file set.
+    A new study explicitly names its directory/profile entry and fingerprints
+    every direct Python source in that bundle, plus inherited model sources.
+    """
     root = Path(root).resolve()
     names = set(model_paths)
-    names.update(("research/mathematical-engineering/langacquire097/" + name)
-                 for name in ("models.py", "objective.py", "train.py", "resources.py", "profile097.py", "data.py"))
+    if study_directory == LEGACY_STUDY and profile_entrypoint == "profile097.py":
+        names.update((LEGACY_STUDY + "/" + name) for name in
+                     ("models.py", "objective.py", "train.py", "resources.py", "profile097.py", "data.py"))
+    else:
+        names.update(required_study_paths(root, study_directory, profile_entrypoint))
     names.update(("src/tac_osm/research_objective_budget.py", "scripts/validate_research_parity.py"))
     result = {}
     for name in sorted(names):
-        path = root / name
-        _require(not path.is_symlink() and path.resolve().is_relative_to(root), "source path escapes repository")
+        path = _repository_file(root, name)
         result[name] = hashlib.sha256(path.read_bytes()).hexdigest()
     return result
 
@@ -118,7 +194,7 @@ def state_dict_digest(state):
     return result.hexdigest()
 
 
-def verify_initial_state(profile_path, row, family):
+def verify_initial_state(profile_path, row, family, *, initial_state_schema="langacquire097.initial-state.v1"):
     """Authenticate the zero-update weights, not a seed reproducibility claim."""
     import torch
     name = row.get("initial_state_file")
@@ -134,7 +210,7 @@ def verify_initial_state(profile_path, row, family):
     payload = torch.load(io.BytesIO(raw), map_location="cpu", weights_only=True)
     _require(isinstance(payload, dict) and set(payload) ==
              {"schema", "family", "seed", "model", "model_sha256", "optimizer_steps"} and
-             payload["schema"] == "langacquire097.initial-state.v1" and payload["family"] == family and
+             payload["schema"] == initial_state_schema and payload["family"] == family and
              payload["seed"] == row["seed"] and payload["optimizer_steps"] == 0,
              "original zero-optimizer initial-state payload required")
     actual = state_dict_digest(payload["model"])
@@ -166,6 +242,10 @@ def _profile(manifest, root):
     sources = profile.get("source_hashes")
     _require(isinstance(sources, dict) and bool(sources), "actual executable source hashes required")
     _require(digest(sources) == profile["implementation_sha256"], "implementation digest does not bind sources")
+    if "study_directory" in manifest or "profile_entrypoint" in manifest:
+        required = required_study_paths(root, manifest.get("study_directory"), manifest.get("profile_entrypoint"))
+        required.update(("src/tac_osm/research_objective_budget.py", "scripts/validate_research_parity.py"))
+        _require(required <= set(sources), "profile omitted required executable study sources")
     for relative, expected in sources.items():
         _sha(expected, "source executable")
         path = root / relative
@@ -184,6 +264,17 @@ def validate_comparison(manifest, phase="preflight", *, root=None):
     _require(manifest.get("compute_accounting") == "within_family_complete_operator_ledger", "complete objective operator convention required")
     family = manifest.get("architecture_family")
     _require(isinstance(family, str) and len(family) >= 2, "one actual architecture family required")
+    marker_contract = manifest.get("optimizer_marker_contract")
+    _require(marker_contract in (None, OPTIMIZER_MARKER_CONTRACT), "unknown optimizer marker contract")
+    initial_schema = manifest.get("initial_state_schema", "langacquire097.initial-state.v1")
+    if "study_directory" in manifest or "profile_entrypoint" in manifest:
+        # Validate directory ownership before deriving the registered payload
+        # schema; a study cannot silently relabel another archive format.
+        required_study_paths(root or Path.cwd(), manifest.get("study_directory"), manifest.get("profile_entrypoint"))
+        _require(initial_schema == Path(manifest["study_directory"]).name + ".initial-state.v1",
+                 "initial-state schema must match the explicit study directory")
+    else:
+        _require(initial_schema == "langacquire097.initial-state.v1", "legacy initial-state schema differs")
     source = manifest.get("real_world_source", {})
     _require(source.get("observed_real_outcomes") is True, "authentic primary observations required")
     _sha(source.get("sha256"), "original source")
@@ -264,11 +355,11 @@ def validate_comparison(manifest, phase="preflight", *, root=None):
         initial_key = p.get("initial_state_file"), p.get("initial_state_sha256")
         if initial_key not in verified_initials:
             profile_path = Path(root or Path.cwd()) / manifest["operator_profile_path"]
-            verified_initials[initial_key] = verify_initial_state(profile_path, p, family)
+            verified_initials[initial_key] = verify_initial_state(profile_path, p, family, initial_state_schema=initial_schema)
         _require(verified_initials[initial_key] == p["weights_before"], "objective initial archive/tensors differ")
         _require(p.get("all_gradients_connected_and_finite") is True, "prefit active gradients incomplete/nonfinite")
         _require(p.get("input_shape") == [budget["batch_size"], budget["history_events"]], "actual profiled geometry differs")
-        ledger_counter(p)
+        _registered_counter(p, marker_contract)
         _require(p.get("operator_sha256") == digest(p["operators"]), "profile operator fingerprint differs")
         if phase == "final":
             measured = row.get("measured")
@@ -289,8 +380,8 @@ def validate_comparison(manifest, phase="preflight", *, root=None):
                      "every actual forward/backward step must match the frozen complete operator ledger")
             opt = measured.get("optimizer_operator_step_sha256")
             first, warm = measured.get("optimizer_operators_first"), measured.get("optimizer_operators_warm")
-            ledger_counter(first)
-            ledger_counter(warm)
+            _registered_counter(first, marker_contract)
+            _registered_counter(warm, marker_contract)
             _require(isinstance(opt, list) and len(opt) == budget["steps"] and opt[0] == digest(first) and
                      all(v == digest(warm) for v in opt[1:]), "actual optimizer first/warm operator coverage incomplete")
         by_seed[row["seed"]].append((row, p))
@@ -306,13 +397,14 @@ def validate_comparison(manifest, phase="preflight", *, root=None):
         _require(pa["weights_before"] == pb["weights_before"], "objective pair initial weights differ")
         _require(pa["initial_state_file"] == pb["initial_state_file"] and
                  pa["initial_state_sha256"] == pb["initial_state_sha256"], "objective pair initial archives differ")
-        verify_same_ledger(pa, pb, "prefit full/query")
+        verify_same_ledger(pa, pb, "prefit full/query", optimizer_marker_contract=marker_contract)
         if phase == "final":
             _require(a["measured"]["initial_model_sha256"] == b["measured"]["initial_model_sha256"],
                      "actual full/query training initializations differ")
             for kind in ("first", "warm"):
                 verify_same_ledger(a["measured"]["optimizer_operators_" + kind], b["measured"]["optimizer_operators_" + kind],
-                                   "actual full/query optimizer " + kind, require_matrix=False)
+                                   "actual full/query optimizer " + kind, require_matrix=False,
+                                   optimizer_marker_contract=marker_contract)
     return {"study_id": manifest["study_id"], "phase": phase, "status": "PASS_WITHIN_FAMILY_OPERATOR_PARITY",
             "architecture_family": family, "matched_seeds": sorted(seeds), "matched_objectives": ["full", "query"],
             "eligible_for_architecture_superiority": False, "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",

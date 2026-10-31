@@ -1,0 +1,106 @@
+{
+  "schema": "langcontrol098.register.v1",
+  "study_id": "LANGCONTROL098",
+  "execution_level": "internal_research",
+  "seeds": [
+    1701,
+    1702,
+    1703,
+    1704,
+    1705
+  ],
+  "families": [
+    "tac",
+    "gru",
+    "ssm",
+    "transformer"
+  ],
+  "objectives": [
+    "full",
+    "query"
+  ],
+  "training": {
+    "steps": 256,
+    "batch_size": 4,
+    "context": 272,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "foreach": false,
+    "max_arm_seconds": 2100,
+    "max_seed_seconds": 2400,
+    "tuning_trials": 0,
+    "max_arm_seconds_by_family": {
+      "tac": 2100,
+      "gru": 480,
+      "ssm": 480,
+      "transformer": 240
+    },
+    "max_leg_seconds": 2400
+  },
+  "manifest_paths": {
+    "tac": "research/mathematical-engineering/langcontrol098/FAIR_COMPARISON_TAC.json",
+    "gru": "research/mathematical-engineering/langcontrol098/FAIR_COMPARISON_GRU.json",
+    "ssm": "research/mathematical-engineering/langcontrol098/FAIR_COMPARISON_SSM.json",
+    "transformer": "research/mathematical-engineering/langcontrol098/FAIR_COMPARISON_TRANSFORMER.json"
+  },
+  "data": {
+    "manifest_sha256": "c44e95dd75524d152a9d84d277554805cba6a00f4db642f48e2139472a2c8d41",
+    "source_provenance_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+    "FIT.json_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+    "artifact_sha256": {
+      "DEV_ACTOR.json": "52104399d27087183ceef9520f4204aa6f50ca8184bd1518342bc6a884699a91",
+      "DEV_CONTROL_ACTOR.json": "4d4d2b03231c90fd5fb323215d85fe52908e75955667593094989cf4a7a745af",
+      "DEV_DONORS.json": "a73e7f036f8a939abba008ef1b5b0c70e1321738b7d68d0fe6be33d76b1e95c6",
+      "DEV_JUDGE.json": "f38224274cb787a5bcd9f68ee43436fa6bdefbde3d19f47b90290d04108e4aec",
+      "FIT.json": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1"
+    },
+    "fit_episodes": 152,
+    "dev_episodes": 72
+  },
+  "generation_limits": {
+    "lexical": 4,
+    "arc": 40
+  },
+  "compute": {
+    "backend": "github_actions_cpu",
+    "profile_max_minutes": 15,
+    "fit_jobs": 10,
+    "fit_job_matrix": "five seeds x two objectives; four family fits per job",
+    "max_fit_minutes_per_objective_leg": 40,
+    "max_fit_minutes_all_legs": 400,
+    "evaluate_max_minutes": 40,
+    "max_experiment_stage_minutes": 455,
+    "job_setup_download_upload_minutes": "separately measured; each job has45minute timeout",
+    "gpu_minutes": 0
+  },
+  "fit_enabled": false,
+  "protected_repository_TEST_permitted": false,
+  "checkpoint_promotion_permitted": false,
+  "phase_policy": "Freeze code, exact objective coefficients and all40 actual no-optimizer profiles before enabling any optimizer; all40 original final checkpoints must seal before DEV. No TEST, GPU, promotion or architecture ranking.",
+  "objective_control": {
+    "domain_weights": {
+      "lexical": 0.5,
+      "arc": 0.5
+    },
+    "prefix_lambda_by_objective": {
+      "full": 1.0,
+      "query": 0.0
+    },
+    "reduction": "fixed_domain_case_segment_means",
+    "normalize_by_total_coefficient_mass": false
+  },
+  "lineage": {
+    "parent_study": "LANGACQUIRE097",
+    "parent_source_commit": "8f2d9bd016358d887f9200d3cdba9bee9681313b",
+    "architecture_change": false,
+    "data_change": false,
+    "historical_objectives_reinterpreted": false,
+    "prior_related_implementation": "LANGMATH098 controlled loss in PR668; new model is not used here"
+  }
+}

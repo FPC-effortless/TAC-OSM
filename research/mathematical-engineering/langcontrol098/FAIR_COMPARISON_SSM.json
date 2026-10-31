@@ -1,0 +1,562 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGCONTROL098-SSM",
+  "study_type": "within_family_objective_comparison",
+  "architecture_family": "ssm",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Prospective coefficient-controlled prefix-supervision effect on fixed future-target/domain/episode coefficients; forty within-family objective fits, unchanged original086 TAC/GRU/SSM/Transformer graphs.",
+  "real_world_source": {
+    "name": "Original licensed CPython code bytes primary; human-authored ARC benchmark secondary",
+    "observed_real_outcomes": true,
+    "sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "PSF-2.0 original code; Apache-2.0 ARC secondary benchmark",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/langcontrol098/SOURCE_PROVENANCE.json",
+    "primary_evidence": "Genuine original code continuation",
+    "secondary_diagnostic": "ARC public authored puzzles; not naturally observed operational outcomes"
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "c44e95dd75524d152a9d84d277554805cba6a00f4db642f48e2139472a2c8d41",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "evaluation_partition": "Historically exposed public DEV; source/task held out from these new random-initialized models"
+  },
+  "causal_protocol": "A then Q in source-free separate query process; actual complete state interventions and past-only ARC binding shuffle; scorer-only Y; unknown semantic rule-family isolation OPEN.",
+  "checkpoint_policy": "Every final model/optimizer/RNG/sampler/code receipt sealed before any DEV predictions; fixed256updates, no selection; cold and stream replay; failures immutable.",
+  "seeds": [
+    1701,
+    1702,
+    1703,
+    1704,
+    1705
+  ],
+  "models": [
+    {
+      "name": "full",
+      "objective": "full",
+      "seed": 1701,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "cb9549ac2322e38abc3d6419052314eb11202a2784065f6b05da5fc8dfed8d2d",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 130486,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 130486,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 79798
+      }
+    },
+    {
+      "name": "query",
+      "objective": "query",
+      "seed": 1701,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "cb9549ac2322e38abc3d6419052314eb11202a2784065f6b05da5fc8dfed8d2d",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 130486,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 12905,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 79798
+      }
+    },
+    {
+      "name": "full",
+      "objective": "full",
+      "seed": 1702,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "aecf077eb29f524edf67199e223bbfc3944c4b2f09c6202d67727759e58f714a",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 131083,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 131083,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 80395
+      }
+    },
+    {
+      "name": "query",
+      "objective": "query",
+      "seed": 1702,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "aecf077eb29f524edf67199e223bbfc3944c4b2f09c6202d67727759e58f714a",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 131083,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 13251,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 80395
+      }
+    },
+    {
+      "name": "full",
+      "objective": "full",
+      "seed": 1703,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "6210a2e18cbac3b190120161dc5b121a6e9e53dca59bb458f030303d2f2a5eda",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 131352,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 131352,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 80664
+      }
+    },
+    {
+      "name": "query",
+      "objective": "query",
+      "seed": 1703,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "6210a2e18cbac3b190120161dc5b121a6e9e53dca59bb458f030303d2f2a5eda",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 131352,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 13302,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 80664
+      }
+    },
+    {
+      "name": "full",
+      "objective": "full",
+      "seed": 1704,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "4900225ef39add3cf557f3d2cb8c713c4d4a149a86c56a3a2432ed60e19ce082",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 131190,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 131190,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 80502
+      }
+    },
+    {
+      "name": "query",
+      "objective": "query",
+      "seed": 1704,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "4900225ef39add3cf557f3d2cb8c713c4d4a149a86c56a3a2432ed60e19ce082",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 131190,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 12930,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 80502
+      }
+    },
+    {
+      "name": "full",
+      "objective": "full",
+      "seed": 1705,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "16ec892b870e2c99e5390c05c67715b12de244e17e97953704722552d0cc2aac",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 130627,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 130627,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 79939
+      }
+    },
+    {
+      "name": "query",
+      "objective": "query",
+      "seed": 1705,
+      "architecture_family": "ssm",
+      "trainable_parameters": 100404,
+      "deployed_parameters": 100404,
+      "nontrainable_state_bytes": 512,
+      "dataset_sha256": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+      "train_split_sha256": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1",
+      "dev_split_sha256": "8d227e1981d8f8a4e6aa520d740d3a0f7a5920bc893a2695dc862b33516c1ce2",
+      "feature_contract_sha256": "aa307af3beefa4934d40b206dd34b28330dd801137d853f795e2d276c723cc90",
+      "target_contract_sha256": "5cd2d764c6bd9fbc77f7a17aaa9512e5203f4a7b8625a7668e7e79cc7d820e75",
+      "optimizer_schedule_sha256": "121de38d52398bbd03f3e0f961fde9669993540a6c738e5155c731fb363a6fbe",
+      "tuning_policy_sha256": "973409ee2033bf495baad1b4eb627405af63fb5641a4fd46ac10b94dbcf8ba50",
+      "selection_policy_sha256": "e28ef95ef42b2d9f8a7cd261adba55884caaf23daf727d6fa0d2e46b17772163",
+      "evaluation_contract_sha256": "746b08cd94ef96572593ecd157985e1eeb53ec46dcc35f154e1e051c036c5594",
+      "training_sample_order_sha256": "16ec892b870e2c99e5390c05c67715b12de244e17e97953704722552d0cc2aac",
+      "budget": {
+        "steps": 256,
+        "examples_seen": 1024,
+        "tokens_seen": 130627,
+        "batch_size": 4,
+        "history_events": 272,
+        "dense_compute_tokens": 278528,
+        "tuning_trials": 0,
+        "tuning_flops": 0,
+        "max_fit_wall_seconds": 480,
+        "shared_objective_leg_wall_seconds": 2400
+      },
+      "expected_supervised_targets": 12933,
+      "expected_observed_by_domain": {
+        "lexical": 50688,
+        "arc": 79939
+      }
+    }
+  ],
+  "compute_accounting": "within_family_complete_operator_ledger",
+  "operator_profile_path": "research/mathematical-engineering/langcontrol098/profiles/PROFILE_ssm.json",
+  "operator_profile_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "implementation_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "training_recipe_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "optimizer_contract": {
+    "name": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "amsgrad": false,
+    "foreach": false,
+    "clip_foreach": false,
+    "fused": false
+  },
+  "profile_status": "BLOCKED_UNTIL_NEW_ACTUAL_NO_OPTIMIZER_PROFILE_SEALED",
+  "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
+  "cross_architecture_superiority": "INELIGIBLE",
+  "contracts": {
+    "feature": {
+      "input": "original byte tokens only; state/owner/clock legal",
+      "context": 272,
+      "padding": "end only; valid-target mask; no padded byte before authentic target",
+      "source_metadata_to_neural_features": false,
+      "acquisition_detached": false
+    },
+    "target": {
+      "training": "same chronological z[1:] targets in both objectives",
+      "full": "fixed domain/case means of Y plus P, lambda=1",
+      "query": "same fixed domain/case means of Y, prefix lambda=0",
+      "evaluation": "first-target-byte NLL; exactly4/40 own-generated bytes; no Y actor access",
+      "objective_masks_are_the_treatment": true,
+      "objective_control": {
+        "domain_weights": {
+          "lexical": 0.5,
+          "arc": 0.5
+        },
+        "prefix_lambda_by_objective": {
+          "full": 1.0,
+          "query": 0.0
+        },
+        "reduction": "fixed_domain_case_segment_means",
+        "normalize_by_total_coefficient_mass": false
+      }
+    },
+    "evaluation": {
+      "domains": [
+        "lexical",
+        "arc"
+      ],
+      "conditions": [
+        "carry",
+        "reset",
+        "donor",
+        "corrupt"
+      ],
+      "binding_shuffle": true,
+      "generation_limits": {
+        "lexical": 4,
+        "arc": 40
+      },
+      "primary_family": "tac",
+      "endpoint": "positive lexical firstbyte NLL; exact4 utility; ARC exactgrid secondary",
+      "complete_frozen_DEV": {
+        "DEV_ACTOR.json": "52104399d27087183ceef9520f4204aa6f50ca8184bd1518342bc6a884699a91",
+        "DEV_CONTROL_ACTOR.json": "4d4d2b03231c90fd5fb323215d85fe52908e75955667593094989cf4a7a745af",
+        "DEV_DONORS.json": "a73e7f036f8a939abba008ef1b5b0c70e1321738b7d68d0fe6be33d76b1e95c6",
+        "DEV_JUDGE.json": "f38224274cb787a5bcd9f68ee43436fa6bdefbde3d19f47b90290d04108e4aec",
+        "FIT.json": "510b83352b0bb3b14791009735ff7680e7bb6bf622319c9c0391fb923c7eeeb1"
+      }
+    }
+  },
+  "runtime_storage": {
+    "tensor_state_bytes_at272": 512,
+    "clock_and_owner_metadata": "Measured separately; no hidden free metadata",
+    "transformer_KV_scales_with_clock": false,
+    "fixed_deterministic_TAC_buffer_bytes": 0
+  },
+  "training_plan": {
+    "steps": 256,
+    "batch_size": 4,
+    "context": 272,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "foreach": false,
+    "max_arm_seconds": 2100,
+    "max_seed_seconds": 2400,
+    "tuning_trials": 0,
+    "max_arm_seconds_by_family": {
+      "tac": 2100,
+      "gru": 480,
+      "ssm": 480,
+      "transformer": 240
+    },
+    "max_leg_seconds": 2400
+  },
+  "claims": "Internally measured within-family effect of prefix auxiliary supervision at fixed future coefficients only. No cross-family FLOP parity, architecture winner, novel intelligence or independent qualification.",
+  "runtime_execution": {
+    "jobs": "one objective leg per seed; four family fits, ten legs total",
+    "per_fit_wall_cap_seconds": 480,
+    "shared_objective_leg_wall_cap_seconds": 2400,
+    "actual_physical_CPU_recorded_per_fit": true,
+    "environment": "pinned one-thread CPU FP32; separate GHA virtual machines may use different physical CPU models",
+    "hardware_FLOP_parity_claim": false,
+    "CPU_time_parity_requirement": false,
+    "initialization": "Actual live initial parameter digest must match frozen profile before optimizer; full/query digest pair rechecked in assembly"
+  },
+  "literature_gap": {
+    "unresolved_TAConly_question": "Does removing prefix auxiliary supervision at exactly fixed future-target, episode and domain coefficients improve causally useful acquired state on the unchanged compactTAC graph?",
+    "what_is_not_being_rediscovered": "Episodic recurrent learning, backpropagation through time, memory augmentation and in-context adaptation are established.",
+    "established_work": [
+      {
+        "paper": "Santoro etal., Memory-Augmented Neural Networks, ICML2016",
+        "established_result": "Episodic learning with addressable external memory",
+        "url": "https://proceedings.mlr.press/v48/santoro16.html"
+      },
+      {
+        "paper": "Dai etal., Transformer-XL, ACL2019",
+        "established_result": "Recurrent context beyond fixed-length language-model segments",
+        "url": "https://aclanthology.org/P19-1285/"
+      }
+    ]
+  },
+  "objective_control": {
+    "domain_weights": {
+      "lexical": 0.5,
+      "arc": 0.5
+    },
+    "prefix_lambda_by_objective": {
+      "full": 1.0,
+      "query": 0.0
+    },
+    "reduction": "fixed_domain_case_segment_means",
+    "normalize_by_total_coefficient_mass": false
+  },
+  "study_directory": "research/mathematical-engineering/langcontrol098",
+  "profile_entrypoint": "profile098.py",
+  "initial_state_schema": "langcontrol098.initial-state.v1",
+  "optimizer_marker_contract": "balanced-empty-optimizer-profiler-v1"
+}
