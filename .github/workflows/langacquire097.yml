@@ -52,7 +52,7 @@ jobs:
           # must not replay this frozen forty-fit experiment. Direct097 changes
           # or an explicit097 dispatch retain the original execution behavior.
           direct097 = any(p.startswith(root) and scientific(p) for p in paths)
-          separate099 = any(p.startswith('research/mathematical-engineering/langtrain099/') for p in paths)
+          separate099 = any(p.startswith(('research/mathematical-engineering/langtrain099/','research/mathematical-engineering/langrecomp100/')) for p in paths)
           needed = os.environ['REQUESTED_EVENT'] == 'workflow_dispatch' or (any(map(scientific, paths)) and (direct097 or not separate099))
           config = json.load(open(root+'REGISTER.json'))
           enabled = config['fit_enabled']

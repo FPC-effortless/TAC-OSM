@@ -102,6 +102,27 @@ def check_langtrain099_model(model,label):
     demand(model.get("trainable_parameters")==10000000 and model.get("deployed_parameters")==10000000,
            label+": only exactly10,000,000 active/deployed parameters authorized")
 
+# Explicit owner-requested recomputation test on the existing exact10M models.
+def checked_langrecomp100(m):
+    return (m.get("study_id")=="LANGRECOMP100" and m.get("study_type")=="single_model_training"
+        and m.get("parameter_budget_contract")=="owner-2026-10-31-langrecomp100-exact10m-continuation"
+        and m.get("execution_level")=="internal_research" and m.get("no_architecture_superiority_claim") is True)
+
+def check_langrecomp100(m,phase):
+    demand(checked_langrecomp100(m),"LANGRECOMP100 exact owner scope required")
+    demand(m.get("geometry")=={"embed":256,"context":376,"key":24,"value":32,"ffn":4335},"LANGRECOMP100 unchanged099 geometry required")
+    demand(m.get("parent_checkpoint_run")==41153068368,"LANGRECOMP100 original trained checkpoint run required")
+    rows=m.get("models",[])
+    demand(len(rows)==6 and {(r.get("name"),r.get("seed")) for r in rows}=={(p,s) for p in ("native","recompute") for s in (9901,9902,9903)},"LANGRECOMP100 exact paired matrix required")
+    demand(m.get("budget",{}).get("training_updates")==16 and m["budget"].get("tuning_trials")==0,"LANGRECOMP100 only16 updates without tuning")
+    demand(m["budget"].get("max_attempts",1) in (1,2),"LANGRECOMP100 at most one documented corrective replay")
+    for r in rows:
+        check_langtrain099_model(r,"LANGRECOMP100 actual model")
+        if phase=="final":
+            a=r.get("measured",{});check_langtrain099_model(a,"LANGRECOMP100 final actual model")
+            demand(a.get("steps")==16 and a.get("absolute_optimizer_steps")==2064 and a.get("cold_replay_bitwise") is True,"LANGRECOMP100 complete original optimizer/replay required")
+            digest(a.get("sample_sha256"),"LANGRECOMP100 actual next16 data schedule")
+
 # Owner's 2026-10-28 NEW language-model scale (old studies unchanged).
 # Explicit, narrow contract: no global relaxation of the historical 100K gate.
 def checked_new_scale(m):
@@ -312,6 +333,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
     if kind=="single_model_training":
         if m.get("study_id")=="CODEVALUE003":check_codevalue003(m,phase)
         if m.get("study_id")=="LANGTRAIN099":check_langtrain099(m,phase)
+        if m.get("study_id")=="LANGRECOMP100":check_langrecomp100(m,phase)
         demand(m.get("registered_before_first_fit") is True,
                "single-model fit must be preregistered")
         source=m.get("real_world_source")
@@ -323,7 +345,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
                "single-model training requires >=1 declared model/seed")
         for i,model in enumerate(models):
             demand(isinstance(model,dict),f"models[{i}] must be an object")
-            if checked_langtrain099(m):
+            if checked_langtrain099(m) or checked_langrecomp100(m):
                 check_langtrain099_model(model,f"models[{i}]")
             elif checked_langmem083(m):
                 check_langmem083_model(model,f"models[{i}]")
@@ -350,7 +372,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 receipt=model.get("measured")
                 demand(isinstance(receipt,dict),
                        f"models[{i}] final actual measurement receipt required")
-                if checked_langtrain099(m):
+                if checked_langtrain099(m) or checked_langrecomp100(m):
                     check_langtrain099_model(receipt,f"models[{i}].measured")
                 elif checked_langmem083(m):
                     check_langmem083_model({**model,

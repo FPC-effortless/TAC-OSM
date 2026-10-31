@@ -1,0 +1,156 @@
+name: LANGRECOMP100 exact10M activation recomputation trial
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langrecomp100/**'
+      - 'tests/test_langrecomp100.py'
+      - 'research/phone_queue/langrecomp100-*.json'
+      - '.github/workflows/langrecomp100.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  OMP_NUM_THREADS: '2'
+  MKL_NUM_THREADS: '2'
+  OPENBLAS_NUM_THREADS: '1'
+  PYTHONPATH: src
+  SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+  STUDY: research/mathematical-engineering/langrecomp100
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    outputs:
+      fit: ${{ steps.route.outputs.fit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          fetch-depth: 2
+      - name: Route only registered scientific changes; never retrain report updates
+        id: route
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          python - <<'PY'
+          import json,os,subprocess
+          root=os.environ['STUDY']+'/'
+          paths=subprocess.check_output(['git','diff-tree','--root','--no-commit-id','--name-only','-r',os.environ['SOURCE_COMMIT']],text=True).splitlines()
+          needed=os.environ['EVENT']=='workflow_dispatch' or any(p.startswith(root) and not p.startswith(root+'results/') and (p.endswith('.py') or p.rsplit('/',1)[-1] in ('REGISTER.json','FAIR_COMPARISON.json','PREREGISTRATION.md')) for p in paths)
+          reg=json.load(open(root+'REGISTER.json'));enabled=reg['continuation_enabled']
+          if enabled:assert reg['math_gate']['status']=='PASS'
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('fit='+str(needed and enabled).lower()+'\n')
+          print({'scientific_execution':needed,'continuation_enabled':enabled})
+          PY
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 'pytest>=8,<9' cryptography==46.0.3
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Full source gradients, state derivative, masks, causality and constructed optimizer parity
+        run: python -m pytest -q tests/test_langrecomp100.py tests/test_langtrain099.py tests/test_research_parity_gate.py tests/test_research_probe_agnostic.py
+      - name: Review source checks CPU proposal
+        run: python scripts/phone_lab.py plan research/phone_queue/langrecomp100-checks.json
+      - name: Enforce exact original model and limited continuation budget
+        run: python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
+      - name: Verify exact reciprocal proof/source snapshot before real continuation
+        if: steps.route.outputs.fit == 'true'
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,os,urllib.request
+          study=Path(os.environ['STUDY']);reg=json.loads((study/'REGISTER.json').read_text());gate=reg['math_gate']
+          def fetch(commit,path):
+              with urllib.request.urlopen('https://raw.githubusercontent.com/FPC-effortless/pnds-lean/'+commit+'/'+path,timeout=30) as r:return r.read()
+          local=json.loads(Path('research/pnds-variant-math-links.json').read_text())
+          assert json.loads(fetch(gate['metadata_commit'],'foundation/v1/variant-math-links.json'))==local
+          assert hashlib.sha256(fetch(gate['source_commit'],'PNDS/LANGRECOMP100.lean')).hexdigest()==gate['lean_sha256']
+          assert fetch(gate['source_commit'],'foundation/v1/langrecomp100_reference.py')==(study/'reference.py').read_bytes()
+          row=next(r for r in local['prospective_training_candidates'] if r['id']=='LANGRECOMP100')
+          for path,digest in row['tac']['source_sha256'].items():assert hashlib.sha256(Path(path).read_bytes()).hexdigest()==digest,path
+          PY
+  fit:
+    needs: checks
+    if: needs.checks.outputs.fit == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [9901, 9902, 9903]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          fetch-depth: 2
+      - name: Fetch exact original parent for source-byte authentication
+        run: git fetch --no-tags --depth=1 origin 068ed9bd5bd68c19b0fd98dcff9a42197c1e4d21
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41153068368
+          name: langtrain099-FIT-only
+          path: /tmp/langrecomp100-FIT
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41153068368
+          name: langtrain099-original-seed-${{ matrix.seed }}
+          path: /tmp/langrecomp100-parent
+      - name: Review paired continuation CPU budget
+        run: python scripts/phone_lab.py plan research/phone_queue/langrecomp100-seed-${{ matrix.seed }}.json
+      - name: Matched original weights and moments;16 genuine updates per policy in fresh processes
+        env:
+          SEED: ${{ matrix.seed }}
+        run: |
+          python - <<'PY'
+          import json,os,subprocess,sys
+          study=os.environ['STUDY'];seed=int(os.environ['SEED']);reg=json.load(open(study+'/REGISTER.json'));codes=[]
+          for policy in reg['policy_order'][str(seed)]:
+              command=[sys.executable,study+'/worker.py','--seed',str(seed),'--policy',policy,'--parent','/tmp/langrecomp100-parent','--data','/tmp/langrecomp100-FIT','--source-commit',os.environ['SOURCE_COMMIT'],'--output','ci-artifacts/seed-'+str(seed)+'/'+policy]
+              codes.append(subprocess.run(command,check=False,timeout=360).returncode)
+          sys.exit(1 if any(codes) else 0)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langrecomp100-original-seed-${{ matrix.seed }}
+          path: ci-artifacts/seed-${{ matrix.seed }}/
+          if-no-files-found: error
+          retention-days: 90
+  compare:
+    needs: [checks, fit]
+    if: needs.checks.outputs.fit == 'true' && needs.fit.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 cryptography==46.0.3
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: langrecomp100-original-seed-*
+          path: /tmp/langrecomp100-originals
+      - name: Compare all16 exact gradients and optimizer updates per seed; physical memory versus logical saves
+        run: python "$STUDY/assemble.py" --fits /tmp/langrecomp100-originals --source-commit "$SOURCE_COMMIT" --output ci-artifacts/comparison
+      - name: Final actual exact10M original-optimizer exposure gate
+        run: python scripts/validate_research_parity.py --manifest ci-artifacts/comparison/FINAL_RESOURCE_MANIFEST.json --phase final
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langrecomp100-comparison
+          path: ci-artifacts/comparison/
+          if-no-files-found: error
+          retention-days: 90
