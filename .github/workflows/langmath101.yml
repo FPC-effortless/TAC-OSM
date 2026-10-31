@@ -62,6 +62,17 @@ jobs:
           python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
           python scripts/phone_lab.py plan research/phone_queue/langmath101-profile.json
           python "$STUDY/readiness.py"
+          python - <<'PY'
+          import importlib.util,json,os,sys
+          from pathlib import Path
+          study=Path(os.environ['STUDY']);spec=importlib.util.spec_from_file_location('lm101_prefit_common',study/'common.py');C=importlib.util.module_from_spec(spec);sys.modules[spec.name]=C;spec.loader.exec_module(C)
+          profile=C.read(study/'profiles/PROFILE_INDEX.json')
+          for row in profile['models']:
+              C.setup(row['seed']);model=C.make_model(row['architecture'],C.read(study/'profiles'/str(row['seed'])/'TOKENIZER.json'))
+              assert C.state_digest(model)==row['weights_before'],row['architecture']+': runner initialization differs from exact frozen profile'
+              del model
+          print({'exact_runner_initializations_verified':len(profile['models']),'optimizer_steps':0})
+          PY
   fit:
     needs: preflight
     if: needs.preflight.outputs.fit == 'true'
