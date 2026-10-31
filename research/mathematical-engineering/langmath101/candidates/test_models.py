@@ -1,11 +1,20 @@
 """Candidate source/gradient/causal checks; no neural training or capability score."""
 import hashlib
+import importlib.util
 from pathlib import Path
+import sys
 
 import pytest
 import torch
 
-from langmath101_candidates.models import FAMILY_NAMES, TARGET, catalog, make_model, intervene
+# Resolve this exact source file independently of the checkout's directory name
+# and pytest's import mode. Treat models.py as a package for its sibling imports.
+_path=Path(__file__).resolve().with_name('models.py')
+_name='_langmath101_candidate_tests_'+hashlib.sha256(str(_path).encode()).hexdigest()[:12]
+_spec=importlib.util.spec_from_file_location(_name,_path,submodule_search_locations=[str(_path.parent)])
+_models=importlib.util.module_from_spec(_spec);sys.modules[_name]=_models;_spec.loader.exec_module(_models)
+FAMILY_NAMES,TARGET=_models.FAMILY_NAMES,_models.TARGET
+catalog,make_model,intervene=_models.catalog,_models.make_model,_models.intervene
 
 torch.set_num_threads(1)
 
