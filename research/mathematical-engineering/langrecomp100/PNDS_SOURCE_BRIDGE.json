@@ -3,19 +3,19 @@
   "study": "LANGRECOMP100",
   "tac": {
     "repository": "FPC-effortless/TAC-OSM",
-    "commit": "ec64f7300a62490cbfecf33725a8e459acec35a2",
+    "commit": "a6d8644efdbd80a8b9fcb4654d24f86282b376ca",
     "pull_request": 676,
     "evidence_path": "research/mathematical-engineering/langrecomp100",
     "bridge_path": "research/mathematical-engineering/langrecomp100/PNDS_SOURCE_BRIDGE.json",
     "source_sha256": {
       "research/mathematical-engineering/langrecomp100/assemble.py": "c83e90190fef82795e304b000d9a7c7232404da4b95edbf4d7150bf183e419e9",
       "research/mathematical-engineering/langrecomp100/recompute.py": "7071fe21b7b33ecb7214821fce8120231a0807791b1d67673f267f415abd9837",
-      "research/mathematical-engineering/langrecomp100/worker.py": "1c41cd279c4efcd1760de358ab7da59f258d5a033bce1dfa96c1fc709ad9354e",
+      "research/mathematical-engineering/langrecomp100/worker.py": "f7108b62ee7d6fc0c6fdb0477267b013d335edebdaee136134529dd051884ecd",
       "research/mathematical-engineering/langrecomp100/reference.py": "44bf2d35245ef9de29af59da05500c08ff49acbcf106a2950055384354606309",
       "research/mathematical-engineering/langrecomp100/common.py": "0f16cfd147237e8cd697893fa816a174628fe6f66aa292f4bf39bc25f3067a87",
       "research/mathematical-engineering/langrecomp100/probe_adapter.py": "e79e28804798c314e10f1e47f708fdcaabacd2012f664990e35557c646384642",
       "research/mathematical-engineering/langrecomp100/FORMULATION.md": "f1a871a46e0719013ee394b605d03372aee7d6d24664ce66d8eb0a5f3cbd089a",
-      "tests/test_langrecomp100.py": "92ded75e3bc1bd6a0ebcb27b76a3467f42a50af3cea701eb8f53ce0ac1d9b052",
+      "tests/test_langrecomp100.py": "ea857aeea92828a53c21c6648322245b9462f9040908c94cc251abc5d529adc4",
       "research/mathematical-engineering/langtrain099/model.py": "ddb2000482e2aa87a4fbdec19cdfdd01249280263e2438be230799ac1758ce9f",
       "research/mathematical-engineering/langtrain099/objective.py": "ab02ada6e3727471941f7d35343a5628f4c1d6fffbcd88e7517b8cbd0aba127b"
     }
@@ -38,7 +38,7 @@
   "verification": {
     "scoped_replay_proof": "PASS_4_GENERIC_EXACT_REAL_PROPOSITIONS",
     "full_model_IEEE_AD": "OPEN",
-    "actual_optimizer_parity": "ENABLED_FIXED16_UPDATE_TRIAL_NOT_YET_MEASURED",
+    "actual_optimizer_parity": "FIRST_ATTEMPT_PASS; CORRECTED_MEASUREMENT_REPLAY_DISABLED_PENDING_SOURCE_GATES",
     "source_constructed_checks": "PASS_65_IN_ACTIONS",
     "scoped_proof_run": 41159586682,
     "reference_tests": 7
@@ -50,6 +50,14 @@
       "run": 41159196726,
       "status": "FAIL_LEAN_RESERVED_ARGUMENT_NAME_PREFIX",
       "optimizer_steps": 0
+    }
+  ],
+  "measurement_attempts": [
+    {
+      "run": 41159811557,
+      "source": "061dc749674680139600e9895cf5d104e24fa5c8",
+      "physical_memory_status": "SUPERSEDED_UNQUALIFIED_NONDETACHED_PACKHOOK",
+      "gradient_optimizer_comparison_job": "PASS"
     }
   ]
 }
