@@ -18,7 +18,7 @@ ROOT=HERE.parents[2] if HERE.parent.name=='mathematical-engineering' else HERE.p
 SEEDS=(10101,10102,10103)
 RECIPE={'steps_parameter_lane':512,'batch_size':4,'dense_context':272,'real_language_context':128,
  'optimizer':'AdamW','learning_rate':.001,'betas':[.9,.999],'eps':1e-8,'weight_decay':.01,
- 'grad_clip':1.,'prefix_weight':.5,'threads':2,'tuning_trials':0,'max_arm_seconds':3600,
+ 'grad_clip':1.,'prefix_weight':.5,'threads':2,'tuning_trials':0,'max_arm_seconds':2700,
  'counted_lane_min_steps':200,'counted_lane_max_steps':4096,'dtype':'FP32',
  'learning_rate_policy':'constant; same optimizer policy for variable-length counted runs'}
 

@@ -112,7 +112,7 @@ def build_manifest(profile,profile_path,specs,plans,counts,source,contracts):
     # Shared target is set from original source profiles before any fitting.
     # A0/other dense arms count all actual forward+back mm/addmm/bmm; adaptive
     # route-dependent runtime consumption still controls the actual stop point.
-    target=512*maximum;bound=int(target*.005)
+    target=480*maximum;bound=int(target*.005)
     if maximum>bound:raise ValueError('Profile charge exceeds the frozen0.5% first-crossing headroom')
     rows=[];estimates=[]
     for pr in profile['models']:
@@ -120,7 +120,7 @@ def build_manifest(profile,profile_path,specs,plans,counts,source,contracts):
         estimate=math.ceil(target/charge)
         if not 200<=estimate<=4096:
             raise ValueError(f'Counted source-work estimate exceeds frozen200..4096 bounds: {arm} seed{seed}: {estimate}')
-        expected_wall=pr['profile_wall_seconds']*max(512,estimate)*1.25+30
+        expected_wall=pr['profile_wall_seconds']*max(512,estimate)*1.20+30
         if expected_wall>C.RECIPE['max_arm_seconds']:
             raise ValueError(f'Actual source profile predicts over-budget training for {arm} seed{seed}: {expected_wall:.2f}s; retain receipt and redesign before fitting')
         estimates.append({'architecture':arm,'seed':seed,'counted_step_estimate':estimate,
@@ -153,7 +153,7 @@ def build_manifest(profile,profile_path,specs,plans,counts,source,contracts):
       'operator_profile_path':relative(profile_path),'operator_profile_sha256':C.sha(profile_path),
       'arms':rows,'counted_target_policy':{'common_target':target,'maximum_profile_step':maximum,
         'minimum_profile_step':minimum,'max_single_step_bound':bound,
-        'definition':'512 times maximum sealed zero-update actual source forward/back dense count across every architecture and seed; freeze before fitting.'}}
+        'definition':'480 times maximum sealed zero-update actual source forward/back dense count across every architecture and seed; freeze before fitting.'}}
     protocol=json.loads((HERE/'PROTOCOL.json').read_text())
     for field in ('research_scope','split_policy','causal_protocol','checkpoint_policy'):
         if field not in protocol:raise ValueError('Frozen PROTOCOL is missing outer-gate field '+field)

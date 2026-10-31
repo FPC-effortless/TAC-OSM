@@ -31,7 +31,8 @@
     "stop": "first actual step reaching the common frozen dense-arithmetic target",
     "minimum_steps": 200,
     "maximum_steps": 4096,
-    "maximum_overshoot_fraction": 0.005
+    "maximum_overshoot_fraction": 0.005,
+    "profile_maximum_step_multiplier": 480
   },
   "arithmetic_convention": "actual_ATen_mm_addmm_bmm_units",
   "full_model_FLOPs_status": "INCONCLUSIVE_NOT_CLAIMED",
@@ -47,10 +48,10 @@
     "threads": 2
   },
   "resource_bounds": {
-    "per_fit_seconds": 3600,
+    "per_fit_seconds": 2700,
     "GPU_minutes": 0,
     "maximum_concurrent_fit_jobs": 12,
-    "maximum_all_fit_CPU_minutes": 8280
+    "maximum_all_fit_CPU_minutes": 6210
   },
   "data": {
     "cohort": "original authenticated LANGTRAIN099 FIT/DEV",
@@ -123,6 +124,20 @@
   "resource_revision_before_first_fit": {
     "old_per_fit_seconds": 2100,
     "new_per_fit_seconds": 3600,
-    "reason": "Actual zero-update traced adaptive source profile4.30s/step predicts2782s under512updates and1.25headroom; no optimizer, DEV scoring or architecture selection used."
+    "reason": "Actual zero-update traced adaptive source profile4.30s/step predicts2782s under512updates and1.25headroom; no optimizer, DEV scoring or architecture selection used.",
+    "queue_limit_replan": {
+      "new_per_fit_seconds": 2700,
+      "queue_CPU_job_limit_minutes": 45,
+      "previous_final_profile_max_conservative_seconds": 2620.046871299637,
+      "reason": "Keep actual profile-based estimate within unchanged source-controlled45minuteCPUqueuepolicy; alloptimizerstepsstillzero."
+    }
+  },
+  "resource_projection": {
+    "measured_basis": "actual zero-update full source forward/backward ATen tracing, all69model/seed pairs",
+    "time_headroom_factor": 1.2,
+    "additional_seconds": 30,
+    "hard_fit_wall_limit_seconds": 2700,
+    "source_before_first_fit": true,
+    "reason": "Counted target lowered uniformly before fitting; maximum observed traced step4.30s*512*1.2+30=2672s. Preserve every earlier source/profile attempt; no optimizer or DEV score used."
   }
 }
