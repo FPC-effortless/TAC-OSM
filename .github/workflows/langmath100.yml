@@ -9,7 +9,31 @@ permissions:
   contents: read
   actions: read
 jobs:
+  route:
+    runs-on: ubuntu-latest
+    outputs:
+      scientific: ${{ steps.changed.outputs.scientific }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - id: changed
+        name: Keep results-only commits from rerunning neural inference
+        run: |
+          python - <<'PY'
+          import os,subprocess
+          files=subprocess.check_output(['git','diff','--name-only','HEAD^','HEAD'],text=True).splitlines()
+          prefix='research/mathematical-engineering/langmath100/'
+          scientific={prefix+n for n in ['run.py','test_interventions.py','PROTOCOL.json','FAIR_COMPARISON.json']}
+          scientific.add('research/phone_queue/langmath100-replay.json')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('scientific='+str(bool(set(files)&scientific)).lower()+'\n')
+          print({'changed':files,'run_frozen_inference':bool(set(files)&scientific)})
+          PY
   replay-and-attribute:
+    needs: route
+    if: needs.route.outputs.scientific == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     strategy:
