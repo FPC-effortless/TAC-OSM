@@ -1,0 +1,36 @@
+name: LANGBASE107 matched Transformer engineering
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/langbase107/**"
+      - "research/mathematical-engineering/dev107/**"
+      - "research/phone_queue/langbase107-engineering.json"
+      - ".github/workflows/dev107-langbase107-engineering.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  no-fit-engineering:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install torch pytest
+      - name: Validate no-fit registration
+        run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/dev107/FAIR_COMPARISON.json --phase preflight
+      - name: Run focused engineering checks
+        run: python -m pytest -q research/langbase107/test_model.py
+      - name: Produce no-fit preflight receipt
+        run: python -m research.langbase107.preflight --out ci-artifacts/langbase107/PREFLIGHT.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LANGBASE107-no-fit-engineering
+          path: ci-artifacts/langbase107/PREFLIGHT.json
+          if-no-files-found: error
+

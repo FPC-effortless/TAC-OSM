@@ -1,0 +1,17 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "DEV107_LANGBASE107_NO_FIT_ENGINEERING",
+  "study_type": "noncomparative_diagnostic",
+  "scientific_purpose": "Verify the exact parameter geometry, causality, gradients and KV-cached inference equivalence of a conventional Transformer control before any prospective comparison is proposed",
+  "no_architecture_superiority_claim": true,
+  "no_new_model_fits": true,
+  "model_scale_policy": "declared-target-v2",
+  "parameter_scale": {
+    "target_trainable_parameters": 1000000,
+    "target_deployed_parameters": 1000000,
+    "relative_tolerance": 0.05,
+    "registered_before_first_fit": true,
+    "rationale": "Engineering preflight for a future approximately one-million-parameter language comparison; this diagnostic performs no optimizer update"
+  }
+}
+
