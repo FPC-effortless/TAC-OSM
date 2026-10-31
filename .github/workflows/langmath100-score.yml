@@ -9,7 +9,28 @@ permissions:
   contents: read
   actions: read
 jobs:
+  route:
+    runs-on: ubuntu-latest
+    outputs:
+      scoring: ${{ steps.changed.outputs.scoring }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - id: changed
+        run: |
+          python - <<'PY'
+          import os,subprocess
+          files=set(subprocess.check_output(['git','diff','--name-only','HEAD^','HEAD'],text=True).splitlines())
+          relevant={'research/results/langmath100/score.py','research/results/langmath100/benchmark.py'}
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('scoring='+str(bool(files&relevant)).lower()+'\n')
+          print({'run_scoring_and_timing':bool(files&relevant)})
+          PY
   score-frozen-originals:
+    needs: route
+    if: needs.route.outputs.scoring == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -38,6 +59,8 @@ jobs:
           name: langmath100-complete-scoring
           path: ci-artifacts/langmath100/
   trained-reference-timing:
+    needs: route
+    if: needs.route.outputs.scoring == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
