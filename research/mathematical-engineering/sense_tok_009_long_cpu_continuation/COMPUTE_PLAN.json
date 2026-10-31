@@ -1,0 +1,28 @@
+{
+  "planner_decision": {
+    "schema": "tac-osm.compute-decision.v1",
+    "run_id": "sense-tok-009-long-cpu-continuation",
+    "issue_number": 667,
+    "variant": "System 1",
+    "kind": "training",
+    "backend": "github_actions",
+    "accelerator": null,
+    "gpu_devices_required": 0,
+    "cpu_estimate_minutes": 30,
+    "gpu_budget_minutes": 0,
+    "state": "BLOCKED_EVIDENCE_OR_DESIGN",
+    "reasons": [
+      "CPU or diagnostic workload fits small GitHub runner budget"
+    ],
+    "blockers": [
+      "independent signed prefit reward/source/ACL evidence required at execution"
+    ],
+    "approved_to_train": false,
+    "approved_to_open_test": false,
+    "automatic_submissions": false,
+    "source_contract_fingerprint": "26fb091f5e676987cac3e9c0c94f6579bd2a65195d1a4d09260d715c046121e3"
+  },
+  "actual_execution": "owner-authorized existing managed CPU session; no GitHub training dispatch or GPU use",
+  "hard_wall_cap_seconds": 3600,
+  "exception_scope": "Exploratory continuation only, same deferred qualifications as initial approved CPU fit; planner is not training authorization"
+}

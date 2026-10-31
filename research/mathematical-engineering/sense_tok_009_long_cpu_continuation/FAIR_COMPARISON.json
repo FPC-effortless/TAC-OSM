@@ -1,0 +1,170 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "SENSE-TOK-009-LONG-CPU-CONTINUATION",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "name": "Original CPython v3.13.5 next-byte source, bounded exploratory CPU pilot",
+    "sha256": "7f5b6dc2596dc00f9710d21c34e4fde7fa413732cf767d6fc11aaf9ec81cc370",
+    "observed_real_outcomes": true,
+    "license": "PSF Python license; original bytes as next-byte targets"
+  },
+  "models": [
+    {
+      "variant": "S005-adaptive-codebook",
+      "seed": 1,
+      "trainable_parameters": 101008,
+      "deployed_parameters": 101008
+    }
+  ],
+  "owner_exception": {
+    "authority": "User explicitly requested: Proceed for longer training; same exploratory CPU continuation scope after the approved initial fit",
+    "scope": "One continuation of the exact step-1024 checkpoint: 3072 extra updates to 4096 total; no automatic retries",
+    "deferred": [
+      "independent signed prefit attestation",
+      "full formal verification",
+      "comparative qualification gates",
+      "complete adaptive ResearchProbeAdapter"
+    ],
+    "not_waived": [
+      "publisher byte integrity",
+      "causal input boundary",
+      "checkpoint preservation",
+      "sealed TEST exclusion",
+      "100k parameter band",
+      "no scientific promotion or architecture superiority claim"
+    ],
+    "max_optimizer_steps": 3072,
+    "max_wall_seconds": 3600,
+    "gpu_allowed": false
+  },
+  "config": {
+    "seed": 1,
+    "batch_size": 4,
+    "history_bytes": 256,
+    "steps": 4096,
+    "checkpoint_steps": [
+      1024,
+      1536,
+      2048,
+      2560,
+      3072,
+      3584,
+      4096
+    ],
+    "dev_evaluation_steps": [
+      1024,
+      4096
+    ],
+    "optimizer": {
+      "name": "AdamW",
+      "lr": 0.0003,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "gradient_clip_l2": 1.0
+    },
+    "warmup_steps": 16,
+    "final_lr": 3e-05,
+    "start_step": 1024,
+    "additional_steps": 3072,
+    "continuation_schedule": "16-update warm restart from prior floor (3e-5) toward 3e-4, then cosine to 3e-5 over remaining 3056 updates; no endpoint tuning"
+  },
+  "source_files": [
+    {
+      "split": "FIT",
+      "path": "fractions.py",
+      "size_bytes": 40021,
+      "sha256": "58f7750133f2e23999ba3f634d1b14edfec6dc48bf8bb00a9911262cd7198f63",
+      "git_blob_sha1": "e71ef58f18b3db13170b3bf2917cd6ad80652fc0"
+    },
+    {
+      "split": "FIT",
+      "path": "statistics.py",
+      "size_bytes": 61831,
+      "sha256": "0f618d7c13e99f5289d5e2a20ba8b7340be27ab424f2bffb739ab3be291fe261",
+      "git_blob_sha1": "ad4a94219cf38cb106d71a5bc6fc9eb7be384ec1"
+    },
+    {
+      "split": "EXPOSED_DEV",
+      "path": "ast.py",
+      "size_bytes": 65339,
+      "sha256": "7514eb7df98b1b76eab160ca2a83e6e9a9f3219a4659808cd9fd278b524ede1b",
+      "git_blob_sha1": "37b20206b8af4fda67c631fd010eda0008985511"
+    },
+    {
+      "split": "EXPOSED_DEV",
+      "path": "inspect.py",
+      "size_bytes": 128276,
+      "sha256": "d5ac7f91f6906439fd57f87f1e37934e95bb40569fa0a26affa4cf618f67532a",
+      "git_blob_sha1": "de2fe7e1ae0f6d345fdf1a53f4f0073079f50802"
+    },
+    {
+      "split": "EXPOSED_DEV",
+      "path": "csv.py",
+      "size_bytes": 19178,
+      "sha256": "bd242c88ac4fd905cc64121e6fc9714c32b9e6031f52a03296aa8d28b32903df",
+      "git_blob_sha1": "cd202659873811a2ea47c7374cc268d26a9ac5f3"
+    },
+    {
+      "split": "EXPOSED_DEV",
+      "path": "difflib.py",
+      "size_bytes": 83368,
+      "sha256": "3eb2d371b4a171b063921de6bbf115108bc39de8bf72866315868ce2599213b7",
+      "git_blob_sha1": "33e7e6c165aa0c12c779331927c3a40f3b09d9e2"
+    },
+    {
+      "split": "EXPOSED_DEV",
+      "path": "textwrap.py",
+      "size_bytes": 19939,
+      "sha256": "26836f5c17cdb4ffdeaff1a5146ed61a262aa410bdf3ad204e2bd0792f010d5e",
+      "git_blob_sha1": "7ca393d1c371aad54a2d1d70fae15efa889175bb"
+    },
+    {
+      "split": "EXPOSED_DEV",
+      "path": "email/parser.py",
+      "size_bytes": 4975,
+      "sha256": "88890ea9994c55ff7d6c1fd570fece2785f51ed407ee95df4aff946e250bcd66",
+      "git_blob_sha1": "06d99b17f2f9c4992301c432f498b0a32339171b"
+    }
+  ],
+  "model_source_parent": "ed3138de514855e248610899f1c035f95444d0c8",
+  "source_qualification": "publisher content equality; no independent evaluator attestation",
+  "qualification": "UNQUALIFIED_EXPLORATORY_CONTINUATION",
+  "test_access": "NONE",
+  "fits_authorized": 0,
+  "parent_checkpoint": {
+    "step": 1024,
+    "sha256": "5e167e312a31f1a44d21abd594eca869dbd1dc024acbf239e23c329780f60e8f",
+    "source_study": "SENSE-TOK-008-CPU-CONTINUATION",
+    "optimizer_and_rng_must_resume": true,
+    "prior_sample_order_sha256": "2222677cc3bdc9bff6b1f76f4dc1ca90d8d9bd9bee10d2819fc3d71684004014",
+    "optimizer_steps_by_parameter": {
+      "backbone.position_recency": 888,
+      "backbone.byte_emb.weight": 1024,
+      "backbone.gru_cell.weight_ih": 1024,
+      "backbone.gru_cell.weight_hh": 1024,
+      "backbone.gru_cell.bias_ih": 1024,
+      "backbone.gru_cell.bias_hh": 1024,
+      "backbone.byte_head.weight": 1024,
+      "backbone.byte_head.bias": 1024,
+      "backbone.mode_gate.weight": 1024,
+      "backbone.mode_gate.bias": 1024,
+      "backbone.token_codes.weight": 888
+    }
+  },
+  "continuations_authorized": 1,
+  "prediction_time_information_boundary": "BOS followed only by previously observed byte IDs; targets are next original bytes. DEV uses teacher forcing. Completed token identity must not affect earlier predictions. No source/target metadata enters the graph.",
+  "leakage_threat_model": {
+    "exposed_dev_not_sealed": true,
+    "fit_dev_exact_window_duplicates_excluded": true,
+    "publisher_byte_identity_required": true,
+    "future_prefix_poison_replay_required": true,
+    "near_duplicate_boilerplate_overlap": "UNRESOLVED",
+    "independent_source_evaluator_acl": "DEFERRED_OWNER_EXPLORATORY_EXCEPTION",
+    "sealed_test_access": "NONE"
+  }
+}

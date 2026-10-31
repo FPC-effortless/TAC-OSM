@@ -1,0 +1,124 @@
+{
+  "candidate_parameters": [
+    {
+      "arm": "dense_byte",
+      "deployed_parameters": 100688,
+      "qualification": "instantiated_candidate_not_full_resource_parity",
+      "random_byte_probability": null,
+      "seed": 1,
+      "trainable_parameters": 100688,
+      "training_authorized": false,
+      "within_100k_band": true
+    },
+    {
+      "arm": "forced_token",
+      "deployed_parameters": 101008,
+      "qualification": "instantiated_candidate_not_full_resource_parity",
+      "random_byte_probability": null,
+      "seed": 1,
+      "trainable_parameters": 100832,
+      "training_authorized": false,
+      "within_100k_band": true
+    },
+    {
+      "arm": "adaptive_latent",
+      "deployed_parameters": 100752,
+      "qualification": "instantiated_candidate_not_full_resource_parity",
+      "random_byte_probability": null,
+      "seed": 1,
+      "trainable_parameters": 100752,
+      "training_authorized": false,
+      "within_100k_band": true
+    },
+    {
+      "arm": "adaptive_codebook",
+      "deployed_parameters": 101008,
+      "qualification": "instantiated_candidate_not_full_resource_parity",
+      "random_byte_probability": null,
+      "seed": 1,
+      "trainable_parameters": 101008,
+      "training_authorized": false,
+      "within_100k_band": true
+    },
+    {
+      "arm": "frozen_gate_weights",
+      "deployed_parameters": 101008,
+      "qualification": "instantiated_candidate_not_full_resource_parity",
+      "random_byte_probability": null,
+      "seed": 1,
+      "trainable_parameters": 100832,
+      "training_authorized": false,
+      "within_100k_band": true
+    },
+    {
+      "arm": "random_gate",
+      "deployed_parameters": 100832,
+      "qualification": "instantiated_candidate_not_full_resource_parity",
+      "random_byte_probability": 0.5,
+      "seed": 1,
+      "trainable_parameters": 100832,
+      "training_authorized": false,
+      "within_100k_band": true
+    }
+  ],
+  "compute_plan": {
+    "accelerator": null,
+    "approved_to_open_test": false,
+    "approved_to_train": false,
+    "automatic_submissions": false,
+    "backend": "github_actions",
+    "blockers": [],
+    "cpu_estimate_minutes": 5,
+    "gpu_budget_minutes": 0,
+    "gpu_devices_required": 0,
+    "issue_number": 667,
+    "kind": "no_fit",
+    "reasons": [
+      "CPU or diagnostic workload fits small GitHub runner budget"
+    ],
+    "run_id": "sense-tok-006-readiness",
+    "schema": "tac-osm.compute-decision.v1",
+    "source_contract_fingerprint": "5a3469b82b6bf81f09c1eb0f15ab9a08dcb048e083d09bddef4ba68731ebeef0",
+    "state": "READY_NO_FIT",
+    "variant": "System 1"
+  },
+  "diagnostic_registration": {
+    "eligible_for_architecture_superiority": false,
+    "phase": "preflight",
+    "reward_integrity": "NOT_APPLICABLE_HISTORICAL_OR_NO_FIT",
+    "status": "PASS_DIAGNOSTIC_ONLY",
+    "study_id": "SENSE-TOK-006-CONTROLLED-LEARNING-PREPARATION"
+  },
+  "evidence_class": "NO_FIT_COMPARISON_PREPARATION",
+  "max_relative_parameter_gaps": {
+    "deployed_parameters": 0.003168065895770632,
+    "trainable_parameters": 0.003168065895770632
+  },
+  "model_fits": 0,
+  "note": "No optimizer exists in this command; a diagnostic PASS cannot authorize a fit.",
+  "open_gates": {
+    "actual_full_graph_flop_parity": "OPEN",
+    "authenticated_fit_dev_and_original_next_byte_targets": "OPEN",
+    "frozen_numeric_training_tuning_and_calibration_budgets": "OPEN",
+    "independent_signed_source_goal_reward_acl_prefit": "OPEN",
+    "protected_approved_exactly_two_T4_execution": "OPEN",
+    "reciprocal_full_model_Lean_Python_source_correspondence": "OPEN",
+    "sealed_test_custody_and_out_of_domain_holdout": "OPEN",
+    "source_specific_ResearchProbeAdapter": "OPEN"
+  },
+  "optimizer_steps": 0,
+  "protocol_sha256": "89e81658a7599eee1a4501e3f608f59c048a5a2323b98ba7b6ecf0d83ee9d986",
+  "random_probability_status": "UNQUALIFIED_COUNT_ONLY_FIXTURE",
+  "source_file_sha256": {
+    "scripts/prepare_sense_tok_learning.py": "636852a00e3bde78d58d1a0cf69ff6dfc6c7d04cc411d83f4f76c4424313c090",
+    "src/tac_osm/adaptive_byte_token.py": "b0237bac0d7cf1d5ef8f5377dce4a63770f9f444fd9d71f59a6f0a6ab4f12d6e",
+    "src/tac_osm/adaptive_codebook_token.py": "d3ecf2186bd8b78243ac43cc95630353aa18caaec8dd09ae095120b2a26a1a05",
+    "src/tac_osm/adaptive_token_controls.py": "7d84311738f9b2add1441ec2f0c46e3efa3298810c312ef430aef1f3d8dea7a1",
+    "src/tac_osm/adaptive_token_evaluation.py": "e6ba9338f41c6cfb245caa3a678039f62cede7c7a4da73e99a87fafbaa61a914"
+  },
+  "source_parent_commit": "045994fb432a9874d0fc4f7914e5fe45ad8fe7ec",
+  "status": "BLOCKED_BEFORE_FIRST_FIT",
+  "study_id": "SENSE-TOK-006-LEARNING",
+  "test_accessed": false,
+  "training_authorized": false
+}

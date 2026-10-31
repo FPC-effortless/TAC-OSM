@@ -1,0 +1,139 @@
+{
+  "schema": "sense-tok.controlled-learning-draft.v1",
+  "study_id": "SENSE-TOK-006-LEARNING",
+  "status": "DRAFT_BLOCKED_BEFORE_FIRST_FIT",
+  "registration_reviewed": false,
+  "training_authorized": false,
+  "no_new_model_fits": true,
+  "model_ancestor_commit": "045994fb432a9874d0fc4f7914e5fe45ad8fe7ec",
+  "question": "Does learning BYTE/TOKEN selection and discrete code values improve causal held-out byte prediction beyond continuous latent patches and controls that do not learn gate weights?",
+  "nonclaims": [
+    "No trained token identities or useful switching demonstrated",
+    "No semantic concept discovery, lossless code-only tokenization, general intelligence or architecture-superiority claim",
+    "No inference cost improvement from recurrent event counts alone",
+    "No fabricated corpus hashes, signatures, source rights, budget receipts or sealed-TEST custody"
+  ],
+  "prior_art": [
+    {
+      "paper": "Byte Latent Transformer: Patches Scale Better Than Tokens",
+      "url": "https://aclanthology.org/2025.acl-long.453/",
+      "reuse": "Byte-local encoding/decoding and patch-level processing are established; S004 is not a faithful BLT implementation."
+    },
+    {
+      "paper": "Dynamic Chunking for End-to-End Hierarchical Sequence Modeling",
+      "url": "https://arxiv.org/abs/2507.07955",
+      "reuse": "End-to-end content-dependent hierarchical chunking is established; these small GRU candidates are not H-Net reproductions."
+    },
+    {
+      "paper": "Neural Discrete Representation Learning",
+      "url": "https://papers.nips.cc/paper/2017/hash/7a98af17e63a0ac09ce2e96d03992fbc-Abstract.html",
+      "reuse": "Discrete latent codebooks and straight-through training are established; the S005 estimator is not asserted identical to VQ-VAE."
+    }
+  ],
+  "arms": [
+    "dense_byte",
+    "forced_token",
+    "adaptive_latent",
+    "adaptive_codebook",
+    "frozen_gate_weights",
+    "random_gate"
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "arm_contracts": {
+    "dense_byte": "118-wide GRU with current-byte readout; no unused pending-token columns or learned routing head; 100688 trainable/deployed weights",
+    "forced_token": "S005 with TOKEN forced and gate weights frozen; 100832 trainable, 101008 deployed",
+    "adaptive_latent": "Original S004 continuous patch pathway; 100752 trainable/deployed",
+    "adaptive_codebook": "Original S005 learned gate/codebook pathway; 101008 trainable/deployed",
+    "frozen_gate_weights": "S005 gate weights stay at paired initialization; encoder/state inputs can still learn, so this does not freeze its eventual decisions; 100832 trainable, 101008 deployed",
+    "random_gate": "S005 with a parameter-free exogenous gate; 100832 trainable/deployed; explicit independent uniform draws per source/position; frozen FIT-only calibration required"
+  },
+  "input_boundary": {
+    "model_inputs": "BOS then previously observed bytes only; sequence rows reset state",
+    "denied": [
+      "current target byte",
+      "future bytes",
+      "reward",
+      "gold token IDs",
+      "TEST-derived route probabilities",
+      "source identifiers as learned features"
+    ],
+    "random_control_draws": "Independent external RNG schedule, not target-derived; freeze probability using FIT-only source-qualified calibration before any comparison fit; calibration work charged and replayed",
+    "targets": "Original next source bytes delivered only to the loss/scorer after prediction; aligned shift asserted",
+    "state": "S004/S005 full-prefix recurrent computation, no cross-sequence state carry; this study cannot establish persistent cross-session learning"
+  },
+  "data": {
+    "fit_dev_source_manifest": null,
+    "sealed_test_custody_receipt": null,
+    "source_requirement": "Publisher/version/licence/full original hashes; group-disjoint FIT/DEV/sealed TEST; exact/near-duplicate and boilerplate audit; source order and sample exposure frozen before fit",
+    "prior_exposed_diagnostics": "All S001-S005 diagnostic source bytes, including exposed CPython prefixes, remain DEV/exposed; never reclassify as sealed TEST",
+    "holdout_requirement": "Independent new source groups and an out-of-domain slice; multiple files from one repository do not establish domain generalization"
+  },
+  "training": {
+    "objective": "Mean next-byte cross entropy in nats; straight-through surrogate for adaptive arms; no invented reward or recurrent-event penalty in the primary comparison",
+    "optimizer": {
+      "name": "AdamW",
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "epsilon": 1e-08,
+      "weight_decay": 0.01,
+      "gradient_clip_l2": 1.0
+    },
+    "learning_rate_schedule": {
+      "kind": "linear_warmup_then_cosine",
+      "warmup_steps": 128,
+      "final_learning_rate": 3e-05
+    },
+    "steps_per_arm_seed": 2048,
+    "batch_size": 4,
+    "history_bytes": 256,
+    "exact_sample_order_and_exposure_receipt": null,
+    "tuning_trials_and_compute": {
+      "trials": 0,
+      "flops": 0
+    },
+    "selection_rule": "DEV-only checks at steps 0,256,512,1024,1536,2048; lowest mean original-byte NLL, earliest checkpoint on exact ties; identical source/exposure opportunities for all arms; TEST excluded",
+    "random_fit_calibration_receipt": null,
+    "full_graph_training_flop_profiles": null,
+    "note": "Missing numerical budgets are blockers. No fabricated equal-FLOP figures and no dummy work to manufacture parity. If exposure/steps/compute cannot all match, preserve separately labelled analyses and withhold a fully matched architecture win. CPU wall time is an outcome, not a parity condition.",
+    "proposed_targets_per_arm_seed": 2097152,
+    "budget_status": "REVIEWABLE_PROPOSAL_NOT_SOURCE_QUALIFIED_OR_PROFILED; no tuning or fits authorized; realized resource feasibility and strict parity still OPEN"
+  },
+  "evaluation": {
+    "primary": "Held-out bits per original byte, aggregated from total NLL and original byte count; no per-token denominator",
+    "planned_gate": "Adaptive discrete vs continuous latent: at least 0.02 BPB gain, paired seed CI excluding zero, at least four of five positive seeds, conditional on all source/resource/integrity gates",
+    "routing_attribution": "Compare adaptive codebook with frozen-gate-weights and independently randomized calibrated controls on identical source; report whether routing gain survives both",
+    "decision_horizons": [
+      1,
+      8,
+      32
+    ],
+    "decision_sampling": "Frozen source-hash/position schedule on authorized DEV only, independent of targets; reject unavailable full horizons rather than silently truncate",
+    "decision_regret": "Teacher-forced internal BYTE/TOKEN forks with policy continuation; realized hindsight loss is not expected optimality or a causal external action effect; report ties separately",
+    "code_causality": "Freeze baseline routing and selector keys; replace code VALUES only. Joint key/value row permutation is a relabelling negative control, subject to argmax ties/numerics",
+    "code_reuse": "Occupancy, effective code count, dominant share and novel-sequence effects; occupancy alone is not semantic reuse",
+    "bypass": "Separate local-byte readout knockout required on actual trained checkpoint; clearly label possible distribution shift and do not claim removal of all byte processing",
+    "efficiency": "Original-byte throughput, full forward/backward profiler coverage, controller/entropy/pooling/selection/candidate GRUs/byte head/audit overhead, peak memory and end-to-end latency on recorded hardware",
+    "uncertainty": "Publish all five paired seeds and source-group uncertainty separately; freeze interval construction and any multiplicity handling before unsealing TEST",
+    "checkpoint": "Preserve initialization/final hashes, optimizer/sample-order/RNG state and exact replay; trusted independent postfit receipt binds every arm and seed"
+  },
+  "open_gates": {
+    "authenticated_fit_dev_and_original_next_byte_targets": "OPEN",
+    "sealed_test_custody_and_out_of_domain_holdout": "OPEN",
+    "frozen_numeric_training_tuning_and_calibration_budgets": "OPEN",
+    "actual_full_graph_flop_parity": "OPEN",
+    "independent_signed_source_goal_reward_acl_prefit": "OPEN",
+    "source_specific_ResearchProbeAdapter": "OPEN",
+    "reciprocal_full_model_Lean_Python_source_correspondence": "OPEN",
+    "protected_approved_exactly_two_T4_execution": "OPEN"
+  },
+  "execution_contract": "Replace this draft with a reviewed architecture_comparison FAIR_COMPARISON manifest containing actual corpus hashes, numeric budgets and all 30 arm/seed rows. The canonical validate_research_parity.py preflight and independently signed evidence must pass before optimizer step 1. Use the reviewed phone_queue planner and guarded run_qualified_research.py launcher; require final parity and checkpoint-specific independent postfit audit. This draft cannot pass as a training manifest."
+}
