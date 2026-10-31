@@ -1,0 +1,60 @@
+{
+  "study": "SENSE-TOK-003",
+  "status": "NO_FIT_COST_AND_STORAGE_AUDIT",
+  "publisher": "python/cpython v3.13.5",
+  "source_commit": "6cb20a219a860eaf687b2d968b41c480c7461909",
+  "source_files_verified": 6,
+  "full_source_bytes": 321075,
+  "full_source_patch_commits": {
+    "fixed": 40132,
+    "entropy": 114598,
+    "sensory": 59607,
+    "sensory_v2": 59607
+  },
+  "full_source_delayed_commits": {
+    "fixed": 0,
+    "entropy": 0,
+    "sensory": 0,
+    "sensory_v2": 59607
+  },
+  "full_source_model_training": false,
+  "prototype_latency_environment": "single-threaded Python 3.13 torch 2.10.0+cpu; initial warmup, three subsequent trials per source, 256 bytes each",
+  "prototype_latency_replay_median_ms_per_file": {
+    "fixed": {
+      "dense": 7.76566,
+      "sparse": 13.95094,
+      "ratio": 1.7965
+    },
+    "entropy": {
+      "dense": 7.59533,
+      "sparse": 18.43868,
+      "ratio": 2.4276
+    },
+    "sensory": {
+      "dense": 7.03241,
+      "sparse": 13.65439,
+      "ratio": 1.9416
+    },
+    "sensory_v2": {
+      "dense": 7.04311,
+      "sparse": 14.50537,
+      "ratio": 2.0595
+    }
+  },
+  "observed_result": "Sparse prototype slower on every variant despite fewer recurrent calls",
+  "uncertainties": [
+    "cpu prototype implementation not optimized",
+    "recurrent calls not end-to-end FLOPs",
+    "source buffer and committed payload history scale linearly",
+    "no model learned and no quality gain",
+    "full original publisher/ACL attestations and exact train budget not available"
+  ],
+  "reproduce": [
+    "python scripts/diagnose_patch_sparse_nofit.py --source-root /usr/lib/python3.13 --max-bytes 256",
+    "python scripts/profile_sparse_patcher_nofit.py --source-root /usr/lib/python3.13 --max-bytes 256 --repeats 3"
+  ],
+  "trained_models": 0,
+  "optimizer_steps": 0,
+  "test_unsealed": false,
+  "quality_claim": "NOT_SUPPORTED"
+}
