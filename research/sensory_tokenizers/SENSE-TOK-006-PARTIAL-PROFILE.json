@@ -1,0 +1,3505 @@
+{
+  "study": "SENSE-TOK-006",
+  "source_commit": "6cb20a219a860eaf687b2d968b41c480c7461909",
+  "sources": [
+    {
+      "path": "ast.py",
+      "sha256": "7514eb7df98b1b76eab160ca2a83e6e9a9f3219a4659808cd9fd278b524ede1b"
+    },
+    {
+      "path": "inspect.py",
+      "sha256": "d5ac7f91f6906439fd57f87f1e37934e95bb40569fa0a26affa4cf618f67532a"
+    },
+    {
+      "path": "csv.py",
+      "sha256": "bd242c88ac4fd905cc64121e6fc9714c32b9e6031f52a03296aa8d28b32903df"
+    },
+    {
+      "path": "difflib.py",
+      "sha256": "3eb2d371b4a171b063921de6bbf115108bc39de8bf72866315868ce2599213b7"
+    },
+    {
+      "path": "textwrap.py",
+      "sha256": "26836f5c17cdb4ffdeaff1a5146ed61a262aa410bdf3ad204e2bd0792f010d5e"
+    },
+    {
+      "path": "email/parser.py",
+      "sha256": "88890ea9994c55ff7d6c1fd570fece2785f51ed407ee95df4aff946e250bcd66"
+    }
+  ],
+  "scope": "EXPOSED_DEV_NO_FIT_PARTIAL_CPU_PROFILE",
+  "batch": 4,
+  "history_bytes": 256,
+  "seed": 1,
+  "torch_version": "2.5.1+cpu",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+  "reported_operator_flop_relative_spread": 0.31894111214928805,
+  "rows": [
+    {
+      "arm": "dense_byte",
+      "reported_operator_flops": 562571688,
+      "operators_without_flop_counts": [
+        {
+          "operator": "aten::slice",
+          "calls": 2058
+        },
+        {
+          "operator": "aten::as_strided",
+          "calls": 7695
+        },
+        {
+          "operator": "aten::select",
+          "calls": 1026
+        },
+        {
+          "operator": "aten::eq",
+          "calls": 2
+        },
+        {
+          "operator": "aten::all",
+          "calls": 4
+        },
+        {
+          "operator": "aten::fill_",
+          "calls": 774
+        },
+        {
+          "operator": "aten::is_nonzero",
+          "calls": 4
+        },
+        {
+          "operator": "aten::item",
+          "calls": 4
+        },
+        {
+          "operator": "aten::_local_scalar_dense",
+          "calls": 4
+        },
+        {
+          "operator": "aten::ge",
+          "calls": 2
+        },
+        {
+          "operator": "aten::lt",
+          "calls": 2
+        },
+        {
+          "operator": "aten::__and__",
+          "calls": 2
+        },
+        {
+          "operator": "aten::bitwise_and",
+          "calls": 2
+        },
+        {
+          "operator": "aten::new_zeros",
+          "calls": 1
+        },
+        {
+          "operator": "aten::new_empty",
+          "calls": 1
+        },
+        {
+          "operator": "aten::empty",
+          "calls": 1025
+        },
+        {
+          "operator": "aten::zero_",
+          "calls": 258
+        },
+        {
+          "operator": "aten::unbind",
+          "calls": 1
+        },
+        {
+          "operator": "aten::embedding",
+          "calls": 256
+        },
+        {
+          "operator": "aten::index_select",
+          "calls": 256
+        },
+        {
+          "operator": "aten::contiguous",
+          "calls": 512
+        },
+        {
+          "operator": "aten::clone",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::empty_like",
+          "calls": 769
+        },
+        {
+          "operator": "aten::copy_",
+          "calls": 1792
+        },
+        {
+          "operator": "aten::gru_cell",
+          "calls": 256
+        },
+        {
+          "operator": "aten::linear",
+          "calls": 768
+        },
+        {
+          "operator": "aten::t",
+          "calls": 3839
+        },
+        {
+          "operator": "aten::transpose",
+          "calls": 3839
+        },
+        {
+          "operator": "aten::expand",
+          "calls": 768
+        },
+        {
+          "operator": "aten::resolve_conj",
+          "calls": 5373
+        },
+        {
+          "operator": "aten::unsafe_chunk",
+          "calls": 512
+        },
+        {
+          "operator": "aten::unsafe_split",
+          "calls": 512
+        },
+        {
+          "operator": "aten::narrow",
+          "calls": 2048
+        },
+        {
+          "operator": "aten::add_",
+          "calls": 3312
+        },
+        {
+          "operator": "aten::sigmoid_",
+          "calls": 512
+        },
+        {
+          "operator": "aten::mul_",
+          "calls": 512
+        },
+        {
+          "operator": "aten::empty_strided",
+          "calls": 513
+        },
+        {
+          "operator": "aten::tanh_",
+          "calls": 256
+        },
+        {
+          "operator": "aten::sub",
+          "calls": 256
+        },
+        {
+          "operator": "aten::cat",
+          "calls": 769
+        },
+        {
+          "operator": "aten::stack",
+          "calls": 1
+        },
+        {
+          "operator": "aten::view",
+          "calls": 1028
+        },
+        {
+          "operator": "aten::reshape",
+          "calls": 2
+        },
+        {
+          "operator": "aten::flatten",
+          "calls": 1
+        },
+        {
+          "operator": "aten::cross_entropy_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::log_softmax",
+          "calls": 1
+        },
+        {
+          "operator": "aten::to",
+          "calls": 1
+        },
+        {
+          "operator": "aten::_log_softmax",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_nd",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_forward",
+          "calls": 1
+        },
+        {
+          "operator": "aten::ones_like",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_backward",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::_log_softmax_backward_data",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ViewBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "ViewBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: StackBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "StackBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "calls": 768
+        },
+        {
+          "operator": "AddmmBackward0",
+          "calls": 768
+        },
+        {
+          "operator": "aten::sum",
+          "calls": 768
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "calls": 768
+        },
+        {
+          "operator": "TBackward0",
+          "calls": 768
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "calls": 256
+        },
+        {
+          "operator": "CatBackward0",
+          "calls": 256
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "AddBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "calls": 512
+        },
+        {
+          "operator": "MulBackward0",
+          "calls": 512
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SubBackward0",
+          "calls": 256
+        },
+        {
+          "operator": "SubBackward0",
+          "calls": 256
+        },
+        {
+          "operator": "aten::neg",
+          "calls": 256
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TanhBackward0",
+          "calls": 256
+        },
+        {
+          "operator": "TanhBackward0",
+          "calls": 256
+        },
+        {
+          "operator": "aten::tanh_backward",
+          "calls": 256
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SigmoidBackward0",
+          "calls": 512
+        },
+        {
+          "operator": "SigmoidBackward0",
+          "calls": 512
+        },
+        {
+          "operator": "aten::sigmoid_backward",
+          "calls": 512
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsafeSplitBackward0",
+          "calls": 512
+        },
+        {
+          "operator": "UnsafeSplitBackward0",
+          "calls": 512
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "calls": 256
+        },
+        {
+          "operator": "EmbeddingBackward0",
+          "calls": 256
+        },
+        {
+          "operator": "aten::embedding_backward",
+          "calls": 256
+        },
+        {
+          "operator": "aten::embedding_dense_backward",
+          "calls": 256
+        },
+        {
+          "operator": "aten::zeros",
+          "calls": 256
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "calls": 7
+        },
+        {
+          "operator": "torch::autograd::AccumulateGrad",
+          "calls": 7
+        },
+        {
+          "operator": "aten::detach",
+          "calls": 7
+        },
+        {
+          "operator": "detach",
+          "calls": 7
+        }
+      ],
+      "instrumented_wall_seconds": 1.234355165001034,
+      "gradient_modules": {
+        "byte_emb": {
+          "trainable": 8224,
+          "nonzero_gradient_parameters": 8224,
+          "all_recorded_gradients_finite": true
+        },
+        "gru_cell": {
+          "trainable": 53808,
+          "nonzero_gradient_parameters": 53808,
+          "all_recorded_gradients_finite": true
+        },
+        "byte_head": {
+          "trainable": 38656,
+          "nonzero_gradient_parameters": 38656,
+          "all_recorded_gradients_finite": true
+        }
+      },
+      "full_compute_coverage": "INCONCLUSIVE",
+      "parameter_receipt": {
+        "arm": "dense_byte",
+        "seed": 1,
+        "trainable_parameters": 100688,
+        "deployed_parameters": 100688,
+        "random_byte_probability": null,
+        "within_100k_band": true,
+        "training_authorized": false,
+        "qualification": "instantiated_candidate_not_full_resource_parity"
+      }
+    },
+    {
+      "arm": "forced_token",
+      "reported_operator_flops": 490477804,
+      "operators_without_flop_counts": [
+        {
+          "operator": "aten::slice",
+          "calls": 25482
+        },
+        {
+          "operator": "aten::as_strided",
+          "calls": 59741
+        },
+        {
+          "operator": "aten::select",
+          "calls": 4106
+        },
+        {
+          "operator": "aten::eq",
+          "calls": 250
+        },
+        {
+          "operator": "aten::all",
+          "calls": 4
+        },
+        {
+          "operator": "aten::fill_",
+          "calls": 7635
+        },
+        {
+          "operator": "aten::is_nonzero",
+          "calls": 4
+        },
+        {
+          "operator": "aten::item",
+          "calls": 4708
+        },
+        {
+          "operator": "aten::_local_scalar_dense",
+          "calls": 4708
+        },
+        {
+          "operator": "aten::ge",
+          "calls": 250
+        },
+        {
+          "operator": "aten::lt",
+          "calls": 2
+        },
+        {
+          "operator": "aten::__and__",
+          "calls": 2
+        },
+        {
+          "operator": "aten::bitwise_and",
+          "calls": 2
+        },
+        {
+          "operator": "aten::unbind",
+          "calls": 5
+        },
+        {
+          "operator": "aten::new_zeros",
+          "calls": 8
+        },
+        {
+          "operator": "aten::new_empty",
+          "calls": 8
+        },
+        {
+          "operator": "aten::empty",
+          "calls": 9168
+        },
+        {
+          "operator": "aten::zero_",
+          "calls": 4089
+        },
+        {
+          "operator": "aten::view",
+          "calls": 7416
+        },
+        {
+          "operator": "aten::embedding",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::index_select",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::zeros_like",
+          "calls": 1276
+        },
+        {
+          "operator": "aten::empty_like",
+          "calls": 1277
+        },
+        {
+          "operator": "aten::empty_strided",
+          "calls": 12850
+        },
+        {
+          "operator": "aten::cat",
+          "calls": 4718
+        },
+        {
+          "operator": "aten::linear",
+          "calls": 6116
+        },
+        {
+          "operator": "aten::t",
+          "calls": 11820
+        },
+        {
+          "operator": "aten::transpose",
+          "calls": 11820
+        },
+        {
+          "operator": "aten::expand",
+          "calls": 8784
+        },
+        {
+          "operator": "aten::copy_",
+          "calls": 18581
+        },
+        {
+          "operator": "aten::resolve_conj",
+          "calls": 24140
+        },
+        {
+          "operator": "aten::reshape",
+          "calls": 4090
+        },
+        {
+          "operator": "aten::detach",
+          "calls": 3829
+        },
+        {
+          "operator": "detach",
+          "calls": 3829
+        },
+        {
+          "operator": "aten::log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::_log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::exp",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sum",
+          "calls": 5853
+        },
+        {
+          "operator": "aten::neg",
+          "calls": 1392
+        },
+        {
+          "operator": "aten::div",
+          "calls": 5824
+        },
+        {
+          "operator": "aten::to",
+          "calls": 8390
+        },
+        {
+          "operator": "aten::_to_copy",
+          "calls": 7501
+        },
+        {
+          "operator": "aten::sigmoid",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::rsub",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sub",
+          "calls": 3944
+        },
+        {
+          "operator": "aten::gru_cell",
+          "calls": 2036
+        },
+        {
+          "operator": "aten::unsafe_chunk",
+          "calls": 4072
+        },
+        {
+          "operator": "aten::unsafe_split",
+          "calls": 4072
+        },
+        {
+          "operator": "aten::narrow",
+          "calls": 19736
+        },
+        {
+          "operator": "aten::add_",
+          "calls": 15832
+        },
+        {
+          "operator": "aten::sigmoid_",
+          "calls": 4072
+        },
+        {
+          "operator": "aten::mul_",
+          "calls": 4072
+        },
+        {
+          "operator": "aten::clone",
+          "calls": 4072
+        },
+        {
+          "operator": "aten::tanh_",
+          "calls": 2036
+        },
+        {
+          "operator": "aten::arange",
+          "calls": 4840
+        },
+        {
+          "operator": "aten::resize_",
+          "calls": 2420
+        },
+        {
+          "operator": "aten::unsqueeze",
+          "calls": 5732
+        },
+        {
+          "operator": "aten::softmax",
+          "calls": 3308
+        },
+        {
+          "operator": "aten::_softmax",
+          "calls": 3308
+        },
+        {
+          "operator": "aten::linalg_vector_norm",
+          "calls": 1776
+        },
+        {
+          "operator": "aten::clamp_min",
+          "calls": 1776
+        },
+        {
+          "operator": "aten::expand_as",
+          "calls": 1776
+        },
+        {
+          "operator": "aten::numpy_T",
+          "calls": 888
+        },
+        {
+          "operator": "aten::permute",
+          "calls": 1012
+        },
+        {
+          "operator": "aten::matmul",
+          "calls": 1776
+        },
+        {
+          "operator": "aten::argmax",
+          "calls": 888
+        },
+        {
+          "operator": "aten::lift_fresh",
+          "calls": 888
+        },
+        {
+          "operator": "aten::detach_",
+          "calls": 888
+        },
+        {
+          "operator": "detach_",
+          "calls": 888
+        },
+        {
+          "operator": "aten::one_hot",
+          "calls": 888
+        },
+        {
+          "operator": "aten::min",
+          "calls": 888
+        },
+        {
+          "operator": "aten::max",
+          "calls": 888
+        },
+        {
+          "operator": "aten::zeros",
+          "calls": 2804
+        },
+        {
+          "operator": "aten::scatter_",
+          "calls": 888
+        },
+        {
+          "operator": "aten::stack",
+          "calls": 6
+        },
+        {
+          "operator": "aten::resolve_neg",
+          "calls": 4
+        },
+        {
+          "operator": "aten::mean",
+          "calls": 1
+        },
+        {
+          "operator": "aten::div_",
+          "calls": 1
+        },
+        {
+          "operator": "aten::flatten",
+          "calls": 1
+        },
+        {
+          "operator": "aten::cross_entropy_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_nd",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_forward",
+          "calls": 1
+        },
+        {
+          "operator": "aten::ones_like",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_backward",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::_log_softmax_backward_data",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ViewBackward0",
+          "calls": 1025
+        },
+        {
+          "operator": "ViewBackward0",
+          "calls": 1025
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "calls": 1272
+        },
+        {
+          "operator": "AddmmBackward0",
+          "calls": 1272
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "calls": 1272
+        },
+        {
+          "operator": "TBackward0",
+          "calls": 1272
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "calls": 1916
+        },
+        {
+          "operator": "CatBackward0",
+          "calls": 1916
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SumBackward1",
+          "calls": 892
+        },
+        {
+          "operator": "SumBackward1",
+          "calls": 892
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "calls": 2032
+        },
+        {
+          "operator": "MulBackward0",
+          "calls": 2032
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SoftmaxBackward0",
+          "calls": 1016
+        },
+        {
+          "operator": "SoftmaxBackward0",
+          "calls": 1016
+        },
+        {
+          "operator": "aten::_softmax_backward_data",
+          "calls": 1016
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SliceBackward0",
+          "calls": 892
+        },
+        {
+          "operator": "SliceBackward0",
+          "calls": 892
+        },
+        {
+          "operator": "aten::slice_backward",
+          "calls": 892
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsqueezeBackward0",
+          "calls": 892
+        },
+        {
+          "operator": "UnsqueezeBackward0",
+          "calls": 892
+        },
+        {
+          "operator": "aten::squeeze",
+          "calls": 892
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_dense_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "calls": 620
+        },
+        {
+          "operator": "AddBackward0",
+          "calls": 620
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SubBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "SubBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TanhBackward0",
+          "calls": 124
+        },
+        {
+          "operator": "TanhBackward0",
+          "calls": 124
+        },
+        {
+          "operator": "aten::tanh_backward",
+          "calls": 124
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SigmoidBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "SigmoidBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "aten::sigmoid_backward",
+          "calls": 248
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsafeSplitBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "UnsafeSplitBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MmBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "MmBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: DivBackward0",
+          "calls": 372
+        },
+        {
+          "operator": "DivBackward0",
+          "calls": 372
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: PermuteBackward0",
+          "calls": 124
+        },
+        {
+          "operator": "PermuteBackward0",
+          "calls": 124
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ExpandBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "ExpandBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ClampMinBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "ClampMinBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "aten::scalar_tensor",
+          "calls": 248
+        },
+        {
+          "operator": "aten::where",
+          "calls": 248
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LinalgVectorNormBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "LinalgVectorNormBackward0",
+          "calls": 248
+        },
+        {
+          "operator": "aten::masked_fill_",
+          "calls": 248
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "calls": 9
+        },
+        {
+          "operator": "torch::autograd::AccumulateGrad",
+          "calls": 9
+        }
+      ],
+      "instrumented_wall_seconds": 12.4882914610007,
+      "gradient_modules": {
+        "byte_emb": {
+          "trainable": 8224,
+          "nonzero_gradient_parameters": 8224,
+          "all_recorded_gradients_finite": true
+        },
+        "gru_cell": {
+          "trainable": 47520,
+          "nonzero_gradient_parameters": 47520,
+          "all_recorded_gradients_finite": true
+        },
+        "byte_head": {
+          "trainable": 44800,
+          "nonzero_gradient_parameters": 44800,
+          "all_recorded_gradients_finite": true
+        },
+        "mode_gate": {
+          "trainable": 0,
+          "nonzero_gradient_parameters": 0,
+          "all_recorded_gradients_finite": true
+        },
+        "token_codes": {
+          "trainable": 256,
+          "nonzero_gradient_parameters": 256,
+          "all_recorded_gradients_finite": true
+        }
+      },
+      "full_compute_coverage": "INCONCLUSIVE",
+      "parameter_receipt": {
+        "arm": "forced_token",
+        "seed": 1,
+        "trainable_parameters": 100832,
+        "deployed_parameters": 101008,
+        "random_byte_probability": null,
+        "within_100k_band": true,
+        "training_authorized": false,
+        "qualification": "instantiated_candidate_not_full_resource_parity"
+      }
+    },
+    {
+      "arm": "adaptive_latent",
+      "reported_operator_flops": 717052013,
+      "operators_without_flop_counts": [
+        {
+          "operator": "aten::slice",
+          "calls": 22797
+        },
+        {
+          "operator": "aten::as_strided",
+          "calls": 63896
+        },
+        {
+          "operator": "aten::select",
+          "calls": 4106
+        },
+        {
+          "operator": "aten::eq",
+          "calls": 2
+        },
+        {
+          "operator": "aten::all",
+          "calls": 4
+        },
+        {
+          "operator": "aten::fill_",
+          "calls": 9165
+        },
+        {
+          "operator": "aten::is_nonzero",
+          "calls": 4
+        },
+        {
+          "operator": "aten::item",
+          "calls": 3064
+        },
+        {
+          "operator": "aten::_local_scalar_dense",
+          "calls": 3064
+        },
+        {
+          "operator": "aten::ge",
+          "calls": 1022
+        },
+        {
+          "operator": "aten::lt",
+          "calls": 2
+        },
+        {
+          "operator": "aten::__and__",
+          "calls": 2
+        },
+        {
+          "operator": "aten::bitwise_and",
+          "calls": 2
+        },
+        {
+          "operator": "aten::unbind",
+          "calls": 5
+        },
+        {
+          "operator": "aten::new_zeros",
+          "calls": 8
+        },
+        {
+          "operator": "aten::new_empty",
+          "calls": 8
+        },
+        {
+          "operator": "aten::empty",
+          "calls": 3996
+        },
+        {
+          "operator": "aten::zero_",
+          "calls": 2976
+        },
+        {
+          "operator": "aten::view",
+          "calls": 12342
+        },
+        {
+          "operator": "aten::embedding",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::index_select",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::zeros_like",
+          "calls": 973
+        },
+        {
+          "operator": "aten::empty_like",
+          "calls": 974
+        },
+        {
+          "operator": "aten::empty_strided",
+          "calls": 11253
+        },
+        {
+          "operator": "aten::cat",
+          "calls": 6154
+        },
+        {
+          "operator": "aten::linear",
+          "calls": 5178
+        },
+        {
+          "operator": "aten::t",
+          "calls": 25886
+        },
+        {
+          "operator": "aten::transpose",
+          "calls": 25886
+        },
+        {
+          "operator": "aten::expand",
+          "calls": 6148
+        },
+        {
+          "operator": "aten::copy_",
+          "calls": 16427
+        },
+        {
+          "operator": "aten::resolve_conj",
+          "calls": 37258
+        },
+        {
+          "operator": "aten::reshape",
+          "calls": 5110
+        },
+        {
+          "operator": "aten::detach",
+          "calls": 4094
+        },
+        {
+          "operator": "detach",
+          "calls": 4094
+        },
+        {
+          "operator": "aten::log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::_log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::exp",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sum",
+          "calls": 9159
+        },
+        {
+          "operator": "aten::neg",
+          "calls": 3603
+        },
+        {
+          "operator": "aten::div",
+          "calls": 3064
+        },
+        {
+          "operator": "aten::to",
+          "calls": 7146
+        },
+        {
+          "operator": "aten::_to_copy",
+          "calls": 7145
+        },
+        {
+          "operator": "aten::sigmoid",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::rsub",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sub",
+          "calls": 4627
+        },
+        {
+          "operator": "aten::gru_cell",
+          "calls": 1567
+        },
+        {
+          "operator": "aten::unsafe_chunk",
+          "calls": 3134
+        },
+        {
+          "operator": "aten::unsafe_split",
+          "calls": 3134
+        },
+        {
+          "operator": "aten::narrow",
+          "calls": 19873
+        },
+        {
+          "operator": "aten::add_",
+          "calls": 29309
+        },
+        {
+          "operator": "aten::sigmoid_",
+          "calls": 3134
+        },
+        {
+          "operator": "aten::mul_",
+          "calls": 3134
+        },
+        {
+          "operator": "aten::clone",
+          "calls": 3134
+        },
+        {
+          "operator": "aten::tanh_",
+          "calls": 1567
+        },
+        {
+          "operator": "aten::arange",
+          "calls": 1940
+        },
+        {
+          "operator": "aten::resize_",
+          "calls": 970
+        },
+        {
+          "operator": "aten::unsqueeze",
+          "calls": 1944
+        },
+        {
+          "operator": "aten::softmax",
+          "calls": 970
+        },
+        {
+          "operator": "aten::_softmax",
+          "calls": 970
+        },
+        {
+          "operator": "aten::stack",
+          "calls": 6
+        },
+        {
+          "operator": "aten::resolve_neg",
+          "calls": 4
+        },
+        {
+          "operator": "aten::mean",
+          "calls": 1
+        },
+        {
+          "operator": "aten::div_",
+          "calls": 1
+        },
+        {
+          "operator": "aten::flatten",
+          "calls": 1
+        },
+        {
+          "operator": "aten::cross_entropy_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_nd",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_forward",
+          "calls": 1
+        },
+        {
+          "operator": "aten::ones_like",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_backward",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::_log_softmax_backward_data",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ViewBackward0",
+          "calls": 2045
+        },
+        {
+          "operator": "ViewBackward0",
+          "calls": 2045
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "calls": 5178
+        },
+        {
+          "operator": "AddmmBackward0",
+          "calls": 5178
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "calls": 5178
+        },
+        {
+          "operator": "TBackward0",
+          "calls": 5178
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "calls": 3014
+        },
+        {
+          "operator": "CatBackward0",
+          "calls": 3014
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SumBackward1",
+          "calls": 970
+        },
+        {
+          "operator": "SumBackward1",
+          "calls": 970
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "calls": 6094
+        },
+        {
+          "operator": "MulBackward0",
+          "calls": 6094
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SoftmaxBackward0",
+          "calls": 970
+        },
+        {
+          "operator": "SoftmaxBackward0",
+          "calls": 970
+        },
+        {
+          "operator": "aten::_softmax_backward_data",
+          "calls": 970
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SliceBackward0",
+          "calls": 970
+        },
+        {
+          "operator": "SliceBackward0",
+          "calls": 970
+        },
+        {
+          "operator": "aten::slice_backward",
+          "calls": 970
+        },
+        {
+          "operator": "aten::zeros",
+          "calls": 1994
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsqueezeBackward0",
+          "calls": 970
+        },
+        {
+          "operator": "UnsqueezeBackward0",
+          "calls": 970
+        },
+        {
+          "operator": "aten::squeeze",
+          "calls": 970
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "calls": 7288
+        },
+        {
+          "operator": "AddBackward0",
+          "calls": 7288
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SubBackward0",
+          "calls": 3607
+        },
+        {
+          "operator": "SubBackward0",
+          "calls": 3607
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TanhBackward0",
+          "calls": 1567
+        },
+        {
+          "operator": "TanhBackward0",
+          "calls": 1567
+        },
+        {
+          "operator": "aten::tanh_backward",
+          "calls": 1567
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SigmoidBackward0",
+          "calls": 4154
+        },
+        {
+          "operator": "SigmoidBackward0",
+          "calls": 4154
+        },
+        {
+          "operator": "aten::sigmoid_backward",
+          "calls": 4154
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsafeSplitBackward0",
+          "calls": 3134
+        },
+        {
+          "operator": "UnsafeSplitBackward0",
+          "calls": 3134
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: DivBackward0",
+          "calls": 1020
+        },
+        {
+          "operator": "DivBackward0",
+          "calls": 1020
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_dense_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "calls": 10
+        },
+        {
+          "operator": "torch::autograd::AccumulateGrad",
+          "calls": 10
+        }
+      ],
+      "instrumented_wall_seconds": 12.574701411000206,
+      "gradient_modules": {
+        "byte_emb": {
+          "trainable": 8224,
+          "nonzero_gradient_parameters": 8224,
+          "all_recorded_gradients_finite": true
+        },
+        "gru_cell": {
+          "trainable": 47520,
+          "nonzero_gradient_parameters": 47520,
+          "all_recorded_gradients_finite": true
+        },
+        "byte_head": {
+          "trainable": 44800,
+          "nonzero_gradient_parameters": 44800,
+          "all_recorded_gradients_finite": true
+        },
+        "mode_gate": {
+          "trainable": 176,
+          "nonzero_gradient_parameters": 176,
+          "all_recorded_gradients_finite": true
+        }
+      },
+      "full_compute_coverage": "INCONCLUSIVE",
+      "parameter_receipt": {
+        "arm": "adaptive_latent",
+        "seed": 1,
+        "trainable_parameters": 100752,
+        "deployed_parameters": 100752,
+        "random_byte_probability": null,
+        "within_100k_band": true,
+        "training_authorized": false,
+        "qualification": "instantiated_candidate_not_full_resource_parity"
+      }
+    },
+    {
+      "arm": "adaptive_codebook",
+      "reported_operator_flops": 720169449,
+      "operators_without_flop_counts": [
+        {
+          "operator": "aten::slice",
+          "calls": 22950
+        },
+        {
+          "operator": "aten::as_strided",
+          "calls": 67912
+        },
+        {
+          "operator": "aten::select",
+          "calls": 4106
+        },
+        {
+          "operator": "aten::eq",
+          "calls": 676
+        },
+        {
+          "operator": "aten::all",
+          "calls": 4
+        },
+        {
+          "operator": "aten::fill_",
+          "calls": 10563
+        },
+        {
+          "operator": "aten::is_nonzero",
+          "calls": 4
+        },
+        {
+          "operator": "aten::item",
+          "calls": 4075
+        },
+        {
+          "operator": "aten::_local_scalar_dense",
+          "calls": 4075
+        },
+        {
+          "operator": "aten::ge",
+          "calls": 1696
+        },
+        {
+          "operator": "aten::lt",
+          "calls": 2
+        },
+        {
+          "operator": "aten::__and__",
+          "calls": 2
+        },
+        {
+          "operator": "aten::bitwise_and",
+          "calls": 2
+        },
+        {
+          "operator": "aten::unbind",
+          "calls": 5
+        },
+        {
+          "operator": "aten::new_zeros",
+          "calls": 8
+        },
+        {
+          "operator": "aten::new_empty",
+          "calls": 8
+        },
+        {
+          "operator": "aten::empty",
+          "calls": 6054
+        },
+        {
+          "operator": "aten::zero_",
+          "calls": 3317
+        },
+        {
+          "operator": "aten::view",
+          "calls": 12356
+        },
+        {
+          "operator": "aten::embedding",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::index_select",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::zeros_like",
+          "calls": 959
+        },
+        {
+          "operator": "aten::empty_like",
+          "calls": 960
+        },
+        {
+          "operator": "aten::empty_strided",
+          "calls": 13612
+        },
+        {
+          "operator": "aten::cat",
+          "calls": 6186
+        },
+        {
+          "operator": "aten::linear",
+          "calls": 5192
+        },
+        {
+          "operator": "aten::t",
+          "calls": 27641
+        },
+        {
+          "operator": "aten::transpose",
+          "calls": 27641
+        },
+        {
+          "operator": "aten::expand",
+          "calls": 6854
+        },
+        {
+          "operator": "aten::copy_",
+          "calls": 18832
+        },
+        {
+          "operator": "aten::resolve_conj",
+          "calls": 42074
+        },
+        {
+          "operator": "aten::reshape",
+          "calls": 5110
+        },
+        {
+          "operator": "aten::detach",
+          "calls": 4769
+        },
+        {
+          "operator": "detach",
+          "calls": 4769
+        },
+        {
+          "operator": "aten::log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::_log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::exp",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sum",
+          "calls": 9883
+        },
+        {
+          "operator": "aten::neg",
+          "calls": 4284
+        },
+        {
+          "operator": "aten::div",
+          "calls": 7108
+        },
+        {
+          "operator": "aten::to",
+          "calls": 9842
+        },
+        {
+          "operator": "aten::_to_copy",
+          "calls": 9504
+        },
+        {
+          "operator": "aten::sigmoid",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::rsub",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sub",
+          "calls": 4971
+        },
+        {
+          "operator": "aten::gru_cell",
+          "calls": 1574
+        },
+        {
+          "operator": "aten::unsafe_chunk",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::unsafe_split",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::narrow",
+          "calls": 19972
+        },
+        {
+          "operator": "aten::add_",
+          "calls": 30795
+        },
+        {
+          "operator": "aten::sigmoid_",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::mul_",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::clone",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::tanh_",
+          "calls": 1574
+        },
+        {
+          "operator": "aten::arange",
+          "calls": 1976
+        },
+        {
+          "operator": "aten::resize_",
+          "calls": 988
+        },
+        {
+          "operator": "aten::unsqueeze",
+          "calls": 2317
+        },
+        {
+          "operator": "aten::softmax",
+          "calls": 1325
+        },
+        {
+          "operator": "aten::_softmax",
+          "calls": 1325
+        },
+        {
+          "operator": "aten::linalg_vector_norm",
+          "calls": 674
+        },
+        {
+          "operator": "aten::clamp_min",
+          "calls": 674
+        },
+        {
+          "operator": "aten::expand_as",
+          "calls": 674
+        },
+        {
+          "operator": "aten::numpy_T",
+          "calls": 337
+        },
+        {
+          "operator": "aten::permute",
+          "calls": 674
+        },
+        {
+          "operator": "aten::matmul",
+          "calls": 674
+        },
+        {
+          "operator": "aten::argmax",
+          "calls": 337
+        },
+        {
+          "operator": "aten::lift_fresh",
+          "calls": 337
+        },
+        {
+          "operator": "aten::detach_",
+          "calls": 337
+        },
+        {
+          "operator": "detach_",
+          "calls": 337
+        },
+        {
+          "operator": "aten::one_hot",
+          "calls": 337
+        },
+        {
+          "operator": "aten::min",
+          "calls": 337
+        },
+        {
+          "operator": "aten::max",
+          "calls": 337
+        },
+        {
+          "operator": "aten::zeros",
+          "calls": 2349
+        },
+        {
+          "operator": "aten::scatter_",
+          "calls": 337
+        },
+        {
+          "operator": "aten::stack",
+          "calls": 6
+        },
+        {
+          "operator": "aten::resolve_neg",
+          "calls": 4
+        },
+        {
+          "operator": "aten::mean",
+          "calls": 1
+        },
+        {
+          "operator": "aten::div_",
+          "calls": 1
+        },
+        {
+          "operator": "aten::flatten",
+          "calls": 1
+        },
+        {
+          "operator": "aten::cross_entropy_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_nd",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_forward",
+          "calls": 1
+        },
+        {
+          "operator": "aten::ones_like",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_backward",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::_log_softmax_backward_data",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ViewBackward0",
+          "calls": 2045
+        },
+        {
+          "operator": "ViewBackward0",
+          "calls": 2045
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "calls": 5192
+        },
+        {
+          "operator": "AddmmBackward0",
+          "calls": 5192
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "calls": 5192
+        },
+        {
+          "operator": "TBackward0",
+          "calls": 5192
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "calls": 3032
+        },
+        {
+          "operator": "CatBackward0",
+          "calls": 3032
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SumBackward1",
+          "calls": 988
+        },
+        {
+          "operator": "SumBackward1",
+          "calls": 988
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "calls": 6144
+        },
+        {
+          "operator": "MulBackward0",
+          "calls": 6144
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SoftmaxBackward0",
+          "calls": 1325
+        },
+        {
+          "operator": "SoftmaxBackward0",
+          "calls": 1325
+        },
+        {
+          "operator": "aten::_softmax_backward_data",
+          "calls": 1325
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SliceBackward0",
+          "calls": 988
+        },
+        {
+          "operator": "SliceBackward0",
+          "calls": 988
+        },
+        {
+          "operator": "aten::slice_backward",
+          "calls": 988
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsqueezeBackward0",
+          "calls": 988
+        },
+        {
+          "operator": "UnsqueezeBackward0",
+          "calls": 988
+        },
+        {
+          "operator": "aten::squeeze",
+          "calls": 988
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "calls": 7653
+        },
+        {
+          "operator": "AddBackward0",
+          "calls": 7653
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SubBackward0",
+          "calls": 3951
+        },
+        {
+          "operator": "SubBackward0",
+          "calls": 3951
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TanhBackward0",
+          "calls": 1574
+        },
+        {
+          "operator": "TanhBackward0",
+          "calls": 1574
+        },
+        {
+          "operator": "aten::tanh_backward",
+          "calls": 1574
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SigmoidBackward0",
+          "calls": 4168
+        },
+        {
+          "operator": "SigmoidBackward0",
+          "calls": 4168
+        },
+        {
+          "operator": "aten::sigmoid_backward",
+          "calls": 4168
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsafeSplitBackward0",
+          "calls": 3148
+        },
+        {
+          "operator": "UnsafeSplitBackward0",
+          "calls": 3148
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MmBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "MmBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: DivBackward0",
+          "calls": 2031
+        },
+        {
+          "operator": "DivBackward0",
+          "calls": 2031
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: PermuteBackward0",
+          "calls": 337
+        },
+        {
+          "operator": "PermuteBackward0",
+          "calls": 337
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ExpandBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "ExpandBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ClampMinBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "ClampMinBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "aten::scalar_tensor",
+          "calls": 674
+        },
+        {
+          "operator": "aten::where",
+          "calls": 674
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LinalgVectorNormBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "LinalgVectorNormBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "aten::masked_fill_",
+          "calls": 674
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_dense_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "calls": 11
+        },
+        {
+          "operator": "torch::autograd::AccumulateGrad",
+          "calls": 11
+        }
+      ],
+      "instrumented_wall_seconds": 6.536098717999266,
+      "gradient_modules": {
+        "byte_emb": {
+          "trainable": 8224,
+          "nonzero_gradient_parameters": 8224,
+          "all_recorded_gradients_finite": true
+        },
+        "gru_cell": {
+          "trainable": 47520,
+          "nonzero_gradient_parameters": 47520,
+          "all_recorded_gradients_finite": true
+        },
+        "byte_head": {
+          "trainable": 44800,
+          "nonzero_gradient_parameters": 44800,
+          "all_recorded_gradients_finite": true
+        },
+        "mode_gate": {
+          "trainable": 176,
+          "nonzero_gradient_parameters": 176,
+          "all_recorded_gradients_finite": true
+        },
+        "token_codes": {
+          "trainable": 256,
+          "nonzero_gradient_parameters": 256,
+          "all_recorded_gradients_finite": true
+        }
+      },
+      "full_compute_coverage": "INCONCLUSIVE",
+      "parameter_receipt": {
+        "arm": "adaptive_codebook",
+        "seed": 1,
+        "trainable_parameters": 101008,
+        "deployed_parameters": 101008,
+        "random_byte_probability": null,
+        "within_100k_band": true,
+        "training_authorized": false,
+        "qualification": "instantiated_candidate_not_full_resource_parity"
+      }
+    },
+    {
+      "arm": "frozen_gate_weights",
+      "reported_operator_flops": 719812273,
+      "operators_without_flop_counts": [
+        {
+          "operator": "aten::slice",
+          "calls": 22950
+        },
+        {
+          "operator": "aten::as_strided",
+          "calls": 64852
+        },
+        {
+          "operator": "aten::select",
+          "calls": 4106
+        },
+        {
+          "operator": "aten::eq",
+          "calls": 676
+        },
+        {
+          "operator": "aten::all",
+          "calls": 4
+        },
+        {
+          "operator": "aten::fill_",
+          "calls": 9543
+        },
+        {
+          "operator": "aten::is_nonzero",
+          "calls": 4
+        },
+        {
+          "operator": "aten::item",
+          "calls": 4075
+        },
+        {
+          "operator": "aten::_local_scalar_dense",
+          "calls": 4075
+        },
+        {
+          "operator": "aten::ge",
+          "calls": 1696
+        },
+        {
+          "operator": "aten::lt",
+          "calls": 2
+        },
+        {
+          "operator": "aten::__and__",
+          "calls": 2
+        },
+        {
+          "operator": "aten::bitwise_and",
+          "calls": 2
+        },
+        {
+          "operator": "aten::unbind",
+          "calls": 5
+        },
+        {
+          "operator": "aten::new_zeros",
+          "calls": 8
+        },
+        {
+          "operator": "aten::new_empty",
+          "calls": 8
+        },
+        {
+          "operator": "aten::empty",
+          "calls": 6054
+        },
+        {
+          "operator": "aten::zero_",
+          "calls": 3317
+        },
+        {
+          "operator": "aten::view",
+          "calls": 11336
+        },
+        {
+          "operator": "aten::embedding",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::index_select",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::zeros_like",
+          "calls": 959
+        },
+        {
+          "operator": "aten::empty_like",
+          "calls": 960
+        },
+        {
+          "operator": "aten::empty_strided",
+          "calls": 13612
+        },
+        {
+          "operator": "aten::cat",
+          "calls": 6186
+        },
+        {
+          "operator": "aten::linear",
+          "calls": 5192
+        },
+        {
+          "operator": "aten::t",
+          "calls": 24581
+        },
+        {
+          "operator": "aten::transpose",
+          "calls": 24581
+        },
+        {
+          "operator": "aten::expand",
+          "calls": 6854
+        },
+        {
+          "operator": "aten::copy_",
+          "calls": 18832
+        },
+        {
+          "operator": "aten::resolve_conj",
+          "calls": 39014
+        },
+        {
+          "operator": "aten::reshape",
+          "calls": 5110
+        },
+        {
+          "operator": "aten::detach",
+          "calls": 4767
+        },
+        {
+          "operator": "detach",
+          "calls": 4767
+        },
+        {
+          "operator": "aten::log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::_log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::exp",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sum",
+          "calls": 8863
+        },
+        {
+          "operator": "aten::neg",
+          "calls": 4284
+        },
+        {
+          "operator": "aten::div",
+          "calls": 7108
+        },
+        {
+          "operator": "aten::to",
+          "calls": 9842
+        },
+        {
+          "operator": "aten::_to_copy",
+          "calls": 9504
+        },
+        {
+          "operator": "aten::sigmoid",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::rsub",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sub",
+          "calls": 4971
+        },
+        {
+          "operator": "aten::gru_cell",
+          "calls": 1574
+        },
+        {
+          "operator": "aten::unsafe_chunk",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::unsafe_split",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::narrow",
+          "calls": 19972
+        },
+        {
+          "operator": "aten::add_",
+          "calls": 28759
+        },
+        {
+          "operator": "aten::sigmoid_",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::mul_",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::clone",
+          "calls": 3148
+        },
+        {
+          "operator": "aten::tanh_",
+          "calls": 1574
+        },
+        {
+          "operator": "aten::arange",
+          "calls": 1976
+        },
+        {
+          "operator": "aten::resize_",
+          "calls": 988
+        },
+        {
+          "operator": "aten::unsqueeze",
+          "calls": 2317
+        },
+        {
+          "operator": "aten::softmax",
+          "calls": 1325
+        },
+        {
+          "operator": "aten::_softmax",
+          "calls": 1325
+        },
+        {
+          "operator": "aten::linalg_vector_norm",
+          "calls": 674
+        },
+        {
+          "operator": "aten::clamp_min",
+          "calls": 674
+        },
+        {
+          "operator": "aten::expand_as",
+          "calls": 674
+        },
+        {
+          "operator": "aten::numpy_T",
+          "calls": 337
+        },
+        {
+          "operator": "aten::permute",
+          "calls": 674
+        },
+        {
+          "operator": "aten::matmul",
+          "calls": 674
+        },
+        {
+          "operator": "aten::argmax",
+          "calls": 337
+        },
+        {
+          "operator": "aten::lift_fresh",
+          "calls": 337
+        },
+        {
+          "operator": "aten::detach_",
+          "calls": 337
+        },
+        {
+          "operator": "detach_",
+          "calls": 337
+        },
+        {
+          "operator": "aten::one_hot",
+          "calls": 337
+        },
+        {
+          "operator": "aten::min",
+          "calls": 337
+        },
+        {
+          "operator": "aten::max",
+          "calls": 337
+        },
+        {
+          "operator": "aten::zeros",
+          "calls": 2349
+        },
+        {
+          "operator": "aten::scatter_",
+          "calls": 337
+        },
+        {
+          "operator": "aten::stack",
+          "calls": 6
+        },
+        {
+          "operator": "aten::resolve_neg",
+          "calls": 4
+        },
+        {
+          "operator": "aten::mean",
+          "calls": 1
+        },
+        {
+          "operator": "aten::div_",
+          "calls": 1
+        },
+        {
+          "operator": "aten::flatten",
+          "calls": 1
+        },
+        {
+          "operator": "aten::cross_entropy_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_nd",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_forward",
+          "calls": 1
+        },
+        {
+          "operator": "aten::ones_like",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_backward",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::_log_softmax_backward_data",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ViewBackward0",
+          "calls": 2045
+        },
+        {
+          "operator": "ViewBackward0",
+          "calls": 2045
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "calls": 5192
+        },
+        {
+          "operator": "AddmmBackward0",
+          "calls": 5192
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "calls": 4172
+        },
+        {
+          "operator": "TBackward0",
+          "calls": 4172
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "calls": 3032
+        },
+        {
+          "operator": "CatBackward0",
+          "calls": 3032
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SumBackward1",
+          "calls": 988
+        },
+        {
+          "operator": "SumBackward1",
+          "calls": 988
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "calls": 6144
+        },
+        {
+          "operator": "MulBackward0",
+          "calls": 6144
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SoftmaxBackward0",
+          "calls": 1325
+        },
+        {
+          "operator": "SoftmaxBackward0",
+          "calls": 1325
+        },
+        {
+          "operator": "aten::_softmax_backward_data",
+          "calls": 1325
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SliceBackward0",
+          "calls": 988
+        },
+        {
+          "operator": "SliceBackward0",
+          "calls": 988
+        },
+        {
+          "operator": "aten::slice_backward",
+          "calls": 988
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsqueezeBackward0",
+          "calls": 988
+        },
+        {
+          "operator": "UnsqueezeBackward0",
+          "calls": 988
+        },
+        {
+          "operator": "aten::squeeze",
+          "calls": 988
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "calls": 7653
+        },
+        {
+          "operator": "AddBackward0",
+          "calls": 7653
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SubBackward0",
+          "calls": 3951
+        },
+        {
+          "operator": "SubBackward0",
+          "calls": 3951
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TanhBackward0",
+          "calls": 1574
+        },
+        {
+          "operator": "TanhBackward0",
+          "calls": 1574
+        },
+        {
+          "operator": "aten::tanh_backward",
+          "calls": 1574
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SigmoidBackward0",
+          "calls": 4168
+        },
+        {
+          "operator": "SigmoidBackward0",
+          "calls": 4168
+        },
+        {
+          "operator": "aten::sigmoid_backward",
+          "calls": 4168
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsafeSplitBackward0",
+          "calls": 3148
+        },
+        {
+          "operator": "UnsafeSplitBackward0",
+          "calls": 3148
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MmBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "MmBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: DivBackward0",
+          "calls": 2031
+        },
+        {
+          "operator": "DivBackward0",
+          "calls": 2031
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: PermuteBackward0",
+          "calls": 337
+        },
+        {
+          "operator": "PermuteBackward0",
+          "calls": 337
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ExpandBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "ExpandBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ClampMinBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "ClampMinBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "aten::scalar_tensor",
+          "calls": 674
+        },
+        {
+          "operator": "aten::where",
+          "calls": 674
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LinalgVectorNormBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "LinalgVectorNormBackward0",
+          "calls": 674
+        },
+        {
+          "operator": "aten::masked_fill_",
+          "calls": 674
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_dense_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "calls": 9
+        },
+        {
+          "operator": "torch::autograd::AccumulateGrad",
+          "calls": 9
+        }
+      ],
+      "instrumented_wall_seconds": 6.460611571999834,
+      "gradient_modules": {
+        "byte_emb": {
+          "trainable": 8224,
+          "nonzero_gradient_parameters": 8224,
+          "all_recorded_gradients_finite": true
+        },
+        "gru_cell": {
+          "trainable": 47520,
+          "nonzero_gradient_parameters": 47520,
+          "all_recorded_gradients_finite": true
+        },
+        "byte_head": {
+          "trainable": 44800,
+          "nonzero_gradient_parameters": 44800,
+          "all_recorded_gradients_finite": true
+        },
+        "mode_gate": {
+          "trainable": 0,
+          "nonzero_gradient_parameters": 0,
+          "all_recorded_gradients_finite": true
+        },
+        "token_codes": {
+          "trainable": 256,
+          "nonzero_gradient_parameters": 256,
+          "all_recorded_gradients_finite": true
+        }
+      },
+      "full_compute_coverage": "INCONCLUSIVE",
+      "parameter_receipt": {
+        "arm": "frozen_gate_weights",
+        "seed": 1,
+        "trainable_parameters": 100832,
+        "deployed_parameters": 101008,
+        "random_byte_probability": null,
+        "within_100k_band": true,
+        "training_authorized": false,
+        "qualification": "instantiated_candidate_not_full_resource_parity"
+      }
+    },
+    {
+      "arm": "random_gate",
+      "reported_operator_flops": 708315253,
+      "operators_without_flop_counts": [
+        {
+          "operator": "aten::slice",
+          "calls": 15741
+        },
+        {
+          "operator": "aten::as_strided",
+          "calls": 50618
+        },
+        {
+          "operator": "aten::select",
+          "calls": 4106
+        },
+        {
+          "operator": "aten::eq",
+          "calls": 495
+        },
+        {
+          "operator": "aten::all",
+          "calls": 6
+        },
+        {
+          "operator": "aten::fill_",
+          "calls": 8352
+        },
+        {
+          "operator": "aten::is_nonzero",
+          "calls": 6
+        },
+        {
+          "operator": "aten::item",
+          "calls": 3804
+        },
+        {
+          "operator": "aten::_local_scalar_dense",
+          "calls": 3804
+        },
+        {
+          "operator": "aten::ge",
+          "calls": 1515
+        },
+        {
+          "operator": "aten::lt",
+          "calls": 4
+        },
+        {
+          "operator": "aten::__and__",
+          "calls": 3
+        },
+        {
+          "operator": "aten::bitwise_and",
+          "calls": 3
+        },
+        {
+          "operator": "aten::isfinite",
+          "calls": 1
+        },
+        {
+          "operator": "aten::abs",
+          "calls": 2
+        },
+        {
+          "operator": "aten::empty",
+          "calls": 5772
+        },
+        {
+          "operator": "aten::ne",
+          "calls": 1
+        },
+        {
+          "operator": "aten::to",
+          "calls": 8098
+        },
+        {
+          "operator": "aten::_to_copy",
+          "calls": 7851
+        },
+        {
+          "operator": "aten::empty_strided",
+          "calls": 11944
+        },
+        {
+          "operator": "aten::copy_",
+          "calls": 15516
+        },
+        {
+          "operator": "aten::flatten",
+          "calls": 2
+        },
+        {
+          "operator": "aten::view",
+          "calls": 10245
+        },
+        {
+          "operator": "aten::resolve_conj",
+          "calls": 32137
+        },
+        {
+          "operator": "aten::resolve_neg",
+          "calls": 5
+        },
+        {
+          "operator": "aten::unbind",
+          "calls": 5
+        },
+        {
+          "operator": "aten::new_zeros",
+          "calls": 8
+        },
+        {
+          "operator": "aten::new_empty",
+          "calls": 1028
+        },
+        {
+          "operator": "aten::zero_",
+          "calls": 2784
+        },
+        {
+          "operator": "aten::embedding",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::index_select",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::zeros_like",
+          "calls": 1016
+        },
+        {
+          "operator": "aten::empty_like",
+          "calls": 1017
+        },
+        {
+          "operator": "aten::cat",
+          "calls": 5856
+        },
+        {
+          "operator": "aten::linear",
+          "calls": 4100
+        },
+        {
+          "operator": "aten::t",
+          "calls": 21726
+        },
+        {
+          "operator": "aten::transpose",
+          "calls": 21726
+        },
+        {
+          "operator": "aten::expand",
+          "calls": 5081
+        },
+        {
+          "operator": "aten::reshape",
+          "calls": 4090
+        },
+        {
+          "operator": "aten::detach",
+          "calls": 4585
+        },
+        {
+          "operator": "detach",
+          "calls": 4585
+        },
+        {
+          "operator": "aten::log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::_log_softmax",
+          "calls": 1021
+        },
+        {
+          "operator": "aten::exp",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sum",
+          "calls": 6832
+        },
+        {
+          "operator": "aten::neg",
+          "calls": 4066
+        },
+        {
+          "operator": "aten::div",
+          "calls": 4996
+        },
+        {
+          "operator": "aten::new_full",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sigmoid",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::rsub",
+          "calls": 1020
+        },
+        {
+          "operator": "aten::sub",
+          "calls": 4844
+        },
+        {
+          "operator": "aten::gru_cell",
+          "calls": 1538
+        },
+        {
+          "operator": "aten::unsafe_chunk",
+          "calls": 3076
+        },
+        {
+          "operator": "aten::unsafe_split",
+          "calls": 3076
+        },
+        {
+          "operator": "aten::narrow",
+          "calls": 13778
+        },
+        {
+          "operator": "aten::add_",
+          "calls": 23586
+        },
+        {
+          "operator": "aten::sigmoid_",
+          "calls": 3076
+        },
+        {
+          "operator": "aten::mul_",
+          "calls": 3076
+        },
+        {
+          "operator": "aten::clone",
+          "calls": 3076
+        },
+        {
+          "operator": "aten::tanh_",
+          "calls": 1538
+        },
+        {
+          "operator": "aten::arange",
+          "calls": 1460
+        },
+        {
+          "operator": "aten::resize_",
+          "calls": 730
+        },
+        {
+          "operator": "aten::unsqueeze",
+          "calls": 1710
+        },
+        {
+          "operator": "aten::softmax",
+          "calls": 976
+        },
+        {
+          "operator": "aten::_softmax",
+          "calls": 976
+        },
+        {
+          "operator": "aten::linalg_vector_norm",
+          "calls": 492
+        },
+        {
+          "operator": "aten::clamp_min",
+          "calls": 492
+        },
+        {
+          "operator": "aten::expand_as",
+          "calls": 492
+        },
+        {
+          "operator": "aten::numpy_T",
+          "calls": 246
+        },
+        {
+          "operator": "aten::permute",
+          "calls": 492
+        },
+        {
+          "operator": "aten::matmul",
+          "calls": 492
+        },
+        {
+          "operator": "aten::argmax",
+          "calls": 246
+        },
+        {
+          "operator": "aten::lift_fresh",
+          "calls": 246
+        },
+        {
+          "operator": "aten::detach_",
+          "calls": 246
+        },
+        {
+          "operator": "detach_",
+          "calls": 246
+        },
+        {
+          "operator": "aten::one_hot",
+          "calls": 246
+        },
+        {
+          "operator": "aten::min",
+          "calls": 246
+        },
+        {
+          "operator": "aten::max",
+          "calls": 246
+        },
+        {
+          "operator": "aten::zeros",
+          "calls": 1759
+        },
+        {
+          "operator": "aten::scatter_",
+          "calls": 246
+        },
+        {
+          "operator": "aten::stack",
+          "calls": 6
+        },
+        {
+          "operator": "aten::mean",
+          "calls": 1
+        },
+        {
+          "operator": "aten::div_",
+          "calls": 1
+        },
+        {
+          "operator": "aten::cross_entropy_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_nd",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_forward",
+          "calls": 1
+        },
+        {
+          "operator": "aten::ones_like",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "NllLossBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::nll_loss_backward",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "LogSoftmaxBackward0",
+          "calls": 1
+        },
+        {
+          "operator": "aten::_log_softmax_backward_data",
+          "calls": 1
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ViewBackward0",
+          "calls": 1025
+        },
+        {
+          "operator": "ViewBackward0",
+          "calls": 1025
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "StackBackward0",
+          "calls": 5
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "calls": 4100
+        },
+        {
+          "operator": "AddmmBackward0",
+          "calls": 4100
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "calls": 4100
+        },
+        {
+          "operator": "TBackward0",
+          "calls": 4100
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "calls": 1513
+        },
+        {
+          "operator": "CatBackward0",
+          "calls": 1513
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SumBackward1",
+          "calls": 489
+        },
+        {
+          "operator": "SumBackward1",
+          "calls": 489
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "calls": 5074
+        },
+        {
+          "operator": "MulBackward0",
+          "calls": 5074
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SoftmaxBackward0",
+          "calls": 735
+        },
+        {
+          "operator": "SoftmaxBackward0",
+          "calls": 735
+        },
+        {
+          "operator": "aten::_softmax_backward_data",
+          "calls": 735
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SliceBackward0",
+          "calls": 489
+        },
+        {
+          "operator": "SliceBackward0",
+          "calls": 489
+        },
+        {
+          "operator": "aten::slice_backward",
+          "calls": 489
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsqueezeBackward0",
+          "calls": 489
+        },
+        {
+          "operator": "UnsqueezeBackward0",
+          "calls": 489
+        },
+        {
+          "operator": "aten::squeeze",
+          "calls": 489
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "calls": 7418
+        },
+        {
+          "operator": "AddBackward0",
+          "calls": 7418
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SubBackward0",
+          "calls": 2804
+        },
+        {
+          "operator": "SubBackward0",
+          "calls": 2804
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: TanhBackward0",
+          "calls": 1538
+        },
+        {
+          "operator": "TanhBackward0",
+          "calls": 1538
+        },
+        {
+          "operator": "aten::tanh_backward",
+          "calls": 1538
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: SigmoidBackward0",
+          "calls": 3076
+        },
+        {
+          "operator": "SigmoidBackward0",
+          "calls": 3076
+        },
+        {
+          "operator": "aten::sigmoid_backward",
+          "calls": 3076
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: UnsafeSplitBackward0",
+          "calls": 3076
+        },
+        {
+          "operator": "UnsafeSplitBackward0",
+          "calls": 3076
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "EmbeddingBackward0",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "aten::embedding_dense_backward",
+          "calls": 1024
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: MmBackward0",
+          "calls": 492
+        },
+        {
+          "operator": "MmBackward0",
+          "calls": 492
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: DivBackward0",
+          "calls": 738
+        },
+        {
+          "operator": "DivBackward0",
+          "calls": 738
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: PermuteBackward0",
+          "calls": 246
+        },
+        {
+          "operator": "PermuteBackward0",
+          "calls": 246
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ExpandBackward0",
+          "calls": 492
+        },
+        {
+          "operator": "ExpandBackward0",
+          "calls": 492
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: ClampMinBackward0",
+          "calls": 492
+        },
+        {
+          "operator": "ClampMinBackward0",
+          "calls": 492
+        },
+        {
+          "operator": "aten::scalar_tensor",
+          "calls": 492
+        },
+        {
+          "operator": "aten::where",
+          "calls": 492
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: LinalgVectorNormBackward0",
+          "calls": 492
+        },
+        {
+          "operator": "LinalgVectorNormBackward0",
+          "calls": 492
+        },
+        {
+          "operator": "aten::masked_fill_",
+          "calls": 492
+        },
+        {
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "calls": 9
+        },
+        {
+          "operator": "torch::autograd::AccumulateGrad",
+          "calls": 9
+        }
+      ],
+      "instrumented_wall_seconds": 5.422623307000322,
+      "gradient_modules": {
+        "byte_emb": {
+          "trainable": 8224,
+          "nonzero_gradient_parameters": 8224,
+          "all_recorded_gradients_finite": true
+        },
+        "gru_cell": {
+          "trainable": 47520,
+          "nonzero_gradient_parameters": 47520,
+          "all_recorded_gradients_finite": true
+        },
+        "byte_head": {
+          "trainable": 44800,
+          "nonzero_gradient_parameters": 44800,
+          "all_recorded_gradients_finite": true
+        },
+        "mode_gate": {
+          "trainable": 0,
+          "nonzero_gradient_parameters": 0,
+          "all_recorded_gradients_finite": true
+        },
+        "token_codes": {
+          "trainable": 256,
+          "nonzero_gradient_parameters": 256,
+          "all_recorded_gradients_finite": true
+        }
+      },
+      "full_compute_coverage": "INCONCLUSIVE",
+      "parameter_receipt": {
+        "arm": "random_gate",
+        "seed": 1,
+        "trainable_parameters": 100832,
+        "deployed_parameters": 100832,
+        "random_byte_probability": 0.5,
+        "within_100k_band": true,
+        "training_authorized": false,
+        "qualification": "instantiated_candidate_not_full_resource_parity"
+      }
+    }
+  ],
+  "optimizer_steps": 0,
+  "fits": 0,
+  "test_read": false,
+  "full_training_compute_parity": "INCONCLUSIVE",
+  "training_authorized": false,
+  "limitations": [
+    "Profiler omits FLOPs for listed operators; these are not full training FLOPs.",
+    "Only one untrained seed and one exposed source batch; not full training behavior.",
+    "Wall time includes profiler overhead and is not a fairness requirement.",
+    "Random probability .5 is a diagnostic fixture, not FIT calibration."
+  ]
+}
