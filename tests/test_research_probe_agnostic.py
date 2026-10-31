@@ -304,3 +304,82 @@ def test_interpretation_does_not_invent_memory_for_stateless_model():
         stateless_adapter(), isolation=True)
     assert "interpretation" in report
     assert not any(x["area"] == "memory" for x in report["interpretation"]["alerts"])
+
+
+class DiscretePrefixNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.embedding = nn.Embedding(256, 4)
+        self.output = nn.Linear(4, 2)
+
+
+def discrete_prefix_adapter():
+    def validate(m, x):
+        if not isinstance(m, DiscretePrefixNet) or set(x) != {"history", "query"}:
+            raise ValueError("discrete prefix contract")
+    def start(m, x):
+        return {"prefix": x["history"][:, :0].clone(),
+                "seen": torch.zeros(x["history"].shape[0], 1, dtype=torch.bool)}
+    def advance(m, s, x, t):
+        return {"prefix": torch.cat((s["prefix"], x["history"][:, t:t+1]), 1),
+                "seen": torch.ones_like(s["seen"])}
+    def forecast(m, s, x):
+        context = (m.embedding(s["prefix"]).mean(1) if s["prefix"].shape[1]
+                   else m.embedding.weight.new_zeros(x["history"].shape[0], 4))
+        return {"logits": m.output(context + m.embedding(x["query"][:, 0]))}
+    return ResearchProbeAdapter(name="integer-prefix-with-boolean-flag", validate=validate,
+        steps=lambda x: x["history"].shape[1], start=start, advance=advance,
+        forecast=forecast, state_views=lambda s:s,
+        patch_state=lambda s,name,value:{**s,name:value},
+        batch_size=lambda x:x["history"].shape[0],
+        batch_item=lambda x,i:{k:v[i:i+1] for k,v in x.items()})
+
+
+def test_discrete_prefix_growth_and_boolean_state_are_counted_without_float_memory():
+    model = DiscretePrefixNet()
+    sample = {"history":torch.tensor([[1,2,3],[4,5,6]]),"query":torch.tensor([[7],[8]])}
+    adapter = discrete_prefix_adapter()
+    report = probe_memory(model, sample, adapter)
+    assert report["coverage"] == "named_adapter_state"
+    assert report["state_dtypes"] == {"prefix":"torch.int64","seen":"torch.bool"}
+    assert report["state_storage_bytes"] == 2*3*8+2
+    assert report["query_does_not_write_state"]
+    assert all(row["components"]["prefix"]["shape_changed"] for row in report["timeline"])
+    assert all(row["components"]["prefix"]["change_l2"] is None for row in report["timeline"])
+    runtime = probe_runtime(model,sample,adapter,warmups=0,repeats=2)
+    assert runtime["state_bytes_batch"] == 50
+
+
+def test_large_integer_identity_mismatch_is_exact_even_with_large_float_tolerance():
+    model = StatelessNet()
+    sample = {"features":torch.randn(2,4)}
+    adapter = replace(stateless_adapter(), start=lambda m,x:{
+        "source_id":torch.full((x["features"].shape[0],1), 2**62 +
+                         (1 if x["features"].shape[0]==1 else 0),dtype=torch.int64)})
+    result = probe_entity_isolation(model,sample,adapter,tolerance=1e8)
+    assert result["status"] == "FAIL"
+    assert result["discrete_state_exactly_equal"] is False
+
+
+def test_boolean_state_identity_mismatch_does_not_subtract_boolean_tensors():
+    model = StatelessNet(); sample = {"features":torch.randn(2,4)}
+    adapter = replace(stateless_adapter(),start=lambda m,x:{
+        "flag":torch.full((x["features"].shape[0],1),x["features"].shape[0]==1,dtype=torch.bool)})
+    result = probe_entity_isolation(model,sample,adapter)
+    assert result["status"] == "FAIL"
+    assert result["discrete_state_exactly_equal"] is False
+
+
+def test_discrete_state_support_rejects_integer_heads_and_silent_dtype_writes():
+    bad = replace(stateless_adapter(),forecast=lambda m,s,x:{"risk":m(x["features"]).long()})
+    with pytest.raises(ValueError,match="nonfloating"):
+        probe_memory(StatelessNet(),{"features":torch.randn(2,4)},bad)
+    def dtype_write(m,s,x):
+        s["source_id"] = s["source_id"].float()
+        return {"risk":m(x["features"])}
+    adapter=replace(stateless_adapter(),
+        start=lambda m,x:{"source_id":torch.ones(x["features"].shape[0],1,dtype=torch.long)},
+        patch_state=lambda s,name,value:{**s,name:value},state_views=lambda s:s,
+        forecast=dtype_write)
+    report=probe_memory(StatelessNet(),{"features":torch.randn(2,4)},adapter)
+    assert report["query_does_not_write_state"] is False

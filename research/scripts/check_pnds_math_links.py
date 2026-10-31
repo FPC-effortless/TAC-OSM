@@ -6,6 +6,7 @@ equivalence. The original source commit, PR, gate and negative evidence remain
 in TAC-OSM. Pair with PNDS/scripts/validate_variant_math.py during review.
 """
 import json
+import hashlib
 import re
 from pathlib import Path
 
@@ -50,7 +51,27 @@ def validate(path=LINKS):
             row.get("python_source_equivalence_verified") is not False or
             row.get("real_world_capability_inferred") is not False):
             raise ValueError(f"{name}: incomplete or falsely promoted semantics")
+    prospective = data.get("prospective_graph_index")
+    prospective_count = 0
+    if prospective is not None:
+        map_path = ROOT / prospective["tac_source_map_path"]
+        raw = map_path.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != prospective["source_map_sha256"]:
+            raise ValueError("Prospective source/equation registry digest mismatch")
+        mapping = json.loads(raw)
+        records = mapping.get("variants", [])
+        if (len(records) != 6 or len(set(prospective["ids"])) != 6 or
+                set(prospective["ids"]) != {r["id"] for r in records}):
+            raise ValueError("All six prospective configurations must remain registered")
+        for record in records:
+            if (not re.fullmatch("[0-9a-f]{40}", record.get("source_commit", "")) or
+                    record.get("source_repository") != "FPC-effortless/TAC-OSM" or
+                    any(record.get(k) is not False for k in ("lean_full_graph_proved",
+                        "python_global_source_equivalence_proved", "trained_capability_established"))):
+                raise ValueError("Missing source pin or unsupported prospective graph promotion")
+        prospective_count = len(records)
     return {"source_pinned_versions": len(rows), "reciprocal_manifest_locally_valid": True,
+            "prospective_graph_configurations": prospective_count,
             "remote_equivalence_tested": False, "whole_model_proof_established": False}
 
 

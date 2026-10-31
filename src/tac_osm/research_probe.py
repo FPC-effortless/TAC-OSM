@@ -30,6 +30,9 @@ class ResearchProbeAdapter:
 
     - sample is a source-authorized, decision-time object, never a label oracle.
     - state can be any Python value; state_views exposes its named tensors.
+      Floating, integer and boolean state tensors are supported; discrete
+      identities are compared exactly and are not treated as differentiable.
+      State tensor lengths may grow (for example an observed raw prefix).
     - forecast must not update model buffers/parameters or caller-owned state.
     - patch_state must replace the named state component WITHOUT touching the
       caller-owned original state. This may form an out-of-distribution state.
@@ -57,21 +60,25 @@ class ResearchProbeAdapter:
     ] | None = None
 
 
-def _tensor_map(items: Named, *, allow_empty: bool = False) -> dict[str, torch.Tensor]:
+def _tensor_map(items: Named, *, allow_empty: bool = False,
+                allow_discrete: bool = False) -> dict[str, torch.Tensor]:
     if not isinstance(items, Mapping) or (not items and not allow_empty):
         raise ValueError("adapter must expose a named tensor mapping")
     out = {}
     for name, tensor in items.items():
         if not isinstance(name, str) or not name or not isinstance(tensor, torch.Tensor):
             raise ValueError("adapter mapping has invalid named tensor")
-        if not torch.is_floating_point(tensor) or not torch.isfinite(tensor).all():
+        discrete = tensor.dtype in (torch.bool, torch.uint8, torch.int8,
+                                    torch.int16, torch.int32, torch.int64)
+        if (not (torch.is_floating_point(tensor) or (allow_discrete and discrete))
+                or not torch.isfinite(tensor).all()):
             raise ValueError("nonfloating or nonfinite tensor at: " + name)
         out[name] = tensor
     return out
 
 
 def _state(adapter: ResearchProbeAdapter, value: Any) -> dict[str, torch.Tensor]:
-    return _tensor_map(adapter.state_views(value), allow_empty=True)
+    return _tensor_map(adapter.state_views(value), allow_empty=True, allow_discrete=True)
 
 
 def _outputs(adapter: ResearchProbeAdapter, model: nn.Module,
@@ -93,7 +100,8 @@ def _module_snap(model: nn.Module) -> dict[str, torch.Tensor]:
 def _unchanged(before: Mapping[str, torch.Tensor],
                after: Mapping[str, torch.Tensor]) -> bool:
     return before.keys() == after.keys() and all(
-        torch.equal(before[k], after[k]) for k in before)
+        before[k].dtype == after[k].dtype and before[k].device == after[k].device
+        and torch.equal(before[k], after[k]) for k in before)
 
 
 def _norm(value: torch.Tensor) -> float:
@@ -101,6 +109,10 @@ def _norm(value: torch.Tensor) -> float:
 
 
 def _stats(value: torch.Tensor) -> dict[str, Any]:
+    if not torch.is_floating_point(value):
+        return {"shape": list(value.shape), "dtype": str(value.dtype),
+                "storage_bytes": value.numel() * value.element_size(),
+                "kind": "discrete_state_not_continuous_latent"}
     x = value.detach().float()
     return {"shape": list(x.shape), "l2": _norm(x),
             "mean_abs": float(x.abs().mean()) if x.numel() else 0.,
@@ -116,6 +128,18 @@ def _changes(left: Named, right: Named) -> dict[str, float]:
             raise ValueError("forecast shape changed across diagnostic intervention")
         out[name] = float((left[name] - right[name]).detach().float().abs().mean())
     return out
+
+
+def _state_change(before: torch.Tensor, after: torch.Tensor) -> dict[str, Any]:
+    if before.shape != after.shape:
+        return {"change_l2": None, "previous_shape": list(before.shape),
+                "shape_changed": True,
+                "storage_growth_bytes": after.numel()*after.element_size() -
+                                        before.numel()*before.element_size()}
+    if not torch.is_floating_point(after):
+        return {"change_l2": None, "shape_changed": False,
+                "changed_elements": int(torch.ne(before, after).sum())}
+    return {"change_l2": _norm(after-before), "shape_changed": False}
 
 
 def _check(adapter: ResearchProbeAdapter, model: nn.Module, sample: Any) -> tuple[int, int]:
@@ -145,7 +169,7 @@ def _replay(adapter: ResearchProbeAdapter, model: nn.Module,
             timeline.append({
                 "event_index": t,
                 "components": {
-                    k: {**_stats(now[k]), "change_l2": _norm(now[k] - before[k])}
+                    k: {**_stats(now[k]), **_state_change(before[k], now[k])}
                     for k in now},
             })
         prev = now
@@ -208,6 +232,8 @@ def probe_memory(model: nn.Module, sample: Any,
         "query_does_not_write_state": pure,
         "candidate_permutation": permutation,
         "coverage": "stateless_model" if not names else "named_adapter_state",
+        "state_dtypes": {name: str(t.dtype) for name, t in names.items()},
+        "state_storage_bytes": sum(t.numel()*t.element_size() for t in names.values()),
         "qualification": "local_no_fit_diagnostics_not_capability_evidence",
     }
 
@@ -268,6 +294,7 @@ def probe_entity_isolation(model: nn.Module, sample: Any,
         output, _ = _forecast_pure(adapter, replica, state, sample)
         whole_state = _state(adapter, state)
         maximum = 0.
+        discrete_mismatch = False
         for i in range(batch):
             one_sample = adapter.batch_item(sample, i)
             one = copy.deepcopy(model).eval()
@@ -283,11 +310,19 @@ def probe_entity_isolation(model: nn.Module, sample: Any,
                 for k in a:
                     if a[k].ndim < 1 or a[k].shape[0] != batch or b[k].shape != a[k][i:i + 1].shape:
                         raise ValueError("entity-isolation tensors must have declared batch-leading axis")
-                    maximum = max(maximum, float((a[k][i:i + 1] - b[k]).abs().max()))
+                    if a[k].dtype != b[k].dtype or a[k].device != b[k].device:
+                        raise ValueError("entity output/state dtype or device changed when sliced")
+                    if not torch.is_floating_point(a[k]):
+                        # Integer IDs near 2**63 and boolean masks must never
+                        # be rounded to float or subtracted with overflow.
+                        discrete_mismatch |= not torch.equal(a[k][i:i + 1], b[k])
+                    elif a[k].numel():
+                        maximum = max(maximum, float((a[k][i:i + 1] - b[k]).abs().max()))
     return {"schema": "tac-osm-observatory/model-agnostic-isolation-v1",
-            "adapter": adapter.name, "status": "PASS" if maximum <= tolerance else "FAIL",
+            "adapter": adapter.name, "status": "PASS" if maximum <= tolerance and not discrete_mismatch else "FAIL",
             "entities": batch, "max_absolute_difference": maximum,
-            "tolerance": tolerance, "within_tolerance": maximum <= tolerance,
+            "tolerance": tolerance, "within_tolerance": maximum <= tolerance and not discrete_mismatch,
+            "discrete_state_exactly_equal": not discrete_mismatch,
             "qualification": "model_batch_isolation_not_source_identity_authentication"}
 
 

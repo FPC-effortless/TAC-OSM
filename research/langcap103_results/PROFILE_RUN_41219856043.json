@@ -1,0 +1,190 @@
+{
+  "schema": "langcap103.engineering-prefit.v1",
+  "status": "MEASURED_UNTRAINED_CANDIDATES_NOT_FROZEN_REGISTRATION",
+  "torch_version": "2.15.0+cpu",
+  "python": "3.12.15",
+  "source_pins": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "commit": "bd6b22def4ea430a3dc2214c81c0d8f09461bc53",
+    "source_directory": "research/mathematical-engineering/langmath101/candidates",
+    "sha256": {
+      "native098.py": "e59c0aec80a39d84a6f01a7ca662d0c8baf3e2c2d33901057f017cb23c999498",
+      "models.py": "41b41b9ded06a0e1c6d3aa3f31ffc16508ddd4f2fbb678bfdc1015a878aeca5c"
+    },
+    "modifications": "NONE; source-identical copies; original studies untouched"
+  },
+  "cohorts": [
+    {
+      "candidate_target": 1000000,
+      "relative_parameter_gap": 0.0023479342578407803,
+      "arms": [
+        {
+          "target": 1000000,
+          "configuration": {
+            "arm": "tac_associative_stack",
+            "width": 256,
+            "depth": 8
+          },
+          "trainable_parameters": 1000028,
+          "deployed_parameters": 1000028,
+          "fp32_weight_bytes": 4000112,
+          "fp32_parameter_gradient_two_adam_moments_bytes": 16000448,
+          "memory_estimate_excludes": [
+            "activations",
+            "workspaces",
+            "allocator",
+            "input",
+            "cache"
+          ],
+          "persistent_recurrent_bytes_per_stream": 6144,
+          "readout_parameter_fraction": 0.1901826748851032,
+          "fixture_forward_backward_and_causal_prefix": "PASS_ENGINEERING_ONLY",
+          "untrained_weight_sha256": "9066b7dd357179eb8bb3a9ffc4e816d16b08a90e2db9da3e2c96af7d81cadcf2",
+          "optimizer_updates": 0
+        },
+        {
+          "target": 1000000,
+          "configuration": {
+            "arm": "causal_transformer",
+            "width": 128,
+            "depth": 4,
+            "ffn": 649
+          },
+          "trainable_parameters": 999972,
+          "deployed_parameters": 999972,
+          "fp32_weight_bytes": 3999888,
+          "fp32_parameter_gradient_two_adam_moments_bytes": 15999552,
+          "memory_estimate_excludes": [
+            "activations",
+            "workspaces",
+            "allocator",
+            "input",
+            "cache"
+          ],
+          "persistent_recurrent_bytes_per_stream": null,
+          "readout_parameter_fraction": 0.03302492469789154,
+          "fixture_forward_backward_and_causal_prefix": "PASS_ENGINEERING_ONLY",
+          "untrained_weight_sha256": "8c4dcc9fed52adc5cd105cdd442a3c9e3885f309937ca3ac0695a392859415b6",
+          "optimizer_updates": 0
+        },
+        {
+          "target": 1000000,
+          "configuration": {
+            "arm": "stacked_gru",
+            "width": 193,
+            "depth": 4
+          },
+          "trainable_parameters": 997680,
+          "deployed_parameters": 997680,
+          "fp32_weight_bytes": 3990720,
+          "fp32_parameter_gradient_two_adam_moments_bytes": 15962880,
+          "memory_estimate_excludes": [
+            "activations",
+            "workspaces",
+            "allocator",
+            "input",
+            "cache"
+          ],
+          "persistent_recurrent_bytes_per_stream": 3088,
+          "readout_parameter_fraction": 0.04977948841311843,
+          "fixture_forward_backward_and_causal_prefix": "PASS_ENGINEERING_ONLY",
+          "untrained_weight_sha256": "5f80f9e768c54c8bbb0f62fe5d4b31525e2c6e29fec4a5f4e8aa9b1d92f2b096",
+          "optimizer_updates": 0
+        }
+      ]
+    },
+    {
+      "candidate_target": 10000000,
+      "relative_parameter_gap": 0.0012898100605184721,
+      "arms": [
+        {
+          "target": 10000000,
+          "configuration": {
+            "arm": "tac_associative_stack",
+            "width": 992,
+            "depth": 8
+          },
+          "trainable_parameters": 9999922,
+          "deployed_parameters": 9999922,
+          "fp32_weight_bytes": 39999688,
+          "fp32_parameter_gradient_two_adam_moments_bytes": 159998752,
+          "memory_estimate_excludes": [
+            "activations",
+            "workspaces",
+            "allocator",
+            "input",
+            "cache"
+          ],
+          "persistent_recurrent_bytes_per_stream": 14976,
+          "readout_parameter_fraction": 0.10447781492695643,
+          "fixture_forward_backward_and_causal_prefix": "PASS_ENGINEERING_ONLY",
+          "untrained_weight_sha256": "fb03e89335b4f8c79c484dc2dffaeeacfe683155d831f110e2363b64b510ffe6",
+          "optimizer_updates": 0
+        },
+        {
+          "target": 10000000,
+          "configuration": {
+            "arm": "causal_transformer",
+            "width": 256,
+            "depth": 8,
+            "ffn": 1889
+          },
+          "trainable_parameters": 9999880,
+          "deployed_parameters": 9999880,
+          "fp32_weight_bytes": 39999520,
+          "fp32_parameter_gradient_two_adam_moments_bytes": 159998080,
+          "memory_estimate_excludes": [
+            "activations",
+            "workspaces",
+            "allocator",
+            "input",
+            "cache"
+          ],
+          "persistent_recurrent_bytes_per_stream": null,
+          "readout_parameter_fraction": 0.006579278951347416,
+          "fixture_forward_backward_and_causal_prefix": "PASS_ENGINEERING_ONLY",
+          "untrained_weight_sha256": "c0cd659515f93a1b697198ac6669b94e77a9b4ebd6511a73a7f83d17b2733502",
+          "optimizer_updates": 0
+        },
+        {
+          "target": 10000000,
+          "configuration": {
+            "arm": "stacked_gru",
+            "width": 634,
+            "depth": 4
+          },
+          "trainable_parameters": 9987024,
+          "deployed_parameters": 9987024,
+          "fp32_weight_bytes": 39948096,
+          "fp32_parameter_gradient_two_adam_moments_bytes": 159792384,
+          "memory_estimate_excludes": [
+            "activations",
+            "workspaces",
+            "allocator",
+            "input",
+            "cache"
+          ],
+          "persistent_recurrent_bytes_per_stream": 10144,
+          "readout_parameter_fraction": 0.016277121192459335,
+          "fixture_forward_backward_and_causal_prefix": "PASS_ENGINEERING_ONLY",
+          "untrained_weight_sha256": "c4e2fb2be9b3a1f4b21099bb7f86d6652c86c4f1eea30dc2f9b1283541660f8d",
+          "optimizer_updates": 0
+        }
+      ]
+    }
+  ],
+  "training_enabled": false,
+  "real_data_accessed": false,
+  "optimizer_updates": 0,
+  "training_flops": null,
+  "trained_latency": null,
+  "capability_result": null,
+  "training_blockers": [
+    "authenticated training corpus and frozen splits",
+    "independent source/reward/ACL prefit attestations",
+    "PNDS source-equivalent formulation and actual graph/probe coverage",
+    "frozen FAIR_COMPARISON manifest, training/tuning and measured FLOP budgets",
+    "positive-control solvability and licensed evidence-dependent capability cohort",
+    "authorized execution venue and quota"
+  ]
+}

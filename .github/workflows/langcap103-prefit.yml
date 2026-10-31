@@ -1,0 +1,36 @@
+name: LANGCAP103 scaled model preflight (NO TRAINING)
+on:
+  pull_request:
+    paths:
+      - 'research/langcap103/**'
+      - 'research/phone_queue/langcap103-prefit.json'
+      - '.github/workflows/langcap103-prefit.yml'
+permissions:
+  contents: read
+jobs:
+  instantiated-model-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Route reviewed zero-GPU no-fit proposal
+        run: python scripts/phone_lab.py plan research/phone_queue/langcap103-prefit.json
+      - name: Install CPU model-inspection dependencies
+        run: |
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy
+      - name: Instantiate six actual models and verify counts, gradient connectivity and causal prefixes
+        run: python research/langcap103/preflight.py --out ci-artifacts/langcap103/profile.json
+      - name: Preserve exact source, geometry and no-training receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGCAP103-untrained-model-preflight
+          path: |
+            ci-artifacts/langcap103/
+            research/langcap103/SOURCE_PINS.json
+            research/phone_queue/langcap103-prefit.json
+          retention-days: 30
