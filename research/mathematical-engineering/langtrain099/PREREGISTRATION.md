@@ -31,3 +31,5 @@ Prediction actors receive earlier acquisition bytes and then query bytes in sepa
 ## Originals and reporting
 
 Retain all three initial and trained original checkpoints with complete optimizer/RNG state, full per-update losses/exposures, actual hardware/memory/timing, failure/partial checkpoints, SHA-256 archives, source commit/hashes and fresh-process full-model FIT replay. After sealing all fits, run initial and final DEV inference and replay each in fresh processes, seal predictions before scoring, then independently calculate task correctness and the original Witten–Bell and raw-history references. No result-driven checkpoint selection, retries or architecture changes. Internally measured, not independently qualified. No architecture superiority, general intelligence, commercial usefulness, protected-evaluation, promotion or merge claim.
+
+Scaled proof source is pinned in PNDS_SOURCE_BRIDGE.json before optimizer enablement.

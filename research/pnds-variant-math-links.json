@@ -641,6 +641,70 @@
       "inference_graph_changed": true,
       "whole_graph_IEEE_AD_equivalence": "OPEN",
       "training_enabled": false
+    },
+    {
+      "id": "LANGTRAIN099",
+      "lane": "language",
+      "version": "LANGTRAIN099",
+      "state_kind": "contextual_dual_normalized_associative_memory",
+      "stage": "REGISTERED_EXACT10M_FIT_DISABLED_PENDING_ORIGINAL_PROFILES_AND_PROOF",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "f6e19be81ac7e478f78e86af4f92f735cc22a9ec",
+        "pull_request": 671,
+        "evidence_path": "research/mathematical-engineering/langtrain099",
+        "bridge_path": "research/mathematical-engineering/langtrain099/PNDS_SOURCE_BRIDGE.json",
+        "source_sha256": {
+          "research/mathematical-engineering/langtrain099/train.py": "2b46ee0fecbaa0c059ad3269da2a651079485e94b506bc1a22f3abaf9a18f0cd",
+          "research/mathematical-engineering/langtrain099/actor.py": "68307d5091978a6264eab73c04cf5d71160249b7ec4c53bccb14434a186235d1",
+          "research/mathematical-engineering/langtrain099/evaluate.py": "46e775135f7f62756505c3017413b5d5f757b0108cc63c861ae47c30a1de83da",
+          "research/mathematical-engineering/langtrain099/objective.py": "ab02ada6e3727471941f7d35343a5628f4c1d6fffbcd88e7517b8cbd0aba127b",
+          "research/mathematical-engineering/langtrain099/data.py": "284bb87479acbe360390d58ab0ef96a7ff4d53111890e795d565fee87303c76a",
+          "research/mathematical-engineering/langtrain099/profile099.py": "991db5b4ff474565225e8326f95fa6f4c0f8cb82fe9986c6b5386c7f6b6694e9",
+          "research/mathematical-engineering/langtrain099/model.py": "ddb2000482e2aa87a4fbdec19cdfdd01249280263e2438be230799ac1758ce9f",
+          "research/mathematical-engineering/langtrain099/reference.py": "e866a562c46b54a1c17c0c2eef754499a7761e1eb37db563f02a87cc7a9648b3",
+          "research/mathematical-engineering/langtrain099/common.py": "46894a763d5d4269a7c7b8d181587c11517e70d0f9245a2d481587d7b2f93e74",
+          "research/mathematical-engineering/langtrain099/probe_adapter.py": "3c67be2f3f0c4f08192a2edc36a9b7a61574ec291e81e280c219548e392ecb66",
+          "research/mathematical-engineering/langtrain099/FORMULATION.md": "875b43d927f2586da15b04b8957b24d8812fcea8f60567f037366babdaf2bafe",
+          "tests/test_langtrain099.py": "ae54430078301599346dcf4536551fe68fbdb91ac8e83d8c1a52ee50b055dc80"
+        }
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "commit": "0f628b876bd6ed81b496771a2625dbc54c84932e",
+        "pull_request": 98,
+        "lean_path": "PNDS/LANGTRAIN099.lean",
+        "lean_symbol": "PNDS.LANGTRAIN099.full_persistent_state_invariant",
+        "python_path": "foundation/v1/langtrain099_reference.py",
+        "python_symbol": "forward",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "context_then_normalized_associative_tensor_scans",
+      "formula": "c=delta*c+(1-delta)*offer; M=a*M+(1-a)*v*kT; z=a*z+(1-a)*k; r=M*q/(epsilon+z*q)",
+      "operator_contracts": [
+        "TENSOR_AFFINE_ACTION",
+        "BOUNDED_FULL_PERSISTENT_STATE",
+        "NORMALIZED_BANK_CONE",
+        "BOUNDED_READ",
+        "LINEAR_WORK_SCAN"
+      ],
+      "formalization_status": "SCALED_EXACT_REAL_PROOF_BUILD_PENDING_IEEE_AD_OPEN",
+      "lean_full_graph_proved": false,
+      "lean_full_persistent_state_invariant_proved": false,
+      "python_source_equivalence_verified": false,
+      "constructed_full_forward_reference_checks": "51_CONSTRUCTED_CHECKS_PASS_FP32_FP64",
+      "real_world_capability_inferred": false,
+      "inference_graph_changed": true,
+      "whole_graph_IEEE_AD_equivalence": "OPEN",
+      "training_enabled": false,
+      "geometry": {
+        "embed": 256,
+        "context": 376,
+        "key": 24,
+        "value": 32,
+        "ffn": 4335
+      },
+      "active_parameters": 10000000
     }
   ]
 }
