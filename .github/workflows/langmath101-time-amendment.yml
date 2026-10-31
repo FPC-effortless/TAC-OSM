@@ -18,10 +18,28 @@ jobs:
   preflight:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      recovery_requested: ${{ steps.route.outputs.recovery_requested }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ env.SOURCE_COMMIT }}
+      - name: Prevent redundant CPU recovery fits on unrelated research commits
+        id: route
+        run: |
+          python - <<'PY'
+          import os,subprocess
+          files=subprocess.check_output(
+              ['git','diff-tree','--root','--no-commit-id','--name-only','-r',
+               os.environ['SOURCE_COMMIT']],text=True).splitlines()
+          # Already recovered and independently audited; rerun only if the
+          # specific posthoc timeout implementation is edited, not when PR #679
+          # is updated with DEV-only scripts or documentation.
+          enabled='.github/scripts/langmath101-time-amendment.py' in files
+          with open(os.environ['GITHUB_OUTPUT'],'a') as stream:
+              stream.write('recovery_requested='+str(enabled).lower()+'\n')
+          print({'recovery_requested':enabled,'changed_paths':len(files)})
+          PY
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -29,6 +47,7 @@ jobs:
         run: python .github/scripts/langmath101-time-amendment.py --self-test
   recover:
     needs: preflight
+    if: needs.preflight.outputs.recovery_requested == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     strategy:
