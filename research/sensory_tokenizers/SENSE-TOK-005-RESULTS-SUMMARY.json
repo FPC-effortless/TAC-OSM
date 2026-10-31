@@ -1,0 +1,66 @@
+{
+  "study_id": "SENSE-TOK-005",
+  "evidence_class": "PUBLISHER_BLOB_MATCHED_NO_FIT_MECHANISM_ONLY",
+  "tested_at_utc_date": "2026-10-31",
+  "source": {
+    "publisher": "python/cpython",
+    "tag": "v3.13.5",
+    "commit": "6cb20a219a860eaf687b2d968b41c480c7461909",
+    "full_file_matches": 6,
+    "prefix_bytes_per_file": 256,
+    "split": "EXPOSED_DEV_NOT_SEALED_TEST"
+  },
+  "seed_set": [
+    0,
+    1,
+    2
+  ],
+  "trained_models": 0,
+  "optimizer_steps": 0,
+  "model_parameters": 101008,
+  "codebook_vectors": 8,
+  "code_width": 32,
+  "byte_predictions": 4608,
+  "prior_observed_bytes": 4590,
+  "modes": {
+    "forced_byte": {
+      "updates": 4590,
+      "tokens_committed": 0
+    },
+    "forced_token": {
+      "updates": 558,
+      "tokens_committed": 558,
+      "median_used_code_ids_per_file_seed": 7,
+      "median_top_code_share": 0.43548387096774194
+    },
+    "untrained_gate": {
+      "updates": 3387,
+      "tokens_committed": 473,
+      "median_used_code_ids_per_file_seed": 6,
+      "median_top_code_share": 0.32291666666666663
+    }
+  },
+  "full_local_raw_diagnostic_sha256": "752322dfe9de5d5cb8f19dd2558ca7bdbb0c1b31b67389447c479e4b4d3093d2",
+  "local_combined_001_to_005_tests_passed": 108,
+  "local_additional_pytest_subtests_passed": 278,
+  "committed_S005_CI_regression_test_count": 12,
+  "numerical_reference_status": "TWO_OPERATORS_CHECKED_NO_LEAN_FULL_GRAPH",
+  "no_capability_inference": true,
+  "no_architectural_superiority_inference": true,
+  "no_compute_savings_inference": true,
+  "blocking_requirements": [
+    "authenticated independent observed outcomes and train/dev/test splits",
+    "matched full training compute/data/tuning",
+    "independent signed goal/reward/source/ACL attestations",
+    "PNDS full Lean/Python/source equivalence",
+    "owner-approved protected T4x2 when justified"
+  ],
+  "falsifiers": [
+    "future-byte leakage",
+    "codebook learned-vs-random identity effect",
+    "code collapse",
+    "route mode ablations",
+    "decoder byte-bypass",
+    "end-to-end BPB and total compute"
+  ]
+}
