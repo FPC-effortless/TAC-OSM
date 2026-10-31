@@ -1,0 +1,23 @@
+{
+  "schema": "tac-osm.langcache104-construction-presets.v1",
+  "status": "UNTRAINED_CONSTRUCTION_ONLY_NOT_FAIR_COMPARISON_REGISTRATION",
+  "model_scale_policy": "declared-target-v2",
+  "presets": {
+    "approximately_1m": {
+      "target_trainable_parameters": 1000000,
+      "target_deployed_parameters": 1000000,
+      "relative_tolerance": 0.05,
+      "rationale": "Four actual residual layers and four heads; expands learned memory geometry rather than only the decoder.",
+      "config": {"d_model": 128, "n_layers": 4, "n_heads": 4, "key_dim": 16, "value_dim": 16, "write_rank": 2, "ffn_dim": 192, "window": 128, "chunk_size": 32, "rotary": true, "local_rope": true, "tied_embedding": true}
+    },
+    "approximately_10m": {
+      "target_trainable_parameters": 10000000,
+      "target_deployed_parameters": 10000000,
+      "relative_tolerance": 0.05,
+      "rationale": "Eight actual residual layers, eight heads, wider residual and value channels; constructed before any fitting or capability selection.",
+      "config": {"d_model": 256, "n_layers": 8, "n_heads": 8, "key_dim": 16, "value_dim": 24, "write_rank": 2, "ffn_dim": 448, "window": 128, "chunk_size": 32, "rotary": true, "local_rope": true, "tied_embedding": true}
+    }
+  },
+  "training_authorized": false,
+  "missing_before_training": ["authentic source and independent permission review", "matched contemporary neural arms", "measured complete compute and equal tuning/data contracts", "signed source/goal/reward/ACL evidence and trusted verifier", "PNDS mathematical release qualification", "frozen FAIR_COMPARISON registration", "protected operator-approved T4 x2 execution"]
+}

@@ -1,0 +1,1040 @@
+{
+  "schema": "tac-osm.langcache104-engineering.v1",
+  "status": "PASS_FINITE_NO_FIT_FIXTURES_ONLY",
+  "optimizer_updates": 0,
+  "data_kind": "constructed_engineering_inputs_no_capability_scores",
+  "dev_scoring": false,
+  "protected_test_access": false,
+  "torch_version": "2.15.0+cpu",
+  "hardware": "CPU",
+  "cuda_available": false,
+  "gpu_speed_or_precision_qualification": "INCONCLUSIVE_NOT_EXECUTED",
+  "tests": {
+    "tests": 82,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_files_sha256": {
+    "research/langcache104/model.py": "fa53ab6711175a0465c992fd811d7c0e0928b19b95488f09eaf70cc2dcc4e79a",
+    "research/langcache104/kernels.py": "1c2782bbaaac7aa54722f420bbbad8c5215f260ed591a6cef154c0540f41b8d1",
+    "research/langcache104/exact_store.py": "bbc5fffc65639b044c0cf78588287fadf1a5f7783f5d0dde369d06f4049e5a3b",
+    "research/langcache104/probe_adapter.py": "84f5119e2b239c7f25f4b76f6c580004f18b6122b11214bb6316f85de80f67e1",
+    "research/langcache104/test_model.py": "099a4f91c9d1b988735016f463563e83a6b3a69e051c5351f3ff48d1f6e90d70",
+    "research/langcache104/test_kernels.py": "5f665eb59dff86fd86220a29d07ff1f421deee74d019ff65c4b61278e89882f6",
+    "research/langcache104/test_exact_store.py": "09fa37bd3e85a42da896e662022763d91e07ed036ff802dc3eb7e76b95052337",
+    "research/langcache104/verify.py": "c07d65859bae5de4df271279f714e9febab962a63ad0bbda9b35feccf7361c39"
+  },
+  "cases": [
+    {
+      "dtype": "torch.float32",
+      "configuration": {
+        "d_model": 16,
+        "n_layers": 2,
+        "n_heads": 2,
+        "key_dim": 4,
+        "value_dim": 4,
+        "write_rank": 2,
+        "ffn_dim": 24,
+        "window": 5,
+        "chunk_size": 3,
+        "rotary": true,
+        "local_rope": true,
+        "tied_embedding": true
+      },
+      "counts": {
+        "trainable": 12220,
+        "deployed": 12220,
+        "fixed_buffer_bytes": 16
+      },
+      "parameter_and_buffer_sha256": "e57c9de4911bd1fa3e70c45c412f2f4407be54f449218e59569d160b9d3380b6",
+      "unchanged_parameters_and_buffers": true,
+      "logit_max_abs_error": 2.086162567138672e-07,
+      "state_max_abs_error": 4.544854164123535e-07,
+      "all_parameter_gradients": [
+        {
+          "name": "embedding.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.073364496231079e-08
+        },
+        {
+          "name": "blocks.0.memory_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.5029294192790985e-09
+        },
+        {
+          "name": "blocks.0.fast.query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.3096723705530167e-10
+        },
+        {
+          "name": "blocks.0.fast.key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.9099388737231493e-10
+        },
+        {
+          "name": "blocks.0.fast.value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.3969838619232178e-09
+        },
+        {
+          "name": "blocks.0.fast.retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.0186340659856796e-09
+        },
+        {
+          "name": "blocks.0.fast.retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.3283064365386963e-10
+        },
+        {
+          "name": "blocks.0.fast.eligibility.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.656612873077393e-10
+        },
+        {
+          "name": "blocks.0.fast.eligibility.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.0372681319713593e-10
+        },
+        {
+          "name": "blocks.0.slow.query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.3096723705530167e-10
+        },
+        {
+          "name": "blocks.0.slow.key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.2369127944111824e-10
+        },
+        {
+          "name": "blocks.0.slow.value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.3969838619232178e-09
+        },
+        {
+          "name": "blocks.0.slow.retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 9.313225746154785e-10
+        },
+        {
+          "name": "blocks.0.slow.retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.7462298274040222e-10
+        },
+        {
+          "name": "blocks.0.slow.eligibility.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.984919309616089e-10
+        },
+        {
+          "name": "blocks.0.slow.eligibility.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.1641532182693481e-10
+        },
+        {
+          "name": "blocks.0.local_query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.4924596548080444e-10
+        },
+        {
+          "name": "blocks.0.local_key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.656612873077393e-10
+        },
+        {
+          "name": "blocks.0.local_value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.862645149230957e-09
+        },
+        {
+          "name": "blocks.0.rotary_retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 7.566995918750763e-10
+        },
+        {
+          "name": "blocks.0.rotary_retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.9103830456733704e-10
+        },
+        {
+          "name": "blocks.0.rotary_angle.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 5.704350769519806e-09
+        },
+        {
+          "name": "blocks.0.rotary_angle.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 5.122274160385132e-09
+        },
+        {
+          "name": "blocks.0.rotary_offer.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.1641532182693481e-09
+        },
+        {
+          "name": "blocks.0.rotary_offer.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.1641532182693481e-09
+        },
+        {
+          "name": "blocks.0.perspective_out.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.05359673500061e-09
+        },
+        {
+          "name": "blocks.0.ffn_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.5133991837501526e-09
+        },
+        {
+          "name": "blocks.0.ffn_value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.7462298274040222e-09
+        },
+        {
+          "name": "blocks.0.ffn_gate.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.280568540096283e-09
+        },
+        {
+          "name": "blocks.0.ffn_out.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.3969838619232178e-09
+        },
+        {
+          "name": "blocks.1.memory_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.656612873077393e-10
+        },
+        {
+          "name": "blocks.1.fast.query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.1382008930668235e-11
+        },
+        {
+          "name": "blocks.1.fast.key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.2741809263825417e-11
+        },
+        {
+          "name": "blocks.1.fast.value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.656612873077393e-10
+        },
+        {
+          "name": "blocks.1.fast.retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.0372681319713593e-10
+        },
+        {
+          "name": "blocks.1.fast.retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.0186340659856796e-10
+        },
+        {
+          "name": "blocks.1.fast.eligibility.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.1641532182693481e-10
+        },
+        {
+          "name": "blocks.1.fast.eligibility.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.9103830456733704e-11
+        },
+        {
+          "name": "blocks.1.slow.query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.729372449219227e-11
+        },
+        {
+          "name": "blocks.1.slow.key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.548361852765083e-11
+        },
+        {
+          "name": "blocks.1.slow.value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.984919309616089e-10
+        },
+        {
+          "name": "blocks.1.slow.retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.0372681319713593e-10
+        },
+        {
+          "name": "blocks.1.slow.retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 8.731149137020111e-11
+        },
+        {
+          "name": "blocks.1.slow.eligibility.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.7462298274040222e-10
+        },
+        {
+          "name": "blocks.1.slow.eligibility.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.9103830456733704e-11
+        },
+        {
+          "name": "blocks.1.local_query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.4551915228366852e-10
+        },
+        {
+          "name": "blocks.1.local_key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.3283064365386963e-10
+        },
+        {
+          "name": "blocks.1.local_value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.1641532182693481e-09
+        },
+        {
+          "name": "blocks.1.rotary_retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.0372681319713593e-10
+        },
+        {
+          "name": "blocks.1.rotary_retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.0186340659856796e-10
+        },
+        {
+          "name": "blocks.1.rotary_angle.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.2118911147117615e-09
+        },
+        {
+          "name": "blocks.1.rotary_angle.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.1641532182693481e-09
+        },
+        {
+          "name": "blocks.1.rotary_offer.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.656612873077393e-10
+        },
+        {
+          "name": "blocks.1.rotary_offer.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.6193447411060333e-10
+        },
+        {
+          "name": "blocks.1.perspective_out.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 9.313225746154785e-10
+        },
+        {
+          "name": "blocks.1.ffn_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.3283064365386963e-10
+        },
+        {
+          "name": "blocks.1.ffn_value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.3969838619232178e-09
+        },
+        {
+          "name": "blocks.1.ffn_gate.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 7.566995918750763e-10
+        },
+        {
+          "name": "blocks.1.ffn_out.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 9.022187441587448e-10
+        },
+        {
+          "name": "output_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.984919309616089e-10
+        }
+      ],
+      "state_tensor_bytes_batch2_after_11_bytes": 2432,
+      "probe": null
+    },
+    {
+      "dtype": "torch.float64",
+      "configuration": {
+        "d_model": 16,
+        "n_layers": 2,
+        "n_heads": 2,
+        "key_dim": 4,
+        "value_dim": 4,
+        "write_rank": 2,
+        "ffn_dim": 24,
+        "window": 5,
+        "chunk_size": 3,
+        "rotary": true,
+        "local_rope": true,
+        "tied_embedding": true
+      },
+      "counts": {
+        "trainable": 12220,
+        "deployed": 12220,
+        "fixed_buffer_bytes": 32
+      },
+      "parameter_and_buffer_sha256": "c3883170bd34cf039c82e42cdd3106218c8bffaa28987024e0affca9ee56eebe",
+      "unchanged_parameters_and_buffers": true,
+      "logit_max_abs_error": 4.510281037539698e-16,
+      "state_max_abs_error": 1.609823385706477e-15,
+      "all_parameter_gradients": [
+        {
+          "name": "embedding.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.249000902703301e-16
+        },
+        {
+          "name": "blocks.0.memory_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.288372600415926e-18
+        },
+        {
+          "name": "blocks.0.fast.query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.2526065174565133e-19
+        },
+        {
+          "name": "blocks.0.fast.key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 5.082197683525802e-19
+        },
+        {
+          "name": "blocks.0.fast.value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 5.068645156369733e-18
+        },
+        {
+          "name": "blocks.0.fast.retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.7647155398380363e-18
+        },
+        {
+          "name": "blocks.0.fast.retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.87890977618477e-19
+        },
+        {
+          "name": "blocks.0.fast.eligibility.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.4094628242311558e-18
+        },
+        {
+          "name": "blocks.0.fast.eligibility.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.336808689942018e-19
+        },
+        {
+          "name": "blocks.0.slow.query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.0657581468206416e-19
+        },
+        {
+          "name": "blocks.0.slow.key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.7947076036992655e-19
+        },
+        {
+          "name": "blocks.0.slow.value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.6020852139652106e-18
+        },
+        {
+          "name": "blocks.0.slow.retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.3852447794681098e-18
+        },
+        {
+          "name": "blocks.0.slow.retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.505213034913027e-19
+        },
+        {
+          "name": "blocks.0.slow.eligibility.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 7.047314121155779e-19
+        },
+        {
+          "name": "blocks.0.slow.eligibility.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.6263032587282567e-19
+        },
+        {
+          "name": "blocks.0.local_query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 8.131516293641283e-19
+        },
+        {
+          "name": "blocks.0.local_key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.505213034913027e-19
+        },
+        {
+          "name": "blocks.0.local_value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.7220534694101275e-18
+        },
+        {
+          "name": "blocks.0.rotary_retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.577867169202165e-18
+        },
+        {
+          "name": "blocks.0.rotary_retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.3552527156068805e-18
+        },
+        {
+          "name": "blocks.0.rotary_angle.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.0842021724855044e-17
+        },
+        {
+          "name": "blocks.0.rotary_angle.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 9.540979117872439e-18
+        },
+        {
+          "name": "blocks.0.rotary_offer.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.9873299934333204e-18
+        },
+        {
+          "name": "blocks.0.rotary_offer.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.2526065174565133e-18
+        },
+        {
+          "name": "blocks.0.perspective_out.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.734723475976807e-17
+        },
+        {
+          "name": "blocks.0.ffn_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.927345865710862e-18
+        },
+        {
+          "name": "blocks.0.ffn_value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.065758146820642e-18
+        },
+        {
+          "name": "blocks.0.ffn_gate.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.119968255444917e-18
+        },
+        {
+          "name": "blocks.0.ffn_out.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.144186300207963e-18
+        },
+        {
+          "name": "blocks.1.memory_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.4094628242311558e-18
+        },
+        {
+          "name": "blocks.1.fast.query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.0333801956502464e-19
+        },
+        {
+          "name": "blocks.1.fast.key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 7.453889935837843e-20
+        },
+        {
+          "name": "blocks.1.fast.value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.3010426069826053e-18
+        },
+        {
+          "name": "blocks.1.fast.retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.981555974335137e-19
+        },
+        {
+          "name": "blocks.1.fast.retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.2197274440461925e-19
+        },
+        {
+          "name": "blocks.1.fast.eligibility.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.4907779871675686e-19
+        },
+        {
+          "name": "blocks.1.fast.eligibility.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 9.486769009248164e-20
+        },
+        {
+          "name": "blocks.1.slow.query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.7957098481791167e-19
+        },
+        {
+          "name": "blocks.1.slow.key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.4907779871675686e-19
+        },
+        {
+          "name": "blocks.1.slow.value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 8.673617379884035e-19
+        },
+        {
+          "name": "blocks.1.slow.retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 7.589415207398531e-19
+        },
+        {
+          "name": "blocks.1.slow.retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.0842021724855044e-19
+        },
+        {
+          "name": "blocks.1.slow.eligibility.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 4.336808689942018e-19
+        },
+        {
+          "name": "blocks.1.slow.eligibility.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.776263578034403e-20
+        },
+        {
+          "name": "blocks.1.local_query.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.303929616531697e-19
+        },
+        {
+          "name": "blocks.1.local_key.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.5236570605778894e-19
+        },
+        {
+          "name": "blocks.1.local_value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.0357660829594124e-18
+        },
+        {
+          "name": "blocks.1.rotary_retention.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 3.2526065174565133e-19
+        },
+        {
+          "name": "blocks.1.rotary_retention.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.2197274440461925e-19
+        },
+        {
+          "name": "blocks.1.rotary_angle.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 7.535205098774256e-18
+        },
+        {
+          "name": "blocks.1.rotary_angle.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.830473686658678e-18
+        },
+        {
+          "name": "blocks.1.rotary_offer.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 9.75781955236954e-19
+        },
+        {
+          "name": "blocks.1.rotary_offer.bias",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 5.421010862427522e-19
+        },
+        {
+          "name": "blocks.1.perspective_out.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.6020852139652106e-18
+        },
+        {
+          "name": "blocks.1.ffn_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 9.215718466126788e-19
+        },
+        {
+          "name": "blocks.1.ffn_value.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.734723475976807e-18
+        },
+        {
+          "name": "blocks.1.ffn_gate.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 1.5720931501039814e-18
+        },
+        {
+          "name": "blocks.1.ffn_out.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 2.168404344971009e-18
+        },
+        {
+          "name": "output_norm.weight",
+          "connected": true,
+          "finite": true,
+          "nonzero": true,
+          "max_absolute_parity_error": 6.505213034913027e-19
+        }
+      ],
+      "state_tensor_bytes_batch2_after_11_bytes": 4864,
+      "probe": {
+        "adapter": "langcache104-deep-associative-source",
+        "entity_isolation": {
+          "schema": "tac-osm-observatory/model-agnostic-isolation-v1",
+          "adapter": "langcache104-deep-associative-source",
+          "status": "PASS",
+          "entities": 2,
+          "max_absolute_difference": 8.881784197001252e-16,
+          "tolerance": 1e-09,
+          "within_tolerance": true,
+          "discrete_state_exactly_equal": true,
+          "qualification": "model_batch_isolation_not_source_identity_authentication"
+        },
+        "input_state_dependencies": {
+          "schema": "tac-osm-observatory/model-agnostic-dependency-v1",
+          "status": "MEASURED",
+          "adapter": "langcache104-deep-associative-source",
+          "heads": {
+            "next_byte_logits": {
+              "layer.0.fast_memory": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 39.12975311279297
+              },
+              "layer.0.fast_mass": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 5.259981155395508
+              },
+              "layer.0.slow_memory": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 1519.2255859375
+              },
+              "layer.0.slow_mass": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 149.16793823242188
+              },
+              "layer.0.rotary": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 4.649433612823486
+              },
+              "layer.0.recent_key": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 0.4009179174900055
+              },
+              "layer.0.recent_value": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 2.0814850330352783
+              },
+              "layer.1.fast_memory": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 12.209429740905762
+              },
+              "layer.1.fast_mass": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 2.677218437194824
+              },
+              "layer.1.slow_memory": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 1043.474609375
+              },
+              "layer.1.slow_mass": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 140.81698608398438
+              },
+              "layer.1.rotary": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 3.155522108078003
+              },
+              "layer.1.recent_key": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 0.12358814477920532
+              },
+              "layer.1.recent_value": {
+                "connected": true,
+                "finite": true,
+                "gradient_l2": 0.8911008834838867
+              }
+            }
+          },
+          "qualification": "local_gradient_not_global_data_flow_proof"
+        },
+        "candidate_permutation": "INCONCLUSIVE_NO_LEGAL_CANDIDATE_AXIS"
+      }
+    }
+  ],
+  "training_authorized": false,
+  "open_gates": {
+    "trained_capability": "NOT_TRAINED",
+    "primary_real_source": "OPEN_NO_SOURCE_USED",
+    "full_graph_lean_correspondence": "OPEN",
+    "independent_signed_source_goal_reward_acl_attestation": "OPEN",
+    "matched_neural_competitors_and_compute": "OPEN",
+    "learned_exact_key_routing": "NOT_IMPLEMENTED_EXPLICIT_KEY_API_ONLY"
+  },
+  "limits": [
+    "finite constructed source fixtures do not establish learned ability",
+    "shared PyTorch primitives; independently written recurrent operator oracles",
+    "full-model chunk/recurrent parity shares parameter projections and output graph",
+    "no optimizer, DEV scoring, protected TEST, GPU benchmark or paid compute",
+    "exact store is an explicit observed-record API, separate from neural logits"
+  ]
+}

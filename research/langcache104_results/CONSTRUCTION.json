@@ -1,0 +1,76 @@
+{
+  "schema": "tac-osm.langcache104-construction-presets.v1",
+  "status": "CONSTRUCTED_NO_FIT",
+  "hardware": "CPU",
+  "torch_version": "2.15.0+cpu",
+  "configs_sha256": "712e353a2cb2a9aea69d44ba2e8d5c6c16b233ab00fc6dc199c1a3b0f64b61eb",
+  "presets": {
+    "approximately_1m": {
+      "config": {
+        "d_model": 128,
+        "n_layers": 4,
+        "n_heads": 4,
+        "key_dim": 16,
+        "value_dim": 16,
+        "write_rank": 2,
+        "ffn_dim": 192,
+        "window": 128,
+        "chunk_size": 32,
+        "rotary": true,
+        "local_rope": true,
+        "tied_embedding": true
+      },
+      "counts": {
+        "trainable": 1015376,
+        "deployed": 1015376,
+        "fixed_buffer_bytes": 128
+      },
+      "inference_output_shape": [
+        1,
+        131,
+        256
+      ],
+      "observed_bytes": 131,
+      "fp32_state_tensor_bytes_per_stream": 295936,
+      "fp32_underlying_state_storage_bytes_per_stream": 295936,
+      "metadata_and_python_overhead_bytes": "UNMEASURED_EXCLUDED",
+      "exact_store_bytes": "SEPARATE_EXPLICIT_COMPONENT_NOT_IN_NEURAL_LOGITS",
+      "optimizer_updates": 0,
+      "parameters_and_buffers_unchanged": true
+    },
+    "approximately_10m": {
+      "config": {
+        "d_model": 256,
+        "n_layers": 8,
+        "n_heads": 8,
+        "key_dim": 16,
+        "value_dim": 24,
+        "write_rank": 2,
+        "ffn_dim": 448,
+        "window": 128,
+        "chunk_size": 32,
+        "rotary": true,
+        "local_rope": true,
+        "tied_embedding": true
+      },
+      "counts": {
+        "trainable": 9952064,
+        "deployed": 9952064,
+        "fixed_buffer_bytes": 256
+      },
+      "inference_output_shape": [
+        1,
+        131,
+        256
+      ],
+      "observed_bytes": 131,
+      "fp32_state_tensor_bytes_per_stream": 1511424,
+      "fp32_underlying_state_storage_bytes_per_stream": 1511424,
+      "metadata_and_python_overhead_bytes": "UNMEASURED_EXCLUDED",
+      "exact_store_bytes": "SEPARATE_EXPLICIT_COMPONENT_NOT_IN_NEURAL_LOGITS",
+      "optimizer_updates": 0,
+      "parameters_and_buffers_unchanged": true
+    }
+  },
+  "training_authorized": false
+}
