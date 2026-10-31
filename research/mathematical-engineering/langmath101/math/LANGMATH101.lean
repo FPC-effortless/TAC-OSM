@@ -7,7 +7,7 @@ This is a typed one-stream forward specification, not an IEEE/AD proof.
 The Python functional references test finite-precision correspondence against
 the actual source. Surrogate derivatives, runtime validation and owner ACLs are
 separate obligations; no learned capability follows from these definitions.
-`at` totalizes out-of-range indexing. Registered geometries/layouts only use
+`coord` totalizes out-of-range indexing. Registered geometries/layouts only use
 in-range indices; the source validates its corresponding shape contracts.
 -/
 namespace PNDS.LANGMATH101
@@ -17,7 +17,7 @@ open scoped BigOperators
 abbrev Vec (n : ℕ) := Fin n → ℝ
 abbrev Byte := Fin 256
 
-def at {n} (x : Vec n) (i : ℕ) : ℝ := if h : i < n then x ⟨i,h⟩ else 0
+def coord {n} (x : Vec n) (i : ℕ) : ℝ := if h : i < n then x ⟨i,h⟩ else 0
 def elems {n} (x : Vec n) : List ℝ := (List.finRange n).map x
 def pack {n} (xs : List ℝ) : Vec n := fun i => (xs[i.val]?).getD 0
 def vmap {n} (f : ℝ → ℝ) (x : Vec n) : Vec n := fun i => f (x i)
@@ -25,7 +25,7 @@ def vadd {n} (x y : Vec n) : Vec n := fun i => x i+y i
 def vmul {n} (x y : Vec n) : Vec n := fun i => x i*y i
 def vscale {n} (a : ℝ) (x : Vec n) : Vec n := fun i => a*x i
 def vzero (n : ℕ) : Vec n := fun _ => 0
-def slice {n m} (x : Vec n) (offset : ℕ) : Vec m := fun i => at x (offset+i.val)
+def slice {n m} (x : Vec n) (offset : ℕ) : Vec m := fun i => coord x (offset+i.val)
 def dot {n} (x y : Vec n) : ℝ := ∑ i, x i*y i
 def sigmoid (x : ℝ) := 1/(1+Real.exp (-x))
 def squash (x : ℝ) := 2*sigmoid (2*x)-1
@@ -115,7 +115,7 @@ def nativeStep {g} (p : NativeParams g) (s : NativeState g) (byte : Byte)
   let value : Fin 2 → Vec g.value := fun h => vmap squash (slice raw (4*g.key+h.val*g.value))
   let alpha : Fin 2 → ℝ := fun h =>
     if s.clock=0 ∨ writeAllowed=false then 1 else
-      p.bankMin h+(p.bankMax h-p.bankMin h)*sigmoid (at raw (4*g.key+2*g.value+h.val))
+      p.bankMin h+(p.bankMax h-p.bankMin h)*sigmoid (coord raw (4*g.key+2*g.value+h.val))
   let banks := fun h => bankUpdate (s.banks h) (alpha h) (s.previousKey h) (value h)
   let reads := fun h => bankRead (banks h) (query h)
   let evidence : Vec 2 := fun h => dot (banks h).mass (query h)
@@ -164,7 +164,7 @@ def associativeStep {d c k v} (p : AssociativeParams d c k v)
   let queries : Fin 2 → Vec k := fun b => softmax (slice raw (2*k+b.val*k))
   let values : Fin 2 → Vec v := fun b => vmap squash (slice raw (4*k+b.val*v))
   let alpha := fun b : Fin 2 => if clock=0 then 1 else
-    1-u*(1-retention b (at raw (4*k+2*v+b.val)))
+    1-u*(1-retention b (coord raw (4*k+2*v+b.val)))
   let banks := fun b => bankUpdate (s.banks b) (alpha b) (s.key b) (values b)
   let reads := fun b => bankRead (banks b) (queries b)
   let evidence : Vec 2 := fun b => dot (banks b).mass (queries b)
@@ -248,9 +248,9 @@ structure GRU (input hidden : ℕ) where
 def gruStep {d h} (p : GRU d h) (x : Vec d) (old : Vec h) : Vec h :=
   let gi := linear p.inputAffine x
   let gh := linear p.hiddenAffine old
-  let r := fun i : Fin h => sigmoid (at gi i.val+at gh i.val)
-  let z := fun i : Fin h => sigmoid (at gi (h+i.val)+at gh (h+i.val))
-  let n := fun i : Fin h => squash (at gi (2*h+i.val)+r i*at gh (2*h+i.val))
+  let r := fun i : Fin h => sigmoid (coord gi i.val+coord gh i.val)
+  let z := fun i : Fin h => sigmoid (coord gi (h+i.val)+coord gh (h+i.val))
+  let n := fun i : Fin h => squash (coord gi (2*h+i.val)+r i*coord gh (2*h+i.val))
   fun i => (1-z i)*n i+z i*old i
 def gruForward {width} (embedding : Byte → Vec 32) (gru : GRU 32 64)
     (readout : Head 64 width) (state : Vec 64) (byte : Byte) : Vec 256 × Vec 64 :=
@@ -293,10 +293,10 @@ def transformerForward {width n} (p : Transformer width)
   let k := fun j => linear p.key (z j)
   let v := fun j => linear p.value (z j)
   let score := fun (bank : Fin 4) j =>
-    (∑ i:Fin 8,at q (bank.val*8+i.val)*at (k j) (bank.val*8+i.val))/Real.sqrt 8
+    (∑ i:Fin 8,coord q (bank.val*8+i.val)*coord (k j) (bank.val*8+i.val))/Real.sqrt 8
   let weight := fun bank j => if j.val≤t.val then Real.exp (score bank j) else 0
   let attended : Vec 32 := fun i =>
-    (∑ j,weight ⟨i.val/8,by omega⟩ j*at (v j) i.val)/(∑ j,weight ⟨i.val/8,by omega⟩ j)
+    (∑ j,weight ⟨i.val/8,by omega⟩ j*coord (v j) i.val)/(∑ j,weight ⟨i.val/8,by omega⟩ j)
   let h := vadd (input t) (linear p.attentionOut attended)
   let h := vadd h (linear p.ffnOut (vmap gelu (linear p.ffnUp (layerNorm p.ffnNorm h))))
   head p.readout h
@@ -315,7 +315,7 @@ def ssmByteStep {width} (p : SSM) (readout : Head 64 width)
   let result := ssmForward p readout s.hidden byte
   (result.1,⟨s.clock+1,result.2⟩)
 
-/-- Transformer state is the entire observed raw prefix, with clock equal to its length. -/
+/-- Transformer state is the entire observed raw prefixTokens, with clock equal to its length. -/
 structure TransformerState where
   observed : List Byte
 def transformerByteStep {width} (p : Transformer width) (s : TransformerState)
@@ -414,7 +414,7 @@ def mergePair (pair : BPEToken × BPEToken) (newToken : BPEToken)
       else a::mergePair pair newToken (b::rest)
   | short => short
 termination_by tokens.length
-decreasing_by all_goals simp_wf; omega
+decreasing_by all_goals simp_wf
 def tokenizeBPE (merges : Fin 32 → BPEToken × BPEToken) (observed : List Byte) : List BPEToken :=
   (List.finRange 32).foldl
     (fun ids rank => mergePair (merges rank) ⟨256+rank.val,by omega⟩ ids)
@@ -427,13 +427,13 @@ def bpeForward {h} (embedding : BPEToken → Vec 24) (recurrent : GRU 24 h)
     (observed : List Byte) : Vec 256 :=
   linear readout (bpeFold embedding recurrent (vzero h) (288::tokenizeBPE merges observed))
 
-/-- Cached prefix equality assumes unchanged parameters and an actual prefix
+/-- Cached prefixTokens equality assumes unchanged parameters and an actual prefixTokens
 state, as checked by the runtime version/identity guard. It does not prove
 that a mutable cache is immune to arbitrary storage tampering. -/
 theorem bpe_prefix_cache {h} (embedding : BPEToken → Vec 24) (recurrent : GRU 24 h)
-    (initial : Vec h) (prefix suffix : List BPEToken) :
-    bpeFold embedding recurrent initial (prefix++suffix)=
-    bpeFold embedding recurrent (bpeFold embedding recurrent initial prefix) suffix := by
+    (initial : Vec h) (prefixTokens suffix : List BPEToken) :
+    bpeFold embedding recurrent initial (prefixTokens++suffix)=
+    bpeFold embedding recurrent (bpeFold embedding recurrent initial prefixTokens) suffix := by
   simp [bpeFold,List.foldl_append]
 
 /-- Hidden-state-only terminal decoding: pending raw bytes have no direct head path. -/

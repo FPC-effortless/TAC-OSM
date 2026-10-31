@@ -8,9 +8,18 @@ import torch
 HERE=Path(__file__).resolve().parent
 CANDIDATES=HERE.parent/'candidates'
 if not CANDIDATES.exists():CANDIDATES=HERE.parent/'langmath101_candidates'
-sys.path.insert(0,str(CANDIDATES))
-import models
-import reference
+def load_module(name,path,*,package=False):
+    # Load by exact file identity in both standalone and package pytest modes.
+    # Unique names also prevent unrelated models.py/reference.py test collisions.
+    spec=importlib.util.spec_from_file_location(
+        name,path,submodule_search_locations=[str(path.parent)] if package else None)
+    module=importlib.util.module_from_spec(spec)
+    sys.modules[name]=module
+    spec.loader.exec_module(module)
+    return module
+
+models=load_module('_langmath101_equation_candidates',CANDIDATES/'models.py',package=True)
+reference=load_module('_langmath101_equation_reference',HERE/'reference.py')
 
 @pytest.mark.parametrize('arm',models.catalog())
 def test_input_to_output_state_and_all_parameter_gradients(arm):
