@@ -30,10 +30,11 @@ action and linear scan work. All inspected axioms are standard Mathlib axioms.
 The expanded proof passed [run41147906379](https://github.com/FPC-effortless/pnds-lean/actions/runs/41147906379).
 It does not replace a matrix proof with an assumed norm inequality.
 
-Local no-fit verification: **54 checks passed** (35 candidate tests and19 generic
+Local no-fit verification: **55 checks passed** (36 candidate tests and19 generic
 probe checks); the independent PNDS NumPy suite has five passing tests. Checks
 cover the full source/reference graph, all state, serial/parallel/chunk forward
-and all-parameter gradients, local acquired-state finite differences, causal
+and all-parameter gradients, local acquired-state finite differences, an independent finite-difference
+coordinate in every learned parameter tensor, causal
 future poisoning, entity separation, boundary rejection, long constructed state
 invariants and a future-only acquisition gradient with a detached negative
 control. No optimizer step or original-data score was executed.

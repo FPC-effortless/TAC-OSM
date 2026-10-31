@@ -153,3 +153,20 @@ def test_future_only_training_graph_reaches_acquisition_and_detach_removes_path(
         loss=O.controlled_loss(torch.cat((first,later),1),target,future,valid,('code','arc'),prefix_weight=0.)
         loss.backward();norms.append(float(m.embedding.weight.grad[0].norm()))
     assert norms[0]>1e-10 and norms[1]==0
+
+
+def test_each_parameter_tensor_gradient_against_independent_full_numpy_graph():
+    m=model();x=torch.tensor([[3,4,5,6,7,8,9],[11,12,13,14,15,16,17]])
+    weights=torch.linspace(-.5,.7,2*7*256,dtype=torch.float64).reshape(2,7,256)
+    out,_=m(x);loss=(out*weights).mean();loss.backward();p=params(m)
+    epsilon=1e-5
+    for name,value in m.named_parameters():
+        index=np.unravel_index(int(value.grad.abs().argmax()),tuple(value.shape))
+        expected=float(value.grad[index]);original=p[name][index];scalars=[]
+        for sign in (-1,1):
+            p[name][index]=original+sign*epsilon
+            prediction,_=N.forward(p,x.numpy())
+            scalars.append(float((prediction*weights.numpy()).mean()))
+        p[name][index]=original
+        numerical=(scalars[1]-scalars[0])/(2*epsilon)
+        assert np.isclose(expected,numerical,atol=1e-7,rtol=1e-4),(name,expected,numerical)
