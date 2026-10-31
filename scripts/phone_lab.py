@@ -27,7 +27,7 @@ SUITES = {
                   "tests/test_research_reward_integrity.py"],
     "observatory": ["tests/test_research_observatory.py", "tests/test_research_probe_agnostic.py"],
     "scientific": ["tests/test_research_parity_gate.py", "tests/test_reward_runner_integration.py",
-                   "tests/test_adaptive_token_study_nofit.py"],
+                   "tests/test_adaptive_token_study_nofit.py", "tests/test_adaptive_token_training_nofit.py"],
 }
 MARKER = "<!-- tac-osm-phone-lab-status -->"
 
