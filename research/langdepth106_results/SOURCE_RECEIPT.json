@@ -1,0 +1,63 @@
+{
+  "boundary_policy": "reset carried state at each independent stream; never carry TRAIN state into DEV/TEST",
+  "evaluation_policy": "separate files; post-fit access requires the frozen evaluation protocol",
+  "format": "langdepth106-pinned-raw-byte-source-v1",
+  "partitions": {
+    "dev": {
+      "adjacent_source_target_pairs": 55769,
+      "bytes": 55770,
+      "sha256": "c64e90c160750d91a9d2d9b1ace5eab1a440f5a1701d32a8e97a179b7839f1c8",
+      "source_byte_end_exclusive": 1059624,
+      "source_byte_start_inclusive": 1003854
+    },
+    "test": {
+      "adjacent_source_target_pairs": 55769,
+      "bytes": 55770,
+      "sha256": "8b5a8c8af45905547ad03b7aae6980a277a5dd78924a6e6ac64b75d63d7d40bd",
+      "source_byte_end_exclusive": 1115394,
+      "source_byte_start_inclusive": 1059624
+    },
+    "train": {
+      "adjacent_source_target_pairs": 1003853,
+      "bytes": 1003854,
+      "sha256": "a9e24e23a1ec77744dad26844bfd5a09b6e041954e1eef0000e7f24cba6db735",
+      "source_byte_end_exclusive": 1003854,
+      "source_byte_start_inclusive": 0
+    }
+  },
+  "preparation_is_training_authorization": false,
+  "publisher": {
+    "independent_permission_attestation": "not supplied by this source-preparation script",
+    "publisher_license_declaration": "MIT, declared in pinned Readme.md",
+    "readme_git_blob_sha1": "a14aa2def8aa8894ecaf63165a6651df4766aa52",
+    "readme_sha256": "6540438971f884ae42315e517df7c9d0e1ca520daa120f0d0845b50944485ec4",
+    "readme_url": "https://github.com/karpathy/char-rnn/blob/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/Readme.md",
+    "standalone_root_license_paths": [],
+    "tree_response_sha256": "c4e155d6524a66b78e8b1f0d2d3faf5e65874a12819e0664309c09448d4188c6",
+    "tree_url": "https://api.github.com/repos/karpathy/char-rnn/git/trees/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e?recursive=1",
+    "underlying_works": "Shakespeare public-domain text; publisher compilation/README evidence recorded separately"
+  },
+  "representation": "raw bytes; fixed 256 symbols; no vocabulary fit",
+  "source": {
+    "bytes": 1115394,
+    "commit": "6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e",
+    "corpus_scope": "small diagnostic corpus, not broad language competence",
+    "encoding": "utf-8",
+    "fit_preprocessing": "none; exact raw byte IDs, no fitted vocabulary",
+    "fixed_byte_vocabulary": 256,
+    "git_blob_sha1": "7dcb3a2d4cc3b48b6283dd46870bfeb78f88aac9",
+    "publisher_path": "data/tinyshakespeare/input.txt",
+    "repository": "karpathy/char-rnn",
+    "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "source_url": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+    "split_sha256": {
+      "dev": "c64e90c160750d91a9d2d9b1ace5eab1a440f5a1701d32a8e97a179b7839f1c8",
+      "test": "8b5a8c8af45905547ad03b7aae6980a277a5dd78924a6e6ac64b75d63d7d40bd",
+      "train": "a9e24e23a1ec77744dad26844bfd5a09b6e041954e1eef0000e7f24cba6db735"
+    },
+    "unique_bytes": 65,
+    "unique_characters": 65,
+    "utf8_characters": 1115394
+  },
+  "split_policy": "contiguous bytes: floor(9*N/10), floor(19*N/20); no cross-partition pairs"
+}

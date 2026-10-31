@@ -1,0 +1,67 @@
+{
+  "schema": "langdepth106.pretraining-declarations.v1",
+  "protocol_sha256": "ab162c4811e563dab9fcffc99c3125b6b96309604c47eb7d8bbb686796f7dbfa",
+  "counts": {
+    "four": {
+      "trainable": 998024,
+      "deployed": 998024,
+      "fixed_buffer_bytes": 128
+    },
+    "eight": {
+      "trainable": 999784,
+      "deployed": 999784,
+      "fixed_buffer_bytes": 256
+    }
+  },
+  "relative_parameter_gap": 0.0017603802421323005,
+  "qualified_planner_decisions": [
+    {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 15,
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 684,
+      "kind": "no_fit",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langdepth106-engineering",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "580d20adb6fcca69ca2daf87fb4d2a951c7f43af9eabe03000dd69e0fdf8cad6",
+      "state": "READY_NO_FIT",
+      "variant": "System 1"
+    },
+    {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [
+        "source-authorized real data and preregistered scientific plan required",
+        "independent signed prefit reward/source/ACL evidence required at execution"
+      ],
+      "cpu_estimate_minutes": 45,
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 684,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langdepth106-training",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "ecd2658c8943a4d72b6e6a5510c376c4ab596c56eefef20c196dcd7b218232f0",
+      "state": "BLOCKED_EVIDENCE_OR_DESIGN",
+      "variant": "System 1"
+    }
+  ],
+  "execution_authority": "Explicit current request and persisting owner-authorized CPU exploratory training; not a qualified signed research-gate pass.",
+  "source_verified": true,
+  "optimizer_updates_at_registration": 0
+}
