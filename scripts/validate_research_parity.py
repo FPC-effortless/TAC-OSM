@@ -33,7 +33,7 @@ STUDY_FILE = re.compile(r"(?:^|/)(?:me|dev)(\d{2,3})(?:[-_./]|$)",re.I)
 SCHEMA = "tac-osm.parity.v1"
 PARAM_TOLERANCE=0.01
 FLOP_TOLERANCE=0.01
-# Prospective model-size policy: all trained neural models ~100k trainables.
+# Legacy v1 remains ~100K. Scale v2 permits an explicitly registered size.
 # Historical studies remain immutable, not silently retroactively disqualified.
 MODEL_TARGET_PARAMETERS = 100_000
 MODEL_TARGET_RELATIVE_TOLERANCE = 0.05
@@ -56,21 +56,53 @@ def requires_100k_policy(study_id):
         return int(m.group(2)) > cutoff
     return True
 
-def check_model_parameter_target(trainable_parameters, deployed_parameters=None, *, label="model"):
-    """Hard prefit and postfit count guard for ALL new trained neural models.
+SCALE_POLICY_V2 = "declared-target-v2"
 
-    Count trained encoder/memory/decoder/router/uncertainty/action heads. Include
-    frozen learned model weights in deployed counts; exclude nonlearned buffers.
-    """
+def check_model_parameter_target(trainable_parameters, deployed_parameters=None, *,
+                                 label="model", parameter_scale=None):
+    """Enforce legacy 100K or explicit preregistered v2 scale, +/-5% absolute."""
+    target = 100_000 if parameter_scale is None else parameter_scale["target_trainable_parameters"]
+    total_target = 100_000 if parameter_scale is None else parameter_scale["target_deployed_parameters"]
     positive_num(trainable_parameters, f"{label}.trainable_parameters", whole=True)
-    demand(MODEL_MIN_PARAMETERS <= trainable_parameters <= MODEL_MAX_PARAMETERS,
-           f"{label}: prospective 100k target requires 95,000..105,000 trainable parameters, got {trainable_parameters}")
+    if parameter_scale is None:
+        demand(95_000 <= trainable_parameters <= 105_000,
+               f"{label}: prospective 100k target requires 95,000..105,000 trainable parameters, got {trainable_parameters}")
+    else:
+        demand(abs(trainable_parameters-target)/target <= MODEL_TARGET_RELATIVE_TOLERANCE,
+               f"{label}: declared v2 trainable target {target} +/-5% required, got {trainable_parameters}")
     if deployed_parameters is not None:
         positive_num(deployed_parameters, f"{label}.deployed_parameters", whole=True)
         demand(deployed_parameters >= trainable_parameters,
                f"{label}: deployed learned parameters cannot be below trainable count")
-        demand(MODEL_MIN_PARAMETERS <= deployed_parameters <= MODEL_MAX_PARAMETERS,
-               f"{label}: 100k target requires 95,000..105,000 deployed learned parameters, got {deployed_parameters}")
+        if parameter_scale is None:
+            demand(95_000 <= deployed_parameters <= 105_000,
+                   f"{label}: 100k target requires 95,000..105,000 deployed learned parameters, got {deployed_parameters}")
+        else:
+            demand(abs(deployed_parameters-total_target)/total_target <= MODEL_TARGET_RELATIVE_TOLERANCE,
+                   f"{label}: declared v2 deployed target {total_target} +/-5% required, got {deployed_parameters}")
+
+def registered_parameter_scale(manifest):
+    """Fail-closed v2 declaration; legacy registrations remain 100K-bound."""
+    policy,scale=manifest.get("model_scale_policy"),manifest.get("parameter_scale")
+    if policy is None:
+        demand(scale is None, "parameter_scale requires explicit model_scale_policy")
+        return None
+    demand(policy == SCALE_POLICY_V2, "Unknown model_scale_policy")
+    demand(isinstance(scale,dict) and set(scale)=={
+        "target_trainable_parameters","target_deployed_parameters",
+        "relative_tolerance","registered_before_first_fit","rationale"},
+        "V2 needs exact complete parameter_scale fields")
+    for key in ("target_trainable_parameters","target_deployed_parameters"):
+        positive_num(scale[key], "parameter_scale."+key, whole=True)
+    demand(scale["target_deployed_parameters"]>=scale["target_trainable_parameters"],
+           "V2 deployed target lower than trainable target")
+    demand(type(scale["relative_tolerance"]) in (float,int) and
+           scale["relative_tolerance"]==MODEL_TARGET_RELATIVE_TOLERANCE,
+           "V2 absolute tolerance must be exactly 5%")
+    demand(scale["registered_before_first_fit"] is True,
+           "V2 scale must be registered before any optimization")
+    text_field(scale["rationale"], "parameter_scale.rationale")
+    return scale
 
 
 class ParityError(ValueError): pass
@@ -108,6 +140,11 @@ def _check_manifest_parity_only(m,phase="preflight"):
     kind=m.get("study_type")
     demand(kind in ("architecture_comparison","single_model_training","noncomparative_diagnostic"),
         "study_type must distinguish comparison, single-model fit and no-fit diagnostics")
+    prospective=requires_100k_policy(m["study_id"])
+    demand(prospective or (m.get("model_scale_policy") is None and
+           m.get("parameter_scale") is None),
+           "Historical model-size registration is immutable")
+    scale=registered_parameter_scale(m) if prospective else None
     if kind=="noncomparative_diagnostic":
         demand(m.get("no_architecture_superiority_claim") is True,
             "diagnostic must forbid architecture-superiority claims")
@@ -132,7 +169,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
             if requires_100k_policy(m["study_id"]):
                 check_model_parameter_target(model.get("trainable_parameters"),
                                              model.get("deployed_parameters"),
-                                             label=f"models[{i}]")
+                                             label=f"models[{i}]",parameter_scale=scale)
             positive_num(model.get("trainable_parameters"),f"models[{i}].trainable_parameters",whole=True)
             positive_num(model.get("deployed_parameters"),f"models[{i}].deployed_parameters",whole=True)
             positive_num(model.get("seed"),f"models[{i}].seed",whole=True)
@@ -143,7 +180,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 if requires_100k_policy(m["study_id"]):
                     check_model_parameter_target(receipt.get("trainable_parameters"),
                                                  receipt.get("deployed_parameters"),
-                                                 label=f"models[{i}].measured")
+                                                 label=f"models[{i}].measured",parameter_scale=scale)
                 demand(receipt.get("trainable_parameters")==model["trainable_parameters"],
                        f"models[{i}] actual trainable count differs from frozen preregistration")
                 digest(receipt.get("checkpoint_sha256"),f"models[{i}] final checkpoint")
@@ -188,7 +225,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
             "trainable parameters cannot exceed total deployed parameters")
         if requires_100k_policy(m["study_id"]):
             check_model_parameter_target(r["trainable_parameters"], r["deployed_parameters"],
-                                         label=f"arms[{i}] {r['architecture']}")
+                                         label=f"arms[{i}] {r['architecture']}",parameter_scale=scale)
         for k in ("dataset_sha256","train_split_sha256","dev_split_sha256",
                   "test_split_sha256","training_sample_order_sha256",
                   "feature_contract_sha256","target_contract_sha256",
@@ -223,7 +260,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
             if requires_100k_policy(m["study_id"]):
                 check_model_parameter_target(
                     result.get("trainable_parameters"),result.get("deployed_parameters"),
-                    label=f"postfit {r['architecture']} seed {r['seed']}")
+                    label=f"postfit {r['architecture']} seed {r['seed']}",parameter_scale=scale)
                 demand(result["trainable_parameters"]==r["trainable_parameters"] and
                        result["deployed_parameters"]==r["deployed_parameters"],
                        "postfit actual model parameter counts deviate from registered original prefit counts")
@@ -266,7 +303,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
         if phase=="final":
             actual=[r["measured"] for r in group]
             close_enough(actual,"training_flops",FLOP_TOLERANCE,f"seed {seed} actual FLOPs")
-    # Absolute 100k ±5% arm checks apply independently of the matched-arm 1% gate.
+    # Absolute preregistered v1/v2 band is IN ADDITION to 1% matched-arm parity.
     # No CPU-time parity test: real execution speed is an efficiency result,
     # not a requirement for equal data, parameters or compute allotments.
     return {"study_id":m["study_id"],"phase":phase,"matched_seeds":sorted(seed_sets),
@@ -356,17 +393,31 @@ def main():
     group.add_argument("--manifest")
     group.add_argument("--check-changed",metavar="BASE...HEAD")
     group.add_argument("--model-parameters",type=int,
-                       help="Standalone prefit guard on exact counted trainable parameters, even outside matched comparisons")
+                       help="Standalone count-only check, NOT training authorization")
     cli.add_argument("--deployed-parameters",type=int,
-                     help="Optional complete learned parameter count for standalone prefit/final guard")
+                     help="Complete deployed learned parameter count (including frozen weights)")
+    cli.add_argument("--target-trainable-parameters",type=int)
+    cli.add_argument("--target-deployed-parameters",type=int)
     cli.add_argument("--phase",choices=("preflight","final"),default="preflight")
     cli.add_argument("--reward-evidence", help="evaluator-signed attestation JSON; required for prospective fits")
     args=cli.parse_args()
     try:
         if args.model_parameters is not None:
+            tt,td=args.target_trainable_parameters,args.target_deployed_parameters
+            demand((tt is None)==(td is None),
+                   "Both v2 targets needed for standalone count-only check")
+            scale=None
+            if tt is not None:
+                scale=registered_parameter_scale({
+                    "model_scale_policy":SCALE_POLICY_V2,
+                    "parameter_scale":{"target_trainable_parameters":tt,
+                       "target_deployed_parameters":td,"relative_tolerance":0.05,
+                       "registered_before_first_fit":True,
+                       "rationale":"Standalone numeric check does not authorize training"}})
             check_model_parameter_target(args.model_parameters,args.deployed_parameters,
-                                         label="standalone_model")
-            print(json.dumps({"status":"PASS_100K_TARGET",
+                                         label="standalone_model",parameter_scale=scale)
+            print(json.dumps({"status":"PASS_COUNT_ONLY_NOT_TRAINING_AUTHORIZATION",
+                              "policy":SCALE_POLICY_V2 if scale else "legacy-100k-v1",
                               "trainable_parameters":args.model_parameters,
                               "deployed_parameters":args.deployed_parameters},sort_keys=True))
         elif args.manifest:
