@@ -123,3 +123,12 @@ the smaller of the two fork losses; this includes realized target noise.
 These equations and finite unit checks are not full source-equivalent Lean
 proofs. PNDS full-graph, precision, gradient and serial/parallel obligations
 remain OPEN and continue to block mathematical readiness and training.
+
+Companion [PNDS draft PR #100](https://github.com/FPC-effortless/pnds-lean/pull/100)
+adds partial selected-lookup, realized-regret and parameter-count formulations
+at source commit `6887529e33c6d7379a2cacc5dc3f24b40ae458be`. Its 24 Python
+tests pass locally. No local Lean build is claimed. The new prospective-study
+record is byte-identical in both reciprocal manifests; all original 17
+historical rows remain unchanged. The model/control source pin is the
+implementation-only commit `9e2696ca0d15c1e8633777794c4fdf9a891b3890`,
+before this metadata-only cross-link commit.

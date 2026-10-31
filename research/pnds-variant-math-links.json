@@ -533,5 +533,53 @@
       "python_source_equivalence_verified": false,
       "real_world_capability_inferred": false
     }
+  ],
+  "prospective_studies": [
+    {
+      "id": "SENSE-TOK-006-PREPARATION",
+      "scope": "NO_FIT_CONTROLLED_LEARNING_PREPARATION_NOT_QUALIFIED_VARIANT",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "9e2696ca0d15c1e8633777794c4fdf9a891b3890",
+        "pull_request": 675,
+        "model_ancestor_commit": "045994fb432a9874d0fc4f7914e5fe45ad8fe7ec",
+        "source_file_sha256": {
+          "scripts/prepare_sense_tok_learning.py": "636852a00e3bde78d58d1a0cf69ff6dfc6c7d04cc411d83f4f76c4424313c090",
+          "src/tac_osm/adaptive_byte_token.py": "b0237bac0d7cf1d5ef8f5377dce4a63770f9f444fd9d71f59a6f0a6ab4f12d6e",
+          "src/tac_osm/adaptive_codebook_token.py": "d3ecf2186bd8b78243ac43cc95630353aa18caaec8dd09ae095120b2a26a1a05",
+          "src/tac_osm/adaptive_token_controls.py": "7d84311738f9b2add1441ec2f0c46e3efa3298810c312ef430aef1f3d8dea7a1",
+          "src/tac_osm/adaptive_token_evaluation.py": "e6ba9338f41c6cfb245caa3a678039f62cede7c7a4da73e99a87fafbaa61a914"
+        },
+        "evidence_path": "research/sensory_tokenizers/SENSE-TOK-006-READINESS.json"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "lean_path": "PNDS/SenseTok006.lean",
+        "python_path": "foundation/v1/sense_tok_006.py",
+        "spec_path": "foundation/v1/SENSE-TOK-006.md",
+        "commit": "6887529e33c6d7379a2cacc5dc3f24b40ae458be",
+        "pull_request": 100
+      },
+      "candidate_arms": [
+        "dense_byte",
+        "forced_token",
+        "adaptive_latent",
+        "adaptive_codebook",
+        "frozen_gate_weights",
+        "random_gate"
+      ],
+      "formalization_status": "PARTIAL_SELECTED_LOOKUP_REGRET_COUNT_FULL_GRAPH_OPEN",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false,
+      "training_authorized": false,
+      "remaining": [
+        "full original graph and argmax/tie semantics",
+        "forward/backward precision and source correspondence",
+        "state/mask/time and serial/parallel verification",
+        "source-specific ResearchProbeAdapter",
+        "independent real-data signed training and outcome qualification"
+      ]
+    }
   ]
 }
