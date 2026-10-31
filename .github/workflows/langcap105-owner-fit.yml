@@ -91,8 +91,8 @@ jobs:
       - name: Real-source eight-step optimizer smoke, checkpoint and no-DEV attestation
         run: |
           python research/langcap105/train_owner.py \
-            --source-receipt ci-input/FIT-only/ci-artifacts/langcap105-source/SOURCE_RECEIPT.json \
-            --fit-archive ci-input/FIT-only/ci-artifacts/langcap105-FIT/FIT_ONLY.tar \
+            --source-receipt ci-input/FIT-only/langcap105-source/SOURCE_RECEIPT.json \
+            --fit-archive ci-input/FIT-only/langcap105-FIT/FIT_ONLY.tar \
             --scale '${{ matrix.scale }}' --arm '${{ matrix.arm }}' \
             --seed ${{ matrix.seed }} --smoke --max-steps 8 \
             --output ci-artifacts/langcap105-smoke
@@ -129,8 +129,8 @@ jobs:
       - name: Fit actual learned TAC, Transformer or GRU on verified CPython FIT bytes
         run: |
           python research/langcap105/train_owner.py \
-            --source-receipt ci-input/FIT-only/ci-artifacts/langcap105-source/SOURCE_RECEIPT.json \
-            --fit-archive ci-input/FIT-only/ci-artifacts/langcap105-FIT/FIT_ONLY.tar \
+            --source-receipt ci-input/FIT-only/langcap105-source/SOURCE_RECEIPT.json \
+            --fit-archive ci-input/FIT-only/langcap105-FIT/FIT_ONLY.tar \
             --scale '${{ matrix.scale }}' --arm '${{ matrix.arm }}' \
             --seed ${{ matrix.seed }} \
             --output ci-artifacts/langcap105-fit
