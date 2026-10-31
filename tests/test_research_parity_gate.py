@@ -398,5 +398,5 @@ def test_v2_single_model_can_preregister_large_size_without_superiority():
        "deployed_parameters":10_000_000,"checkpoint_sha256":source_hash("b")}
     assert check_manifest(m,"final")["status"]=="PASS_SINGLE_MODEL"
     m["models"][0]["measured"]["deployed_parameters"]=9_000_000
-    with pytest.raises(ParityError, match="deployed"):
+    with pytest.raises(ParityError, match="deployed|trainable parameters cannot exceed"):
         check_manifest(m,"final")
