@@ -1,0 +1,3008 @@
+{
+  "schema": "langdepth106.result-calculation-audit.v1",
+  "status": "PASS_READ_ONLY_NUMERIC_AND_RECEIPT_AUDIT",
+  "source_result_file": "/workspace/scratch/7673e97ffb67/downloads/langdepth106/support/extracted/LANGDEPTH106-final-evaluation-attempt-1/RESULT.json",
+  "source_result_sha256": "c1d48d50e25d8c5e3b8597a541e366e6010d1ab2d6a9427d6a3f4ba739f1ffe0",
+  "operations": "Read numeric RESULT.json, original FIT receipts and logs, and generated sample bytes only; no model, checkpoint tensor, source dataset, DEV scoring or TEST prediction execution.",
+  "tolerance": {
+    "relative": 1e-12,
+    "absolute": 1e-12
+  },
+  "formulas": {
+    "nll": "nll_sum_nats / target_count",
+    "bits_per_byte": "nll / log(2)",
+    "perplexity": "exp(nll)",
+    "accuracy": "correct_count / target_count",
+    "decode_bps_per_run": "64 / median(three decode_seconds)",
+    "prefill_bps_per_run": "128 / median(three prefill_seconds)"
+  },
+  "all_metric_rows": [
+    {
+      "arm": "four",
+      "seed": 10601,
+      "partition": "dev",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 84691.22671485461,
+      "correct_count": 30693,
+      "derived_nll_nats": 1.518607590504664,
+      "derived_bits_per_byte": 2.190887639877417,
+      "derived_perplexity": 4.565863215633853,
+      "derived_accuracy": 0.550359518729043,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10601,
+      "partition": "dev",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 85945.90424293796,
+      "correct_count": 30221,
+      "derived_nll_nats": 1.5411053496196447,
+      "derived_bits_per_byte": 2.223345045383714,
+      "derived_perplexity": 4.669749124713206,
+      "derived_accuracy": 0.5418960354318707,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10601,
+      "partition": "test",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 90098.4698092309,
+      "correct_count": 29083,
+      "derived_nll_nats": 1.6155654540915365,
+      "derived_bits_per_byte": 2.3307682688493863,
+      "derived_perplexity": 5.0307317672226315,
+      "derived_accuracy": 0.521490433753519,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10601,
+      "partition": "test",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 91204.96319575033,
+      "correct_count": 28732,
+      "derived_nll_nats": 1.6354061072594153,
+      "derived_bits_per_byte": 2.3593922807826826,
+      "derived_perplexity": 5.131541530196957,
+      "derived_accuracy": 0.5151966146066811,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10602,
+      "partition": "dev",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 84609.49924895438,
+      "correct_count": 30687,
+      "derived_nll_nats": 1.5171421264314293,
+      "derived_bits_per_byte": 2.18877342212636,
+      "derived_perplexity": 4.559177007523524,
+      "derived_accuracy": 0.5502519320769603,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10602,
+      "partition": "dev",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 85914.58352097597,
+      "correct_count": 30281,
+      "derived_nll_nats": 1.540543734350194,
+      "derived_bits_per_byte": 2.2225348058195897,
+      "derived_perplexity": 4.667127258609196,
+      "derived_accuracy": 0.5429719019526977,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10602,
+      "partition": "test",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 91118.66640060992,
+      "correct_count": 29087,
+      "derived_nll_nats": 1.633858710046978,
+      "derived_bits_per_byte": 2.357159858498014,
+      "derived_perplexity": 5.1236071375493575,
+      "derived_accuracy": 0.5215621581882408,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10602,
+      "partition": "test",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 92309.77937421536,
+      "correct_count": 28669,
+      "derived_nll_nats": 1.655216686227391,
+      "derived_bits_per_byte": 2.3879729048169205,
+      "derived_perplexity": 5.234213981387109,
+      "derived_accuracy": 0.5140669547598128,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10603,
+      "partition": "dev",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 84104.64469981646,
+      "correct_count": 30764,
+      "derived_nll_nats": 1.508089524643018,
+      "derived_bits_per_byte": 2.1757132784190762,
+      "derived_perplexity": 4.518090842519443,
+      "derived_accuracy": 0.5516326274453549,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10603,
+      "partition": "dev",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 85388.323652563,
+      "correct_count": 30411,
+      "derived_nll_nats": 1.531107311455522,
+      "derived_bits_per_byte": 2.208920925305715,
+      "derived_perplexity": 4.6232934147066285,
+      "derived_accuracy": 0.5453029460811561,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10603,
+      "partition": "test",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 90390.60740237216,
+      "correct_count": 29192,
+      "derived_nll_nats": 1.6208038050237974,
+      "derived_bits_per_byte": 2.3383256117617948,
+      "derived_perplexity": 5.057153648790674,
+      "derived_accuracy": 0.5234449245996879,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "four",
+      "seed": 10603,
+      "partition": "test",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 91674.29023433203,
+      "correct_count": 28807,
+      "derived_nll_nats": 1.6438216613948973,
+      "derived_bits_per_byte": 2.371533359000275,
+      "derived_perplexity": 5.174908518418526,
+      "derived_accuracy": 0.5165414477577148,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10601,
+      "partition": "dev",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 89815.206643418,
+      "correct_count": 29439,
+      "derived_nll_nats": 1.610486231480177,
+      "derived_bits_per_byte": 2.3234404995764066,
+      "derived_perplexity": 5.005244343622753,
+      "derived_accuracy": 0.527873908443759,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10601,
+      "partition": "dev",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 91040.66192984884,
+      "correct_count": 29127,
+      "derived_nll_nats": 1.6324600034042,
+      "derived_bits_per_byte": 2.3551419513608196,
+      "derived_perplexity": 5.116445723737155,
+      "derived_accuracy": 0.5222794025354588,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10601,
+      "partition": "test",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 94042.77383586498,
+      "correct_count": 28289,
+      "derived_nll_nats": 1.6862911982618476,
+      "derived_bits_per_byte": 2.4328039492270754,
+      "derived_perplexity": 5.399418152683873,
+      "derived_accuracy": 0.5072531334612419,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10601,
+      "partition": "test",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 95190.63338136356,
+      "correct_count": 27964,
+      "derived_nll_nats": 1.7068735925220742,
+      "derived_bits_per_byte": 2.462498067355926,
+      "derived_perplexity": 5.511702684183527,
+      "derived_accuracy": 0.5014255231400957,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10602,
+      "partition": "dev",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 89412.86041171354,
+      "correct_count": 29424,
+      "derived_nll_nats": 1.603271717472315,
+      "derived_bits_per_byte": 2.3130321559948404,
+      "derived_perplexity": 4.969263885016967,
+      "derived_accuracy": 0.5276049418135523,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10602,
+      "partition": "dev",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 90669.60914458439,
+      "correct_count": 29070,
+      "derived_nll_nats": 1.6258066155854398,
+      "derived_bits_per_byte": 2.3455431417495833,
+      "derived_perplexity": 5.082517021651748,
+      "derived_accuracy": 0.5212573293406731,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10602,
+      "partition": "test",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 94832.89583527241,
+      "correct_count": 27940,
+      "derived_nll_nats": 1.7004589617040367,
+      "derived_bits_per_byte": 2.4532437112856096,
+      "derived_perplexity": 5.476460300570265,
+      "derived_accuracy": 0.500995176531765,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10602,
+      "partition": "test",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 95969.9851580244,
+      "correct_count": 27621,
+      "derived_nll_nats": 1.7208482339296813,
+      "derived_bits_per_byte": 2.482659213212882,
+      "derived_perplexity": 5.589267460405236,
+      "derived_accuracy": 0.4952751528627015,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10603,
+      "partition": "dev",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 89148.22233979845,
+      "correct_count": 29499,
+      "derived_nll_nats": 1.598526463443821,
+      "derived_bits_per_byte": 2.3061862015401733,
+      "derived_perplexity": 4.945739324697966,
+      "derived_accuracy": 0.5289497749645861,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10603,
+      "partition": "dev",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 90276.10881822083,
+      "correct_count": 29181,
+      "derived_nll_nats": 1.6187507184676224,
+      "derived_bits_per_byte": 2.3353636339686856,
+      "derived_perplexity": 5.046781525698421,
+      "derived_accuracy": 0.523247682404203,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10603,
+      "partition": "test",
+      "mode": "continuous_carry",
+      "target_count": 55769,
+      "nll_sum_nats": 93560.99240964485,
+      "correct_count": 28364,
+      "derived_nll_nats": 1.6776523231480724,
+      "derived_bits_per_byte": 2.420340686941573,
+      "derived_perplexity": 5.352974154369636,
+      "derived_accuracy": 0.5085979666122756,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    },
+    {
+      "arm": "eight",
+      "seed": 10603,
+      "partition": "test",
+      "mode": "reset_windows",
+      "target_count": 55769,
+      "nll_sum_nats": 94817.12536537592,
+      "correct_count": 28001,
+      "derived_nll_nats": 1.7001761796943808,
+      "derived_bits_per_byte": 2.4528357430826264,
+      "derived_perplexity": 5.474911875064426,
+      "derived_accuracy": 0.5020889741612724,
+      "absolute_difference_from_reported": {
+        "next_byte_nll_nats": 0.0,
+        "bits_per_byte": 0.0,
+        "perplexity": 0.0,
+        "next_byte_accuracy": 0.0
+      }
+    }
+  ],
+  "metric_rows_checked": 24,
+  "runs_and_counters": [
+    {
+      "arm": "four",
+      "seed": 10601,
+      "receipt_matches_original": true,
+      "checkpoint_metadata_matches_receipt": true,
+      "log_rows": 4096,
+      "sample_draws": 32768,
+      "training_byte_presentations": 4194304,
+      "independently_derived_sample_offset_sha256": "af1afe983f64e1c840af0f2a68195446a398936d69ed88f21a607aad469ca4ad"
+    },
+    {
+      "arm": "four",
+      "seed": 10602,
+      "receipt_matches_original": true,
+      "checkpoint_metadata_matches_receipt": true,
+      "log_rows": 4096,
+      "sample_draws": 32768,
+      "training_byte_presentations": 4194304,
+      "independently_derived_sample_offset_sha256": "efc1cf90e849624c3dabe8357694f58260adcbdcfed1c7ea97a9a5d78ecd3c81"
+    },
+    {
+      "arm": "four",
+      "seed": 10603,
+      "receipt_matches_original": true,
+      "checkpoint_metadata_matches_receipt": true,
+      "log_rows": 4096,
+      "sample_draws": 32768,
+      "training_byte_presentations": 4194304,
+      "independently_derived_sample_offset_sha256": "171e84336bc712de65bd62cda8494ab690e9ade8c586ceb90a24bfa730bf5cfa"
+    },
+    {
+      "arm": "eight",
+      "seed": 10601,
+      "receipt_matches_original": true,
+      "checkpoint_metadata_matches_receipt": true,
+      "log_rows": 4096,
+      "sample_draws": 32768,
+      "training_byte_presentations": 4194304,
+      "independently_derived_sample_offset_sha256": "af1afe983f64e1c840af0f2a68195446a398936d69ed88f21a607aad469ca4ad"
+    },
+    {
+      "arm": "eight",
+      "seed": 10602,
+      "receipt_matches_original": true,
+      "checkpoint_metadata_matches_receipt": true,
+      "log_rows": 4096,
+      "sample_draws": 32768,
+      "training_byte_presentations": 4194304,
+      "independently_derived_sample_offset_sha256": "efc1cf90e849624c3dabe8357694f58260adcbdcfed1c7ea97a9a5d78ecd3c81"
+    },
+    {
+      "arm": "eight",
+      "seed": 10603,
+      "receipt_matches_original": true,
+      "checkpoint_metadata_matches_receipt": true,
+      "log_rows": 4096,
+      "sample_draws": 32768,
+      "training_byte_presentations": 4194304,
+      "independently_derived_sample_offset_sha256": "171e84336bc712de65bd62cda8494ab690e9ade8c586ceb90a24bfa730bf5cfa"
+    }
+  ],
+  "paired_training_histories": [
+    {
+      "seed": 10601,
+      "all_4096_offset_batches_equal": true,
+      "all_4096_learning_rates_equal": true,
+      "all_exposure_and_source_metadata_equal": true,
+      "sample_offset_sha256": "af1afe983f64e1c840af0f2a68195446a398936d69ed88f21a607aad469ca4ad"
+    },
+    {
+      "seed": 10602,
+      "all_4096_offset_batches_equal": true,
+      "all_4096_learning_rates_equal": true,
+      "all_exposure_and_source_metadata_equal": true,
+      "sample_offset_sha256": "efc1cf90e849624c3dabe8357694f58260adcbdcfed1c7ea97a9a5d78ecd3c81"
+    },
+    {
+      "seed": 10603,
+      "all_4096_offset_batches_equal": true,
+      "all_4096_learning_rates_equal": true,
+      "all_exposure_and_source_metadata_equal": true,
+      "sample_offset_sha256": "171e84336bc712de65bd62cda8494ab690e9ade8c586ceb90a24bfa730bf5cfa"
+    }
+  ],
+  "paired_summary_recalculation": [
+    {
+      "partition_mode": "dev/continuous_carry",
+      "derived_pairs": [
+        {
+          "seed": 10601,
+          "nll_eight_minus_four": 0.09187864097551302,
+          "accuracy_eight_minus_four": -0.022485610285283952
+        },
+        {
+          "seed": 10602,
+          "nll_eight_minus_four": 0.08612959104088569,
+          "accuracy_eight_minus_four": -0.022646990263407996
+        },
+        {
+          "seed": 10603,
+          "nll_eight_minus_four": 0.09043693880080306,
+          "accuracy_eight_minus_four": -0.022682852480768845
+        }
+      ],
+      "mean_nll_eight_minus_four": 0.08948172360573392,
+      "minimum_nll_difference": 0.08612959104088569,
+      "maximum_nll_difference": 0.09187864097551302,
+      "four_layer_nll_lower_in_all_three": true
+    },
+    {
+      "partition_mode": "dev/reset_windows",
+      "derived_pairs": [
+        {
+          "seed": 10601,
+          "nll_eight_minus_four": 0.09135465378455532,
+          "accuracy_eight_minus_four": -0.019616632896411912
+        },
+        {
+          "seed": 10602,
+          "nll_eight_minus_four": 0.08526288123524584,
+          "accuracy_eight_minus_four": -0.021714572612024585
+        },
+        {
+          "seed": 10603,
+          "nll_eight_minus_four": 0.08764340701210038,
+          "accuracy_eight_minus_four": -0.022055263676953096
+        }
+      ],
+      "mean_nll_eight_minus_four": 0.08808698067730052,
+      "minimum_nll_difference": 0.08526288123524584,
+      "maximum_nll_difference": 0.09135465378455532,
+      "four_layer_nll_lower_in_all_three": true
+    },
+    {
+      "partition_mode": "test/continuous_carry",
+      "derived_pairs": [
+        {
+          "seed": 10601,
+          "nll_eight_minus_four": 0.07072574417031108,
+          "accuracy_eight_minus_four": -0.0142373002922771
+        },
+        {
+          "seed": 10602,
+          "nll_eight_minus_four": 0.06660025165705874,
+          "accuracy_eight_minus_four": -0.020566981656475858
+        },
+        {
+          "seed": 10603,
+          "nll_eight_minus_four": 0.05684851812427505,
+          "accuracy_eight_minus_four": -0.014846957987412313
+        }
+      ],
+      "mean_nll_eight_minus_four": 0.06472483798388162,
+      "minimum_nll_difference": 0.05684851812427505,
+      "maximum_nll_difference": 0.07072574417031108,
+      "four_layer_nll_lower_in_all_three": true
+    },
+    {
+      "partition_mode": "test/reset_windows",
+      "derived_pairs": [
+        {
+          "seed": 10601,
+          "nll_eight_minus_four": 0.07146748526265889,
+          "accuracy_eight_minus_four": -0.013771091466585395
+        },
+        {
+          "seed": 10602,
+          "nll_eight_minus_four": 0.0656315477022904,
+          "accuracy_eight_minus_four": -0.01879180189711127
+        },
+        {
+          "seed": 10603,
+          "nll_eight_minus_four": 0.05635451829948357,
+          "accuracy_eight_minus_four": -0.014452473596442417
+        }
+      ],
+      "mean_nll_eight_minus_four": 0.06448451708814429,
+      "minimum_nll_difference": 0.05635451829948357,
+      "maximum_nll_difference": 0.07146748526265889,
+      "four_layer_nll_lower_in_all_three": true
+    }
+  ],
+  "per_arm_summary": {
+    "four": {
+      "parameter_count": 998024,
+      "test": {
+        "reset_windows": {
+          "mean_nll_nats": 1.644814818293901,
+          "mean_bits_per_byte": 2.3729661815332928,
+          "mean_next_byte_accuracy": 0.5152683390414029,
+          "perplexity_of_mean_nll": 5.180050567523419,
+          "arithmetic_mean_run_perplexity": 5.180221343334197,
+          "seed_range_nll": [
+            1.6354061072594153,
+            1.655216686227391
+          ],
+          "targets_per_run": 55769
+        },
+        "continuous_carry": {
+          "mean_nll_nats": 1.623409323054104,
+          "mean_bits_per_byte": 2.342084579703065,
+          "mean_next_byte_accuracy": 0.5221658388471493,
+          "perplexity_of_mean_nll": 5.0703473345336505,
+          "arithmetic_mean_run_perplexity": 5.070497517854221,
+          "seed_range_nll": [
+            1.6155654540915365,
+            1.633858710046978
+          ],
+          "targets_per_run": 55769
+        }
+      },
+      "cpu_fixture": {
+        "aggregation_unit": "one within-run median of three timing repetitions per seed, then across three seeds",
+        "arithmetic_mean_run_median_decode_bytes_per_second": 206.498077498087,
+        "median_run_median_decode_bytes_per_second": 206.9303496046515,
+        "arithmetic_mean_run_median_prefill_bytes_per_second": 7118.922732496973,
+        "median_run_median_prefill_bytes_per_second": 7116.133915651078,
+        "persistent_physical_storage_bytes_per_stream": 295936,
+        "persistent_kib_per_stream": 289.0,
+        "batch_size": 1,
+        "threads": 2,
+        "precision": "float32",
+        "gpu_measured": false,
+        "flops_measured": false
+      },
+      "training": {
+        "mean_wall_seconds_per_fit": 736.9232799173334,
+        "mean_process_cpu_seconds_per_fit": 1472.9952875766667,
+        "arithmetic_mean_predicted_byte_presentations_per_wall_second": 5692.515391612894,
+        "presentations_per_fit": 4194304
+      },
+      "secondary_test_carry_minus_reset_mean_nll": -0.021405495239797068
+    },
+    "eight": {
+      "parameter_count": 999784,
+      "test": {
+        "reset_windows": {
+          "mean_nll_nats": 1.7092993353820454,
+          "mean_bits_per_byte": 2.465997674550478,
+          "mean_next_byte_accuracy": 0.4995965500546899,
+          "perplexity_of_mean_nll": 5.525088886794717,
+          "arithmetic_mean_run_perplexity": 5.525294006551063,
+          "seed_range_nll": [
+            1.7001761796943808,
+            1.7208482339296813
+          ],
+          "targets_per_run": 55769
+        },
+        "continuous_carry": {
+          "mean_nll_nats": 1.6881341610379856,
+          "mean_bits_per_byte": 2.435462782484753,
+          "mean_next_byte_accuracy": 0.5056154255350942,
+          "perplexity_of_mean_nll": 5.409378254581462,
+          "arithmetic_mean_run_perplexity": 5.409617535874592,
+          "seed_range_nll": [
+            1.6776523231480724,
+            1.7004589617040367
+          ],
+          "targets_per_run": 55769
+        }
+      },
+      "cpu_fixture": {
+        "aggregation_unit": "one within-run median of three timing repetitions per seed, then across three seeds",
+        "arithmetic_mean_run_median_decode_bytes_per_second": 106.11466853152253,
+        "median_run_median_decode_bytes_per_second": 106.90756111777118,
+        "arithmetic_mean_run_median_prefill_bytes_per_second": 3767.064245226261,
+        "median_run_median_prefill_bytes_per_second": 3793.072486508246,
+        "persistent_physical_storage_bytes_per_stream": 591872,
+        "persistent_kib_per_stream": 578.0,
+        "batch_size": 1,
+        "threads": 2,
+        "precision": "float32",
+        "gpu_measured": false,
+        "flops_measured": false
+      },
+      "training": {
+        "mean_wall_seconds_per_fit": 801.5905410553333,
+        "mean_process_cpu_seconds_per_fit": 1596.49009036,
+        "arithmetic_mean_predicted_byte_presentations_per_wall_second": 5233.68469239738,
+        "presentations_per_fit": 4194304
+      },
+      "secondary_test_carry_minus_reset_mean_nll": -0.021165174344059734
+    }
+  },
+  "generated_sample_audit": [
+    {
+      "arm": "four",
+      "seed": 10601,
+      "raw_sha256": "7ff741753d776f044b99401ba2714b21f51c766e66af00fe41af3380d34eb369",
+      "total_bytes": 519,
+      "generated_bytes": 512,
+      "real_newline_bytes": 15,
+      "literal_backslash_n_sequences": 0,
+      "display_equals_utf8_replacement_decoding": true,
+      "unmodified_decoded_display_for_predeclared_seed_10601": "ROMEO:\nNo, I show me and the pains, if the tond\nAnd gracious wrong change in my friends!\n\nProvost:\nWell, trick with Pompey's sorrow thee\nWith her Montague her prisoner my unrest be child,\nBut trust that he heavened spoke and with his time\nBe down the root doth eyes waters and make\nWith thou swear'd and that many brother power\nThat not raimder with sons accessuar,\nSidness of not with a day and passish banish,\nWhich her consul by his traitor come of a hath\nthink to this light on me: must house any to heaven.\n\nHASTIN"
+    },
+    {
+      "arm": "four",
+      "seed": 10602,
+      "raw_sha256": "026978a3189e76f2240558be3bd5280bdd1d61c47454da1c5485efa1a16a5497",
+      "total_bytes": 519,
+      "generated_bytes": 512,
+      "real_newline_bytes": 13,
+      "literal_backslash_n_sequences": 0,
+      "display_equals_utf8_replacement_decoding": true,
+      "unmodified_decoded_display_for_predeclared_seed_10601": null
+    },
+    {
+      "arm": "four",
+      "seed": 10603,
+      "raw_sha256": "3797751eb3de2f8ad6b883abdbf472ed436d9414515546c81c98c94d2e72ebff",
+      "total_bytes": 519,
+      "generated_bytes": 512,
+      "real_newline_bytes": 21,
+      "literal_backslash_n_sequences": 0,
+      "display_equals_utf8_replacement_decoding": true,
+      "unmodified_decoded_display_for_predeclared_seed_10601": null
+    },
+    {
+      "arm": "eight",
+      "seed": 10601,
+      "raw_sha256": "228a8ce486bce3f0ad7b056d2ccb3db14cc7fbdf48d8a4e08e37cb9592dd10fc",
+      "total_bytes": 519,
+      "generated_bytes": 512,
+      "real_newline_bytes": 22,
+      "literal_backslash_n_sequences": 0,
+      "display_equals_utf8_replacement_decoding": true,
+      "unmodified_decoded_display_for_predeclared_seed_10601": "ROMEO:\nNo, I show my common head'st: he past.\n\nGLOUCESTER:\nWhy, sir.\n\nSecond Servant:\nMadam, see up all the wearing for the bears.\n\nKING RICLIO:\nThen queen the disprectly-uncessed death:\nThe careful Margar he manengious have;\nOr man, therefore would love best.\n\nKING RICHARD II:\nMost shall comes who not that man.\n\nRICHARD:\nA lamp good none dismorrows and cafle a power.\nThat me to me, 'tis but that I would you\nRitent be myself of his, breast come of a sating\nThee the was you, though must hours and death\nMore the way"
+    },
+    {
+      "arm": "eight",
+      "seed": 10602,
+      "raw_sha256": "f4dc6ab8764d73d6ee27c1403998cfd3acf51d5f45fdd9ec7458f1dac74b764d",
+      "total_bytes": 519,
+      "generated_bytes": 512,
+      "real_newline_bytes": 22,
+      "literal_backslash_n_sequences": 0,
+      "display_equals_utf8_replacement_decoding": true,
+      "unmodified_decoded_display_for_predeclared_seed_10601": null
+    },
+    {
+      "arm": "eight",
+      "seed": 10603,
+      "raw_sha256": "a708fe1eab899d1efd01d14fe328fbff6c54a9b66af860bc3564e78298cafd75",
+      "total_bytes": 519,
+      "generated_bytes": 512,
+      "real_newline_bytes": 19,
+      "literal_backslash_n_sequences": 0,
+      "display_equals_utf8_replacement_decoding": true,
+      "unmodified_decoded_display_for_predeclared_seed_10601": null
+    }
+  ],
+  "checks": [
+    {
+      "name": "six_declared_arm_seed_pairs",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/original_receipt_equal",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/actual_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/arm",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/seed",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/checkpoint_file",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/checkpoint_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/final_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/original_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/parameter_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/sample_offset_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/optimizer_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/checkpoint_integrity/scheduler_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/steps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/byte_presentations",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/log_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/independent_offset_digest",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/last_log_counters",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/dev/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/test/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/resource/decode_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/resource/prefill_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/resource/decode_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/resource/decode_seconds_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/resource/prefill_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/resource/prefill_seconds",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/resource/state_physical_equals_logical",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/generation_sha",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/generation_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/generation_prompt",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/generation_new_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10601/generation_display",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/original_receipt_equal",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/actual_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/arm",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/seed",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/checkpoint_file",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/checkpoint_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/final_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/original_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/parameter_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/sample_offset_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/optimizer_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/checkpoint_integrity/scheduler_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/steps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/byte_presentations",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/log_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/independent_offset_digest",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/last_log_counters",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/dev/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/test/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/resource/decode_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/resource/prefill_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/resource/decode_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/resource/decode_seconds_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/resource/prefill_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/resource/prefill_seconds",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/resource/state_physical_equals_logical",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/generation_sha",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/generation_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/generation_prompt",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/generation_new_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10602/generation_display",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/original_receipt_equal",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/actual_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/arm",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/seed",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/checkpoint_file",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/checkpoint_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/final_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/original_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/parameter_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/sample_offset_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/optimizer_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/checkpoint_integrity/scheduler_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/steps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/byte_presentations",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/log_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/independent_offset_digest",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/last_log_counters",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/dev/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/test/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/resource/decode_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/resource/prefill_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/resource/decode_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/resource/decode_seconds_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/resource/prefill_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/resource/prefill_seconds",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/resource/state_physical_equals_logical",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/generation_sha",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/generation_length",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/generation_prompt",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/generation_new_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "four/10603/generation_display",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/original_receipt_equal",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/actual_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/arm",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/seed",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/checkpoint_file",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/checkpoint_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/final_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/original_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/parameter_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/sample_offset_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/optimizer_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/checkpoint_integrity/scheduler_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/steps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/byte_presentations",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/log_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/independent_offset_digest",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/last_log_counters",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/dev/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/test/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/resource/decode_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/resource/prefill_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/resource/decode_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/resource/decode_seconds_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/resource/prefill_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/resource/prefill_seconds",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/resource/state_physical_equals_logical",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/generation_sha",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/generation_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/generation_prompt",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/generation_new_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10601/generation_display",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/original_receipt_equal",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/actual_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/arm",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/seed",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/checkpoint_file",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/checkpoint_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/final_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/original_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/parameter_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/sample_offset_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/optimizer_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/checkpoint_integrity/scheduler_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/steps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/byte_presentations",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/log_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/independent_offset_digest",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/last_log_counters",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/dev/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/test/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/resource/decode_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/resource/prefill_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/resource/decode_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/resource/decode_seconds_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/resource/prefill_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/resource/prefill_seconds",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/resource/state_physical_equals_logical",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/generation_sha",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/generation_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/generation_prompt",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/generation_new_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10602/generation_display",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/original_receipt_equal",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/actual_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/arm",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/seed",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/checkpoint_file",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/checkpoint_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/final_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/original_parameters_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/parameter_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/sample_offset_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/optimizer_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/checkpoint_integrity/scheduler_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/steps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/byte_presentations",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/log_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/independent_offset_digest",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/last_log_counters",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/dev/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/continuous_carry/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/target_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/partition_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/chunks",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/sequence_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/mode",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/clock",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/next_byte_nll_nats",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/bits_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/perplexity",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/next_byte_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/test/reset_windows/ppl_overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/resource/decode_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/resource/prefill_repetition_count",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/resource/decode_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/resource/decode_seconds_per_byte",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/resource/prefill_bps",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/resource/prefill_seconds",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/resource/state_physical_equals_logical",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/generation_sha",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/generation_length",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/generation_prompt",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/generation_new_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/10603/generation_display",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/actual_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/training_byte_presentations",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/sample_offset_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/optimizer_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/scheduler_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/protocol_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/source_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/train_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/implementation_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/all_offsets",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10601/all_learning_rates",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/actual_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/training_byte_presentations",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/sample_offset_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/optimizer_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/scheduler_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/protocol_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/source_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/train_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/implementation_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/all_offsets",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10602/all_learning_rates",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/actual_steps",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/sample_draws",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/training_byte_presentations",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/sample_offset_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/optimizer_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/scheduler_metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/protocol_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/source_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/train_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/implementation_sha256",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/all_offsets",
+      "status": "PASS"
+    },
+    {
+      "name": "paired/10603/all_learning_rates",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/run_count",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/10601/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/10601/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/10602/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/10602/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/10603/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/10603/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/mean_nll_eight_minus_four",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/minimum_nll_difference",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/continuous_carry/maximum_nll_difference",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/run_count",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/10601/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/10601/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/10602/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/10602/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/10603/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/10603/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/mean_nll_eight_minus_four",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/minimum_nll_difference",
+      "status": "PASS"
+    },
+    {
+      "name": "dev/reset_windows/maximum_nll_difference",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/run_count",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/10601/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/10601/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/10602/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/10602/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/10603/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/10603/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/mean_nll_eight_minus_four",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/minimum_nll_difference",
+      "status": "PASS"
+    },
+    {
+      "name": "test/continuous_carry/maximum_nll_difference",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/run_count",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/10601/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/10601/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/10602/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/10602/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/paired_seed",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/10603/paired_nll",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/10603/paired_accuracy",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/mean_nll_eight_minus_four",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/minimum_nll_difference",
+      "status": "PASS"
+    },
+    {
+      "name": "test/reset_windows/maximum_nll_difference",
+      "status": "PASS"
+    },
+    {
+      "name": "four/constant_state_bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "eight/constant_state_bytes",
+      "status": "PASS"
+    }
+  ],
+  "passed_check_count": 541,
+  "failed_check_count": 0,
+  "interpretation_limits": [
+    "The four-layer wider allocation has lower TEST NLL in all three paired runs; both depth and width differ, so this is not proof about depth alone or TAC versus another architecture.",
+    "Continuous-carry measurements preserve all carried components, including local KV; their differences do not identify an associative-bank-specific causal contribution.",
+    "Three paired seeds on one text split are not independent task replications; no confidence interval, significance test or superiority claim is added.",
+    "Inference speed uses a small CPU synthetic resource fixture, not GPU throughput, an application workload, or complete training/inference FLOPs.",
+    "Physical carried-state bytes include all persistent model tensors and local KV, not model weights or training activation memory.",
+    "Generated text is illustrative; if shown use predeclared seed 10601 for each arm, preserve its actual newlines, and do not treat fluency as a capability score.",
+    "Original RESULT.json and its generated files are not modified."
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "study_id": "LANGDEPTH106",
+  "status": "SIX_REAL_FITS_AND_FROZEN_FINAL_EVALUATION_COMPLETED",
+  "source_head": "71cbe65ccedac8b59fbc3f496f4078f261741f6a",
+  "run_id": 41232595986,
+  "aggregation": "arithmetic mean across three registered seed runs; timing is mean of per-run medians",
+  "arms": {
+    "four": {
+      "parameters": 998024,
+      "test_reset_nll_nats": 1.644814818293901,
+      "test_reset_bits_per_byte": 2.3729661815332928,
+      "test_reset_accuracy": 0.5152683390414029,
+      "test_carry_nll_nats": 1.623409323054104,
+      "test_carry_accuracy": 0.5221658388471493,
+      "cpu_decode_bytes_per_second_mean_run_medians": 206.498077498087,
+      "cpu_prefill_bytes_per_second_mean_run_medians": 7118.922732496973,
+      "carried_tensor_bytes": 295936,
+      "training_wall_seconds_mean": 736.9232799173334
+    },
+    "eight": {
+      "parameters": 999784,
+      "test_reset_nll_nats": 1.7092993353820454,
+      "test_reset_bits_per_byte": 2.465997674550478,
+      "test_reset_accuracy": 0.4995965500546899,
+      "test_carry_nll_nats": 1.6881341610379856,
+      "test_carry_accuracy": 0.5056154255350942,
+      "cpu_decode_bytes_per_second_mean_run_medians": 106.11466853152253,
+      "cpu_prefill_bytes_per_second_mean_run_medians": 3767.064245226261,
+      "carried_tensor_bytes": 591872,
+      "training_wall_seconds_mean": 801.5905410553333
+    }
+  },
+  "paired_test_reset_nll_eight_minus_four": {
+    "maximum_nll_difference": 0.07146748526265889,
+    "mean_nll_eight_minus_four": 0.06448451708814429,
+    "minimum_nll_difference": 0.05635451829948357,
+    "paired_runs": [
+      {
+        "accuracy_eight_minus_four": -0.013771091466585395,
+        "nll_eight_minus_four": 0.07146748526265889,
+        "seed": 10601
+      },
+      {
+        "accuracy_eight_minus_four": -0.01879180189711127,
+        "nll_eight_minus_four": 0.0656315477022904,
+        "seed": 10602
+      },
+      {
+        "accuracy_eight_minus_four": -0.014452473596442417,
+        "nll_eight_minus_four": 0.05635451829948357,
+        "seed": 10603
+      }
+    ],
+    "run_count": 3,
+    "uncertainty_scope": "three initialization/sampling runs on one fixed text split; no byte-level bootstrap or architecture-superiority claim"
+  },
+  "scope": "Depth and width allocations on one public corpus; not general architecture superiority.",
+  "independent_attestation": false,
+  "results_sha256": "c1d48d50e25d8c5e3b8597a541e366e6010d1ab2d6a9427d6a3f4ba739f1ffe0"
+}
