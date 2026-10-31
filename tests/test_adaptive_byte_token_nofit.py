@@ -197,3 +197,24 @@ def test_12_order_sensitive_token_representation_is_learnable():
     F.cross_entropy(out[0], targets).backward()
     assert m.position_recency.grad is not None
     assert m.position_recency.grad.abs().sum().item() > 0
+
+
+def test_13_representability_gate_can_condition_on_observed_input_not_gold():
+    """Analytic weights demonstrate G2 *representability*, not learned skill."""
+    torch.manual_seed(60)
+    model = AdaptiveByteTokenGRU(max_token_bytes=4).eval()
+    with torch.no_grad():
+        model.mode_gate.weight.zero_()
+        model.mode_gate.bias.zero_()
+        # Controller's current-observed-byte coordinate is at hidden offset.
+        model.mode_gate.weight[0, 110] = 3.0
+        model.byte_emb.weight[ord('A'), 0] = 2.0
+        model.byte_emb.weight[ord('B'), 0] = -2.0
+        a, (ra,), _ = model(make_ids(b'A' * 20), audit=True)
+        b, (rb,), _ = model(make_ids(b'B' * 20), audit=True)
+    assert set(ra.decisions) == {'BYTE'}
+    assert set(rb.decisions) == {'TOKEN'}
+    assert ra.recurrent_updates == 19
+    assert rb.recurrent_updates == 4  # 19 observed with token max length=4
+    assert a.shape == b.shape == (1, 20, 256)
+    assert not torch.equal(a, b)
