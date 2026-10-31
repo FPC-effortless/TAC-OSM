@@ -1,0 +1,1357 @@
+{
+  "schema": "langcap105.eval01.complete-frozen-dev-summary.v1",
+  "status": "ALL_18_FROZEN_MODELS_DEV_SCORED_EXPLORATORY",
+  "model_count": 18,
+  "protocol_sha256": "79d82775eeb346068bb8e38b2209f4976d2ed36920a643baa0f407581917447c",
+  "registration_commit": "48c41e27a59659bac03ba59547646fc26aa9cc3d",
+  "dev_targets_per_model": 594688,
+  "dev_files": 18,
+  "dev_groups": 17,
+  "model_summaries": [
+    {
+      "scale": "small",
+      "arm": "tac_associative_stack",
+      "seeds": [
+        10301,
+        10302,
+        10303
+      ],
+      "parameters": 1000028,
+      "dev_nll": {
+        "mean": 1.741723586174137,
+        "sample_sd": 0.006106699123278275,
+        "minimum": 1.7350384023424748,
+        "maximum": 1.7470086023574518
+      },
+      "dev_bits_per_byte": {
+        "mean": 2.5127759803727687,
+        "sample_sd": 0.008810104541354623,
+        "minimum": 2.5031312988113985,
+        "maximum": 2.520400647011455
+      },
+      "dev_accuracy": {
+        "mean": 0.5405641277442962,
+        "sample_sd": 0.001644098117967816,
+        "minimum": 0.5390473660137753,
+        "maximum": 0.5423112623762376
+      },
+      "initial_dev_nll": {
+        "mean": 5.535715733073962,
+        "sample_sd": 0.03193466102477607,
+        "minimum": 5.498857456210253,
+        "maximum": 5.55510567572414
+      },
+      "fixed_final_fit_reference_nll": {
+        "mean": 1.6295684846620675,
+        "sample_sd": 0.007811400491619531,
+        "minimum": 1.6234398778873567,
+        "maximum": 1.6383641152858666
+      },
+      "fixed_final_dev_minus_fit_nll": {
+        "mean": 0.11215510151206927,
+        "sample_sd": 0.010027693436050332,
+        "minimum": 0.1047596385366174,
+        "maximum": 0.12356872447009515
+      },
+      "initial_to_trained_dev_nll_reduction": {
+        "mean": 3.7939921468998254,
+        "sample_sd": 0.02629145094857337,
+        "minimum": 3.763819053867778,
+        "maximum": 3.8119819219016557
+      },
+      "learning_transfer_passed_seeds": 3,
+      "trained_vs_initial_descriptive_uncertainty": {
+        "mean_paired_nll_difference": -3.7939921468998254,
+        "descriptive_95_percentile_interval": [
+          -3.8829435180458503,
+          -3.718231418299765
+        ],
+        "replicates": 10000,
+        "sign": "negative favors left frozen checkpoint on this DEV cohort",
+        "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+      },
+      "per_seed": [
+        {
+          "seed": 10301,
+          "dev_nll": 1.7350384023424748,
+          "dev_accuracy": 0.5423112623762376,
+          "fit_reference_nll": 1.6269014608129795
+        },
+        {
+          "seed": 10302,
+          "dev_nll": 1.7470086023574518,
+          "dev_accuracy": 0.5403337548428756,
+          "fit_reference_nll": 1.6234398778873567
+        },
+        {
+          "seed": 10303,
+          "dev_nll": 1.743123753822484,
+          "dev_accuracy": 0.5390473660137753,
+          "fit_reference_nll": 1.6383641152858666
+        }
+      ]
+    },
+    {
+      "scale": "small",
+      "arm": "causal_transformer",
+      "seeds": [
+        10301,
+        10302,
+        10303
+      ],
+      "parameters": 999972,
+      "dev_nll": {
+        "mean": 2.2754476938545674,
+        "sample_sd": 0.00651997250174769,
+        "minimum": 2.2698988317259516,
+        "maximum": 2.282628669850197
+      },
+      "dev_bits_per_byte": {
+        "mean": 3.282777103726213,
+        "sample_sd": 0.009406331995003786,
+        "minimum": 3.2747717878506823,
+        "maximum": 3.2931370621838503
+      },
+      "dev_accuracy": {
+        "mean": 0.39065919159850765,
+        "sample_sd": 0.0015676055350005952,
+        "minimum": 0.38903929455445546,
+        "maximum": 0.39216866659492033
+      },
+      "initial_dev_nll": {
+        "mean": 5.710350799546451,
+        "sample_sd": 0.15054741544242517,
+        "minimum": 5.564387707081924,
+        "maximum": 5.865097901026863
+      },
+      "fixed_final_fit_reference_nll": {
+        "mean": 2.1929454758788234,
+        "sample_sd": 0.005566460118669139,
+        "minimum": 2.1868482311689856,
+        "maximum": 2.197755683730958
+      },
+      "fixed_final_dev_minus_fit_nll": {
+        "mean": 0.08250221797574413,
+        "sample_sd": 0.006186386309873306,
+        "minimum": 0.07605989625659593,
+        "maximum": 0.08839615711367044
+      },
+      "initial_to_trained_dev_nll_reduction": {
+        "mean": 3.434903105691884,
+        "sample_sd": 0.14412332752826226,
+        "minimum": 3.294488875355972,
+        "maximum": 3.5824692311766664
+      },
+      "learning_transfer_passed_seeds": 3,
+      "trained_vs_initial_descriptive_uncertainty": {
+        "mean_paired_nll_difference": -3.434903105691884,
+        "descriptive_95_percentile_interval": [
+          -3.606117276047993,
+          -3.2877451933035386
+        ],
+        "replicates": 10000,
+        "sign": "negative favors left frozen checkpoint on this DEV cohort",
+        "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+      },
+      "per_seed": [
+        {
+          "seed": 10301,
+          "dev_nll": 2.2698988317259516,
+          "dev_accuracy": 0.39216866659492033,
+          "fit_reference_nll": 2.1868482311689856
+        },
+        {
+          "seed": 10302,
+          "dev_nll": 2.282628669850197,
+          "dev_accuracy": 0.38903929455445546,
+          "fit_reference_nll": 2.1942325127365265
+        },
+        {
+          "seed": 10303,
+          "dev_nll": 2.273815579987554,
+          "dev_accuracy": 0.3907696136461472,
+          "fit_reference_nll": 2.197755683730958
+        }
+      ]
+    },
+    {
+      "scale": "small",
+      "arm": "stacked_gru",
+      "seeds": [
+        10301,
+        10302,
+        10303
+      ],
+      "parameters": 997680,
+      "dev_nll": {
+        "mean": 1.7270758651836513,
+        "sample_sd": 0.010779770353983854,
+        "minimum": 1.7159440564742816,
+        "maximum": 1.7374652097036258
+      },
+      "dev_bits_per_byte": {
+        "mean": 2.49164378593947,
+        "sample_sd": 0.015551921231614408,
+        "minimum": 2.4755839807183375,
+        "maximum": 2.506632441756524
+      },
+      "dev_accuracy": {
+        "mean": 0.5549066625412541,
+        "sample_sd": 0.002991311314276877,
+        "minimum": 0.5520440970727507,
+        "maximum": 0.5580119323073611
+      },
+      "initial_dev_nll": {
+        "mean": 5.53346009684304,
+        "sample_sd": 0.011295276656843186,
+        "minimum": 5.526513352411096,
+        "maximum": 5.546493298090044
+      },
+      "fixed_final_fit_reference_nll": {
+        "mean": 1.6343197628357058,
+        "sample_sd": 0.014465738476596338,
+        "minimum": 1.6176536213202708,
+        "maximum": 1.643621019997944
+      },
+      "fixed_final_dev_minus_fit_nll": {
+        "mean": 0.09275610234794551,
+        "sample_sd": 0.006150984576971523,
+        "minimum": 0.08613368218414386,
+        "maximum": 0.09829043515401081
+      },
+      "initial_to_trained_dev_nll_reduction": {
+        "mean": 3.8063842316593886,
+        "sample_sd": 0.0067664423204863815,
+        "minimum": 3.7986950230380496,
+        "maximum": 3.8114295835536973
+      },
+      "learning_transfer_passed_seeds": 3,
+      "trained_vs_initial_descriptive_uncertainty": {
+        "mean_paired_nll_difference": -3.8063842316593886,
+        "descriptive_95_percentile_interval": [
+          -3.891220357378956,
+          -3.7354703542951495
+        ],
+        "replicates": 10000,
+        "sign": "negative favors left frozen checkpoint on this DEV cohort",
+        "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+      },
+      "per_seed": [
+        {
+          "seed": 10301,
+          "dev_nll": 1.7374652097036258,
+          "dev_accuracy": 0.5520440970727507,
+          "fit_reference_nll": 1.643621019997944
+        },
+        {
+          "seed": 10302,
+          "dev_nll": 1.7159440564742816,
+          "dev_accuracy": 0.5580119323073611,
+          "fit_reference_nll": 1.6176536213202708
+        },
+        {
+          "seed": 10303,
+          "dev_nll": 1.7278183293730467,
+          "dev_accuracy": 0.5546639582436504,
+          "fit_reference_nll": 1.6416846471889028
+        }
+      ]
+    },
+    {
+      "scale": "medium",
+      "arm": "tac_associative_stack",
+      "seeds": [
+        10301,
+        10302,
+        10303
+      ],
+      "parameters": 9999922,
+      "dev_nll": {
+        "mean": 1.6176188404472704,
+        "sample_sd": 0.007362759600854554,
+        "minimum": 1.6129242336929612,
+        "maximum": 1.626104606946964
+      },
+      "dev_bits_per_byte": {
+        "mean": 2.333730679161832,
+        "sample_sd": 0.010622216763410653,
+        "minimum": 2.3269577932784666,
+        "maximum": 2.3459730524090823
+      },
+      "dev_accuracy": {
+        "mean": 0.5732731561199598,
+        "sample_sd": 0.003976835925941005,
+        "minimum": 0.5686898003659061,
+        "maximum": 0.5758095001076194
+      },
+      "initial_dev_nll": {
+        "mean": 5.532630756194361,
+        "sample_sd": 0.019694482966267784,
+        "minimum": 5.512116015746243,
+        "maximum": 5.551387051501534
+      },
+      "fixed_final_fit_reference_nll": {
+        "mean": 1.5030271780291657,
+        "sample_sd": 0.005989349668581914,
+        "minimum": 1.4970242784814434,
+        "maximum": 1.5090028852258988
+      },
+      "fixed_final_dev_minus_fit_nll": {
+        "mean": 0.11459166241810455,
+        "sample_sd": 0.009182886161971346,
+        "minimum": 0.10482479547598711,
+        "maximum": 0.12305023656680869
+      },
+      "initial_to_trained_dev_nll_reduction": {
+        "mean": 3.9150119157470904,
+        "sample_sd": 0.0146082817653022,
+        "minimum": 3.8982883350443576,
+        "maximum": 3.9252824445545698
+      },
+      "learning_transfer_passed_seeds": 3,
+      "trained_vs_initial_descriptive_uncertainty": {
+        "mean_paired_nll_difference": -3.9150119157470904,
+        "descriptive_95_percentile_interval": [
+          -3.996003434715412,
+          -3.8462845872445413
+        ],
+        "replicates": 10000,
+        "sign": "negative favors left frozen checkpoint on this DEV cohort",
+        "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+      },
+      "per_seed": [
+        {
+          "seed": 10301,
+          "dev_nll": 1.6129242336929612,
+          "dev_accuracy": 0.5753201678863539,
+          "fit_reference_nll": 1.4970242784814434
+        },
+        {
+          "seed": 10302,
+          "dev_nll": 1.626104606946964,
+          "dev_accuracy": 0.5686898003659061,
+          "fit_reference_nll": 1.5030543703801553
+        },
+        {
+          "seed": 10303,
+          "dev_nll": 1.6138276807018859,
+          "dev_accuracy": 0.5758095001076194,
+          "fit_reference_nll": 1.5090028852258988
+        }
+      ]
+    },
+    {
+      "scale": "medium",
+      "arm": "causal_transformer",
+      "seeds": [
+        10301,
+        10302,
+        10303
+      ],
+      "parameters": 9999880,
+      "dev_nll": {
+        "mean": 2.082963327721358,
+        "sample_sd": 0.01301369774770392,
+        "minimum": 2.0688015449786055,
+        "maximum": 2.094396145244325
+      },
+      "dev_bits_per_byte": {
+        "mean": 3.005080863257176,
+        "sample_sd": 0.018774797204240336,
+        "minimum": 2.98464972952406,
+        "maximum": 3.021574932400949
+      },
+      "dev_accuracy": {
+        "mean": 0.437395743650452,
+        "sample_sd": 0.0024684164956690698,
+        "minimum": 0.43539301280671544,
+        "maximum": 0.44015349225139905
+      },
+      "initial_dev_nll": {
+        "mean": 5.769702759256312,
+        "sample_sd": 0.10921280314801769,
+        "minimum": 5.651727191495137,
+        "maximum": 5.8672750015368695
+      },
+      "fixed_final_fit_reference_nll": {
+        "mean": 1.9739253618523769,
+        "sample_sd": 0.012399272182925615,
+        "minimum": 1.9643296290623382,
+        "maximum": 1.9879255858166773
+      },
+      "fixed_final_dev_minus_fit_nll": {
+        "mean": 0.10903796586898122,
+        "sample_sd": 0.01126264834798877,
+        "minimum": 0.09928067430049037,
+        "maximum": 0.12136266387880545
+      },
+      "initial_to_trained_dev_nll_reduction": {
+        "mean": 3.6867394315349538,
+        "sample_sd": 0.10766692037532591,
+        "minimum": 3.5660348985539936,
+        "maximum": 3.7728788562925444
+      },
+      "learning_transfer_passed_seeds": 3,
+      "trained_vs_initial_descriptive_uncertainty": {
+        "mean_paired_nll_difference": -3.6867394315349538,
+        "descriptive_95_percentile_interval": [
+          -3.831583072686447,
+          -3.5593121660948497
+        ],
+        "replicates": 10000,
+        "sign": "negative favors left frozen checkpoint on this DEV cohort",
+        "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+      },
+      "per_seed": [
+        {
+          "seed": 10301,
+          "dev_nll": 2.094396145244325,
+          "dev_accuracy": 0.43539301280671544,
+          "fit_reference_nll": 1.9879255858166773
+        },
+        {
+          "seed": 10302,
+          "dev_nll": 2.0856922929411437,
+          "dev_accuracy": 0.4366407258932415,
+          "fit_reference_nll": 1.9643296290623382
+        },
+        {
+          "seed": 10303,
+          "dev_nll": 2.0688015449786055,
+          "dev_accuracy": 0.44015349225139905,
+          "fit_reference_nll": 1.969520870678115
+        }
+      ]
+    },
+    {
+      "scale": "medium",
+      "arm": "stacked_gru",
+      "seeds": [
+        10301,
+        10302,
+        10303
+      ],
+      "parameters": 9987024,
+      "dev_nll": {
+        "mean": 1.3467568321717385,
+        "sample_sd": 0.005864247691328177,
+        "minimum": 1.340707197856623,
+        "maximum": 1.352416197578101
+      },
+      "dev_bits_per_byte": {
+        "mean": 1.942959403057497,
+        "sample_sd": 0.008460321062823671,
+        "minimum": 1.9342316256318883,
+        "maximum": 1.951124141463835
+      },
+      "dev_accuracy": {
+        "mean": 0.63602707077773,
+        "sample_sd": 0.0012979945182068843,
+        "minimum": 0.6350153357727077,
+        "maximum": 0.6374905832974602
+      },
+      "initial_dev_nll": {
+        "mean": 5.551685487480678,
+        "sample_sd": 0.007745153971628352,
+        "minimum": 5.543933275095583,
+        "maximum": 5.559423563688194
+      },
+      "fixed_final_fit_reference_nll": {
+        "mean": 1.2353819002431536,
+        "sample_sd": 0.00788999572301472,
+        "minimum": 1.2262717384935848,
+        "maximum": 1.2400127912868582
+      },
+      "fixed_final_dev_minus_fit_nll": {
+        "mean": 0.11137493192858483,
+        "sample_sd": 0.0037909317964472168,
+        "minimum": 0.10713430979363303,
+        "maximum": 0.11443545936303812
+      },
+      "initial_to_trained_dev_nll_reduction": {
+        "mean": 4.204928655308939,
+        "sample_sd": 0.012005614855601164,
+        "minimum": 4.196786174015092,
+        "maximum": 4.218716365831571
+      },
+      "learning_transfer_passed_seeds": 3,
+      "trained_vs_initial_descriptive_uncertainty": {
+        "mean_paired_nll_difference": -4.204928655308939,
+        "descriptive_95_percentile_interval": [
+          -4.2721056306966085,
+          -4.148918806053182
+        ],
+        "replicates": 10000,
+        "sign": "negative favors left frozen checkpoint on this DEV cohort",
+        "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+      },
+      "per_seed": [
+        {
+          "seed": 10301,
+          "dev_nll": 1.340707197856623,
+          "dev_accuracy": 0.6374905832974602,
+          "fit_reference_nll": 1.2262717384935848
+        },
+        {
+          "seed": 10302,
+          "dev_nll": 1.352416197578101,
+          "dev_accuracy": 0.635575293263022,
+          "fit_reference_nll": 1.2398611709490177
+        },
+        {
+          "seed": 10303,
+          "dev_nll": 1.3471471010804912,
+          "dev_accuracy": 0.6350153357727077,
+          "fit_reference_nll": 1.2400127912868582
+        }
+      ]
+    }
+  ],
+  "descriptive_tac_rival_differences": [
+    {
+      "scale": "small",
+      "left": "tac_associative_stack",
+      "right": "causal_transformer",
+      "mean_paired_nll_difference": -0.5337241076804307,
+      "descriptive_95_percentile_interval": [
+        -0.5577369207170693,
+        -0.5075468026771717
+      ],
+      "replicates": 10000,
+      "sign": "negative favors left frozen checkpoint on this DEV cohort",
+      "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+    },
+    {
+      "scale": "small",
+      "left": "tac_associative_stack",
+      "right": "stacked_gru",
+      "mean_paired_nll_difference": 0.014647720990485466,
+      "descriptive_95_percentile_interval": [
+        -0.0014255464547971108,
+        0.03064588006547268
+      ],
+      "replicates": 10000,
+      "sign": "negative favors left frozen checkpoint on this DEV cohort",
+      "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+    },
+    {
+      "scale": "medium",
+      "left": "tac_associative_stack",
+      "right": "causal_transformer",
+      "mean_paired_nll_difference": -0.4653444872740877,
+      "descriptive_95_percentile_interval": [
+        -0.4912149065170055,
+        -0.43408190426312687
+      ],
+      "replicates": 10000,
+      "sign": "negative favors left frozen checkpoint on this DEV cohort",
+      "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+    },
+    {
+      "scale": "medium",
+      "left": "tac_associative_stack",
+      "right": "stacked_gru",
+      "mean_paired_nll_difference": 0.270862008275532,
+      "descriptive_95_percentile_interval": [
+        0.2511269184157666,
+        0.29143543858859666
+      ],
+      "replicates": 10000,
+      "sign": "negative favors left frozen checkpoint on this DEV cohort",
+      "scope": "paired seed/group resampling within one public source project; not architecture superiority"
+    }
+  ],
+  "unmatched_fit_exposure_diagnostic": [
+    {
+      "seed": 10301,
+      "classification": "UNMATCHED_FIT_EXPOSURE_DIAGNOSTIC_ONLY",
+      "fit_target_exposures": 1310720,
+      "exposure_window_ids_sha256": "25d72b2a2af9f9d1d67410da29760ea4ae8d71406b7cfbc1fc5cec028e49fc80",
+      "metrics": {
+        "targets": 594688,
+        "nll_sum": 1883313.1385155073,
+        "nll": 3.1668927883453297,
+        "bits_per_byte": 4.568860520772829,
+        "correct": 170469,
+        "accuracy": 0.2866528330822213,
+        "by_file": {
+          "Lib/_aix_support.py": {
+            "group": "_aix_support",
+            "nll_sum": 14240.914262263257,
+            "correct": 789,
+            "targets": 3968
+          },
+          "Lib/_py_abc.py": {
+            "group": "_py_abc",
+            "nll_sum": 19491.560536188208,
+            "correct": 1653,
+            "targets": 6144
+          },
+          "Lib/_strptime.py": {
+            "group": "_strptime",
+            "nll_sum": 81324.55712722636,
+            "correct": 7850,
+            "targets": 25472
+          },
+          "Lib/bz2.py": {
+            "group": "bz2",
+            "nll_sum": 37578.55111017444,
+            "correct": 3261,
+            "targets": 11904
+          },
+          "Lib/code.py": {
+            "group": "code",
+            "nll_sum": 39873.70766413749,
+            "correct": 3894,
+            "targets": 13056
+          },
+          "Lib/copy.py": {
+            "group": "copy",
+            "nll_sum": 28340.482064432592,
+            "correct": 2459,
+            "targets": 8960
+          },
+          "Lib/glob.py": {
+            "group": "glob",
+            "nll_sum": 60961.734826484964,
+            "correct": 5683,
+            "targets": 19712
+          },
+          "Lib/numbers.py": {
+            "group": "numbers",
+            "nll_sum": 37517.855963049056,
+            "correct": 2612,
+            "targets": 11392
+          },
+          "Lib/optparse.py": {
+            "group": "optparse",
+            "nll_sum": 188085.93290886836,
+            "correct": 17810,
+            "targets": 60288
+          },
+          "Lib/pstats.py": {
+            "group": "pstats",
+            "nll_sum": 90666.78615810478,
+            "correct": 9119,
+            "targets": 29184
+          },
+          "Lib/rlcompleter.py": {
+            "group": "rlcompleter",
+            "nll_sum": 23541.373566230057,
+            "correct": 2484,
+            "targets": 7808
+          },
+          "Lib/selectors.py": {
+            "group": "selectors",
+            "nll_sum": 61076.49165517117,
+            "correct": 5892,
+            "targets": 19456
+          },
+          "Lib/ssl.py": {
+            "group": "ssl",
+            "nll_sum": 174644.99009907013,
+            "correct": 13818,
+            "targets": 52608
+          },
+          "Lib/subprocess.py": {
+            "group": "subprocess",
+            "nll_sum": 263310.259991296,
+            "correct": 31835,
+            "targets": 89088
+          },
+          "Lib/tracemalloc.py": {
+            "group": "tracemalloc",
+            "nll_sum": 54799.88759036547,
+            "correct": 5466,
+            "targets": 17920
+          },
+          "Lib/typing.py": {
+            "group": "typing",
+            "nll_sum": 429199.940444505,
+            "correct": 33803,
+            "targets": 132480
+          },
+          "Lib/xmlrpc/client.py": {
+            "group": "xmlrpc",
+            "nll_sum": 161853.6936975474,
+            "correct": 11756,
+            "targets": 48512
+          },
+          "Lib/xmlrpc/server.py": {
+            "group": "xmlrpc",
+            "nll_sum": 116804.41885039254,
+            "correct": 10285,
+            "targets": 36736
+          }
+        },
+        "by_group": {
+          "_aix_support": {
+            "nll_sum": 14240.914262263257,
+            "correct": 789,
+            "targets": 3968
+          },
+          "_py_abc": {
+            "nll_sum": 19491.560536188208,
+            "correct": 1653,
+            "targets": 6144
+          },
+          "_strptime": {
+            "nll_sum": 81324.55712722636,
+            "correct": 7850,
+            "targets": 25472
+          },
+          "bz2": {
+            "nll_sum": 37578.55111017444,
+            "correct": 3261,
+            "targets": 11904
+          },
+          "code": {
+            "nll_sum": 39873.70766413749,
+            "correct": 3894,
+            "targets": 13056
+          },
+          "copy": {
+            "nll_sum": 28340.482064432592,
+            "correct": 2459,
+            "targets": 8960
+          },
+          "glob": {
+            "nll_sum": 60961.734826484964,
+            "correct": 5683,
+            "targets": 19712
+          },
+          "numbers": {
+            "nll_sum": 37517.855963049056,
+            "correct": 2612,
+            "targets": 11392
+          },
+          "optparse": {
+            "nll_sum": 188085.93290886836,
+            "correct": 17810,
+            "targets": 60288
+          },
+          "pstats": {
+            "nll_sum": 90666.78615810478,
+            "correct": 9119,
+            "targets": 29184
+          },
+          "rlcompleter": {
+            "nll_sum": 23541.373566230057,
+            "correct": 2484,
+            "targets": 7808
+          },
+          "selectors": {
+            "nll_sum": 61076.49165517117,
+            "correct": 5892,
+            "targets": 19456
+          },
+          "ssl": {
+            "nll_sum": 174644.99009907013,
+            "correct": 13818,
+            "targets": 52608
+          },
+          "subprocess": {
+            "nll_sum": 263310.259991296,
+            "correct": 31835,
+            "targets": 89088
+          },
+          "tracemalloc": {
+            "nll_sum": 54799.88759036547,
+            "correct": 5466,
+            "targets": 17920
+          },
+          "typing": {
+            "nll_sum": 429199.940444505,
+            "correct": 33803,
+            "targets": 132480
+          },
+          "xmlrpc": {
+            "nll_sum": 278658.11254793993,
+            "correct": 22041,
+            "targets": 85248
+          }
+        }
+      }
+    },
+    {
+      "seed": 10302,
+      "classification": "UNMATCHED_FIT_EXPOSURE_DIAGNOSTIC_ONLY",
+      "fit_target_exposures": 1310720,
+      "exposure_window_ids_sha256": "6b6593537515d77ec5d2d8343cfa5bfae56b418492fd693b699fce8b869d930f",
+      "metrics": {
+        "targets": 594688,
+        "nll_sum": 1881888.8248030862,
+        "nll": 3.1644977278893913,
+        "bits_per_byte": 4.565405178930417,
+        "correct": 170469,
+        "accuracy": 0.2866528330822213,
+        "by_file": {
+          "Lib/_aix_support.py": {
+            "group": "_aix_support",
+            "nll_sum": 14238.258863663972,
+            "correct": 789,
+            "targets": 3968
+          },
+          "Lib/_py_abc.py": {
+            "group": "_py_abc",
+            "nll_sum": 19469.496293787015,
+            "correct": 1653,
+            "targets": 6144
+          },
+          "Lib/_strptime.py": {
+            "group": "_strptime",
+            "nll_sum": 81278.5124008419,
+            "correct": 7850,
+            "targets": 25472
+          },
+          "Lib/bz2.py": {
+            "group": "bz2",
+            "nll_sum": 37559.18232378264,
+            "correct": 3261,
+            "targets": 11904
+          },
+          "Lib/code.py": {
+            "group": "code",
+            "nll_sum": 39832.397770848795,
+            "correct": 3894,
+            "targets": 13056
+          },
+          "Lib/copy.py": {
+            "group": "copy",
+            "nll_sum": 28321.282724298155,
+            "correct": 2459,
+            "targets": 8960
+          },
+          "Lib/glob.py": {
+            "group": "glob",
+            "nll_sum": 60895.92146737269,
+            "correct": 5683,
+            "targets": 19712
+          },
+          "Lib/numbers.py": {
+            "group": "numbers",
+            "nll_sum": 37495.923992490636,
+            "correct": 2612,
+            "targets": 11392
+          },
+          "Lib/optparse.py": {
+            "group": "optparse",
+            "nll_sum": 187919.84400200384,
+            "correct": 17810,
+            "targets": 60288
+          },
+          "Lib/pstats.py": {
+            "group": "pstats",
+            "nll_sum": 90539.0318715837,
+            "correct": 9119,
+            "targets": 29184
+          },
+          "Lib/rlcompleter.py": {
+            "group": "rlcompleter",
+            "nll_sum": 23514.435265460193,
+            "correct": 2484,
+            "targets": 7808
+          },
+          "Lib/selectors.py": {
+            "group": "selectors",
+            "nll_sum": 61033.87433952704,
+            "correct": 5892,
+            "targets": 19456
+          },
+          "Lib/ssl.py": {
+            "group": "ssl",
+            "nll_sum": 174657.28445572185,
+            "correct": 13818,
+            "targets": 52608
+          },
+          "Lib/subprocess.py": {
+            "group": "subprocess",
+            "nll_sum": 263056.6776784311,
+            "correct": 31835,
+            "targets": 89088
+          },
+          "Lib/tracemalloc.py": {
+            "group": "tracemalloc",
+            "nll_sum": 54738.87901492102,
+            "correct": 5466,
+            "targets": 17920
+          },
+          "Lib/typing.py": {
+            "group": "typing",
+            "nll_sum": 428839.9783025694,
+            "correct": 33803,
+            "targets": 132480
+          },
+          "Lib/xmlrpc/client.py": {
+            "group": "xmlrpc",
+            "nll_sum": 161761.38712751513,
+            "correct": 11756,
+            "targets": 48512
+          },
+          "Lib/xmlrpc/server.py": {
+            "group": "xmlrpc",
+            "nll_sum": 116736.45690826714,
+            "correct": 10285,
+            "targets": 36736
+          }
+        },
+        "by_group": {
+          "_aix_support": {
+            "nll_sum": 14238.258863663972,
+            "correct": 789,
+            "targets": 3968
+          },
+          "_py_abc": {
+            "nll_sum": 19469.496293787015,
+            "correct": 1653,
+            "targets": 6144
+          },
+          "_strptime": {
+            "nll_sum": 81278.5124008419,
+            "correct": 7850,
+            "targets": 25472
+          },
+          "bz2": {
+            "nll_sum": 37559.18232378264,
+            "correct": 3261,
+            "targets": 11904
+          },
+          "code": {
+            "nll_sum": 39832.397770848795,
+            "correct": 3894,
+            "targets": 13056
+          },
+          "copy": {
+            "nll_sum": 28321.282724298155,
+            "correct": 2459,
+            "targets": 8960
+          },
+          "glob": {
+            "nll_sum": 60895.92146737269,
+            "correct": 5683,
+            "targets": 19712
+          },
+          "numbers": {
+            "nll_sum": 37495.923992490636,
+            "correct": 2612,
+            "targets": 11392
+          },
+          "optparse": {
+            "nll_sum": 187919.84400200384,
+            "correct": 17810,
+            "targets": 60288
+          },
+          "pstats": {
+            "nll_sum": 90539.0318715837,
+            "correct": 9119,
+            "targets": 29184
+          },
+          "rlcompleter": {
+            "nll_sum": 23514.435265460193,
+            "correct": 2484,
+            "targets": 7808
+          },
+          "selectors": {
+            "nll_sum": 61033.87433952704,
+            "correct": 5892,
+            "targets": 19456
+          },
+          "ssl": {
+            "nll_sum": 174657.28445572185,
+            "correct": 13818,
+            "targets": 52608
+          },
+          "subprocess": {
+            "nll_sum": 263056.6776784311,
+            "correct": 31835,
+            "targets": 89088
+          },
+          "tracemalloc": {
+            "nll_sum": 54738.87901492102,
+            "correct": 5466,
+            "targets": 17920
+          },
+          "typing": {
+            "nll_sum": 428839.9783025694,
+            "correct": 33803,
+            "targets": 132480
+          },
+          "xmlrpc": {
+            "nll_sum": 278497.84403578227,
+            "correct": 22041,
+            "targets": 85248
+          }
+        }
+      }
+    },
+    {
+      "seed": 10303,
+      "classification": "UNMATCHED_FIT_EXPOSURE_DIAGNOSTIC_ONLY",
+      "fit_target_exposures": 1310720,
+      "exposure_window_ids_sha256": "230fa0cb6962cc1bc4651e85c53a3538a205b124902524f5b140edabec920878",
+      "metrics": {
+        "targets": 594688,
+        "nll_sum": 1882658.879577954,
+        "nll": 3.1657926165955157,
+        "bits_per_byte": 4.567273308445246,
+        "correct": 170469,
+        "accuracy": 0.2866528330822213,
+        "by_file": {
+          "Lib/_aix_support.py": {
+            "group": "_aix_support",
+            "nll_sum": 14236.415234700575,
+            "correct": 789,
+            "targets": 3968
+          },
+          "Lib/_py_abc.py": {
+            "group": "_py_abc",
+            "nll_sum": 19482.934084144017,
+            "correct": 1653,
+            "targets": 6144
+          },
+          "Lib/_strptime.py": {
+            "group": "_strptime",
+            "nll_sum": 81294.38852363081,
+            "correct": 7850,
+            "targets": 25472
+          },
+          "Lib/bz2.py": {
+            "group": "bz2",
+            "nll_sum": 37562.63437862555,
+            "correct": 3261,
+            "targets": 11904
+          },
+          "Lib/code.py": {
+            "group": "code",
+            "nll_sum": 39851.293485677685,
+            "correct": 3894,
+            "targets": 13056
+          },
+          "Lib/copy.py": {
+            "group": "copy",
+            "nll_sum": 28348.582550357645,
+            "correct": 2459,
+            "targets": 8960
+          },
+          "Lib/glob.py": {
+            "group": "glob",
+            "nll_sum": 60941.882300569865,
+            "correct": 5683,
+            "targets": 19712
+          },
+          "Lib/numbers.py": {
+            "group": "numbers",
+            "nll_sum": 37485.80284197065,
+            "correct": 2612,
+            "targets": 11392
+          },
+          "Lib/optparse.py": {
+            "group": "optparse",
+            "nll_sum": 187980.52826219625,
+            "correct": 17810,
+            "targets": 60288
+          },
+          "Lib/pstats.py": {
+            "group": "pstats",
+            "nll_sum": 90570.73898365261,
+            "correct": 9119,
+            "targets": 29184
+          },
+          "Lib/rlcompleter.py": {
+            "group": "rlcompleter",
+            "nll_sum": 23533.808959380814,
+            "correct": 2484,
+            "targets": 7808
+          },
+          "Lib/selectors.py": {
+            "group": "selectors",
+            "nll_sum": 61053.73128144443,
+            "correct": 5892,
+            "targets": 19456
+          },
+          "Lib/ssl.py": {
+            "group": "ssl",
+            "nll_sum": 174709.4837340422,
+            "correct": 13818,
+            "targets": 52608
+          },
+          "Lib/subprocess.py": {
+            "group": "subprocess",
+            "nll_sum": 263208.58809753304,
+            "correct": 31835,
+            "targets": 89088
+          },
+          "Lib/tracemalloc.py": {
+            "group": "tracemalloc",
+            "nll_sum": 54767.353969099284,
+            "correct": 5466,
+            "targets": 17920
+          },
+          "Lib/typing.py": {
+            "group": "typing",
+            "nll_sum": 429111.57729194197,
+            "correct": 33803,
+            "targets": 132480
+          },
+          "Lib/xmlrpc/client.py": {
+            "group": "xmlrpc",
+            "nll_sum": 161749.95432988755,
+            "correct": 11756,
+            "targets": 48512
+          },
+          "Lib/xmlrpc/server.py": {
+            "group": "xmlrpc",
+            "nll_sum": 116769.1812690991,
+            "correct": 10285,
+            "targets": 36736
+          }
+        },
+        "by_group": {
+          "_aix_support": {
+            "nll_sum": 14236.415234700575,
+            "correct": 789,
+            "targets": 3968
+          },
+          "_py_abc": {
+            "nll_sum": 19482.934084144017,
+            "correct": 1653,
+            "targets": 6144
+          },
+          "_strptime": {
+            "nll_sum": 81294.38852363081,
+            "correct": 7850,
+            "targets": 25472
+          },
+          "bz2": {
+            "nll_sum": 37562.63437862555,
+            "correct": 3261,
+            "targets": 11904
+          },
+          "code": {
+            "nll_sum": 39851.293485677685,
+            "correct": 3894,
+            "targets": 13056
+          },
+          "copy": {
+            "nll_sum": 28348.582550357645,
+            "correct": 2459,
+            "targets": 8960
+          },
+          "glob": {
+            "nll_sum": 60941.882300569865,
+            "correct": 5683,
+            "targets": 19712
+          },
+          "numbers": {
+            "nll_sum": 37485.80284197065,
+            "correct": 2612,
+            "targets": 11392
+          },
+          "optparse": {
+            "nll_sum": 187980.52826219625,
+            "correct": 17810,
+            "targets": 60288
+          },
+          "pstats": {
+            "nll_sum": 90570.73898365261,
+            "correct": 9119,
+            "targets": 29184
+          },
+          "rlcompleter": {
+            "nll_sum": 23533.808959380814,
+            "correct": 2484,
+            "targets": 7808
+          },
+          "selectors": {
+            "nll_sum": 61053.73128144443,
+            "correct": 5892,
+            "targets": 19456
+          },
+          "ssl": {
+            "nll_sum": 174709.4837340422,
+            "correct": 13818,
+            "targets": 52608
+          },
+          "subprocess": {
+            "nll_sum": 263208.58809753304,
+            "correct": 31835,
+            "targets": 89088
+          },
+          "tracemalloc": {
+            "nll_sum": 54767.353969099284,
+            "correct": 5466,
+            "targets": 17920
+          },
+          "typing": {
+            "nll_sum": 429111.57729194197,
+            "correct": 33803,
+            "targets": 132480
+          },
+          "xmlrpc": {
+            "nll_sum": 278519.13559898664,
+            "correct": 22041,
+            "targets": 85248
+          }
+        }
+      }
+    }
+  ],
+  "individual_result_receipts": [
+    {
+      "key": [
+        "medium",
+        "causal_transformer",
+        10301
+      ],
+      "result_sha256": "00d981e5165cf1972f4408c9d49cab52456202832728ad572fae8c84bd86e58b"
+    },
+    {
+      "key": [
+        "medium",
+        "causal_transformer",
+        10302
+      ],
+      "result_sha256": "4450dbff534a215f100203c506c649622f5d4809fa7eb1b19ccba20aa0117ba1"
+    },
+    {
+      "key": [
+        "medium",
+        "causal_transformer",
+        10303
+      ],
+      "result_sha256": "673704ac4e11ddcb910aa0182c864ecd04056c5064502ae1a141ad33dbb3702a"
+    },
+    {
+      "key": [
+        "medium",
+        "stacked_gru",
+        10301
+      ],
+      "result_sha256": "73587c34989c9c4226e7cd8dfe09582510ffffa53a03f7d323f4fb69997b91ce"
+    },
+    {
+      "key": [
+        "medium",
+        "stacked_gru",
+        10302
+      ],
+      "result_sha256": "56dabb063213e818041d55f0d2aa4adff7693b5c4914dc822985b4c6339f88f3"
+    },
+    {
+      "key": [
+        "medium",
+        "stacked_gru",
+        10303
+      ],
+      "result_sha256": "4b169b3b02afd6c217c19de34ccf3469bdc6c69cc9f13be59ece6b596464240a"
+    },
+    {
+      "key": [
+        "medium",
+        "tac_associative_stack",
+        10301
+      ],
+      "result_sha256": "78318cec41b7d751bc90315df0a458faab76db14e70da0f8bed3cfa08c86bcef"
+    },
+    {
+      "key": [
+        "medium",
+        "tac_associative_stack",
+        10302
+      ],
+      "result_sha256": "1a86c1b5572eace8af04fb18c4bf21fcba1fab2d0fe034f23df1d4b8255e0774"
+    },
+    {
+      "key": [
+        "medium",
+        "tac_associative_stack",
+        10303
+      ],
+      "result_sha256": "6d684ecb68e23eb530bce9435978504f9cfb3522c55d3eb61da8d86843c8fded"
+    },
+    {
+      "key": [
+        "small",
+        "causal_transformer",
+        10301
+      ],
+      "result_sha256": "4050af5021679d8eca1ec226d4b50b8f5b4d691d90c860a2db17cf22a230cf3f"
+    },
+    {
+      "key": [
+        "small",
+        "causal_transformer",
+        10302
+      ],
+      "result_sha256": "3fb77b781f4d94e801c21be56cc617996d96d3e061c5819ae4f9283db21e4145"
+    },
+    {
+      "key": [
+        "small",
+        "causal_transformer",
+        10303
+      ],
+      "result_sha256": "6ab45f25d049736a76cbf31751926cb697507e9e04bdd20c5389a99a2ea6f600"
+    },
+    {
+      "key": [
+        "small",
+        "stacked_gru",
+        10301
+      ],
+      "result_sha256": "3e8f6637e9f83ead2262a0cd6f4ddac1e33f406b4d90967f534b136079bf0aa7"
+    },
+    {
+      "key": [
+        "small",
+        "stacked_gru",
+        10302
+      ],
+      "result_sha256": "850104697edab513101262c9f0e6343877a76851b8f479210e334b1c49416f59"
+    },
+    {
+      "key": [
+        "small",
+        "stacked_gru",
+        10303
+      ],
+      "result_sha256": "5af5f5960c6db2d95d980e55932a628a805c21f6ea0b112a1d58cf8fdcb5ed69"
+    },
+    {
+      "key": [
+        "small",
+        "tac_associative_stack",
+        10301
+      ],
+      "result_sha256": "59c447709f1dcdbec46ceb3195d0895100fb5c47e680c7f8c59e67555eb0e4f3"
+    },
+    {
+      "key": [
+        "small",
+        "tac_associative_stack",
+        10302
+      ],
+      "result_sha256": "f47bf04b03659fd1732d35df11ff4a7da99dccc2f4e035a12b2ae0919ed6c5f5"
+    },
+    {
+      "key": [
+        "small",
+        "tac_associative_stack",
+        10303
+      ],
+      "result_sha256": "767d60e3a32d6edff4b2ebc3d9708b14cf2ea0346e8c4e14f080a8ade477e3a4"
+    }
+  ],
+  "optimizer_updates": 0,
+  "protected_test_access": false,
+  "checkpoint_selection": false,
+  "independently_qualified": false,
+  "architecture_superiority_eligible": false,
+  "limits": [
+    "original training full FLOPs and tuning qualification incomplete; descriptive frozen-checkpoint measurements only",
+    "original 128-byte pilot context, not a long-memory or reasoning benchmark",
+    "shared project and publicly exposed DEV; out-of-repository and protected TEST generalization unknown",
+    "no independent evaluator identity, live writer ACL attestation, external goal or independent outcome qualification",
+    "original intermediate checkpoints absent; final states fixed and SHA-locked"
+  ]
+}

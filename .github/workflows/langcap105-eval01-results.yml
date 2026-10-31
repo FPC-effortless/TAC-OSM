@@ -1,0 +1,25 @@
+name: LANGCAP105-EVAL01 published result verification (no predictions)
+on:
+  pull_request:
+    paths:
+      - 'research/langcap105_eval01_results/**'
+      - '.github/workflows/langcap105-eval01-results.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  validate-published-results:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5'
+      - name: Recompute all summaries and paired uncertainty from original saved scores
+        env:
+          GH_READ_TOKEN: ${{ github.token }}
+        run: python research/langcap105_eval01_results/validate.py --verify-remote
