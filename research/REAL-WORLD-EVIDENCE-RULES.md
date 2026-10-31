@@ -43,12 +43,19 @@ protocols, failed runs, and evidence remain intact.
    missingness/censoring handling, baselines, metrics, thresholds, seed count,
    risk stratification and decision rule. Keep test frozen; all attempted runs,
    failures and negative results remain in the ledger.
-7. **Compete against the simplest good solution, not only TAC ablations.**
-   Depending on the task, include last-observation/persistence, useful
-   regression/AR or survival/hazard baselines, calibrated trees, GRU/SSM,
-   attention if relevant, and do-nothing/always-act policies wherever actions
-   truly exist. Match information, horizon, training budget and realistic
-   end-to-end compute; measure memory, latency, calibration and total cost.
+7. **Use credible contemporary neural architectures as the PRIMARY scientific competitors.**
+   A capability-focused study must compare TAC-OSM against a properly trained,
+   faithfully implemented Transformer/attention architecture and a competent
+   recurrent/SSM competitor wherever relevant to the declared task. Report
+   exact depth, width, parameter count, tokenizer, training budget, context
+   access and version; a tiny one-layer attention control must never be
+   described as the representative modern Transformer standard. Preserve
+   simpler current-byte/window, persistence, regression, calibrated-tree and
+   always-act controls as **diagnostics and practical lower bounds**, to catch
+   shortcut tasks and overcomplexity. They do not determine the headline
+   architecture ranking or justify inventing tasks that the simple controls
+   cannot solve. When compute/model scales differ, call the capable reference
+   unmatched and do not claim a parameter-matched superiority result.
 8. **Report the limits explicitly.** Real-world *offline prediction* is not
    real-world *policy utility*, causal counterfactual ability or autonomy.
    Do not claim commercial qualification without observed inspection/action
@@ -70,20 +77,28 @@ protocols, failed runs, and evidence remain intact.
     experimental requirements, not optional caveats. Non-matching runs are
     exploratory and cannot establish architectural superiority.
 
-## Compulsory prospective model-size budget — approximately 100,000 parameters (effective 2026-10-23)
+## Model-scale policy v2 — prospective amendment approved 2026-10-31
 
-**Non-negotiable rule 12 — every NEW trained neural model, architecture variant, ablation fitted from scratch, fine-tuned model, individual seed and trained comparator MUST target approximately 100,000 parameters.** This requirement applies to native TAC-OSM, Concept-CED, GRU, RSSM, SSM, recurrent/attention controls, event models, physical models and any other learned model developed in the TAC-OSM research program. The training environment, benchmark domain or source dataset does not create an exception.
+**Supersedes only the unconditional 100,000-parameter ceiling for newly declared v2 experiments.** The user's explicit instruction to change the model-size rule permits controlled larger-model studies. All earlier committed experiments remain under their *original* scale and evaluation contracts; the amendment never retroactively changes counts, scores, failures, or eligibility. The original 2026-10-23 rule remains enforced on historical/unamended prospective manifests for reproducibility.
 
-- **Exact target:** 100,000 trainable parameters **per independent trained model**, with an inclusive ±5% tolerance: **95,000–105,000**. This is an absolute model-size requirement, not merely a condition that compared architectures have similar sizes. Count encoder, recurrent/fast/slow/associative state projections, shared experts, concept components, action encoders, all decoder passes, routing, forecasts, uncertainty and decision heads, trainable embeddings and other scored-pathway learned parameters. Count shared weights only once; repeated decoder execution does not multiply parameter count. Independently count **all deployed learned weights**, including any frozen pretrained backbone: the same 95k–105k scale applies. Report untrained deterministic priors and runtime memory separately.
-- **Fair matches remain stricter:** for two or more trained alternatives, every arm must individually lie within **95k–105k**, AND trainable and deployed counts must match **within 1% between arms**, with the original real-world data, split, optimizer steps and training/FLOP budget fair-comparison requirements unchanged. A matched pair of 40k or 125k networks **fails** the new absolute rule even if their sizes match each other perfectly. A 95k-versus-105k pair **fails** the existing 1% parity rule.
-- **Fail closed before any optimizer step:** record exact live-model `sum(p.numel() for p in model.parameters() if p.requires_grad)` and `sum(p.numel() for p in model.parameters())` from the **actual instantiated implementation**. Record these in the preregistered `FAIR_COMPARISON.json` (single trained models use `study_type: single_model_training`). Check again against the actual fitted model and checkpoint in the postfit `--phase final` evidence. New noncomparative diagnostics must declare `no_new_model_fits: true`; a purported diagnostic must not train around this rule. The machine validator `scripts/validate_research_parity.py` enforces the prospective 100k count alongside the existing 1% fair-match gate; standalone implementations may call `--model-parameters COUNT --deployed-parameters COUNT` before fitting.
-- **No gaming:** do not add unused/dummy weights, frozen weight padding, artificial width inflation, external hidden learned models, selectively uncounted heads or a materially weaker comparator just to hit the size. Make every counted trained component useful and trainable on identical eligible data; count all model-owned pretrained/frozen learned weights within the deployed total.
-- **Classical controls:** pure persistence, deterministic physics/servo rules and non-neural analytical filters with no learned neural parameter tensor remain baseline methods, not ~100k-parameter neural training candidates. Keep them as compulsory external baselines instead of artificially padding them.
-- **Historical preservation and prospective scope:** ME001–ME072 and DEV001–DEV061 are frozen legacy registrations and retain their original parameter counts, scores and checkpoints; do not retrain them, manufacture larger models or retrospectively relabel results. The first future ME-series registered model training is ME073 and later (DEV062 and later); new unrecognized study IDs also follow the 100k rule. **A new fit, resumed new experimental training, newly trained seed or new model configuration—even when forked from legacy code—falls under this rule.** Renaming a new experiment to an old legacy ID is prohibited. The software's historical-study compatibility path is only for replaying unchanged original results.
-- **Exceptions:** there is no implied exception for convenience, device runtime, unavailable compute or an attractive preliminary result. If a fundamental scientific reason requires a different model scale, obtain an explicit updated owner research instruction and formally amend this rule **before** beginning that registered study; document the deviation as a separate model-scale research program, never present it as satisfying this 100k contract.
-- **No CPU wall-time parity:** the existing rule that model CPU seconds do NOT have to match remains intact. Same original real source, fair optimizer budget and comparable measured training compute remain compulsory; the new 100k target does not replace them.
+### New rule 12: preregister the scientific scale, not an arbitrary universal ceiling
 
-**Promotion gate:** missing counts, 94,999 or 105,001 trainable/deployed learned parameters, uncounted learned modules, an unmatched comparator, or an absent pre/post-fit receipt is a **training authorization FAIL** for prospective 100k studies. Do not spend real model-training budget until the absolute and relative parameter gates pass on the real implementation.
+- Any genuinely **new** training registration may choose a scale justified by its research question: e.g., ~100K for mechanism checks, ~1M / 10M for capability-learning and scaling studies, ~50M / 100M / larger for modern sequence-model research. These are examples, **not exact tiers or automatic training authorizations**. No arbitrary upper parameter limit is imposed by the scale policy.
+- The frozen `FAIR_COMPARISON.json` must specify `model_scale_policy: "declared-target-v2"` and `parameter_scale` containing **integer** `target_trainable_parameters`, `target_deployed_parameters` (>= trainable), `relative_tolerance: 0.05`, `registered_before_first_fit: true`, and a meaningful `rationale`. Exact declared targets are mandatory before optimization. Missing v2 declaration retains the earlier 100K legacy gate for existing manifests; no implicit exception or retroactive relaxation.
+- Every trained arm must fall within ±5% of its **declared absolute trainable and deployed** targets. For architecture superiority claims, separately maintain the existing tighter **≤1% trainable/deployed parity between arms**, identical authentic source/splits, training exposures, optimizer schedule, tuning budget and measured training FLOPs. The absolute band does **not** replace the cross-arm bound.
+- All learned parameters count: embeddings, attention, recurrence, associative state encoders, routers, heads, learned experts and **pretrained/frozen weights deployed by the evaluated model**, including backbone weights. Do not pad with dummy parameters, silently exclude pretrained backbones, or compare a 100K model to a 100M model and call them parameter-matched.
+- There is no requirement to equalize **CPU wall-clock** time between architectures. Report end-to-end time, prefill/decode throughput, memory/KV/state, actual training FLOPs, optimizer updates, data tokens, hardware, and energy if independently measured. Equal-compute and equal-data learning curves are separate mandatory analyses for comparative claims.
+- Contemporary large pretrained Transformer or Mamba-family systems may be **unmatched capability references** when clearly labeled, even when sizes differ. They cannot establish matched superiority of TAC and must not be mislabeled as ~100K controls.
+- Do not train merely because this scale amendment exists. A registered authentic-data cohort, source/target hashes, licensing/split/evidence review, **measured prefit model counts**, sufficiently specified optimizer and compute budget, signed independent-source/reward evidence and valid authorized training workflow remain mandatory. No benchmark result, exploratory DEV score or model-size selection may enter prefit target selection.
+- Classical, stateless, windowed and other inexpensive controls remain compulsory diagnostic or practical baselines, but are not substitutes for a credible, properly trained contemporary architecture in primary capability comparisons.
+
+### Historical continuity and scope
+
+The former 2026-10-23 **100K v1** policy applied to all new trained neural models at that time, with trainable/deployed size 95K–105K and cross-arm parity ≤1%. Preserve this history. Existing v1 studies and their locked runs—including LANGMATH101, ME073+ or DEV062+ registered before this policy change—**retain** their original 100K check, losses, experimental design and independent-attestation requirements. ME001–ME072 and DEV001–DEV061 retain the original pre-100K grandfathering rule. Editing a historical model manifest to `declared-target-v2` is forbidden; start a **new experiment ID** for any larger fresh fit, fine-tuning, additional seed, or changed source/architecture. In particular, PR #679 and its 135/138 original fits plus three post-hoc recoveries are immutable.
+
+The validator `scripts/validate_research_parity.py` now recognizes explicit v2 targets in addition to legacy 100K registrations. A standalone `--model-parameters` check is **count-only**, never a signed training authorization; `--target-trainable-parameters` and `--target-deployed-parameters` may be supplied for numerical validation. The signed research-integrity gate, prospective source audit, final measured checkpoint parity, and independent protected evaluation requirements remain binding.
+
+**Scientific evidence and promotion gate remain unchanged:** Real authentic data are required for primary capability claims. Synthetic tasks are wiring and shortcut diagnostics only. No claim of superior intelligence, commercial readiness, or reliability is authorized merely by scaling a model.
 
 ## Compulsory architecture-comparison contract (hard gate)
 
