@@ -31,3 +31,7 @@ Internally measured, not independently qualified. Same-model execution policies 
 The exact reciprocal source/proof IDs are pinned in PNDS_SOURCE_BRIDGE.json before continuation enablement.
 
 Pre-optimizer proof-build correction: the reserved Lean argument name prefix was renamed; failed source/run and corrected proof source remain in the reciprocal record. No100 real-input training or budget change occurred.
+
+## Measurement correction replay registered before attempt2
+
+Attempt1 source061dc749674680139600e9895cf5d104e24fa5c8/run41159811557 is preserved. Its warmup pack_hook returned input tensors directly, which can retain autograd references; physical memory readings are therefore unqualified. The corrected hook returns a detached data view while preserving values/storage, and a constructed backward regression checks gradient correctness. This is instrumentation only: actual16-update neural forward/backward code, all original weights/moments, data and hyperparameters remain unchanged. Register one corrective replay (attempt2), at most192 actual new optimizer steps across both attempts. Each attempt independently starts from original0992048-step archives and ends at2064; do not misrepresent two replays as sequential32-step training. Keep first gradient/optimizer evidence and all original memory/timing receipts; do not select whichever memory result is favorable. Accepted memory conclusions use the corrected attempt only.

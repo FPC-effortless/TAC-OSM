@@ -25,7 +25,8 @@ class Saves:
         if t.numel():
             storage=t.untyped_storage();pointer=storage.data_ptr()
             if pointer not in self.parameter_storages:self.nonparameter[pointer]=max(self.nonparameter.get(pointer,0),storage.nbytes())
-        return t
+        # Packed values are data views; retaining grad_fn can create cycles.
+        return t.detach()
     def unpack(self,t):return t
     def report(self):return {'logical_requested_bytes':self.logical,'save_requests':self.events,
         'distinct_nonparameter_requested_storage_bytes':sum(self.nonparameter.values()),

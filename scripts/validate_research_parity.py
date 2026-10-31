@@ -115,6 +115,7 @@ def check_langrecomp100(m,phase):
     rows=m.get("models",[])
     demand(len(rows)==6 and {(r.get("name"),r.get("seed")) for r in rows}=={(p,s) for p in ("native","recompute") for s in (9901,9902,9903)},"LANGRECOMP100 exact paired matrix required")
     demand(m.get("budget",{}).get("training_updates")==16 and m["budget"].get("tuning_trials")==0,"LANGRECOMP100 only16 updates without tuning")
+    demand(m["budget"].get("max_attempts",1) in (1,2),"LANGRECOMP100 at most one documented corrective replay")
     for r in rows:
         check_langtrain099_model(r,"LANGRECOMP100 actual model")
         if phase=="final":

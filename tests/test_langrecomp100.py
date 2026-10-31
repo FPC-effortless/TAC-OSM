@@ -76,8 +76,8 @@ def test_scalar_and_multidimensional_tensor_byte_digest():
     b={**a,'step':torch.tensor(2049.)};assert C.tensor_digest(a)!=C.tensor_digest(b)
 
 def test_saved_hook_counter_keeps_only_metadata_not_tensor_references():
-    w=load('worker');m=small();counter=w.Saves(m);a=torch.ones(3,4)
-    assert counter.pack(a) is a;assert counter.unpack(a) is a
+    w=load('worker');m=small();counter=w.Saves(m);a=torch.ones(3,4,requires_grad=True)
+    packed=counter.pack(a);assert packed is not a and not packed.requires_grad and packed.data_ptr()==a.data_ptr();assert counter.unpack(packed) is packed
     assert counter.report()['logical_requested_bytes']==a.numel()*a.element_size()
 
 def test_comparison_rejects_changed_gradient_even_if_output_equal():
@@ -113,3 +113,11 @@ def test_independent_full_graph_replay_reference_matches_actual_checkpoint():
     y,s=R.forward(m,x,owners=('a',),policy='recompute');ny,ns=n.replay_forward(p,x.numpy())
     np.testing.assert_allclose(y.detach().numpy(),ny,atol=5e-10,rtol=5e-10)
     for key in ns:np.testing.assert_allclose(s.tensors[key].detach().numpy(),ns[key],atol=5e-10,rtol=5e-10)
+
+
+def test_measurement_pack_preserves_gradient_without_retaining_grad_fn():
+    w=load('worker');m=small();counter=w.Saves(m);x=torch.arange(1.,7.,dtype=torch.float64,requires_grad=True)
+    with torch.autograd.graph.saved_tensors_hooks(counter.pack,counter.unpack):
+        y=x.tanh().square().sum()
+    actual,=torch.autograd.grad(y,x);expected=2*x.tanh()*(1-x.tanh().square())
+    torch.testing.assert_close(actual,expected,atol=1e-14,rtol=1e-14)

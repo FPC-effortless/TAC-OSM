@@ -1,7 +1,7 @@
 {
   "id": "LANGRECOMP100",
   "schema": "langrecomp100.exact10m-rematerialization.v1",
-  "continuation_enabled": true,
+  "continuation_enabled": false,
   "seeds": [
     9901,
     9902,
@@ -70,5 +70,18 @@
     "id": 13023429505,
     "name": "langtrain099-FIT-only",
     "zip_sha256": "d392f2e45b2ffac2cf9453c509dcb6602629d46053deacddf04ca8044e13f39c"
-  }
+  },
+  "attempt": 2,
+  "max_attempts": 2,
+  "attempt_history": [
+    {
+      "attempt": 1,
+      "source_commit": "061dc749674680139600e9895cf5d104e24fa5c8",
+      "run_id": 41159811557,
+      "actual_new_optimizer_steps_planned": 96,
+      "physical_memory_status": "SUPERSEDED_UNQUALIFIED_NONDETACHED_SAVED_HOOK",
+      "reason": "Warmup measurement pack_hook returned input tensors directly; detached data views avoid retaining autograd references. Neural source, parent weights, recipe and batches unchanged."
+    }
+  ],
+  "maximum_new_optimizer_steps_across_attempts": 192
 }

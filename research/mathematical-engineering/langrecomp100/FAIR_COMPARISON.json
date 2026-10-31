@@ -50,7 +50,10 @@
     "policy_workers_per_job": 2,
     "max_worker_seconds": 300,
     "GPU_minutes": 0,
-    "new_optimizer_steps_total": 96
+    "new_optimizer_steps_total": 96,
+    "max_attempts": 2,
+    "new_optimizer_steps_total_per_attempt": 96,
+    "max_new_optimizer_steps_all_attempts": 192
   },
   "models": [
     {
@@ -101,5 +104,6 @@
       "implementation": "PyTorch non-reentrant checkpointing",
       "url": "https://docs.pytorch.org/docs/stable/checkpoint.html"
     }
-  ]
+  ],
+  "measurement_correction": "One documented replay from original099 parents with detached saved-tensor measurement views; not model/quality tuning; first attempt retained and physicalRSS unqualified."
 }
