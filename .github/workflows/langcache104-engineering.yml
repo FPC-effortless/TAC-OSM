@@ -34,6 +34,7 @@ jobs:
         env:
           PYTHONPATH: 'src:.'
         run: |
+          python research/langcache104/verify_math_pins.py
           python research/langcache104/verify.py --out ci-artifacts/langcache104/ENGINEERING_VERIFICATION.json
           python research/langcache104/construct_presets.py --out ci-artifacts/langcache104/CONSTRUCTION.json
       - name: Preserve engineering receipts

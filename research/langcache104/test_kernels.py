@@ -115,3 +115,58 @@ def test_rotary_no_write_identity_and_parity_rotation():
     torch.testing.assert_close(states[0, :, 0, 0], torch.tensor([-1.,1.,-1.,1.], dtype=torch.float64))
     freeze = rotary_scan(a, torch.zeros_like(theta), offer, initial, mode="parallel")
     torch.testing.assert_close(freeze, initial[:, None].expand_as(freeze), atol=0, rtol=0)
+
+
+def test_long_horizon_fp32_matches_independent_fp64_and_envelopes():
+    """Finite 4,097-step drift fixture, not an all-input precision proof.
+
+    All inputs originate in FP32, then the independent serial oracle evaluates
+    those same represented inputs in FP64. Frozen segments exercise identity
+    carry, and one zero-retention event explicitly erases the prior state.
+    """
+    length, heads, rank, width = 4097, 2, 2, 4
+    generator = torch.Generator().manual_seed(1044097)
+    make = lambda *shape: torch.randn(*shape, generator=generator, dtype=torch.float32)
+    q = make(1, length, heads, width).softmax(-1)
+    k = make(1, length, heads, rank, width).softmax(-1)
+    v = make(1, length, heads, rank, width).tanh()
+    a = torch.empty(1, length, heads, dtype=torch.float32)
+    a[..., 0], a[..., 1] = .995, .999
+    a[:, 257:513] = 1
+    a[:, 2049:2305] = 1
+    a[:, 1536] = 0
+    w = (1-a) * make(1, length, heads).sigmoid()
+    mass = make(1, heads, width).sigmoid()
+    memory = make(1, heads, width, width).tanh() * mass[..., None, :]
+    arguments = (q, k, v, a, w, memory, mass)
+    tolerance = 1e-4  # Fixed absolute tolerance for this declared finite fixture.
+    with torch.no_grad():
+        actual = associative_read(*arguments, chunk_size=32, mode="chunk")
+        expected = bank_oracle(*(x.double() for x in arguments))
+        for observed, reference in zip(actual, expected):
+            assert float((observed.double()-reference).abs().max()) <= tolerance
+        reads, final_memory, final_mass, _ = actual
+        assert bool((final_memory.abs() <= final_mass[..., None, :] + tolerance).all())
+        assert bool((final_mass >= -tolerance).all())
+        assert bool((final_mass <= 1+tolerance).all())
+        assert bool((reads.abs() <= 1+tolerance).all())
+
+        theta = .03 * make(1, length, heads, width//2).tanh()
+        theta[:, 257:513] = 0
+        theta[:, 2049:2305] = 0
+        offer = make(1, length, heads, width).tanh()
+        offer = offer / offer.norm(dim=-1, keepdim=True).clamp_min(1)
+        initial = make(1, heads, width)
+        initial = initial / initial.norm(dim=-1, keepdim=True).clamp_min(1)
+        observed = rotary_scan(a[..., None], theta, offer, initial, mode="parallel")
+        reference = rotary_oracle(a.double()[..., None], theta.double(),
+                                  offer.double(), initial.double())
+        assert float((observed.double()-reference).abs().max()) <= tolerance
+        envelope = initial.double().norm(dim=-1)
+        envelopes = []
+        for index in range(length):
+            decay = a[:, index].double()
+            envelope = decay*envelope + (1-decay)*offer[:, index].double().norm(dim=-1)
+            envelopes.append(envelope)
+        envelope_trajectory = torch.stack(envelopes, 1)
+        assert bool((observed.double().norm(dim=-1) <= envelope_trajectory+tolerance).all())

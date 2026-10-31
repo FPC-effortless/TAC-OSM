@@ -10,7 +10,7 @@
   "cuda_available": false,
   "gpu_speed_or_precision_qualification": "INCONCLUSIVE_NOT_EXECUTED",
   "tests": {
-    "tests": 86,
+    "tests": 96,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -21,10 +21,13 @@
     "research/langcache104/exact_store.py": "bbc5fffc65639b044c0cf78588287fadf1a5f7783f5d0dde369d06f4049e5a3b",
     "research/langcache104/probe_adapter.py": "84f5119e2b239c7f25f4b76f6c580004f18b6122b11214bb6316f85de80f67e1",
     "research/langcache104/test_model.py": "099a4f91c9d1b988735016f463563e83a6b3a69e051c5351f3ff48d1f6e90d70",
-    "research/langcache104/test_kernels.py": "5f665eb59dff86fd86220a29d07ff1f421deee74d019ff65c4b61278e89882f6",
+    "research/langcache104/test_kernels.py": "f595ef41aaad9000898d2444bb86d8890fdc5b0e1fe4e1d7390df7f883f490e1",
     "research/langcache104/test_exact_store.py": "09fa37bd3e85a42da896e662022763d91e07ed036ff802dc3eb7e76b95052337",
     "research/langcache104/test_config_state.py": "df6cb65cbfe9040fe05455f651ed19839ae875c6d060c138c693444e7264a8f1",
-    "research/langcache104/verify.py": "a4ac8b48d514dc849070a638048b510d84173a11ab78d7d0e6d1edec0a1adb7a"
+    "research/langcache104/math_reference.py": "410eb9d44f80d65607c0ec2433e25d5be869b58cc3706982cbc0d0b9cf75eda5",
+    "research/langcache104/test_math_reference.py": "1f04b95e6a233abc5a3cb54620bd838cf3f5732a97b4e8d4eaf050cc48d00d48",
+    "research/langcache104/test_math_correspondence.py": "2a2cfd6743b9dd8fd4d8da18c03c65d00d90e1e755c925e646f2a533f0b78b23",
+    "research/langcache104/verify.py": "79eea08fe9738358717ccf8ce02253782be7015d68d1881888e00abf615d0c69"
   },
   "cases": [
     {
@@ -1023,6 +1026,11 @@
     }
   ],
   "training_authorized": false,
+  "independent_full_graph_reference": {
+    "forward_and_all_state": "PASS_TINY_FP64_COLD_AND_CONTINUED_MASKED_FIXTURES",
+    "finite_difference_gradients": "PASS_60_PARAMETER_TENSOR_COORDINATES_AND_14_STATE_TENSOR_COORDINATES",
+    "scope": "SAMPLED_COORDINATES_NOT_ALL_ELEMENT_OR_ALL_GEOMETRY_PROOF"
+  },
   "open_gates": {
     "trained_capability": "NOT_TRAINED",
     "primary_real_source": "OPEN_NO_SOURCE_USED",
@@ -1034,7 +1042,7 @@
   "limits": [
     "finite constructed source fixtures do not establish learned ability",
     "shared PyTorch primitives; independently written recurrent operator oracles",
-    "full-model chunk/recurrent parity shares parameter projections and output graph",
+    "full-model chunk/recurrent parity shares projections; separate plain-list graph checks tiny fixtures and sampled derivatives",
     "no optimizer, DEV scoring, protected TEST, GPU benchmark or paid compute",
     "exact store is an explicit observed-record API, separate from neural logits"
   ]

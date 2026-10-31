@@ -81,6 +81,7 @@ def run(out):
     torch.set_num_threads(2)
     test_paths = ["research/langcache104/test_kernels.py", "research/langcache104/test_model.py",
                   "research/langcache104/test_exact_store.py", "research/langcache104/test_config_state.py",
+                  "research/langcache104/test_math_reference.py", "research/langcache104/test_math_correspondence.py",
                   "tests/test_research_probe_agnostic.py"]
     with tempfile.TemporaryDirectory(prefix="langcache104-no-fit-") as directory:
         junit = Path(directory)/"junit.xml"
@@ -94,7 +95,8 @@ def run(out):
         tests = {name: sum(int(suite.get(name, 0)) for suite in suites)
                  for name in ("tests", "failures", "errors", "skipped")}
     files = ["model.py", "kernels.py", "exact_store.py", "probe_adapter.py",
-             "test_model.py", "test_kernels.py", "test_exact_store.py", "test_config_state.py", "verify.py"]
+             "test_model.py", "test_kernels.py", "test_exact_store.py", "test_config_state.py",
+             "math_reference.py", "test_math_reference.py", "test_math_correspondence.py", "verify.py"]
     hashes = {"research/langcache104/"+name: hashlib.sha256(
         (ROOT/"research/langcache104"/name).read_bytes()).hexdigest() for name in files}
     report = {"schema": "tac-osm.langcache104-engineering.v1",
@@ -107,6 +109,9 @@ def run(out):
               "tests": tests, "source_files_sha256": hashes,
               "cases": [numeric_case(torch.float32), numeric_case(torch.float64)],
               "training_authorized": False,
+              "independent_full_graph_reference": {"forward_and_all_state": "PASS_TINY_FP64_COLD_AND_CONTINUED_MASKED_FIXTURES",
+                  "finite_difference_gradients": "PASS_60_PARAMETER_TENSOR_COORDINATES_AND_14_STATE_TENSOR_COORDINATES",
+                  "scope": "SAMPLED_COORDINATES_NOT_ALL_ELEMENT_OR_ALL_GEOMETRY_PROOF"},
               "open_gates": {"trained_capability": "NOT_TRAINED",
                   "primary_real_source": "OPEN_NO_SOURCE_USED",
                   "full_graph_lean_correspondence": "OPEN",
@@ -115,7 +120,7 @@ def run(out):
                   "learned_exact_key_routing": "NOT_IMPLEMENTED_EXPLICIT_KEY_API_ONLY"},
               "limits": ["finite constructed source fixtures do not establish learned ability",
                   "shared PyTorch primitives; independently written recurrent operator oracles",
-                  "full-model chunk/recurrent parity shares parameter projections and output graph",
+                  "full-model chunk/recurrent parity shares projections; separate plain-list graph checks tiny fixtures and sampled derivatives",
                   "no optimizer, DEV scoring, protected TEST, GPU benchmark or paid compute",
                   "exact store is an explicit observed-record API, separate from neural logits"]}
     out = Path(out); out.parent.mkdir(parents=True, exist_ok=True)

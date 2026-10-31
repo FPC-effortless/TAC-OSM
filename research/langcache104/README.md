@@ -250,6 +250,12 @@ mixed-precision and trained-checkpoint dimensions remain INCONCLUSIVE.
 The PNDS companion supplies source-pinned Python equations and Lean definitions.
 Read its source map for exact coverage, build status and OPEN whole-model proofs.
 No formal release is claimed while compilation/correspondence obligations remain.
+The initial Lean interface covers the even-value-width subfamily; the optional
+rotation-disabled source permits other widths. This coverage gap remains OPEN.
+The independent Python formulation covers the full tiny tested neural graph,
+including masked continuation and positions. Its numerical derivative audit
+samples one coordinate in each of 60 named parameter tensors and 14 incoming
+state tensors; it is not an all-element derivative proof.
 
 Before any fit, freeze a new `declared-target-v2` authentic-data registration,
 independent source/goal/reward/ACL evidence, measured counts and compute, and
