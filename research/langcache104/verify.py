@@ -82,6 +82,7 @@ def run(out):
     test_paths = ["research/langcache104/test_kernels.py", "research/langcache104/test_model.py",
                   "research/langcache104/test_exact_store.py", "research/langcache104/test_config_state.py",
                   "research/langcache104/test_math_reference.py", "research/langcache104/test_math_correspondence.py",
+                  "research/langcache104/test_registry.py",
                   "tests/test_research_probe_agnostic.py"]
     with tempfile.TemporaryDirectory(prefix="langcache104-no-fit-") as directory:
         junit = Path(directory)/"junit.xml"
@@ -96,7 +97,7 @@ def run(out):
                  for name in ("tests", "failures", "errors", "skipped")}
     files = ["model.py", "kernels.py", "exact_store.py", "probe_adapter.py",
              "test_model.py", "test_kernels.py", "test_exact_store.py", "test_config_state.py",
-             "math_reference.py", "test_math_reference.py", "test_math_correspondence.py", "verify.py"]
+             "math_reference.py", "test_math_reference.py", "test_math_correspondence.py", "test_registry.py", "verify.py"]
     hashes = {"research/langcache104/"+name: hashlib.sha256(
         (ROOT/"research/langcache104"/name).read_bytes()).hexdigest() for name in files}
     report = {"schema": "tac-osm.langcache104-engineering.v1",
