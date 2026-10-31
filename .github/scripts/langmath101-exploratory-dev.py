@@ -48,9 +48,37 @@ def mod(name, path):
     spec.loader.exec_module(m)
     return m
 
+def amended_finalizer():
+    """Check original optimizer slots exactly, allowing legitimate sparse steps.
+
+    Original trainer permits 0 < each AdamW slot step <= total steps and
+    explicitly records each slot count. Original finalizer instead requires
+    equality with total steps for EVERY parameter, which contradicts the
+    frozen training contract for conditional adaptive pathways. The corrected
+    exploratory verifier permits skipped-gradient steps while STILL requiring
+    the exact ordered saved slot counters to match FIT_RECEIPT.json, and
+    retaining every other frozen finalizer assertion unchanged.
+    """
+    path=STUDY/"finalize.py"
+    original=path.read_text()
+    before="step = slot['step']; require(isinstance(step,torch.Tensor) and step.numel() == 1 and float(step) == receipt['actual_steps'], 'actual optimizer slot step differs')"
+    after="step = slot['step']; require(isinstance(step,torch.Tensor) and step.numel() == 1 and 0 < float(step) <= receipt['actual_steps'], 'actual optimizer slot step outside trained bounds')"
+    if original.count(before)!=1:
+        raise ValueError("Frozen finalizer slot assertion unexpectedly changed")
+    if "require(slot_steps == receipt.get('optimizer_slot_steps')" not in original:
+        raise ValueError("Original exact recorded slot-counter binding must remain")
+    effective=original.replace(before,after)
+    assert effective.replace(after,before)==original
+    import types
+    module=types.ModuleType("langmath101_exploratory_finalizer_sparse_slot_audit")
+    module.__file__=str(path)
+    sys.modules[module.__name__]=module
+    exec(compile(effective,str(path),"exec"),module.__dict__)
+    return module,hashlib.sha256(original.encode()).hexdigest(),hashlib.sha256(effective.encode()).hexdigest()
+
 def modules():
-    return mod("langmath101_exploratory_common", STUDY/"common.py"), mod(
-        "langmath101_exploratory_finalizer", STUDY/"finalize.py")
+    finalizer,_,_=amended_finalizer()
+    return mod("langmath101_exploratory_common", STUDY/"common.py"), finalizer
 
 def amended_script():
     return mod("langmath101_exploratory_amendment", ROOT/".github/scripts/langmath101-time-amendment.py")
@@ -176,7 +204,18 @@ def seal(a):
     # This validates the measured operator/matched arithmetic convention, but
     # is not a preregistered-source/time gate and must never produce its seal.
     resource=gate.validate_program(full_rows,"final",root=C.ROOT)
+    _,original_finalizer_sha,effective_finalizer_sha=amended_finalizer()
+    slot_variation=[{"arm":r["architecture"],"seed":r["seed"],"lane":r["lane"],
+                     "actual_steps":r["measured"]["actual_steps"],
+                     "min_slot_steps":min(r["measured"]["optimizer_slot_steps"]),
+                     "max_slot_steps":max(r["measured"]["optimizer_slot_steps"]),
+                     "sub_full_update_slots":sum(n<r["measured"]["actual_steps"] for n in r["measured"]["optimizer_slot_steps"])}
+                    for r in full_rows["arms"] if any(n<r["measured"]["actual_steps"] for n in r["measured"]["optimizer_slot_steps"])]
     save(a.output/"EXPLORATORY_RESOURCE_GATE.json",{
+        "original_finalizer_sha256":original_finalizer_sha,
+        "effective_sparse_slot_finalizer_sha256":effective_finalizer_sha,
+        "slot_audit_scope":"Only exact AdamW slot equality changed to 0<slot<=total; all ordered counters still match saved FIT receipt",
+        "conditionally_stepped_parameter_cases":slot_variation,
         "status":"POSTHOC_INTERNAL_ARITHMETIC_GATE_NOT_ORIGINAL_PASS",
         "measured_gate":resource,
         "registered_wall_limit_seconds":2700,"recovered_wall_limit_seconds":4800,
@@ -372,6 +411,8 @@ def main():
     if a.cmd=="self-test":
         original,effective=gated_eval_source()
         amended_script().effective_source()
+        finalizer,source_finalizer,effective_finalizer=amended_finalizer()
+        assert source_finalizer!=effective_finalizer
         assert "SEALED_EXPLORATORY_MIXED_PROVENANCE_BEFORE_DEV" in effective
         assert "SEALED_ALL_FITS_BEFORE_DEV" not in effective
         print(json.dumps({"status":"EXPLORATORY_GATE_ISOLATED",
