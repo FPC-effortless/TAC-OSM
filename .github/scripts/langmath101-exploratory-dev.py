@@ -48,7 +48,7 @@ def mod(name, path):
     spec.loader.exec_module(m)
     return m
 
-def amended_finalizer():
+def amended_finalizer(*,compile_only=False):
     """Check original optimizer slots exactly, allowing legitimate sparse steps.
 
     Original trainer permits 0 < each AdamW slot step <= total steps and
@@ -69,6 +69,9 @@ def amended_finalizer():
         raise ValueError("Original exact recorded slot-counter binding must remain")
     effective=original.replace(before,after)
     assert effective.replace(after,before)==original
+    compile(effective,str(path),"exec")
+    if compile_only:
+        return None,hashlib.sha256(original.encode()).hexdigest(),hashlib.sha256(effective.encode()).hexdigest()
     import types
     module=types.ModuleType("langmath101_exploratory_finalizer_sparse_slot_audit")
     module.__file__=str(path)
@@ -411,7 +414,7 @@ def main():
     if a.cmd=="self-test":
         original,effective=gated_eval_source()
         amended_script().effective_source()
-        finalizer,source_finalizer,effective_finalizer=amended_finalizer()
+        finalizer,source_finalizer,effective_finalizer=amended_finalizer(compile_only=True)
         assert source_finalizer!=effective_finalizer
         assert "SEALED_EXPLORATORY_MIXED_PROVENANCE_BEFORE_DEV" in effective
         assert "SEALED_ALL_FITS_BEFORE_DEV" not in effective
