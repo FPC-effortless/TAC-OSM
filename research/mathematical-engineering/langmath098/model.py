@@ -99,14 +99,19 @@ class ContextualAssociativeTAC098(nn.Module):
             raise ValueError('FP32/FP64 only until mixed-precision correspondence is qualified')
         if tokens.device != self.embedding.weight.device:
             raise ValueError('tokens and model must share a device')
-        expected = self.start(owners)
-        if (state.owners != expected.owners or type(state.clock) is not int or state.clock < 0
-                or tokens.shape[0] != len(owners) or set(state.tensors) != set(expected.tensors)):
+        if not owners or len(set(owners)) != len(owners) or any(type(o) is not str or not o for o in owners):
+            raise ValueError('explicit unique nonempty stream owners required')
+        # Validate metadata without allocating five throwaway zero tensors on
+        # every streaming step. No learned-value or state cache is maintained.
+        shapes = {'context': (48,), 'lexical': (3, 32), 'previous_key': (2, 8),
+                  'memory': (2, 16, 8), 'mass': (2, 8)}
+        if (state.owners != owners or type(state.clock) is not int or state.clock < 0
+                or tokens.shape[0] != len(owners) or set(state.tensors) != set(shapes)):
             raise ValueError('complete same-owner state and legitimate clock required')
         for name, tensor in state.tensors.items():
-            example = expected.tensors[name]
-            if (tensor.shape != example.shape or tensor.dtype != example.dtype
-                    or tensor.device != example.device or not bool(torch.isfinite(tensor).all())):
+            if (not isinstance(tensor, torch.Tensor) or tensor.shape != (len(owners), *shapes[name])
+                    or tensor.dtype != self.embedding.weight.dtype or tensor.device != self.embedding.weight.device
+                    or not bool(torch.isfinite(tensor).all())):
                 raise ValueError('state tensor shape/precision/device/finite mismatch: '+name)
 
     def forward(self, tokens, *, state=None, owners=None, write_mask=None, parallel=True,

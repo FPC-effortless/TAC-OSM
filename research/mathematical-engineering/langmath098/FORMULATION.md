@@ -79,7 +79,8 @@ subsequently positive simplex vectors. Each valid persistent tensor is bounded.
 The comparison gate is convex, so its mixed read is bounded as well. Decoder
 and parameter-gradient conditioning is distinct from this state invariant.
 
-The Lean file proves finite tensor affine composition/action, zero/nonwrite,
+The Lean file proves the full persistent tensor invariant over arbitrary observation
+streams, activation-derived encoder bounds, finite tensor affine composition/action, zero/nonwrite,
 matrix coordinate cone preservation, mass bound, normalized read bound,
 activation ranges, read-pair exposure and halving-scan work. No assumed matrix
 norm inequality replaces the actual update proof. The Python reference covers

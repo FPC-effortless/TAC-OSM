@@ -140,3 +140,16 @@ def test_source_registered_probe_adapter_boundary_and_state_derivatives():
     assert probe_dependencies(m,sample,a)['status']=='MEASURED'
     assert probe_entity_isolation(m,sample,a,tolerance=3e-5)['status']=='PASS'
     with pytest.raises(ValueError):a.validate(m,{**sample,'targets':torch.ones(2,4)})
+
+
+def test_future_only_training_graph_reaches_acquisition_and_detach_removes_path():
+    m=model();x=torch.arange(16).reshape(2,8);target=(x+1)%256
+    future=torch.zeros_like(x,dtype=torch.bool);future[:,-2:]=True;valid=torch.ones_like(future)
+    norms=[]
+    for detached in (False,True):
+        m.zero_grad();first,state=m(x[:,:4],owners=('a','b'))
+        if detached:state=M.State098(state.owners,state.clock,{n:v.detach() for n,v in state.tensors.items()})
+        later,_=m(x[:,4:],state=state,owners=('a','b'))
+        loss=O.controlled_loss(torch.cat((first,later),1),target,future,valid,('code','arc'),prefix_weight=0.)
+        loss.backward();norms.append(float(m.embedding.weight.grad[0].norm()))
+    assert norms[0]>1e-10 and norms[1]==0
