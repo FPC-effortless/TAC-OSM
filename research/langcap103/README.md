@@ -26,7 +26,9 @@ The native modules in `vendor/` are source-identical copies pinned in
 preflight uses the existing parameterized stack implementation and its real
 gated readout, with at least 70% of candidate parameters outside the readout.
 No dummy weights are introduced. Graph-matched PNDS and probe qualification
-for these exact scaled instances remain OPEN before training.
+for these exact scaled instances are tracked by paired PNDS PR 103 and the
+finite original-source graph/probe checks below. Full release qualification
+and universal backend/finite-precision proofs remain OPEN.
 
 Run `python scripts/phone_lab.py plan research/phone_queue/langcap103-prefit.json`
 then `python research/langcap103/preflight.py --out ci-artifacts/langcap103/profile.json`.
@@ -121,3 +123,54 @@ The real shared prefit gate is invoked without a signature and must reject
 the declaration at its independent-evidence check. The emitted
 `TRAINING_READINESS.json` retains that actual error and all remaining blockers.
 The preparation workflow has no optimizer or GPU execution step.
+
+## Full graph equations, source parity and discrete history
+
+[PNDS PR 103](https://github.com/FPC-effortless/pnds-lean/pull/103) supplies
+shape-indexed exact-real equations for all three complete forward graphs and
+an independently written Python reference. `PNDS_PIN.json` freezes the exact
+mathematics commit and content hashes; both repositories preserve all 17
+legacy entries and append a separate six-configuration prospective index.
+Reciprocal checks use immutable draft commits and compare the full semantic
+JSON, with no default-branch substitution or silent network failure.
+
+The Lean module compiled and audited five proved structural facts: recurrent
+prefix causality and streaming composition, causal future-mask exclusion,
+conditional mass nonnegativity and positive read denominators. Those facts
+do not prove the complete backend or trained intelligence. The independent
+Python graph never calls source forward/attention/recurrent modules; its
+primitive Torch kernels remain shared with the source.
+
+`verify_graphs.py` compares every parameter-tensor gradient, all output logits,
+and recurrent state on actual FIT bytes for six configurations, two dtypes
+and two prefix lengths: **24 bounded numerical cases**, with native
+serial/parallel and chunked-carry checks. Deliberately wrong readouts must be
+rejected, and future-byte poison must leave earlier outputs unchanged.
+Architecture-agnostic adapters also check actual forecast equivalence,
+state purity, named-state interventions and entity isolation; injected
+cross-entity contamination must be detected. No model weights are optimized.
+
+The generic memory interface now supports integer/boolean and growing states.
+Transformer raw-byte prefixes are exposed as int64 external history, patched
+as legal byte IDs and counted at their actual tensor storage size. They are
+never relabeled as stateless or as bounded learned recurrent memory. Discrete
+identities are compared exactly without float rounding or overflowing integer
+subtraction; continuous dependency probes use the actual embedding-coordinate
+graph. No fictitious derivative of discrete byte identity is claimed.
+
+## Fused-attention accounting correction
+
+The original Torch profiler reports zero/unreported arithmetic for CPU fused
+attention. `attention_accounting.py` now inspects actual runtime schemas and
+Q/K/V shapes, rejects already-counted matrix children, and adds the omitted
+full-dense-equivalent QK/PV forward and four backward matrix products using
+multiply-add=2. Expected additions at the profiled batch 2/sequence 256 are
+805,306,368 units for the four-layer 1M Transformer and 3,221,225,472 for the
+eight-layer 10M Transformer. Runtime event/layer counts must match; there is
+no extrapolated charge if a kernel or schema is unexpected.
+
+These are dense-equivalent units, not measured hardware instructions: a fused
+causal kernel may skip future blocks. Scaling, exp/softmax/normalization,
+optimizer work and other unsupported operations remain explicit. Therefore
+the complete training FLOP and 1% comparative-compute gates remain OPEN;
+the corrected subtotal is not promoted to a full-compute measurement.

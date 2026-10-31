@@ -100,7 +100,8 @@ def _module_snap(model: nn.Module) -> dict[str, torch.Tensor]:
 def _unchanged(before: Mapping[str, torch.Tensor],
                after: Mapping[str, torch.Tensor]) -> bool:
     return before.keys() == after.keys() and all(
-        torch.equal(before[k], after[k]) for k in before)
+        before[k].dtype == after[k].dtype and before[k].device == after[k].device
+        and torch.equal(before[k], after[k]) for k in before)
 
 
 def _norm(value: torch.Tensor) -> float:
@@ -309,6 +310,8 @@ def probe_entity_isolation(model: nn.Module, sample: Any,
                 for k in a:
                     if a[k].ndim < 1 or a[k].shape[0] != batch or b[k].shape != a[k][i:i + 1].shape:
                         raise ValueError("entity-isolation tensors must have declared batch-leading axis")
+                    if a[k].dtype != b[k].dtype or a[k].device != b[k].device:
+                        raise ValueError("entity output/state dtype or device changed when sliced")
                     if not torch.is_floating_point(a[k]):
                         # Integer IDs near 2**63 and boolean masks must never
                         # be rounded to float or subtracted with overflow.
