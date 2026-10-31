@@ -1,0 +1,113 @@
+{
+  "schema": "langcap105.owner-authorized-exploratory-fit.v1",
+  "study_id": "LANGCAP105",
+  "registration_date": "2026-10-31",
+  "authorization_basis": "User explicitly authorized training in ChatGPT on 2026-10-31 and requested no external approval workflow",
+  "owner_authorized": true,
+  "scientific_status": "EXPLORATORY_FIT_ONLY_NOT_EXTERNALLY_ATTESTED",
+  "independent_attestation": false,
+  "architecture_superiority_eligible": false,
+  "protected_test_access": false,
+  "dev_scoring_in_training": false,
+  "comparison_scope": "Training execution and within-model FIT learning only; NOT resource-matched architecture comparisons",
+  "source": {
+    "repository": "python/cpython",
+    "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+    "source_sha256": "94fc488af0e975c0643e1d566d0468a4091199fdae02b159c8669a01bebef842",
+    "fit_files": 560,
+    "dev_files_in_worker": 0
+  },
+  "models": {
+    "small": {
+      "target_parameters": 1000000,
+      "configurations": [
+        {
+          "arm": "tac_associative_stack",
+          "width": 256,
+          "depth": 8,
+          "trainable_parameters": 1000028
+        },
+        {
+          "arm": "causal_transformer",
+          "width": 128,
+          "depth": 4,
+          "ffn": 649,
+          "trainable_parameters": 999972
+        },
+        {
+          "arm": "stacked_gru",
+          "width": 193,
+          "depth": 4,
+          "trainable_parameters": 997680
+        }
+      ]
+    },
+    "medium": {
+      "target_parameters": 10000000,
+      "configurations": [
+        {
+          "arm": "tac_associative_stack",
+          "width": 992,
+          "depth": 8,
+          "trainable_parameters": 9999922
+        },
+        {
+          "arm": "causal_transformer",
+          "width": 256,
+          "depth": 8,
+          "ffn": 1889,
+          "trainable_parameters": 9999880
+        },
+        {
+          "arm": "stacked_gru",
+          "width": 634,
+          "depth": 4,
+          "trainable_parameters": 9987024
+        }
+      ]
+    }
+  },
+  "seeds": [
+    10301,
+    10302,
+    10303
+  ],
+  "fit": {
+    "steps": 2560,
+    "batch_size": 4,
+    "sequence_length": 128,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "eps": 1e-8,
+    "weight_decay": 0.1,
+    "precision": "float32",
+    "rng_reseed_each_fit": true,
+    "source_order": "per-seed repeated shuffled FIT-only original file chunks, no cross-file targets",
+    "save_checkpoints_at": [
+      256,
+      512,
+      1024,
+      2048,
+      2560
+    ],
+    "cpu_threads": 2
+  },
+  "resource_bounds": {
+    "per_job_soft_deadline_minutes": 320,
+    "github_job_timeout_minutes": 360,
+    "max_parallel_jobs": 3,
+    "hardware": "GitHub Actions ubuntu CPU no GPU",
+    "compute_accounting": "actual wall time, bytes and steps; full training FLOPs NOT MEASURED"
+  },
+  "required_outcomes": {
+    "trained_weights_checkpoints": true,
+    "optimizer_and_rng_retained": true,
+    "fit_loss_curve": true,
+    "all_18_fit_success": false,
+    "independent_quality_assessment": false
+  }
+}
