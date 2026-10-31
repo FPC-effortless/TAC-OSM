@@ -1,0 +1,169 @@
+{
+  "study_id": "SENSE-TOK-002",
+  "date": "2026-10-31",
+  "status": "NO_FIT_ENGINEERING_DIAGNOSTIC",
+  "trained_models": 0,
+  "optimizer_steps": 0,
+  "language_model_capability": "NOT_MEASURED",
+  "architectural_superiority": "NOT_QUALIFIED",
+  "source": {
+    "publisher": "python/cpython",
+    "tag": "v3.13.5",
+    "commit": "6cb20a219a860eaf687b2d968b41c480c7461909",
+    "release_signature": "GITHUB_VERIFIED",
+    "original_license": "PSF-2.0",
+    "bytes_all": 62102,
+    "bytes_publisher_blob_matching": 45753,
+    "exact_matching_full_files": 6,
+    "mismatched_installed_files": [
+      "argparse.py",
+      "logging/__init__.py"
+    ],
+    "source_matches_are_not_independent_reward_or_goal_attestation": true
+  },
+  "all_files": {
+    "fixed": {
+      "patches": 7765,
+      "lexer_boundary_f1": 0.12513654489688686
+    },
+    "entropy": {
+      "patches": 23038,
+      "lexer_boundary_f1": 0.18539975013335094
+    },
+    "sensory": {
+      "patches": 11622,
+      "lexer_boundary_f1": 0.3319139730857519
+    },
+    "sensory_v2": {
+      "patches": 11627,
+      "lexer_boundary_f1": 0.4128308607949052,
+      "delayed_commits": 11619
+    }
+  },
+  "publisher_blob_matched_subset": {
+    "sensory": {
+      "patches": 8589,
+      "lexer_boundary_f1": 0.3218074341183627
+    },
+    "sensory_v2": {
+      "patches": 8593,
+      "lexer_boundary_f1": 0.40620524186681567,
+      "delayed_commits": 8587
+    }
+  },
+  "mechanism_test": {
+    "data_origin": "locally installed genuine CPython sources; full-source original Git SHA verified after exploratory selection",
+    "metric": "unweighted per-file F1 against Python lexical boundaries; NOT semantics/capability",
+    "eight_files_positive": 8,
+    "eight_files_total": 8,
+    "model_comparison": "NONE",
+    "source_hashes_emitted_at_replay": true
+  },
+  "parameter_preflight": {
+    "common_causal_byte_gru": {
+      "trainable": 100400,
+      "deployed": 100400
+    },
+    "learned_soft_sensory_gru": {
+      "trainable": 100513,
+      "deployed": 100513
+    },
+    "relative_gap": 0.0011254980079681274,
+    "claimed_matched_training_compute": false
+  },
+  "not_yet_satisfied": [
+    "qualified real data entity-time split FIT DEV TEST",
+    "independently signed source/outcome/goal/reward/ACL evaluator preflight",
+    "reviewed FAIR_COMPARISON manifest",
+    "100k and <=1% count is only partial parity",
+    "PNDS reciprocal Lean+Python source-equivalence",
+    "ResearchProbeAdapter and matched activation/gradient gates",
+    "approved dual-T4 quota and 2-GPU signed execution",
+    "verified true bits-per-byte/continuation heldout result"
+  ],
+  "per_file": [
+    [
+      "argparse.py",
+      false,
+      8167,
+      0.36329,
+      0.46341,
+      1471,
+      1471
+    ],
+    [
+      "ast.py",
+      true,
+      8141,
+      0.42612,
+      0.55656,
+      1485,
+      1486
+    ],
+    [
+      "inspect.py",
+      true,
+      8174,
+      0.3811,
+      0.43625,
+      1492,
+      1493
+    ],
+    [
+      "csv.py",
+      true,
+      8133,
+      0.39001,
+      0.49403,
+      1477,
+      1478
+    ],
+    [
+      "difflib.py",
+      true,
+      8147,
+      0.14988,
+      0.18491,
+      1688,
+      1688
+    ],
+    [
+      "textwrap.py",
+      true,
+      8183,
+      0.26252,
+      0.34268,
+      1560,
+      1561
+    ],
+    [
+      "email/parser.py",
+      true,
+      4975,
+      0.32121,
+      0.42279,
+      887,
+      887
+    ],
+    [
+      "logging/__init__.py",
+      false,
+      8182,
+      0.36118,
+      0.40201,
+      1562,
+      1563
+    ]
+  ],
+  "per_file_columns": [
+    "source",
+    "matches_official_blob",
+    "exposed_bytes",
+    "sensory_lexer_f1_rounded",
+    "sensory_v2_lexer_f1_rounded",
+    "sensory_patches",
+    "sensory_v2_patches"
+  ],
+  "replay_command": "python scripts/diagnose_causal_stream.py --max-bytes 8192 --repeats 3 --output diagnostic.json",
+  "provenance_note": "Recorded against locally tested implementation prior to GitHub Actions replay; not independently source-qualified as a predictive benchmark."
+}
