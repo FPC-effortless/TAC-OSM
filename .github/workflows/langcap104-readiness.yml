@@ -1,0 +1,72 @@
+name: LANGCAP104 gated training preparation (NO MODEL FITS)
+on:
+  pull_request:
+    paths:
+      - 'research/langcap104/**'
+      - 'tests/test_langcap104_no_fit.py'
+      - '.github/workflows/langcap104-readiness.yml'
+permissions:
+  contents: read
+jobs:
+  fail-closed-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: No Torch installed, no optimizer, reject unapproved training
+        run: |
+          python -m pip install 'pytest>=8,<9'
+          python -m pytest -q tests/test_langcap104_no_fit.py
+          test ! -f research/mathematical-engineering/langcap104/FAIR_COMPARISON.json
+          python -m py_compile research/langcap104/train.py research/langcap104/stage_fit_only.py
+          echo 'NO TRAINING AUTHORIZED; independent signed evidence is not available'
+  authentic-fit-only-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Checkout exact independently declared CPython publisher revision
+        uses: actions/checkout@v4
+        with:
+          repository: python/cpython
+          ref: 60403a5409ff2c3f3b07dd2ca91a7a3e096839c7
+          path: ci-input/cpython
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify original source bytes without executing publisher code
+        run: python research/langcap103/source.py --source-dir ci-input/cpython --out ci-artifacts/langcap104-source
+      - name: Stage only original FIT bytes into separate archive
+        run: >-
+          python research/langcap104/stage_fit_only.py
+          --receipt ci-artifacts/langcap104-source/SOURCE_RECEIPT.json
+          --full-archive ci-artifacts/langcap104-source/corpus.tar
+          --output ci-artifacts/langcap104-fit-only
+      - name: Prove no DEV bytes can reach training job
+        run: |
+          python - <<'PY'
+          import json,tarfile
+          from pathlib import Path
+          receipt=json.loads(Path('ci-artifacts/langcap104-source/SOURCE_RECEIPT.json').read_text())
+          paths={r['path'] for r in receipt['identity']['files'] if r['split']=='DEV'}
+          with tarfile.open('ci-artifacts/langcap104-fit-only/FIT_ONLY.tar') as t:
+              original=set(t.getnames())
+          assert len(original)==560 and not original.intersection(paths)
+          assert json.loads(Path('ci-artifacts/langcap104-fit-only/FIT_STAGE.json').read_text())['optimizer_updates']==0
+          print('PASS: 560 FIT files; no DEV bytes; zero optimizer updates')
+          PY
+      - name: Archive only FIT model inputs and source metadata, no DEV file data
+        uses: actions/upload-artifact@v4
+        with:
+          name: langcap104-fit-only-staging-NOT-TRAINED
+          path: |
+            ci-artifacts/langcap104-fit-only/
+            ci-artifacts/langcap104-source/SOURCE_RECEIPT.json
+          retention-days: 30
