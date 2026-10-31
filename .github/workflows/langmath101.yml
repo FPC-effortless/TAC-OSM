@@ -55,7 +55,7 @@ jobs:
           python -m pytest -q "$STUDY/math/test_reference.py"
           python -m pytest -q "$STUDY/adaptive/test_models.py"
           python -m pytest -q "$STUDY/candidates/test_models.py" "$STUDY/candidates/test_conventional.py"
-          python -m pytest -q tests/test_research_parity_gate.py tests/test_research_probe_agnostic.py tests/test_langmath101_accounting.py
+          python -m pytest -q tests/test_research_parity_gate.py tests/test_research_probe_agnostic.py tests/test_langmath101_accounting.py tests/test_langmath101_artifact_downloads.py
       - name: Check actual frozen prefit receipts and mathematics readiness
         if: steps.route.outputs.fit == 'true'
         run: |
@@ -69,13 +69,11 @@ jobs:
           run-id: 41153068368
           name: langtrain099-FIT-only
           path: /tmp/langmath101-FIT
-      - uses: actions/download-artifact@v4
+      - name: Download all 69 exact original initializations by frozen archive ID
         if: steps.route.outputs.fit == 'true'
-        with:
-          github-token: ${{ github.token }}
-          run-id: 41169500006
-          pattern: langmath101-fit-*-parameter_exposure_matched
-          path: /tmp/langmath101-original-inits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/download-langmath101-artifacts.py --repository '${{ github.repository }}' --run-id 41169500006 --registry "$STUDY/ORIGINAL_INITIALIZATIONS.json" --expected 69 --output /tmp/langmath101-original-inits
       - name: Recheck every frozen real FIT profile before corrected optimization
         if: steps.route.outputs.fit == 'true'
         run: python "$STUDY/check_frozen_profiles.py" --fit /tmp/langmath101-FIT --initials /tmp/langmath101-original-inits --output ci-artifacts/FROZEN_PROFILE_RECHECK.json
@@ -142,10 +140,10 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install numpy==2.3.5
       - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: langmath101-fit-*
-          path: /tmp/langmath101-fits
+      - name: Download all 138 fit archives with complete pagination
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/download-langmath101-artifacts.py --repository '${{ github.repository }}' --run-id ${{ github.run_id }} --prefix langmath101-fit- --expected 138 --output /tmp/langmath101-fits
       - name: Reopen every original checkpoint and gate actual consumed resources before DEV
         run: |
           python "$STUDY/finalize.py" --manifest "$STUDY/FAIR_COMPARISON.json" --fitsdir /tmp/langmath101-fits --output ci-artifacts/seal
@@ -217,10 +215,10 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install numpy==2.3.5
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: langmath101-eval-*
-          path: /tmp/langmath101-evaluations
+      - name: Download all 138 evaluation archives with complete pagination
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/download-langmath101-artifacts.py --repository '${{ github.repository }}' --run-id ${{ github.run_id }} --prefix langmath101-eval- --expected 138 --output /tmp/langmath101-evaluations
       - run: python "$STUDY/aggregate.py" --manifest "$STUDY/FAIR_COMPARISON.json" --evaluations /tmp/langmath101-evaluations --output ci-artifacts/report
       - uses: actions/upload-artifact@v4
         with:

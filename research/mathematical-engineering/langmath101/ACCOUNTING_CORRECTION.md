@@ -53,6 +53,17 @@ itself byte-bound by the separately hashed V3 profile. No performance selection
 was used. Initial model bytes are preserved; the failed updated bytes remain
 unavailable.
 
+Run41174562442 passed204 source/fixture checks, math/source gates and the
+first four restored real-FIT profiles, then blocked because the cross-run
+artifact glob listed only the first100 of138 artifacts (49 of69 selected).
+Zero new optimizer updates ran. The corrected workflow fetches original
+initializations by frozen artifact IDs and uses complete pagination for all138
+final-fit and evaluation archives. ZIP and original checkpoint byte hashes are
+checked before use; missing, duplicate, changed or unsafe archives fail closed.
+Four local downloader regressions cover pagination, incomplete cohorts, hashes
+and traversal. The local restored-model check completed all69 real-FIT profiles
+with zero optimizer updates and exact original tensor/operator identities.
+
 Local Windows verification: 203 reference, candidate, causal-interface, parity,
 probe and accounting tests passed. The new constructed optimizer regressions
 check exact first/warm AdamW weight and moment equality against untraced
