@@ -1,0 +1,103 @@
+{
+  "study": "SENSE-TOK-003",
+  "source_tag": "python/cpython v3.13.5",
+  "source_commit": "6cb20a219a860eaf687b2d968b41c480c7461909",
+  "evidence_class": "NO_FIT_SOURCE_CHECKED_MECHANISM_DIAGNOSTIC",
+  "training_runs": 0,
+  "optimizer_steps": 0,
+  "train_data_evaluator_attestation": "MISSING",
+  "sealed_test_opened": false,
+  "model_parameters": {
+    "dense": 100400,
+    "sparse": 100544
+  },
+  "predictions_per_file": 256,
+  "verified_files": 6,
+  "metrics": "recurrent state updates; not total FLOPs, speed, compression, or capability",
+  "arms": [
+    "fixed",
+    "entropy",
+    "sensory",
+    "sensory_v2"
+  ],
+  "rows": [
+    {
+      "file": "ast.py",
+      "prefix_sha256": "2c79a750b40c68d56daab17ed0334b4811caa2570225de9d9a13ea51cbc03b49",
+      "git_blob_match": true,
+      "updates": {
+        "fixed": 31,
+        "entropy": 100,
+        "sensory": 43,
+        "sensory_v2": 43
+      }
+    },
+    {
+      "file": "inspect.py",
+      "prefix_sha256": "60088fa9d0cc5e02c93c7d2adeec23dfebdfe834972afc68317d1ae35f140f03",
+      "git_blob_match": true,
+      "updates": {
+        "fixed": 31,
+        "entropy": 109,
+        "sensory": 45,
+        "sensory_v2": 45
+      }
+    },
+    {
+      "file": "csv.py",
+      "prefix_sha256": "8bbb0acc34702447418455ae92ba7abdea3535d1318c0147fc734a42747290cb",
+      "git_blob_match": true,
+      "updates": {
+        "fixed": 31,
+        "entropy": 106,
+        "sensory": 49,
+        "sensory_v2": 49
+      }
+    },
+    {
+      "file": "difflib.py",
+      "prefix_sha256": "25ef3af678ba7f634a23b48c94da1f63f410588cd40b59b6577b0513befb6fc6",
+      "git_blob_match": true,
+      "updates": {
+        "fixed": 31,
+        "entropy": 114,
+        "sensory": 49,
+        "sensory_v2": 49
+      }
+    },
+    {
+      "file": "textwrap.py",
+      "prefix_sha256": "e1f516870aa55a1e0b5ed408cc87d09479812c7401280b72b5c51c3273d008c0",
+      "git_blob_match": true,
+      "updates": {
+        "fixed": 31,
+        "entropy": 111,
+        "sensory": 63,
+        "sensory_v2": 63
+      }
+    },
+    {
+      "file": "email/parser.py",
+      "prefix_sha256": "4018b73a86c2b09400d2736bb5201765534ecfa804185da1806a621b0bda3317",
+      "git_blob_match": true,
+      "updates": {
+        "fixed": 31,
+        "entropy": 113,
+        "sensory": 54,
+        "sensory_v2": 54
+      }
+    }
+  ],
+  "totals": {
+    "bytes": 1536,
+    "dense_updates": 1536,
+    "fixed": 186,
+    "entropy": 653,
+    "sensory": 303,
+    "sensory_v2": 303
+  },
+  "posthoc_design_selection": true,
+  "qualification": "ENGINEERING_ONLY_NOT_ARCHITECTURAL_SUPERIORITY",
+  "full_diagnostic_command": "python scripts/diagnose_patch_sparse_nofit.py --source-root /usr/lib/python3.13 --max-bytes 256",
+  "formalization": "OPEN"
+}
