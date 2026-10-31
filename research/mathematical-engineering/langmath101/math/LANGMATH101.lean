@@ -414,7 +414,7 @@ def mergePair (pair : BPEToken × BPEToken) (newToken : BPEToken)
       else a::mergePair pair newToken (b::rest)
   | short => short
 termination_by tokens.length
-decreasing_by all_goals simp_wf
+decreasing_by all_goals (simp_wf <;> omega)
 def tokenizeBPE (merges : Fin 32 → BPEToken × BPEToken) (observed : List Byte) : List BPEToken :=
   (List.finRange 32).foldl
     (fun ids rank => mergePair (merges rank) ⟨256+rank.val,by omega⟩ ids)
