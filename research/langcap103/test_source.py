@@ -8,6 +8,7 @@ import tarfile
 import tempfile
 import unittest
 from source import canonical, digest, git_blob, next_byte_batch, select_records, source_group, split_for, verify_package
+from prepare_registration import BATCH, SEQUENCE, sample_stream, source_blocks
 
 
 PLAN = json.loads(Path(__file__).with_name("SOURCE_PLAN.json").read_text())
@@ -18,6 +19,24 @@ def row(name, data):
 
 
 class SourceIntegrityTests(unittest.TestCase):
+    def test_training_order_is_repeatable_and_seed_sensitive(self):
+        import itertools
+        blocks = [("Lib/a.py", i*SEQUENCE) for i in range(BATCH*2)]
+        def first(seed):
+            return list(itertools.islice(sample_stream(blocks, seed), len(blocks)))
+        self.assertEqual(first(10301), first(10301))
+        self.assertNotEqual(first(10301), first(10302))
+        self.assertEqual(set(first(10301)), set(blocks))
+
+    def test_training_chunk_list_excludes_dev_and_partial_file_tails(self):
+        r = {"identity": {"files": [
+            {"path": "Lib/fit.py", "bytes": SEQUENCE*(BATCH+1), "split": "FIT"},
+            {"path": "Lib/dev.py", "bytes": SEQUENCE*100, "split": "DEV"}]}}
+        blocks = source_blocks(r)
+        self.assertEqual(len(blocks), BATCH)
+        self.assertTrue(all(name == "Lib/fit.py" and offset+SEQUENCE < SEQUENCE*(BATCH+1)
+                            for name, offset in blocks))
+
     def test_same_module_group_never_splits_children(self):
         self.assertEqual(source_group("Lib/asyncio/tasks.py"), source_group("Lib/asyncio/futures.py"))
         self.assertEqual(split_for(source_group("Lib/asyncio/tasks.py"), PLAN),

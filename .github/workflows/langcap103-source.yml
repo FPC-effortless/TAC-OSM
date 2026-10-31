@@ -35,13 +35,20 @@ jobs:
       - name: Install same observed CPU PyTorch version for original-FIT shape profiling
         run: |
           python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
-          python -m pip install numpy
+          python -m pip install numpy cryptography
       - name: Profile six original-FIT forward/backward graphs without optimizer or DEV scoring
         run: |
           python research/langcap103/profile_source.py \
             --receipt ci-artifacts/langcap103-source/SOURCE_RECEIPT.json \
             --corpus ci-artifacts/langcap103-source/corpus.tar \
             --out ci-artifacts/langcap103-source/FIT_RESOURCE_PROFILE.json
+      - name: Prepare source-bound registration drafts and require unsigned training to be rejected
+        run: |
+          python research/langcap103/prepare_registration.py \
+            --receipt ci-artifacts/langcap103-source/SOURCE_RECEIPT.json \
+            --corpus ci-artifacts/langcap103-source/corpus.tar \
+            --resources ci-artifacts/langcap103-source/FIT_RESOURCE_PROFILE.json \
+            --out ci-artifacts/langcap103-source/registration-review
       - name: Preserve publisher source and original zero-update measurements
         if: always()
         uses: actions/upload-artifact@v4

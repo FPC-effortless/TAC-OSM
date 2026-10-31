@@ -1,0 +1,411 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGCAP103_10M_CODE_LEARNABILITY",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "model_scale_policy": "declared-target-v2",
+  "parameter_scale": {
+    "target_trainable_parameters": 10000000,
+    "target_deployed_parameters": 10000000,
+    "relative_tolerance": 0.05,
+    "registered_before_first_fit": true,
+    "rationale": "Larger-model code learnability; no architecture-superiority claim from this independent-fit cohort"
+  },
+  "real_world_source": {
+    "name": "Original CPython 3.13.0 source byte records",
+    "sha256": "94fc488af0e975c0643e1d566d0468a4091199fdae02b159c8669a01bebef842",
+    "observed_real_outcomes": true,
+    "outcome_semantics": "Original next source byte; not actions, rewards, economic outcomes or causal policy utility",
+    "license": "Publisher PSF-2.0 and retained path-specific original notices; independent permission audit pending",
+    "publisher_commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7"
+  },
+  "models": [
+    {
+      "variant": "tac_associative_stack",
+      "seed": 10301,
+      "trainable_parameters": 9999922,
+      "deployed_parameters": 9999922,
+      "configuration": {
+        "arm": "tac_associative_stack",
+        "width": 992,
+        "depth": 8
+      }
+    },
+    {
+      "variant": "tac_associative_stack",
+      "seed": 10302,
+      "trainable_parameters": 9999922,
+      "deployed_parameters": 9999922,
+      "configuration": {
+        "arm": "tac_associative_stack",
+        "width": 992,
+        "depth": 8
+      }
+    },
+    {
+      "variant": "tac_associative_stack",
+      "seed": 10303,
+      "trainable_parameters": 9999922,
+      "deployed_parameters": 9999922,
+      "configuration": {
+        "arm": "tac_associative_stack",
+        "width": 992,
+        "depth": 8
+      }
+    },
+    {
+      "variant": "causal_transformer",
+      "seed": 10301,
+      "trainable_parameters": 9999880,
+      "deployed_parameters": 9999880,
+      "configuration": {
+        "arm": "causal_transformer",
+        "width": 256,
+        "depth": 8,
+        "ffn": 1889
+      }
+    },
+    {
+      "variant": "causal_transformer",
+      "seed": 10302,
+      "trainable_parameters": 9999880,
+      "deployed_parameters": 9999880,
+      "configuration": {
+        "arm": "causal_transformer",
+        "width": 256,
+        "depth": 8,
+        "ffn": 1889
+      }
+    },
+    {
+      "variant": "causal_transformer",
+      "seed": 10303,
+      "trainable_parameters": 9999880,
+      "deployed_parameters": 9999880,
+      "configuration": {
+        "arm": "causal_transformer",
+        "width": 256,
+        "depth": 8,
+        "ffn": 1889
+      }
+    },
+    {
+      "variant": "stacked_gru",
+      "seed": 10301,
+      "trainable_parameters": 9987024,
+      "deployed_parameters": 9987024,
+      "configuration": {
+        "arm": "stacked_gru",
+        "width": 634,
+        "depth": 4
+      }
+    },
+    {
+      "variant": "stacked_gru",
+      "seed": 10302,
+      "trainable_parameters": 9987024,
+      "deployed_parameters": 9987024,
+      "configuration": {
+        "arm": "stacked_gru",
+        "width": 634,
+        "depth": 4
+      }
+    },
+    {
+      "variant": "stacked_gru",
+      "seed": 10303,
+      "trainable_parameters": 9987024,
+      "deployed_parameters": 9987024,
+      "configuration": {
+        "arm": "stacked_gru",
+        "width": 634,
+        "depth": 4
+      }
+    }
+  ],
+  "no_architecture_superiority_claim": true,
+  "registration_status": "REVIEW_DRAFT_NOT_A_COMPLETE_AUTHORIZED_TRAINING_CONTRACT",
+  "training_enabled": false,
+  "sample_order_contract": {
+    "algorithm": "Python-3.12 random.Random(seed), shuffle original sorted complete FIT chunks each epoch",
+    "file_boundaries_preserved": true,
+    "carry_between_unrelated_chunks": false,
+    "unique_complete_fit_chunks": 41702,
+    "sequence_length": 256,
+    "batch_size": 32,
+    "milestones": {
+      "10301": [
+        {
+          "steps": 2560,
+          "examples_seen": 81920,
+          "input_and_target_bytes_seen_each": 20971520,
+          "sample_order_sha256": "0acd32df1581062e58f2cd1ffd56f46ac913856a8eeb3013283c634984368e4d"
+        },
+        {
+          "steps": 12800,
+          "examples_seen": 409600,
+          "input_and_target_bytes_seen_each": 104857600,
+          "sample_order_sha256": "9d0c2f2427bebd4bb6e14a431a518d4c57d46529825b242011c7e76a57c3bd4a"
+        },
+        {
+          "steps": 25600,
+          "examples_seen": 819200,
+          "input_and_target_bytes_seen_each": 209715200,
+          "sample_order_sha256": "34c78a9be369bf520e0847567b852c8786dcac1d17be8238e95b7e9cb7d9832e"
+        }
+      ],
+      "10302": [
+        {
+          "steps": 2560,
+          "examples_seen": 81920,
+          "input_and_target_bytes_seen_each": 20971520,
+          "sample_order_sha256": "272fedc59201b3bde42a1a1b87a90d8fc89758466b8fca335b77361ed43d8004"
+        },
+        {
+          "steps": 12800,
+          "examples_seen": 409600,
+          "input_and_target_bytes_seen_each": 104857600,
+          "sample_order_sha256": "c508c6dd694533cfadeba199642e0d36f5da187c6742d37f75fe9bde18b9ce33"
+        },
+        {
+          "steps": 25600,
+          "examples_seen": 819200,
+          "input_and_target_bytes_seen_each": 209715200,
+          "sample_order_sha256": "b253e22bc47f5e9d40685cf164bec2815edbc7b72133813c09ae53c3dfcfe293"
+        }
+      ],
+      "10303": [
+        {
+          "steps": 2560,
+          "examples_seen": 81920,
+          "input_and_target_bytes_seen_each": 20971520,
+          "sample_order_sha256": "0492120661e834e53bcb73e6e32628d0bc6446fb6021cd40182e16784976d5c5"
+        },
+        {
+          "steps": 12800,
+          "examples_seen": 409600,
+          "input_and_target_bytes_seen_each": 104857600,
+          "sample_order_sha256": "c52a7e4f85046613825ff1b22d08d65e5ee33e9b356ba327d6e1c9278436b636"
+        },
+        {
+          "steps": 25600,
+          "examples_seen": 819200,
+          "input_and_target_bytes_seen_each": 209715200,
+          "sample_order_sha256": "fcab4adc899cc18a996b073982bb526e5f42a8b6fa715bb52fd5bea9cef8de99"
+        }
+      ]
+    }
+  },
+  "input_contract": "Original raw bytes, same FIT file chunks/order across arms; reset between unrelated chunks",
+  "source_split_contract": {
+    "FIT": {
+      "files": 560,
+      "bytes": 10745409,
+      "groups": [
+        "__future__",
+        "_android_support",
+        "_collections_abc",
+        "_colorize",
+        "_compat_pickle",
+        "_compression",
+        "_ios_support",
+        "_markupbase",
+        "_opcode_metadata",
+        "_osx_support",
+        "_pydatetime",
+        "_pydecimal",
+        "_pyio",
+        "_pylong",
+        "_pyrepl",
+        "_sitebuiltins",
+        "_threading_local",
+        "_weakrefset",
+        "abc",
+        "antigravity",
+        "argparse",
+        "ast",
+        "asyncio",
+        "base64",
+        "bdb",
+        "bisect",
+        "cProfile",
+        "calendar",
+        "cmd",
+        "codecs",
+        "codeop",
+        "collections",
+        "colorsys",
+        "compileall",
+        "concurrent",
+        "configparser",
+        "contextlib",
+        "copyreg",
+        "csv",
+        "ctypes",
+        "curses",
+        "dataclasses",
+        "datetime",
+        "dbm",
+        "decimal",
+        "difflib",
+        "dis",
+        "doctest",
+        "email",
+        "encodings",
+        "enum",
+        "filecmp",
+        "fileinput",
+        "fnmatch",
+        "fractions",
+        "ftplib",
+        "functools",
+        "genericpath",
+        "getopt",
+        "getpass",
+        "gettext",
+        "graphlib",
+        "gzip",
+        "hashlib",
+        "heapq",
+        "hmac",
+        "html",
+        "http",
+        "idlelib",
+        "imaplib",
+        "importlib",
+        "inspect",
+        "io",
+        "ipaddress",
+        "json",
+        "keyword",
+        "linecache",
+        "locale",
+        "logging",
+        "lzma",
+        "mailbox",
+        "mimetypes",
+        "modulefinder",
+        "multiprocessing",
+        "netrc",
+        "ntpath",
+        "nturl2path",
+        "opcode",
+        "operator",
+        "os",
+        "pathlib",
+        "pdb",
+        "pickle",
+        "pickletools",
+        "pkgutil",
+        "platform",
+        "plistlib",
+        "poplib",
+        "posixpath",
+        "pprint",
+        "profile",
+        "pty",
+        "py_compile",
+        "pyclbr",
+        "pydoc",
+        "pydoc_data",
+        "queue",
+        "quopri",
+        "random",
+        "re",
+        "reprlib",
+        "runpy",
+        "sched",
+        "secrets",
+        "shelve",
+        "shlex",
+        "shutil",
+        "signal",
+        "site",
+        "smtplib",
+        "socket",
+        "socketserver",
+        "sqlite3",
+        "stat",
+        "statistics",
+        "string",
+        "stringprep",
+        "struct",
+        "symtable",
+        "sysconfig",
+        "tabnanny",
+        "tarfile",
+        "tempfile",
+        "textwrap",
+        "this",
+        "threading",
+        "timeit",
+        "tkinter",
+        "token",
+        "tokenize",
+        "tomllib",
+        "trace",
+        "traceback",
+        "tty",
+        "turtle",
+        "types",
+        "unittest",
+        "urllib",
+        "uuid",
+        "venv",
+        "warnings",
+        "wave",
+        "weakref",
+        "webbrowser",
+        "wsgiref",
+        "xml",
+        "zipapp",
+        "zipfile",
+        "zipimport",
+        "zoneinfo"
+      ],
+      "manifest_sha256": "7236648103ea8b7a8d974bb20d68732ff01bf34727f4effebdf315a879baeed2"
+    },
+    "DEV": {
+      "files": 18,
+      "bytes": 595847,
+      "groups": [
+        "_aix_support",
+        "_py_abc",
+        "_strptime",
+        "bz2",
+        "code",
+        "copy",
+        "glob",
+        "numbers",
+        "optparse",
+        "pstats",
+        "rlcompleter",
+        "selectors",
+        "ssl",
+        "subprocess",
+        "tracemalloc",
+        "typing",
+        "xmlrpc"
+      ],
+      "manifest_sha256": "d84fd41bda09cde7591f00b67e0c19ec06f2bb7e0f800face78aad3d97e436b3"
+    }
+  },
+  "optimizer_proposal": {
+    "name": "AdamW",
+    "base_lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.1,
+    "precision": "float32",
+    "status": "PROPOSED_NOT_TUNED_OR_RESOURCE_AUTHORIZED"
+  },
+  "compute": {
+    "full_training_flops": null,
+    "t4_throughput": null,
+    "approved_gpu_minutes": 0
+  },
+  "interpretation": "Learnability and loss curves only. Comparative superiority needs the full separately qualified architecture-comparison contract."
+}

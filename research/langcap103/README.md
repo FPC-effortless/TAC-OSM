@@ -104,3 +104,20 @@ source identity, notices and original resource report as a replayable artifact.
 The independent verifier, source-equivalent PNDS/probe qualification, full
 compute accounting and frozen training execution contract remain required
 before any actual optimizer update.
+
+`prepare_registration.py` emits review drafts for both measured scales,
+with each of the three arms and three prospective seeds (10301–10303),
+the original source identity, fixed file-level FIT/DEV records, and replayable
+source-order digests. Each sequence stays inside one original file; whole
+FIT chunks are shuffled with a fixed seed, and state resets between unrelated
+chunks. Draft milestones are 2,560 / 12,800 / 25,600 updates at batch 32,
+sequence 256: 20,971,520 / 104,857,600 / 209,715,200 byte presentations.
+These exposures repeat a finite corpus and do not guarantee adequate learning.
+
+The drafts explicitly use the independent-fit learnability lane, with no
+architecture-superiority claim. They are **not** the final signed
+`FAIR_COMPARISON.json`, and do not bypass the full comparative-compute rules.
+The real shared prefit gate is invoked without a signature and must reject
+the declaration at its independent-evidence check. The emitted
+`TRAINING_READINESS.json` retains that actual error and all remaining blockers.
+The preparation workflow has no optimizer or GPU execution step.
