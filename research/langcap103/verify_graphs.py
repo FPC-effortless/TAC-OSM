@@ -119,14 +119,15 @@ def probe_case(model, arm, tokens):
     for head in dependencies["heads"].values():
         if any(v["connected"] is not True or v["finite"] is not True for v in head.values()):
             raise ValueError("Declared source dependency disconnected or nonfinite")
+    memory = probe_memory(model, sample, adapter)
+    if not memory["query_does_not_write_state"]: raise ValueError("Forecast mutated caller state")
     if arm == "causal_transformer":
-        memory = {"status":"INCONCLUSIVE_DISCRETE_EXTERNAL_HISTORY_UNSUPPORTED_BY_FLOAT_STATE_PROTOCOL",
-            "external_prefix_tensor_bytes": state["prefix"].numel()*state["prefix"].element_size(),
-            "observed_source_bytes":state["prefix"].numel(),"stateless_claim":False,
-            "reason":"actual prefix is int64; no fabricated floating memory or zero-cache inference"}
-    else:
-        memory = probe_memory(model, sample, adapter)
-        if not memory["query_does_not_write_state"]: raise ValueError("Forecast mutated caller state")
+        expected_bytes=state["prefix"].numel()*state["prefix"].element_size()
+        if memory["state_storage_bytes"] != expected_bytes:
+            raise ValueError("External observed-prefix storage was not counted")
+        memory["observed_source_bytes"]=state["prefix"].numel()
+        memory["external_prefix_tensor_bytes"]=expected_bytes
+        memory["dependency_scope"]="embedding-coordinate sensitivity; discrete byte IDs have no continuous derivative"
     return {"adapter":adapter.name,"adapter_equals_actual_source":True,"entity_isolation":isolation,
         "cross_entity_contamination_rejected":True,"dependencies":dependencies,"memory":memory,
         "candidate_permutation":"INCONCLUSIVE_NO_LEGAL_CANDIDATE_AXIS_DECLARED"}
@@ -160,7 +161,7 @@ def run(receipt_path, corpus_path, out):
         "protected_test_access":False,"global_ieee_source_equivalence_proved":False,"training_authorized":False,
         "limits":["untrained parameters and finite original-FIT prefixes only; no trained capability claim",
             "shared Torch primitive arithmetic kernels, independent graph equations",
-            "Transformer discrete external-memory surgery remains unsupported by floating-state protocol",
+            "Transformer raw prefix is discrete external storage, not a bounded learned recurrent state",
             "candidate permutation has no declared legal axis; no fabricated PASS",
             "full FLOPs, trusted independent source/reward/ACL receipt and permitted two-T4 execution remain separate"]}
     out=Path(out);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(report,indent=2)+'\n')

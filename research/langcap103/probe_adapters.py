@@ -1,7 +1,7 @@
 """Actual source adapters, with distinct native/GRU/discrete-prefix ownership.
 
-The generic probe protocol cannot represent integer external-history memory.
-Transformer memory surgery is explicitly INCONCLUSIVE, never called stateless.
+Integer external-history memory is exposed and counted as discrete state;
+it is never called stateless or differentiated as if it were a latent vector.
 """
 from dataclasses import replace
 from pathlib import Path
@@ -58,15 +58,17 @@ def adapter_for(arm, source_model):
     def state_views(state):
         if arm == "tac_associative_stack": return state.tensors
         if arm == "stacked_gru": return state
-        # Integer prefix is separately counted and audited in the actual source
-        # runner. No floating state is invented to satisfy this generic interface.
-        return {}
+        return {"observed_prefix": state["prefix"]}
 
     def patch_state(state, name, value):
         if arm == "tac_associative_stack":
             return replace(state, tensors={**state.tensors, name: value})
         if arm == "stacked_gru": return {**state, name: value}
-        raise ValueError("Integer external-history surgery unsupported by floating-state probe")
+        if (name != "observed_prefix" or value.dtype != torch.long
+                or value.shape != state["prefix"].shape
+                or bool((value < 0).any()) or bool((value > 255).any())):
+            raise ValueError("Invalid original-byte prefix intervention")
+        return {"prefix": value}
 
     def gradients(model, state, sample):
         if arm == "tac_associative_stack":
