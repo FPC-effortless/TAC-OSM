@@ -1,0 +1,46 @@
+{
+  "schema": "langbase107.no-fit-transformer-control.v1",
+  "study_id": "LANGBASE107",
+  "registration_date": "2026-10-31",
+  "status": "ENGINEERING_PREFLIGHT_ONLY_TRAINING_BLOCKED",
+  "question": "Can a conventional causal Transformer be instantiated within one percent of the successful four-layer one-million-parameter LANGCACHE104 model and support correct parallel training attention plus incremental KV-cached inference?",
+  "models": {
+    "tac_reference": {
+      "family": "LANGCACHE104 four-layer hybrid",
+      "width": 120,
+      "depth": 4,
+      "trainable_parameters": 998024
+    },
+    "transformer_control": {
+      "family": "pre-norm causal Transformer",
+      "width": 128,
+      "depth": 4,
+      "heads": 8,
+      "ffn_width": 680,
+      "context": 128,
+      "trainable_parameters": 998816,
+      "position": "RoPE",
+      "attention": "dense causal training attention and bounded 128-position inference KV cache",
+      "activation": "GELU",
+      "embedding": "fixed 256 bytes with tied output weights"
+    }
+  },
+  "proposed_training_if_gates_are_later_satisfied": {
+    "dataset": "the exact frozen LANGDEPTH106 Tiny Shakespeare source and 90/5/5 split",
+    "seeds": [10701, 10702, 10703],
+    "steps": 4096,
+    "batch_size": 8,
+    "sequence_length": 128,
+    "optimizer": "AdamW with the unchanged LANGDEPTH106 schedule",
+    "data_presentations_per_fit": 4194304,
+    "selection": "fixed final checkpoint only; no per-arm tuning"
+  },
+  "interpretation_limits": [
+    "No model is trained or scored by this registration.",
+    "The former LANGDEPTH106 TEST has already been opened and is not a newly sealed comparison set.",
+    "Equal parameter count and data exposure do not establish equal training FLOPs.",
+    "Tiny Shakespeare cannot establish general language, exact recall, reasoning or commercial capability.",
+    "The Transformer is a competent small control, not a reproduction of a frontier pretrained model."
+  ]
+}
+

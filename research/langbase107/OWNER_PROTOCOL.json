@@ -1,0 +1,62 @@
+{
+  "schema": "langbase107.owner-authorized-transformer-fit.v1",
+  "study_id": "LANGBASE107",
+  "registration_date": "2026-10-31",
+  "owner_authorized": true,
+  "authorization_basis": "The user's earlier explicit owner authorization for bounded exploratory CPU language fitting persists, followed by the current instruction to proceed.",
+  "scientific_status": "OWNER_AUTHORIZED_EXPLORATORY_POSTHOC_TRANSFORMER_CONTROL",
+  "independent_attestation": false,
+  "architecture_superiority_eligible": false,
+  "protected_test_newly_sealed": false,
+  "source": {
+    "repository": "karpathy/char-rnn",
+    "commit": "6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e",
+    "canonical_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "train_sha256": "a9e24e23a1ec77744dad26844bfd5a09b6e041954e1eef0000e7f24cba6db735",
+    "dev_sha256": "c64e90c160750d91a9d2d9b1ace5eab1a440f5a1701d32a8e97a179b7839f1c8",
+    "test_sha256": "8b5a8c8af45905547ad03b7aae6980a277a5dd78924a6e6ac64b75d63d7d40bd"
+  },
+  "model": {
+    "arm": "causal_transformer",
+    "config": {"vocab_size": 256, "width": 128, "depth": 4, "heads": 8, "ffn_width": 680, "context": 128},
+    "trainable_parameters": 998816,
+    "deployed_parameters": 998816,
+    "tac_reference_parameters": 998024,
+    "relative_parameter_gap": 0.0007929388395860699
+  },
+  "seeds": [10601, 10602, 10603],
+  "fit": {
+    "steps": 4096,
+    "batch_size": 8,
+    "sequence_length": 128,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "min_lr": 0.00003,
+    "warmup_steps": 128,
+    "betas": [0.9, 0.95],
+    "eps": 1e-8,
+    "weight_decay": 0.1,
+    "clip_grad_norm": 1.0,
+    "cpu_threads": 2,
+    "precision": "float32",
+    "deterministic_algorithms": true,
+    "save_checkpoints_at": [0, 256, 1024, 2048, 4096],
+    "total_predicted_training_bytes_per_fit": 4194304,
+    "data_order": "The identical per-seed OffsetSampler used by LANGDEPTH106; offsets are independent of model initialization."
+  },
+  "evaluation": {
+    "checkpoint": "fixed final update 4096",
+    "metrics": ["next_byte_nll_nats", "bits_per_byte", "perplexity", "next_byte_accuracy"],
+    "primary": "reset 128-byte windows",
+    "secondary": "continuous bounded KV carry",
+    "comparison": "Post-hoc comparison to the immutable LANGDEPTH106 four-layer TAC results; no new sealed-test or qualified superiority claim."
+  },
+  "resource_bounds": {
+    "hardware": "GitHub Actions CPU, two threads",
+    "per_fit_max_seconds": 2700,
+    "job_timeout_minutes": 50,
+    "max_parallel_fits": 3,
+    "full_training_flops": "NOT_CERTIFIED"
+  }
+}
+
