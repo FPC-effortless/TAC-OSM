@@ -43,12 +43,19 @@ protocols, failed runs, and evidence remain intact.
    missingness/censoring handling, baselines, metrics, thresholds, seed count,
    risk stratification and decision rule. Keep test frozen; all attempted runs,
    failures and negative results remain in the ledger.
-7. **Compete against the simplest good solution, not only TAC ablations.**
-   Depending on the task, include last-observation/persistence, useful
-   regression/AR or survival/hazard baselines, calibrated trees, GRU/SSM,
-   attention if relevant, and do-nothing/always-act policies wherever actions
-   truly exist. Match information, horizon, training budget and realistic
-   end-to-end compute; measure memory, latency, calibration and total cost.
+7. **Use credible contemporary neural architectures as the PRIMARY scientific competitors.**
+   A capability-focused study must compare TAC-OSM against a properly trained,
+   faithfully implemented Transformer/attention architecture and a competent
+   recurrent/SSM competitor wherever relevant to the declared task. Report
+   exact depth, width, parameter count, tokenizer, training budget, context
+   access and version; a tiny one-layer attention control must never be
+   described as the representative modern Transformer standard. Preserve
+   simpler current-byte/window, persistence, regression, calibrated-tree and
+   always-act controls as **diagnostics and practical lower bounds**, to catch
+   shortcut tasks and overcomplexity. They do not determine the headline
+   architecture ranking or justify inventing tasks that the simple controls
+   cannot solve. When compute/model scales differ, call the capable reference
+   unmatched and do not claim a parameter-matched superiority result.
 8. **Report the limits explicitly.** Real-world *offline prediction* is not
    real-world *policy utility*, causal counterfactual ability or autonomy.
    Do not claim commercial qualification without observed inspection/action
