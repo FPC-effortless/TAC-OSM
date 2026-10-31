@@ -95,7 +95,14 @@ def counted_dense_units(rows):
         need(key not in seen, "duplicate operator signature")
         seen.add(key)
         name, inputs, outputs = json.loads(sig)
-        need(isinstance(name, str) and name.startswith("aten::"), "ATen name required")
+        # AdamW emits these dispatch-visible, tensor-free profiling markers.
+        # Retain their signatures in the fingerprint; never admit an arbitrary
+        # custom namespace as uncharged computation.
+        marker = name in ("profiler::_record_function_enter_new", "profiler::_record_function_exit")
+        need(isinstance(name, str) and (name.startswith("aten::") or marker),
+             "ATen operator or explicit profiling marker required")
+        if marker:
+            need(inputs == [] and outputs == [], "profiling marker must be tensor-free")
         for tensors in (inputs, outputs):
             need(isinstance(tensors, list), "tensor signature list required")
             for dtype, shape in tensors:

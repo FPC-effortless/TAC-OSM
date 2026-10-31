@@ -85,6 +85,7 @@ def train(a):
  initial_sha=C.checkpoint(a.output/'INITIAL_MODEL.pt',m,None,metadata)
  opt=torch.optim.AdamW(m.parameters(),lr=C.RECIPE['learning_rate'],betas=tuple(C.RECIPE['betas']),eps=C.RECIPE['eps'],weight_decay=C.RECIPE['weight_decay'],foreach=False)
  meter=C.local('meter');journal=[];ledgers={};sample_order=[];losses=[];observed=0;charged=0;started=time.perf_counter();cpu=time.process_time()
+ completed_updates=0;attempted_updates=0
  rule=row['budget'].get('dynamic_stop_rule');steps=row['budget']['steps'] if rule is None else rule['max_steps']
  cold_input=C.padded_batch(bundle,fullplan[0])['tokens'];cold_original=None
  try:
@@ -95,7 +96,10 @@ def train(a):
     value=C.loss(m,batch);value.backward()
     for name,p in m.named_parameters():
      if p.grad is not None and not bool(torch.isfinite(p.grad).all()):raise ValueError('Nonfinite gradient: '+name)
-    torch.nn.utils.clip_grad_norm_(m.parameters(),C.RECIPE['grad_clip'],error_if_nonfinite=True);opt.step()
+    torch.nn.utils.clip_grad_norm_(m.parameters(),C.RECIPE['grad_clip'],error_if_nonfinite=True)
+    attempted_updates+=1
+    opt.step()
+    completed_updates+=1
    r=trace.receipt();r['observed_tokens']=batch['counts']['observed'];journal.append(r);ledgers[r['operator_sha256']]=trace.operators
    charged+=r['counted_dense_units'];observed+=r['observed_tokens'];sample_order.append(item);losses.append(float(value.detach()))
    if rule and r['counted_dense_units']>rule['max_single_step_counted_units']:raise ValueError('Actual step exceeded frozen counted-work bound')
@@ -159,7 +163,8 @@ def train(a):
   C.save(a.output/'FIT_RECEIPT.json',receipt);C.save(a.output/'LOSSES.json',losses)
   print(json.dumps({'status':'SEALED_BEFORE_DEV','arm':a.arm,'seed':a.seed,'lane':a.lane,'steps':n,'elapsed':receipt['elapsed_seconds']}),flush=True)
  except Exception as e:
-  C.save(a.output/'FAILURE.json',{'exception':type(e).__name__,'message':str(e),'actual_steps':len(journal),'optimizer_steps':len(journal),'elapsed':time.perf_counter()-started})
+  C.local('failure').preserve(C,a.output,m,opt,metadata,journal,completed_updates,
+                            attempted_updates,time.perf_counter()-started,e)
   raise
 
 if __name__=='__main__':
