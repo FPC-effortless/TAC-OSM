@@ -41,6 +41,8 @@ def inspect_design(p, policy_text):
     require("Model-scale policy v2" in policy_text and
             'declared-target-v2' in policy_text,
             "Research-wide governing policy not updated")
+    require("PRIMARY scientific competitors" in policy_text,
+            "Modern Transformer/recurrent rivals must be primary")
     require(len(p.get("hypotheses",[]))>=3, "Falsifiable hypotheses missing")
     require(len(p.get("capabilities",[]))>=5, "Capability families missing")
     controls=set(p.get("primary_controls",[]))
