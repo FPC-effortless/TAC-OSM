@@ -1,0 +1,123 @@
+name: LANGMATH101 posthoc adaptive timeout recovery (exploratory)
+on:
+  pull_request:
+    paths:
+      - '.github/scripts/langmath101-time-amendment.py'
+      - '.github/workflows/langmath101-time-amendment.yml'
+permissions:
+  contents: read
+  actions: read
+env:
+  OMP_NUM_THREADS: '2'
+  MKL_NUM_THREADS: '2'
+  OPENBLAS_NUM_THREADS: '1'
+  PYTHONPATH: src
+  SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+  STUDY: research/mathematical-engineering/langmath101
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prove exact frozen source and single explicit time predicate amendment
+        run: python .github/scripts/langmath101-time-amendment.py --self-test
+  recover:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - {architecture: a5_adaptive, seed: 10102, lane: counted_arithmetic_matched}
+          - {architecture: a5_adaptive, seed: 10103, lane: counted_arithmetic_matched}
+          - {architecture: a5_adaptive, seed: 10103, lane: parameter_exposure_matched}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Recheck original preregistration and unchanged source
+        run: |
+          python .github/scripts/langmath101-time-amendment.py --self-test
+          python scripts/phone_lab.py plan research/phone_queue/langmath101-seed-${{ matrix.seed }}.json
+          python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41153068368
+          name: langtrain099-FIT-only
+          path: /tmp/langmath101-FIT
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41169500006
+          name: langmath101-fit-${{ matrix.architecture }}-${{ matrix.seed }}-parameter_exposure_matched
+          path: /tmp/langmath101-original-init
+      - name: Train from exact original initialization with labelled posthoc wall amendment
+        run: >-
+          python .github/scripts/langmath101-time-amendment.py
+          --fit /tmp/langmath101-FIT
+          --tokenizers "$STUDY/profiles"
+          --initial /tmp/langmath101-original-init/INITIAL_MODEL.pt
+          --arm '${{ matrix.architecture }}'
+          --seed ${{ matrix.seed }}
+          --lane '${{ matrix.lane }}'
+          --output ci-artifacts/posthoc
+      - name: Preserve successful exploratory or failed diagnostic artifacts without original seal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: langmath101-posthoc-${{ matrix.architecture }}-${{ matrix.seed }}-${{ matrix.lane }}
+          path: ci-artifacts/posthoc/
+          if-no-files-found: error
+          retention-days: 90
+  audit:
+    needs: [preflight, recover]
+    if: needs.recover.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: langmath101-posthoc-*
+          path: /tmp/posthoc
+      - name: Assert 3 explicitly amended fits, no original-study checkpoint eligibility
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          paths=list(Path('/tmp/posthoc').glob('*/POSTHOC_AMENDMENT.json'))
+          assert len(paths)==3, 'All three recovery artifacts required'
+          triples=set()
+          for p in paths:
+              d=json.loads(p.read_text())
+              root=p.parent
+              assert d['outcome']=='TRAINING_COMPLETED_EXPLORATORY_ONLY'
+              assert d['original_run_id']==41174892770
+              assert d['original_registered_limit_seconds']==2700
+              assert d['posthoc_limit_seconds']==4800
+              assert d['original_fit_eligibility'] is False
+              assert (root/'POSTHOC_MODEL.pt').is_file()
+              assert (root/'POSTHOC_FIT_RECEIPT.json').is_file()
+              assert not (root/'MODEL.pt').exists()
+              assert not (root/'FIT_RECEIPT.json').exists()
+              assert hashlib.sha256((root/'POSTHOC_MODEL.pt').read_bytes()).hexdigest()==d['original_checkpoint_sha256']
+              triples.add((d['architecture'],d['seed'],d['lane']))
+          assert triples=={
+              ('a5_adaptive',10102,'counted_arithmetic_matched'),
+              ('a5_adaptive',10103,'counted_arithmetic_matched'),
+              ('a5_adaptive',10103,'parameter_exposure_matched')}
+          print('PASS: three exploratory recoveries; no preregistered seal')
+          PY
