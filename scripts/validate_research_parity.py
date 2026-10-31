@@ -73,6 +73,35 @@ def check_model_parameter_target(trainable_parameters, deployed_parameters=None,
                f"{label}: 100k target requires 95,000..105,000 deployed learned parameters, got {deployed_parameters}")
 
 
+# Explicit owner request, scoped exact10M pilot; no default100K relaxation.
+LANGTRAIN099_CONTRACT = "owner-2026-10-30-langtrain099-exact10m"
+def checked_langtrain099(m):
+    return (m.get("study_id")=="LANGTRAIN099"
+            and m.get("parameter_budget_contract")==LANGTRAIN099_CONTRACT
+            and m.get("study_type")=="single_model_training"
+            and m.get("execution_level")=="internal_research"
+            and m.get("no_architecture_superiority_claim") is True)
+
+def check_langtrain099(m, phase):
+    demand(checked_langtrain099(m), "LANGTRAIN099 exact owner-authorized scope required")
+    demand(m.get("geometry")=={"embed":256,"context":376,"key":24,"value":32,"ffn":4335},
+           "LANGTRAIN099 frozen useful geometry required")
+    models=m.get("models",[])
+    demand(len(models)==3 and {(r.get("name"),r.get("seed")) for r in models}==
+           {("tac10m",s) for s in (9901,9902,9903)}, "LANGTRAIN099 exact three-seed matrix required")
+    demand(m.get("budget",{}).get("tuning_trials")==0,"LANGTRAIN099 no tuning")
+    for r in models:
+        check_langtrain099_model(r,"LANGTRAIN099 model")
+        if phase=="final":
+            actual=r.get("measured",{})
+            demand(actual.get("steps")==m["budget"]["training_updates"],"LANGTRAIN099 incomplete optimizer exposure")
+            demand(actual.get("cold_replay_max_abs_difference",1)<=1e-6,"LANGTRAIN099 actual cold replay failed")
+            digest(actual.get("sample_sha256"),"LANGTRAIN099 actual original sampling journal")
+
+def check_langtrain099_model(model,label):
+    demand(model.get("trainable_parameters")==10000000 and model.get("deployed_parameters")==10000000,
+           label+": only exactly10,000,000 active/deployed parameters authorized")
+
 # Owner's 2026-10-28 NEW language-model scale (old studies unchanged).
 # Explicit, narrow contract: no global relaxation of the historical 100K gate.
 def checked_new_scale(m):
@@ -282,6 +311,7 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 "status":"PASS_DIAGNOSTIC_ONLY"}
     if kind=="single_model_training":
         if m.get("study_id")=="CODEVALUE003":check_codevalue003(m,phase)
+        if m.get("study_id")=="LANGTRAIN099":check_langtrain099(m,phase)
         demand(m.get("registered_before_first_fit") is True,
                "single-model fit must be preregistered")
         source=m.get("real_world_source")
@@ -293,7 +323,9 @@ def _check_manifest_parity_only(m,phase="preflight"):
                "single-model training requires >=1 declared model/seed")
         for i,model in enumerate(models):
             demand(isinstance(model,dict),f"models[{i}] must be an object")
-            if checked_langmem083(m):
+            if checked_langtrain099(m):
+                check_langtrain099_model(model,f"models[{i}]")
+            elif checked_langmem083(m):
                 check_langmem083_model(model,f"models[{i}]")
             elif checked_langmem078(m):
                 check_langmem078_model(model,f"models[{i}]")
@@ -318,7 +350,9 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 receipt=model.get("measured")
                 demand(isinstance(receipt,dict),
                        f"models[{i}] final actual measurement receipt required")
-                if checked_langmem083(m):
+                if checked_langtrain099(m):
+                    check_langtrain099_model(receipt,f"models[{i}].measured")
+                elif checked_langmem083(m):
                     check_langmem083_model({**model,
                         "trainable_parameters":receipt.get("trainable_parameters"),
                         "deployed_parameters":receipt.get("deployed_parameters")},

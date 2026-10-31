@@ -1,3 +1,14 @@
+## Owner-directed LANGTRAIN099 scale exception — 2026-10-30
+
+The owner's explicit request to test a trained10,000,000-parameter model
+supersedes the100K limit ONLY for LANGTRAIN099 under
+`research/mathematical-engineering/langtrain099/SCALE_AUTHORIZATION.md`.
+Require exactly10,000,000 active/deployed learned parameters per declared seed;
+all source, FIT/DEV, checkpoint/replay, compute and scientific gates remain.
+This is internal research, with no protected TEST, promotion or architecture
+superiority authority. The default100K gate and all historical results remain
+unchanged for every other study.
+
 ## Execution-level amendment — operator instruction, 2026-10-27
 
 Ordinary exploratory research on genuine, publicly licensed, authorized FIT/DEV

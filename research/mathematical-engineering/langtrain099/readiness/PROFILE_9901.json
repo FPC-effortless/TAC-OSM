@@ -1,0 +1,101 @@
+{
+  "counts": {
+    "deployed": 10000000,
+    "fixed_buffer_bytes": 16,
+    "trainable": 10000000
+  },
+  "diagnostics": {
+    "episodic": {
+      "exposure": {
+        "future_targets": 62,
+        "observed": 563,
+        "padding": 525,
+        "supervised": 563
+      },
+      "loss": 8.36428451538086,
+      "parameter_gradient_l2": {
+        "address_value.bias": 0.02471149154007435,
+        "address_value.weight": 0.1137087494134903,
+        "compare.bias": 0.000603110296651721,
+        "compare.weight": 0.0048229750245809555,
+        "context_input.bias": 0.032004792243242264,
+        "context_input.weight": 0.11880479753017426,
+        "context_lag": 0.0300748273730278,
+        "embedding.weight": 0.038783080875873566,
+        "ffn_gate.bias": 0.045708902180194855,
+        "ffn_gate.weight": 1.3768223524093628,
+        "ffn_out.bias": 0.36258789896965027,
+        "ffn_out.weight": 2.826188564300537,
+        "ffn_up.bias": 0.0457368902862072,
+        "ffn_up.weight": 1.3464884757995605,
+        "norm.bias": 0.038303639739751816,
+        "norm.weight": 0.036390118300914764,
+        "raw_context_decay": 0.0017241197638213634
+      }
+    },
+    "language": {
+      "exposure": {
+        "observed": 512,
+        "padding": 0,
+        "supervised": 512
+      },
+      "loss": 5.529611587524414,
+      "parameter_gradient_l2": {
+        "address_value.bias": 0.013519569300115108,
+        "address_value.weight": 0.0862177163362503,
+        "compare.bias": 0.00031206035055220127,
+        "compare.weight": 0.0030226989183574915,
+        "context_input.bias": 0.013120396994054317,
+        "context_input.weight": 0.05340222641825676,
+        "context_lag": 0.010244268923997879,
+        "embedding.weight": 0.01934828981757164,
+        "ffn_gate.bias": 0.022379295900464058,
+        "ffn_gate.weight": 0.6682730317115784,
+        "ffn_out.bias": 0.25736403465270996,
+        "ffn_out.weight": 1.3675035238265991,
+        "ffn_up.bias": 0.024217911064624786,
+        "ffn_up.weight": 0.6653524041175842,
+        "norm.bias": 0.01894264668226242,
+        "norm.weight": 0.017813874408602715,
+        "raw_context_decay": 0.0008467732113786042
+      }
+    }
+  },
+  "estimated_training_seconds_including75pct_margin_and120s": 917.993839104025,
+  "forward_backward_seconds": {
+    "episodic": 0.35383609800000215,
+    "language": 0.1789273420000086
+  },
+  "hardware": {
+    "cpu": "AMD EPYC 9V45 96-Core Processor",
+    "peak_rss_bytes": 622809088,
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+    "threads": 2,
+    "torch": "2.5.1+cpu"
+  },
+  "initial_archive_file": "INIT_9901.pt",
+  "initial_archive_sha256": "9f7cb903ad90881cd7632719cd4e3a2fd2a37418e40f4ad3db752e00905a75db",
+  "model_sha256": "68979eb5a899cca1a7c780cebbe35b8f1b82f77e276b796a69fb366ea47ed8ab",
+  "optimizer_steps": 0,
+  "seed": 9901,
+  "source_hashes": {
+    "research/language-scaling/lang10m/tokenizer/FIT_MANIFEST.json": "364ad09d4429bc73d310a6420d2abaed6823a354f1ab5b63d982ed90c0b681b6",
+    "research/mathematical-engineering/langacquire097/SOURCE_PROVENANCE.json": "da41f78c4faba69fdc84361179e1e2fa49797dbdf0b9fc7cb9231ca99c93bed6",
+    "research/mathematical-engineering/langacquire097/data.py": "008951ae941e7c733c2f938982095260b6b1055d6a536ca33ee03b267f1735c6",
+    "research/mathematical-engineering/langtrain099/FAIR_COMPARISON.json": "25df3bce8e86e5a95632104e1e40633e951f9ddbed036345bdf6d4e22a28e48b",
+    "research/mathematical-engineering/langtrain099/PREREGISTRATION.md": "e57fe363fea76c680d1cb367b5c831e95e81dc887885b2ab02e3ef8f85f07510",
+    "research/mathematical-engineering/langtrain099/REGISTER.json": "77a9bfe5f0f2302474c0f21eaa440edeb47a323ce80743efc0b0e38757e20af5",
+    "research/mathematical-engineering/langtrain099/SCALE_AUTHORIZATION.md": "5ed643822b4ff42638657a6e4ad1b69f4ea48d3ee64173acd8376bcdd37e9842",
+    "research/mathematical-engineering/langtrain099/actor.py": "68307d5091978a6264eab73c04cf5d71160249b7ec4c53bccb14434a186235d1",
+    "research/mathematical-engineering/langtrain099/common.py": "46894a763d5d4269a7c7b8d181587c11517e70d0f9245a2d481587d7b2f93e74",
+    "research/mathematical-engineering/langtrain099/data.py": "284bb87479acbe360390d58ab0ef96a7ff4d53111890e795d565fee87303c76a",
+    "research/mathematical-engineering/langtrain099/evaluate.py": "46e775135f7f62756505c3017413b5d5f757b0108cc63c861ae47c30a1de83da",
+    "research/mathematical-engineering/langtrain099/model.py": "ddb2000482e2aa87a4fbdec19cdfdd01249280263e2438be230799ac1758ce9f",
+    "research/mathematical-engineering/langtrain099/objective.py": "ab02ada6e3727471941f7d35343a5628f4c1d6fffbcd88e7517b8cbd0aba127b",
+    "research/mathematical-engineering/langtrain099/probe_adapter.py": "3c67be2f3f0c4f08192a2edc36a9b7a61574ec291e81e280c219548e392ecb66",
+    "research/mathematical-engineering/langtrain099/profile099.py": "991db5b4ff474565225e8326f95fa6f4c0f8cb82fe9986c6b5386c7f6b6694e9",
+    "research/mathematical-engineering/langtrain099/reference.py": "e866a562c46b54a1c17c0c2eef754499a7761e1eb37db563f02a87cc7a9648b3",
+    "research/mathematical-engineering/langtrain099/train.py": "2b46ee0fecbaa0c059ad3269da2a651079485e94b506bc1a22f3abaf9a18f0cd",
+    "scripts/validate_research_parity.py": "c5d8046e45f7fd8d41615122f8be27419e32c04e53f64e59ac717cbc0dc6c4a4"
+  }
+}

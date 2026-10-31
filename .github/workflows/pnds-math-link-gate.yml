@@ -21,6 +21,8 @@ jobs:
         run: |
           if [ "$GITHUB_HEAD_REF" = 'research/query-diverse-history-training-2026-10-27' ]; then
             python3 research/scripts/check_pnds_remote_parity.py --peer-ref 25d774bd9bf8cbbfaec132460e83cf836965cba3
+          elif [ "$GITHUB_HEAD_REF" = 'research/langtrain099-trained-10m-2026-10-30' ]; then
+            python3 research/scripts/check_pnds_remote_parity.py --peer-ref 7040e70d7febc553dbace036fcac29eebfa75ff3
           else
             python3 research/scripts/check_pnds_remote_parity.py
           fi

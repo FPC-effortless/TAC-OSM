@@ -1,0 +1,189 @@
+name: LANGTRAIN099 trained exact10M capability pilot
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langtrain099/**'
+      - 'tests/test_langtrain099.py'
+      - '.github/workflows/langtrain099.yml'
+      - 'research/phone_queue/langtrain099-*.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  OMP_NUM_THREADS: '2'
+  MKL_NUM_THREADS: '2'
+  OPENBLAS_NUM_THREADS: '1'
+  PYTHONPATH: src
+  SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+  STUDY: research/mathematical-engineering/langtrain099
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      fit: ${{ steps.route.outputs.fit }}
+      initial_run: ${{ steps.route.outputs.initial_run }}
+      initial_artifact: ${{ steps.route.outputs.initial_artifact }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          fetch-depth: 2
+      - name: Route scientific changes, preserve frozen reports without retraining
+        id: route
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          python - <<'PY'
+          import json,os,re,subprocess
+          r=os.environ['STUDY']+'/'
+          paths=subprocess.check_output(['git','diff-tree','--root','--no-commit-id','--name-only','-r',os.environ['SOURCE_COMMIT']],text=True).splitlines()
+          def scientific(p):
+              return p.startswith(r) and not p.startswith(r+'results/') and (p.endswith('.py') or p.rsplit('/',1)[-1] in ('REGISTER.json','FAIR_COMPARISON.json','FROZEN_INPUTS.json','PREREGISTRATION.md'))
+          needed=os.environ['EVENT']=='workflow_dispatch' or any(map(scientific,paths))
+          reg=json.load(open(r+'REGISTER.json'));init=reg['initialization'];enabled=reg['fit_enabled']
+          if enabled:
+              assert type(init['run_id']) is int and init['run_id']>0
+              assert re.fullmatch('langtrain099-preflight-[0-9]+',init['artifact_name'])
+              assert re.fullmatch('[0-9a-f]{64}',init['archive_sha256'])
+              assert reg['math']['PNDS_scaled_state_proof']['status']=='PASS'
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('study='+str(needed).lower()+'\nfit='+str(needed and enabled).lower()+'\n')
+              f.write('initial_run='+str(init['run_id'] or '')+'\ninitial_artifact='+str(init['artifact_name'] or '')+'\n')
+          print({'scientific_execution':needed,'fit_enabled':enabled})
+          PY
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 'pytest>=8,<9' cryptography==46.0.3
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Actual scaled graph, independent reference, causal state and resource gates
+        run: python -m pytest -q tests/test_langtrain099.py tests/test_research_parity_gate.py tests/test_research_probe_agnostic.py
+      - name: Check registered internal exact10M scope
+        run: python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
+      - name: Review CPU readiness proposal
+        if: steps.route.outputs.study == 'true'
+        run: python scripts/phone_lab.py plan research/phone_queue/langtrain099-profile.json
+      - name: Authenticate frozen licensed data and isolate complete held-out files
+        if: steps.route.outputs.study == 'true'
+        run: |
+          python "$STUDY/data.py" --cache /tmp/langtrain099-data
+          python - <<'PY'
+          import json,os
+          assert json.load(open('/tmp/langtrain099-data/PACKAGE_HASHES.json'))==json.load(open(os.environ['STUDY']+'/REGISTER.json'))['data']
+          PY
+      - name: Require exact reciprocal source/proof registry before enabling optimizer jobs
+        if: steps.route.outputs.fit == 'true'
+        run: |
+          python - <<'PYCODE'
+          from pathlib import Path
+          import hashlib,json,os,urllib.request
+          study=Path(os.environ['STUDY']);reg=json.loads((study/'REGISTER.json').read_text());proof=reg['math']['PNDS_scaled_state_proof']
+          def fetch(commit,path):
+              with urllib.request.urlopen('https://raw.githubusercontent.com/FPC-effortless/pnds-lean/'+commit+'/'+path,timeout=30) as r:return r.read()
+          assert json.loads(fetch(proof['metadata_commit'],'foundation/v1/variant-math-links.json'))==json.loads(Path('research/pnds-variant-math-links.json').read_text())
+          assert hashlib.sha256(fetch(proof['source_commit'],'PNDS/LANGTRAIN099.lean')).hexdigest()==proof['lean_sha256']
+          assert fetch(proof['source_commit'],'foundation/v1/langtrain099_reference.py')==(study/'reference.py').read_bytes()
+          rows=[r for r in json.loads(Path('research/pnds-variant-math-links.json').read_text())['prospective_training_candidates'] if r['id']=='LANGTRAIN099']
+          assert len(rows)==1 and rows[0]['pnds']['commit']==proof['source_commit'] and rows[0]['lean_full_persistent_state_invariant_proved'] is True
+          for path,digest in rows[0]['tac']['source_sha256'].items():assert hashlib.sha256(Path(path).read_bytes()).hexdigest()==digest,path
+          PYCODE
+      - name: Original zero-update FIT forward/backward profiles and initial archives
+        if: steps.route.outputs.study == 'true' && steps.route.outputs.fit != 'true'
+        run: python "$STUDY/profile099.py" --data /tmp/langtrain099-data/fit-package --output ci-artifacts/profiles --source-commit "$SOURCE_COMMIT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langtrain099-preflight-${{ github.run_id }}
+          path: ci-artifacts/profiles/
+          if-no-files-found: ignore
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        if: steps.route.outputs.fit == 'true' && success()
+        with:
+          name: langtrain099-FIT-only
+          path: /tmp/langtrain099-data/fit-package/
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        if: steps.route.outputs.fit == 'true' && success()
+        with:
+          name: langtrain099-EVAL-only
+          path: /tmp/langtrain099-data/eval-package/
+          if-no-files-found: error
+          retention-days: 90
+  fit:
+    needs: prepare
+    if: needs.prepare.outputs.fit == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [9901, 9902, 9903]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          name: langtrain099-FIT-only
+          path: /tmp/langtrain099-FIT
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.prepare.outputs.initial_run }}
+          name: ${{ needs.prepare.outputs.initial_artifact }}
+          path: /tmp/langtrain099-original-profiles
+      - name: Review fixed seed CPU budget
+        run: python scripts/phone_lab.py plan research/phone_queue/langtrain099-seed-${{ matrix.seed }}.json
+      - name: Real 2048-step exact10M FP32 training, no DEV delivered
+        run: python "$STUDY/train.py" --seed ${{ matrix.seed }} --data /tmp/langtrain099-FIT --profiles /tmp/langtrain099-original-profiles --source-commit "$SOURCE_COMMIT" --output ci-artifacts/seed-${{ matrix.seed }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langtrain099-original-seed-${{ matrix.seed }}
+          path: ci-artifacts/seed-${{ matrix.seed }}/
+          if-no-files-found: error
+          retention-days: 90
+  evaluate:
+    needs: [prepare, fit]
+    if: needs.prepare.outputs.fit == 'true' && needs.fit.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 cryptography==46.0.3
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: langtrain099-original-seed-*
+          path: /tmp/langtrain099-fits
+      - uses: actions/download-artifact@v4
+        with:
+          name: langtrain099-EVAL-only
+          path: /tmp/langtrain099-EVAL
+      - name: Review independent evaluation budget
+        run: python scripts/phone_lab.py plan research/phone_queue/langtrain099-evaluate.json
+      - name: Seal all3 originals, replay initial/final predictions, then score lexical and ARC independently
+        run: python "$STUDY/evaluate.py" --fits /tmp/langtrain099-fits --data /tmp/langtrain099-EVAL --source-commit "$SOURCE_COMMIT" --output ci-artifacts/evaluation
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langtrain099-complete-evaluation
+          path: ci-artifacts/evaluation/
+          if-no-files-found: error
+          retention-days: 90
