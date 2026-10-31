@@ -73,6 +73,22 @@ jobs:
           import json,os
           assert json.load(open('/tmp/langtrain099-data/PACKAGE_HASHES.json'))==json.load(open(os.environ['STUDY']+'/REGISTER.json'))['data']
           PY
+      - name: Require exact reciprocal source/proof registry before enabling optimizer jobs
+        if: steps.route.outputs.fit == 'true'
+        run: |
+          python - <<'PYCODE'
+          from pathlib import Path
+          import hashlib,json,os,urllib.request
+          study=Path(os.environ['STUDY']);reg=json.loads((study/'REGISTER.json').read_text());proof=reg['math']['PNDS_scaled_state_proof']
+          def fetch(commit,path):
+              with urllib.request.urlopen('https://raw.githubusercontent.com/FPC-effortless/pnds-lean/'+commit+'/'+path,timeout=30) as r:return r.read()
+          assert json.loads(fetch(proof['metadata_commit'],'foundation/v1/variant-math-links.json'))==json.loads(Path('research/pnds-variant-math-links.json').read_text())
+          assert hashlib.sha256(fetch(proof['source_commit'],'PNDS/LANGTRAIN099.lean')).hexdigest()==proof['lean_sha256']
+          assert fetch(proof['source_commit'],'foundation/v1/langtrain099_reference.py')==(study/'reference.py').read_bytes()
+          rows=[r for r in json.loads(Path('research/pnds-variant-math-links.json').read_text())['prospective_training_candidates'] if r['id']=='LANGTRAIN099']
+          assert len(rows)==1 and rows[0]['pnds']['commit']==proof['source_commit'] and rows[0]['lean_full_persistent_state_invariant_proved'] is True
+          for path,digest in rows[0]['tac']['source_sha256'].items():assert hashlib.sha256(Path(path).read_bytes()).hexdigest()==digest,path
+          PYCODE
       - name: Original zero-update FIT forward/backward profiles and initial archives
         if: steps.route.outputs.study == 'true' && steps.route.outputs.fit != 'true'
         run: python "$STUDY/profile099.py" --data /tmp/langtrain099-data/fit-package --output ci-artifacts/profiles --source-commit "$SOURCE_COMMIT"
