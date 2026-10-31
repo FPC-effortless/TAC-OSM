@@ -1,0 +1,65 @@
+{
+  "schema": "langtrain099.trained-exact10m.v1",
+  "id": "LANGTRAIN099",
+  "fit_enabled": false,
+  "owner_contract": "owner-2026-10-30-langtrain099-exact10m",
+  "geometry": {
+    "embed": 256,
+    "context": 376,
+    "key": 24,
+    "value": 32,
+    "ffn": 4335
+  },
+  "parameters": 10000000,
+  "seeds": [
+    9901,
+    9902,
+    9903
+  ],
+  "data": {
+    "EVAL_MANIFEST.json": "549a2fa587de07e6d9cc30944255d5d980c9974e7fb9d366d435567098465c31",
+    "FIT_MANIFEST.json": "651ffb5223990cef1d32ddccc41e94797c42a3e5a12ba378afaac1e28afc226e",
+    "MANIFEST.json": "f587e98c45b28c8fd9cecdf4de60a72019599839993d92c75dac609e7c1c1d4f"
+  },
+  "training": {
+    "steps": 2048,
+    "batch_size": 4,
+    "language_context": 128,
+    "episodic_context": 272,
+    "episodic_every": 4,
+    "prefix_weight": 0.5,
+    "learning_rate": 0.0003,
+    "warmup": 64,
+    "cosine_min_ratio": 0.1,
+    "weight_decay": 0.01,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "grad_clip": 1.0,
+    "threads": 2,
+    "max_seconds": 2220,
+    "precision": "FP32",
+    "max_experiment_CPU_minutes": 156,
+    "tuning_trials": 0
+  },
+  "initialization": {
+    "run_id": null,
+    "artifact_name": null,
+    "archive_sha256": null
+  },
+  "math": {
+    "TAC_parent_source": "78be202a2613c54629785b7a5874dbff0507d988",
+    "PNDS_scaled_state_proof": "PENDING_NO_OPTIMIZER_ALLOWED",
+    "whole_model_IEEE_AD": "OPEN"
+  },
+  "scope": {
+    "execution_level": "internal_research",
+    "no_protected_TEST": true,
+    "no_checkpoint_promotion": true,
+    "no_architecture_superiority_claim": true,
+    "no_AGI_claim": true,
+    "training_level": "bounded pilot, not full language pretraining"
+  }
+}

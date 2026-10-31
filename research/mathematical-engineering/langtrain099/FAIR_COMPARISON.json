@@ -1,0 +1,76 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGTRAIN099",
+  "study_type": "single_model_training",
+  "parameter_budget_contract": "owner-2026-10-30-langtrain099-exact10m",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "geometry": {
+    "embed": 256,
+    "context": 376,
+    "key": 24,
+    "value": 32,
+    "ffn": 4335
+  },
+  "real_world_source": {
+    "name": "Authenticated licensed original code/documentation; authored ARC secondary only",
+    "observed_real_outcomes": true,
+    "sha256": "f587e98c45b28c8fd9cecdf4de60a72019599839993d92c75dac609e7c1c1d4f",
+    "publisher_url": "https://github.com/python/cpython",
+    "license": "Original PSF/BSD/MIT/Apache publisher licenses archived; ARC Apache-2.0 diagnostic",
+    "license_evidence_url": "https://github.com/python/cpython/blob/60403a5409ff2c3f3b07dd2ca91a7a3e096839c7/LICENSE",
+    "source_receipt": "research/mathematical-engineering/langtrain099/FROZEN_INPUTS.json"
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "f587e98c45b28c8fd9cecdf4de60a72019599839993d92c75dac609e7c1c1d4f",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ]
+  },
+  "causal_protocol": "Three whole trained models sealed beforeDEV; fresh actor processes receive onlyA thenQ and ownstate, fixed4/40byte generation; complete reset/donor/corrupt/binding controls; language next-byte causal windows.",
+  "checkpoint_policy": "No best checkpoint selection; all3 final and initialization optimizer/RNG archives, failed attempts, actual data sampling journals and cold/repeated fresh-process replays preserved.",
+  "budget": {
+    "training_updates": 2048,
+    "batch_size": 4,
+    "tuning_trials": 0,
+    "fit_jobs": 3,
+    "per_fit_seconds": 2220,
+    "profile_CPU_minutes": 15,
+    "evaluation_CPU_minutes": 30,
+    "GPU_minutes": 0
+  },
+  "models": [
+    {
+      "name": "tac10m",
+      "seed": 9901,
+      "trainable_parameters": 10000000,
+      "deployed_parameters": 10000000
+    },
+    {
+      "name": "tac10m",
+      "seed": 9902,
+      "trainable_parameters": 10000000,
+      "deployed_parameters": 10000000
+    },
+    {
+      "name": "tac10m",
+      "seed": 9903,
+      "trainable_parameters": 10000000,
+      "deployed_parameters": 10000000
+    }
+  ]
+}

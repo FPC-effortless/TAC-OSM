@@ -1,0 +1,3 @@
+# LANGTRAIN099
+
+Owner-directed exact 10,000,000-parameter trained TAC pilot. See PREREGISTRATION.md, FORMULATION.md, REGISTER.json and SCALE_AUTHORIZATION.md. Initial state: training disabled pending original source-authenticated readiness profiles and scaled PNDS proof. Train only in the dedicated GitHub Actions workflow, with three original checkpoints sealed before DEV. Language prediction, lexical reuse and authored ARC rule transfer are separate outcomes. Public exposed DEV and a small CPU budget preclude broad intelligence or superiority conclusions. Preserve all historical studies and failures.

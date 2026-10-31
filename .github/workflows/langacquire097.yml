@@ -48,7 +48,12 @@ jobs:
                   return False
               return ((path.startswith(root) and (path.endswith('.py') or path.startswith(root+'profiles/') or path.rsplit('/',1)[-1] in ('REGISTER.json','FROZEN_INPUTS.json','PREREGISTRATION.md') or path.rsplit('/',1)[-1].startswith('FAIR_COMPARISON')))
                       or path in ('scripts/validate_research_parity.py','src/tac_osm/research_objective_budget.py'))
-          needed = os.environ['REQUESTED_EVENT'] == 'workflow_dispatch' or any(map(scientific, paths))
+          # A shared validator update for the separately registered099 study
+          # must not replay this frozen forty-fit experiment. Direct097 changes
+          # or an explicit097 dispatch retain the original execution behavior.
+          direct097 = any(p.startswith(root) and scientific(p) for p in paths)
+          separate099 = any(p.startswith('research/mathematical-engineering/langtrain099/') for p in paths)
+          needed = os.environ['REQUESTED_EVENT'] == 'workflow_dispatch' or (any(map(scientific, paths)) and (direct097 or not separate099))
           config = json.load(open(root+'REGISTER.json'))
           enabled = config['fit_enabled']
           initialization = config.get('initialization',{})
