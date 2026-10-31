@@ -1,0 +1,382 @@
+{
+  "schema": "langcontrol098.preflight-review.v1",
+  "source_profile_run_id": 41153143748,
+  "source_profile_commit": "ebbd9e90fc57b77c9c89e96591c2f775a5726ead",
+  "resource_gate": {
+    "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
+    "cross_family_compute_parity": "INELIGIBLE_NOT_MEASURED_OR_MATCHED",
+    "eligible_for_architecture_superiority": false,
+    "families": {
+      "gru": {
+        "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
+        "architecture_family": "gru",
+        "eligible_for_architecture_superiority": false,
+        "matched_objectives": [
+          "full",
+          "query"
+        ],
+        "matched_seeds": [
+          1701,
+          1702,
+          1703,
+          1704,
+          1705
+        ],
+        "phase": "preflight",
+        "scope": "same executable model; complete mathematical ATen signatures/shapes/counts, not hardware instructions",
+        "status": "PASS_WITHIN_FAMILY_OPERATOR_PARITY",
+        "study_id": "LANGCONTROL098-GRU"
+      },
+      "ssm": {
+        "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
+        "architecture_family": "ssm",
+        "eligible_for_architecture_superiority": false,
+        "matched_objectives": [
+          "full",
+          "query"
+        ],
+        "matched_seeds": [
+          1701,
+          1702,
+          1703,
+          1704,
+          1705
+        ],
+        "phase": "preflight",
+        "scope": "same executable model; complete mathematical ATen signatures/shapes/counts, not hardware instructions",
+        "status": "PASS_WITHIN_FAMILY_OPERATOR_PARITY",
+        "study_id": "LANGCONTROL098-SSM"
+      },
+      "tac": {
+        "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
+        "architecture_family": "tac",
+        "eligible_for_architecture_superiority": false,
+        "matched_objectives": [
+          "full",
+          "query"
+        ],
+        "matched_seeds": [
+          1701,
+          1702,
+          1703,
+          1704,
+          1705
+        ],
+        "phase": "preflight",
+        "scope": "same executable model; complete mathematical ATen signatures/shapes/counts, not hardware instructions",
+        "status": "PASS_WITHIN_FAMILY_OPERATOR_PARITY",
+        "study_id": "LANGCONTROL098-TAC"
+      },
+      "transformer": {
+        "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
+        "architecture_family": "transformer",
+        "eligible_for_architecture_superiority": false,
+        "matched_objectives": [
+          "full",
+          "query"
+        ],
+        "matched_seeds": [
+          1701,
+          1702,
+          1703,
+          1704,
+          1705
+        ],
+        "phase": "preflight",
+        "scope": "same executable model; complete mathematical ATen signatures/shapes/counts, not hardware instructions",
+        "status": "PASS_WITHIN_FAMILY_OPERATOR_PARITY",
+        "study_id": "LANGCONTROL098-TRANSFORMER"
+      }
+    },
+    "matched_seeds": [
+      1701,
+      1702,
+      1703,
+      1704,
+      1705
+    ],
+    "models": 40,
+    "phase": "preflight",
+    "research_execution": {
+      "checkpoint_promotion_permitted": false,
+      "evidence_level": "internally_measured_not_independently_qualified",
+      "execution_level": "internal_research",
+      "independently_qualified": false,
+      "protected_TEST_permitted": false,
+      "status": "PASS_INTERNAL_RESEARCH_METADATA"
+    },
+    "reward_integrity": "NOT_INDEPENDENTLY_CERTIFIED_INTERNAL_RESEARCH",
+    "status": "PASS_WITHIN_FAMILY_OBJECTIVE_PROGRAM",
+    "study_id": "LANGCONTROL098"
+  },
+  "stage_plans": {
+    "langcontrol098-evaluate.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "evaluation",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-evaluate",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "5ff90a3777c9c0d1227a847a3e9ef7b814bca05a4ec34e6849e8da9b3a9274e1",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-profile.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 15,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "no_fit",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-profile",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "acd2146e48301c8bb9ffe9c683ec832b5e5fa8265b568b686b5bfb1cc80f1b77",
+      "state": "READY_NO_FIT",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1701-full.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1701-full",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "8cc9e06ebff5a143877eb5c9dce60f5da57158867c936098d899ccad13227762",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1701-query.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1701-query",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "1a3ef1c5add388e4b71627a6c6296f45ceb172f46fb9ef1fafc087eda7a8d9e0",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1702-full.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1702-full",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "e9e5278512ebefe8a99ccc0e40fa4bc7cd24044b9aed4a0f435f0461dd27dbe9",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1702-query.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1702-query",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "5c66296d0b0965a83651132d591c7f83cb0eeada3cfe1f4129dcadb873ba7413",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1703-full.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1703-full",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "a915c8b8257177bf11dfdf2ecaf4db18138908c20610f327c27413fe0f7808a3",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1703-query.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1703-query",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "326ac4c0c222a8712efdcc81771a6765fa70f29a217f76d6d4e15a1500f67550",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1704-full.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1704-full",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "e6a4f225c2acc490cbe9d6bf98268b499c02ad1757c16e2f0b33c1de4224e460",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1704-query.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1704-query",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "f892e3a0a2b2103d740028c11f04d47eae56846585951d36ab4e1d439e9bdd8d",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1705-full.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1705-full",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "fbde727586d795265cad755e95d4fed7ed38ae9e456a650bd2f11f67bd97dad5",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    },
+    "langcontrol098-seed-1705-query.json": {
+      "accelerator": null,
+      "approved_to_open_test": false,
+      "approved_to_train": false,
+      "automatic_submissions": false,
+      "backend": "github_actions",
+      "blockers": [],
+      "cpu_estimate_minutes": 40,
+      "execution_level": "internal_research",
+      "gpu_budget_minutes": 0,
+      "gpu_devices_required": 0,
+      "issue_number": 472,
+      "kind": "training",
+      "reasons": [
+        "CPU or diagnostic workload fits small GitHub runner budget"
+      ],
+      "run_id": "langcontrol098-seed-1705-query",
+      "schema": "tac-osm.compute-decision.v1",
+      "source_contract_fingerprint": "e23a6a7a1a88f51cb10bc5bcef356eefcbf200e12b306d950605387fcb9d6872",
+      "state": "READY_INTERNAL_RESEARCH_PLAN",
+      "variant": "System 1"
+    }
+  },
+  "math_source_verification_run_id": 41153402194,
+  "optimizer_steps_so_far": 0,
+  "protected_TEST_opened": false,
+  "cross_architecture_superiority_eligible": false
+}

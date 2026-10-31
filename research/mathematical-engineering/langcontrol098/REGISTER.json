@@ -79,7 +79,7 @@
     "job_setup_download_upload_minutes": "separately measured; each job has45minute timeout",
     "gpu_minutes": 0
   },
-  "fit_enabled": false,
+  "fit_enabled": true,
   "protected_repository_TEST_permitted": false,
   "checkpoint_promotion_permitted": false,
   "phase_policy": "Freeze code, exact objective coefficients and all40 actual no-optimizer profiles before enabling any optimizer; all40 original final checkpoints must seal before DEV. No TEST, GPU, promotion or architecture ranking.",
@@ -102,5 +102,11 @@
     "data_change": false,
     "historical_objectives_reinterpreted": false,
     "prior_related_implementation": "LANGMATH098 controlled loss in PR668; new model is not used here"
+  },
+  "initialization": {
+    "run_id": 41153143748,
+    "artifact_name": "langcontrol098-preflight-41153143748",
+    "archive_sha256": "351381c3dcff00813b06e2383b4d66f3c61eca646fa78b3b0d04457e2d560492",
+    "policy": "Twenty original zero-optimizer snapshots from source-pinned GitHub preflight; paired arms load exact SHA-verified identical bytes before AdamW."
   }
 }

@@ -411,25 +411,25 @@
   ],
   "compute_accounting": "within_family_complete_operator_ledger",
   "operator_profile_path": "research/mathematical-engineering/langcontrol098/profiles/PROFILE_tac.json",
-  "operator_profile_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
-  "implementation_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
-  "training_recipe_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "operator_profile_sha256": "53b3ce532da85635d3feba4fb04fac0adc9f3c36997ee46f93b85f921fb8b769",
+  "implementation_sha256": "6b92ac098614d36d8856031cb9eeb0272ee7ce6b34411d9b51cad3ac8a7ee06c",
+  "training_recipe_sha256": "ea5358dec719bf0e028466ab5de69a77a21ba8933ab57d0074c78576bf07fcb6",
   "optimizer_contract": {
-    "name": "AdamW",
-    "learning_rate": 0.001,
-    "weight_decay": 0.01,
-    "grad_clip": 1.0,
+    "amsgrad": false,
     "betas": [
       0.9,
       0.999
     ],
-    "eps": 1e-08,
-    "amsgrad": false,
-    "foreach": false,
     "clip_foreach": false,
-    "fused": false
+    "eps": 1e-08,
+    "foreach": false,
+    "fused": false,
+    "grad_clip": 1.0,
+    "learning_rate": 0.001,
+    "name": "AdamW",
+    "weight_decay": 0.01
   },
-  "profile_status": "BLOCKED_UNTIL_NEW_ACTUAL_NO_OPTIMIZER_PROFILE_SEALED",
+  "profile_status": "MEASURED_ORIGINAL_FIT_NO_OPTIMIZER_BEFORE_TRAINING",
   "absolute_training_flops": "INCONCLUSIVE_NOT_CLAIMED",
   "cross_architecture_superiority": "INELIGIBLE",
   "contracts": {
