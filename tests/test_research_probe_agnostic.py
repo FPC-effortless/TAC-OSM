@@ -370,7 +370,16 @@ def test_boolean_state_identity_mismatch_does_not_subtract_boolean_tensors():
     assert result["discrete_state_exactly_equal"] is False
 
 
-def test_discrete_state_support_does_not_accept_integer_prediction_heads():
+def test_discrete_state_support_rejects_integer_heads_and_silent_dtype_writes():
     bad = replace(stateless_adapter(),forecast=lambda m,s,x:{"risk":m(x["features"]).long()})
     with pytest.raises(ValueError,match="nonfloating"):
         probe_memory(StatelessNet(),{"features":torch.randn(2,4)},bad)
+    def dtype_write(m,s,x):
+        s["source_id"] = s["source_id"].float()
+        return {"risk":m(x["features"])}
+    adapter=replace(stateless_adapter(),
+        start=lambda m,x:{"source_id":torch.ones(x["features"].shape[0],1,dtype=torch.long)},
+        patch_state=lambda s,name,value:{**s,name:value},state_views=lambda s:s,
+        forecast=dtype_write)
+    report=probe_memory(StatelessNet(),{"features":torch.randn(2,4)},adapter)
+    assert report["query_does_not_write_state"] is False

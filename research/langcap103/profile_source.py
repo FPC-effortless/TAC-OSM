@@ -11,6 +11,7 @@ import resource
 import time
 from preflight import build, comparator_classes, counts, load_native, parameter_digest
 from source import canonical, digest, next_byte_batch, verify_package
+from attention_accounting import from_profiler, FORWARD, BACKWARD
 
 
 def profile(receipt_path, corpus_path, out):
@@ -43,12 +44,19 @@ def profile(receipt_path, corpus_path, out):
                 raise ValueError("Actual FIT graph disconnected or nonfinite")
             events = prof.key_averages()
             measured_flops = sum(e.flops or 0 for e in events)
+            attention = from_profiler(torch, prof)
+            if config["arm"] == "causal_transformer":
+                operators=[r["operator"] for r in attention["events"]]
+                if operators.count(FORWARD)!=config["depth"] or operators.count(BACKWARD)!=config["depth"]:
+                    raise ValueError("Fused attention runtime does not match registered layer count; no extrapolated charge")
             rows.append({"configuration": config, "target": old["target"], **counts(model),
                 "original_fit_batch_sha256": digest(canonical({"source": receipt["source_sha256"], "rows": ids})),
                 "profiled_batch_size": 2, "profiled_sequence_length": 256,
                 "instrumented_cpu_forward_backward_seconds": elapsed,
                 "process_peak_rss_bytes_after_profile": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
                 "partial_profiler_flops": measured_flops,
+                "fused_attention_accounting":attention,
+                "partial_profile_plus_attention_matrix_units":measured_flops+attention["supplemental_dense_attention_units"],
                 "flops_accounting_complete": False,
                 "counted_operations": [{"name": e.key, "calls": e.count, "flops": e.flops}
                     for e in events if e.flops],
@@ -61,6 +69,7 @@ def profile(receipt_path, corpus_path, out):
         "optimizer_updates": 0, "dev_scoring": False, "protected_test_access": False,
         "limitations": ["instrumented CPU forward/backward excludes optimizer updates and runtime IO",
             "FLOPs are partial; unreported operations are retained, never counted as zero-cost proof",
+            "shape/schema-verified fused attention matrix products are supplemented without double-counting; other costs remain open",
             "RSS is cumulative process high-water mark, not isolated per-model peak",
             "no T4 throughput, training adequacy, trained decode speed or capability result"]}
     out = Path(out); out.parent.mkdir(parents=True, exist_ok=True)

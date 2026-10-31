@@ -22,6 +22,7 @@ jobs:
         run: |
           python scripts/phone_lab.py plan research/phone_queue/langcap103-source-audit.json
           python -m unittest discover -s research/langcap103 -p test_source.py -v
+          python -m unittest discover -s research/langcap103 -p test_attention_accounting.py -v
       - name: Acquire exact publisher release without executing its code
         uses: actions/checkout@v4
         with:
