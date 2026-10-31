@@ -190,7 +190,7 @@ def train(args):
                     "Approved GPU budget expired; retain partial weights only")
             batch_rows=[next(stream) for _ in range(BATCH)]
             for name,offset in batch_rows:
-                schedule_hash.update(canonical([name,offset])+b"\\n")
+                schedule_hash.update(canonical([name,offset])+b"\n")
             tokens=[];targets=[]
             for name,offset in batch_rows:
                 raw=data[name][offset:offset+SEQUENCE+1]
