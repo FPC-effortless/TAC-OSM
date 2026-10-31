@@ -1,0 +1,51 @@
+{
+  "schema": "langcap103.publisher-source-plan.v1",
+  "study_id": "LANGCAP103",
+  "stage": "SOURCE_AUDIT_ONLY_NO_FIT",
+  "repository": "python/cpython",
+  "release_tag": "v3.13.0",
+  "tag_object": "3f27099d916c7b885e3daf1fabedcc119462014d",
+  "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+  "tree": "ed4b2f783624aede5e79a73a2375d2db521fbf72",
+  "publisher_tag_verification": {
+    "provider": "GitHub API",
+    "verified": true,
+    "reason": "valid",
+    "verified_at": "2024-11-06T15:49:37Z",
+    "independent_research_attestation": false
+  },
+  "license": {
+    "path": "LICENSE",
+    "git_blob": "14603b95c2e23b5a4cd6ff93f50348d1817f7638",
+    "review": "Publisher PSF-2.0 license and original path-level notices retained; incorporated third-party code has additional notices; no blanket relicensing or independent legal certification"
+  },
+  "inclusion": {
+    "root": "Lib",
+    "suffix": ".py",
+    "minimum_file_bytes": 257,
+    "maximum_file_bytes": 1000000,
+    "excluded_components": [
+      "test",
+      "tests",
+      "idle_test",
+      "__pycache__",
+      "turtledemo",
+      "ensurepip"
+    ],
+    "duplicate_policy": "exclude_all_content_hashes_with_multiple_paths_before_any_fit",
+    "transform": "NONE: original raw bytes, original file boundaries, no inserted separator targets"
+  },
+  "split": {
+    "policy": "top_level_module_or_package_group",
+    "salt": "LANGCAP103_SOURCE_GROUP_V1",
+    "dev_modulus": 10,
+    "dev_residue": 0,
+    "no_protected_test": true,
+    "minimum_fit_bytes": 1000000,
+    "minimum_dev_bytes": 100000,
+    "minimum_groups_each": 5
+  },
+  "dataset_scope": "Public exposed FIT/DEV from one code repository; no independent TEST or repository-transfer claim",
+  "no_optimizer_steps": true,
+  "original_source_must_not_execute": true
+}

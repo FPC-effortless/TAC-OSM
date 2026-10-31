@@ -72,3 +72,35 @@ That file intentionally does not exist yet: nulls and draft estimates are not
 an approved registration. The preflight report lists these unresolved inputs.
 GPU work routes through the existing two-T4 quota-controlled workflow; this
 CPU/no-fit proposal allocates **zero GPU minutes** and launches no training.
+
+## Publisher corpus and actual-FIT resource preparation
+
+`SOURCE_PLAN.json` fixes CPython 3.13.0 commit
+`60403a5409ff2c3f3b07dd2ca91a7a3e096839c7` before corpus acquisition. The
+publisher tag's GitHub API signature-verification record was checked. This
+is publisher provenance, not the separate independent research attestation.
+
+`source.py` verifies the exact clean commit/tree, each selected Git blob and
+its SHA-256, retains the publisher license and additional original notices,
+excludes tests/demos/bundled wheels and all exact duplicate contents, and
+splits entire top-level modules/packages with a precommitted hash rule.
+No file is assigned using a model result. Original raw bytes and file edges
+remain intact; source code is never executed. Both partitions are public
+exposed FIT/DEV within one repository. No protected TEST or unseen-repository
+claim is created by this split. Near-duplicate and independent permission
+reviews remain explicit limitations.
+
+`profile_source.py` verifies the resulting archive and uses only FIT files
+for six **zero-update** original-input forward/backward probes at batch 2,
+sequence 256. It checks connected finite gradients and unchanged weights.
+Profiler FLOPs are explicitly partial, and unreported operators are retained;
+these numbers cannot pass the full measured-compute comparison gate. CPU
+times include profiler overhead and exclude optimizer steps. They do not
+predict T4 training or trained decode speed. Loss values and DEV scores are
+not published by this resource probe.
+
+The dedicated source workflow preserves the raw corpus, per-file manifests,
+source identity, notices and original resource report as a replayable artifact.
+The independent verifier, source-equivalent PNDS/probe qualification, full
+compute accounting and frozen training execution contract remain required
+before any actual optimizer update.
