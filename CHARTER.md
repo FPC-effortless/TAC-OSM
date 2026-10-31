@@ -10,7 +10,8 @@ PRs and reviews, CI artifacts. No additional paid platform is required.
 Before EVERY train/eval:
 1. Authenticate real publisher dataset, causal observation times, original
    entity IDs, license, split and independently observed outcomes.
-2. Freeze family, seeds, 100k +/-5% parameter target, matched competitors
+2. Freeze family, seeds, explicit scale-v2 trainable/deployed targets (+/-5%;
+   historical v1 remains 100k), matched competitors
    within 1%, equal original data and training budget, replayable checkpoint
    and PNDS mathematical obligations.
 3. Add reviewed JSON study proposal under research/phone_queue and run the

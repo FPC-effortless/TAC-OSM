@@ -37,7 +37,7 @@ We will **not remove simple baselines**: they remain essential negative/shortcut
 
 ## Mandatory *before* first training or primary evaluation
 
-The `PROTOCOL.json` in this directory and `gate.py` provide **no-fit design lint**, not an authorization token. `python research/langcap102/gate.py design` checks the frozen design contract. `python research/langcap102/gate.py readiness --evidence evidence.json` is designed to **fail closed** unless human-reviewable source, split and gold/negative-control evidence is supplied. No original source bytes, gold labels or training data are downloaded or opened by design CI.
+The `PROTOCOL.json` in this directory and `gate.py` provide **no-fit design lint**, not an authorization token. `python research/langcap102/gate.py design` checks the frozen design contract. This is the only implemented subcommand; it does not assess training readiness. Actual fit readiness requires the separate signed parity/source gate below. No original source bytes, gold labels or training data are downloaded or opened by design CI.
 
 A separate preregistered run must supply:
 - Source dataset version, license/permission, publisher, raw archive/content hash, real collected event identity, label availability; source owner/time split and zero target leakage.

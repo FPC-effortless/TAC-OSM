@@ -14,7 +14,8 @@ This is a short operator/agent index, not a replacement for AGENTS.md.
 - Operator permission and signed independent original outcome/source/reward/
   evaluator/access attestation are NEVER replaced by an agent opinion.
 - Protect the sealed TEST set. All primary performance claims need authentic
-  source-qualified data, matched 100k parameter/data/training budgets,
+  source-qualified data, registered scale-v2 targets (historical v1 stays 100k),
+  matched parameter/data/training budgets,
   checkpoint replay and explicit qualification gates.
 - Agents can prepare issue-scoped research PRs but must not quietly merge,
   spend quota, make provider accounts or claim completed trained results.

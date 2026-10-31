@@ -2,6 +2,8 @@
 from importlib.util import module_from_spec,spec_from_file_location
 from pathlib import Path
 import json
+import subprocess
+import sys
 import pytest
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -52,3 +54,31 @@ def test_historical_original_failures_not_erased_by_amendment():
     m["prior_evidence"]["original_failures"]=0
     with pytest.raises(gate.DesignGateError, match="original record"):
         gate.inspect_design(m,policy())
+
+def test_active_agent_instructions_use_registered_scale_and_preserve_history():
+    agents=(ROOT/"AGENTS.md").read_text()
+    assert "## Binding model-scale policy v2" in agents
+    assert "declared-target-v2" in agents
+    assert "LANGMATH101 and existing v1 studies retain 95,000–105,000" in agents
+    assert "A standalone `--model-parameters` check is count-only" in agents
+    assert "## Binding 100k trained-model scale" not in agents
+    for name in ("CHARTER.md", "CODEX.md"):
+        assert "scale-v2" in (ROOT/name).read_text()
+
+def test_scientific_workflow_checks_current_policy_and_signed_evidence():
+    text=(ROOT/".github/workflows/research-scientific-gate.yml").read_text()
+    assert 'grep -q "Model-scale policy v2"' in text
+    assert 'grep -q "Binding model-scale policy v2"' in text
+    assert "python research/langcap102/gate.py design" in text
+    assert "tests/test_reward_runner_integration.py" in text
+    assert "--check-changed" in text
+    assert "NEW_FITS_REQUIRE_100K" not in text
+    assert "Compulsory prospective model-size budget" not in text
+
+def test_readme_only_advertises_implemented_design_command():
+    readme=(STUDY/"README.md").read_text()
+    assert "gate.py readiness" not in readme
+    assert "only implemented subcommand" in readme
+    result=subprocess.run([sys.executable,str(STUDY/"gate.py"),"--help"],
+                          capture_output=True,text=True,check=True)
+    assert "{design}" in result.stdout
