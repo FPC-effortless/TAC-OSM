@@ -23,7 +23,12 @@ def load(name, path):
 
 
 review = load("langacquire097_postfit_review_test", ROOT / "scripts/langacquire097_postfit_review.py")
-budget = load("langacquire097_postfit_original_budget_test", ROOT / "src/tac_osm/research_objective_budget.py")
+# Exact source blob from PR665 head 8f2d9bd016358d887f9200d3cdba9bee9681313b.
+# Authenticate before importing: CI may have only a shallow checkout, and the
+# prospective shared gate may evolve without rewriting this historical parser.
+ORIGINAL_BUDGET_PATH = ROOT / "tests/fixtures/langacquire097_original_budget.py"
+assert hashlib.sha256(ORIGINAL_BUDGET_PATH.read_bytes()).hexdigest() == review.ORIGINAL_BUDGET_SHA256
+budget = load("langacquire097_postfit_original_budget_test", ORIGINAL_BUDGET_PATH)
 
 
 def entry(name, calls=1, *, stage="optimizer", inputs=None, outputs=None):
@@ -89,13 +94,15 @@ def test_real_arithmetic_and_profiler_count_mismatches_still_fail():
 
 
 def test_original_arithmetic_parser_and_original_source_bytes_remain_authoritative():
-    path = ROOT / "src/tac_osm/research_objective_budget.py"
+    path = ORIGINAL_BUDGET_PATH
     before = hashlib.sha256(path.read_bytes()).hexdigest()
     rows = fixture()
     rows[0]["signature"] = json.dumps(["aten::mul", [["torch.float32", [-1]]], []], separators=(",", ":"))
     with review.compatible_ledger_parser(budget), pytest.raises(ValueError, match="shape"):
         budget.ledger_counter(rows)
     assert hashlib.sha256(path.read_bytes()).hexdigest() == before
+    # The checked-in snapshot has the exact original blob hash; historical
+    # behavior is testable without an extra Git object or network access.
     assert before == review.ORIGINAL_BUDGET_SHA256
 
 

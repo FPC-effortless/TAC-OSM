@@ -1,0 +1,213 @@
+name: LANGCONTROL098 fixed-coefficient prefix supervision
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langcontrol098/**'
+      - 'tests/test_langcontrol098_*.py'
+      - 'src/tac_osm/research_objective_budget.py'
+      - 'src/tac_osm/research_probe.py'
+      - 'scripts/validate_research_parity.py'
+      - '.github/workflows/langcontrol098.yml'
+      - 'research/phone_queue/langcontrol098-*.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  PYTHONPATH: src
+  SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+  STUDY: research/mathematical-engineering/langcontrol098
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      fit: ${{ steps.route.outputs.fit }}
+      initial_run: ${{ steps.route.outputs.initial_run }}
+      initial_artifact: ${{ steps.route.outputs.initial_artifact }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+      - name: Decide whether new scientific inputs require execution
+        id: route
+        env:
+          REQUESTED_EVENT: ${{ github.event_name }}
+          REQUESTED_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+          commit = os.environ['SOURCE_COMMIT']
+          assert re.fullmatch('[0-9a-f]{40}', commit)
+          paths = subprocess.check_output(['git','diff-tree','--root','--no-commit-id','--name-only','-r',commit],text=True).splitlines()
+          root = os.environ['STUDY'] + '/'
+          def scientific(path):
+              if path.startswith(root + 'results/'):
+                  return False
+              return ((path.startswith(root) and (path.endswith('.py') or path.startswith(root+'profiles/') or path.rsplit('/',1)[-1] in ('REGISTER.json','FROZEN_INPUTS.json','PREREGISTRATION.md') or path.rsplit('/',1)[-1].startswith('FAIR_COMPARISON')))
+                      or path in ('scripts/validate_research_parity.py','src/tac_osm/research_objective_budget.py'))
+          original_branch = os.environ['REQUESTED_BRANCH'] == 'research/langcontrol098-coefficient-control-2026-10-31'
+          needed = os.environ['REQUESTED_EVENT'] == 'workflow_dispatch' or (original_branch and any(map(scientific, paths)))
+          config = json.load(open(root+'REGISTER.json'))
+          enabled = config['fit_enabled']
+          initialization = config.get('initialization',{})
+          if enabled:
+              assert type(initialization.get('run_id')) is int and initialization['run_id'] > 0
+              assert re.fullmatch(r'langcontrol098-preflight-[0-9]+',initialization.get('artifact_name',''))
+              assert re.fullmatch('[0-9a-f]{64}',initialization.get('archive_sha256',''))
+          with open(os.environ['GITHUB_OUTPUT'],'a') as stream:
+              stream.write('study='+str(needed).lower()+'\n')
+              stream.write('fit='+str(needed and enabled).lower()+'\n')
+              stream.write('initial_run='+str(initialization.get('run_id') or '')+'\n')
+              stream.write('initial_artifact='+str(initialization.get('artifact_name') or '')+'\n')
+          print('Scientific execution required:',needed,'; optimizer enabled:',enabled)
+          PY
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 'pytest>=8,<9' cryptography==46.0.3
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Fetch immutable parent source for historical verifier identity tests
+        run: git fetch --no-tags origin 8f2d9bd016358d887f9200d3cdba9bee9681313b
+      - name: Causal graph, objective, information-boundary and resource-gate checks
+        run: python -m pytest -q tests/test_langcontrol098_*.py tests/test_langacquire097_*.py tests/test_research_probe_agnostic.py tests/test_research_parity_gate.py
+      - name: Review CPU preflight proposal
+        if: steps.route.outputs.study == 'true'
+        run: python scripts/phone_lab.py plan research/phone_queue/langcontrol098-profile.json
+      - name: Authenticate and reproduce frozen source data
+        if: steps.route.outputs.study == 'true'
+        run: python "$STUDY/data.py" --cache /tmp/langcontrol098-data
+      - name: Stage original initial-state archives beside their frozen profiles
+        if: steps.route.outputs.fit == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.route.outputs.initial_run }}
+          name: ${{ steps.route.outputs.initial_artifact }}
+          path: ${{ env.STUDY }}/profiles
+      - name: Actual FIT operator profiles without optimizer updates
+        if: steps.route.outputs.study == 'true' && steps.route.outputs.fit != 'true'
+        run: >-
+          python "$STUDY/profile098.py" --data /tmp/langcontrol098-data
+          --register "$STUDY/REGISTER.json" --output ci-artifacts/no-fit-profile
+          --source-commit "$SOURCE_COMMIT"
+      - name: Block fits unless all four frozen family gates pass
+        if: steps.route.outputs.fit == 'true'
+        run: python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
+      - name: Export FIT-only inputs, excluding DEV actors and answers
+        if: steps.route.outputs.fit == 'true'
+        run: |
+          python - <<'PY'
+          import pathlib, shutil
+          out=pathlib.Path('ci-artifacts/fit-inputs');out.mkdir(parents=True)
+          for name in ('FIT.json','MANIFEST.json'):
+              shutil.copyfile(pathlib.Path('/tmp/langcontrol098-data')/name,out/name)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langcontrol098-preflight-${{ github.run_id }}
+          path: ci-artifacts/no-fit-profile/
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        if: steps.route.outputs.fit == 'true' && success()
+        with:
+          name: langcontrol098-fit-inputs
+          path: ci-artifacts/fit-inputs/
+          if-no-files-found: error
+  fit:
+    needs: prepare
+    if: needs.prepare.outputs.fit == 'true'
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        seed: [1701, 1702, 1703, 1704, 1705]
+        objective: [full, query]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 cryptography==46.0.3
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          name: langcontrol098-fit-inputs
+          path: /tmp/langcontrol098-fit-inputs
+      - name: Fetch the original pinned zero-optimizer initial weights
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.prepare.outputs.initial_run }}
+          name: ${{ needs.prepare.outputs.initial_artifact }}
+          path: ${{ env.STUDY }}/profiles
+      - name: Review this seed's finite CPU proposal
+        run: python scripts/phone_lab.py plan research/phone_queue/langcontrol098-seed-${{ matrix.seed }}-${{ matrix.objective }}.json
+      - name: Seal four original fits without DEV access
+        run: >-
+          python "$STUDY/run.py" --mode fit --seed ${{ matrix.seed }} --objective ${{ matrix.objective }}
+          --initials "$STUDY/profiles"
+          --data /tmp/langcontrol098-fit-inputs --output ci-artifacts/seed-${{ matrix.seed }}-${{ matrix.objective }}
+          --config "$STUDY/REGISTER.json" --source-commit "$SOURCE_COMMIT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langcontrol098-seed-${{ matrix.seed }}-${{ matrix.objective }}
+          path: ci-artifacts/seed-${{ matrix.seed }}-${{ matrix.objective }}/
+          if-no-files-found: error
+  evaluate:
+    needs: [prepare, fit]
+    if: needs.prepare.outputs.fit == 'true' && needs.fit.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 cryptography==46.0.3
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: langcontrol098-seed-*
+          path: /tmp/langcontrol098-all-fits
+      - name: Stage original initial states for final source-bound gates
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.prepare.outputs.initial_run }}
+          name: ${{ needs.prepare.outputs.initial_artifact }}
+          path: ${{ env.STUDY }}/profiles
+      - name: Review complete evaluation cost
+        run: python scripts/phone_lab.py plan research/phone_queue/langcontrol098-evaluate.json
+      - name: Assemble and verify all forty original fits without DEV access
+        run: >-
+          python "$STUDY/run.py" --mode assemble --fits /tmp/langcontrol098-all-fits
+          --output /tmp/langcontrol098-seed-seals
+          --config "$STUDY/REGISTER.json" --source-commit "$SOURCE_COMMIT"
+      - name: Verify all forty checkpoints, replay predictions, then score
+        run: >-
+          python "$STUDY/run.py" --mode evaluate --fits /tmp/langcontrol098-seed-seals
+          --data /tmp/langcontrol098-dev-data --output ci-artifacts/evaluation
+          --config "$STUDY/REGISTER.json" --source-commit "$SOURCE_COMMIT"
+      - name: Verify final actual parameter, exposure and operator receipts
+        run: |
+          for manifest in ci-artifacts/evaluation/FINAL_PARITY_*.json; do
+            python scripts/validate_research_parity.py --manifest "$manifest" --phase final
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langcontrol098-results-${{ github.run_id }}
+          path: ci-artifacts/evaluation/
+          if-no-files-found: error

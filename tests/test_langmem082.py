@@ -29,7 +29,11 @@ def test_actual_matrix_read_and_isolated_event_value_reconstruction():
     P=torch.eye(8)*.7
     vector=read((Q@P)[None,:,:],key[None,:])
     assert torch.allclose(vector,.7*value)
-    assert torch.linalg.vector_norm(Q)==torch.linalg.vector_norm(Q.roll(1,0))
+    # Row permutation changes floating-point reduction order; compare within
+    # two dtype epsilons rather than requiring bitwise-identical rounding.
+    torch.testing.assert_close(torch.linalg.vector_norm(Q),
+                               torch.linalg.vector_norm(Q.roll(1,0)),
+                               rtol=2*torch.finfo(Q.dtype).eps,atol=0)
     book=torch.randn(256,8,generator=torch.Generator().manual_seed(42))
     book=torch.nn.functional.normalize(book,dim=-1);book[137]=torch.nn.functional.normalize(value,dim=0)
     assert decode(vector,book)==137

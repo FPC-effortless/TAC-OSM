@@ -36,6 +36,7 @@ jobs:
         id: route
         env:
           REQUESTED_EVENT: ${{ github.event_name }}
+          REQUESTED_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
           python3 - <<'PY'
           import json, os, re, subprocess
@@ -48,7 +49,8 @@ jobs:
                   return False
               return ((path.startswith(root) and (path.endswith('.py') or path.startswith(root+'profiles/') or path.rsplit('/',1)[-1] in ('REGISTER.json','FROZEN_INPUTS.json','PREREGISTRATION.md') or path.rsplit('/',1)[-1].startswith('FAIR_COMPARISON')))
                       or path in ('scripts/validate_research_parity.py','src/tac_osm/research_objective_budget.py'))
-          needed = os.environ['REQUESTED_EVENT'] == 'workflow_dispatch' or any(map(scientific, paths))
+          original_branch = os.environ['REQUESTED_BRANCH'] == 'research/langacquire097-episodic-learning-2026-10-30'
+          needed = os.environ['REQUESTED_EVENT'] == 'workflow_dispatch' or (original_branch and any(map(scientific, paths)))
           config = json.load(open(root+'REGISTER.json'))
           enabled = config['fit_enabled']
           initialization = config.get('initialization',{})
