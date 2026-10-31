@@ -1,0 +1,215 @@
+name: LANGDEPTH106 four vs eight layers 1M Tiny Shakespeare
+on:
+  pull_request:
+    paths:
+      - 'research/langdepth106/**'
+      - '.github/workflows/langdepth106-tinyshakespeare.yml'
+permissions:
+  contents: read
+concurrency:
+  group: langdepth106-exploratory-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.event.pull_request.user.login == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Record qualified planner result and explicit exploratory authority
+        run: |
+          python scripts/phone_lab.py plan research/phone_queue/langdepth106-engineering.json
+          python scripts/phone_lab.py plan research/phone_queue/langdepth106-training.json
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          path=Path('research/langdepth106/PROTOCOL.json')
+          p=json.loads(path.read_text())
+          assert p['owner_authorized'] is True
+          assert p['independent_attestation'] is False
+          assert p['architecture_superiority_eligible'] is False
+          assert p['fit']['steps']==4096 and p['fit']['batch_size']==8
+          print({'authority':p['authorization_basis'],'protocol_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'qualified_research_gate_passed':False})
+          PY
+      - name: Freeze six registered arm/seed fits
+        id: matrix
+        run: |
+          python - <<'PY'
+          import json,os
+          p=json.load(open('research/langdepth106/PROTOCOL.json'))
+          rows=[{'arm':arm,'seed':seed} for arm in p['models'] for seed in p['seeds']]
+          assert len(rows)==6
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('matrix='+json.dumps({'include':rows},separators=(',',':'))+'\n')
+          PY
+      - uses: actions/checkout@v4
+        with:
+          repository: karpathy/char-rnn
+          ref: 6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e
+          path: ci-input/publisher
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Retrieve pinned publisher tree metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import urllib.request
+          url='https://api.github.com/repos/karpathy/char-rnn/git/trees/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e?recursive=1'
+          with urllib.request.urlopen(url,timeout=30) as r:
+              Path('ci-input/publisher-tree.json').write_bytes(r.read())
+          PY
+      - name: Verify original bytes and isolate training and held-out files
+        run: >-
+          python research/langdepth106/source.py
+          --source ci-input/publisher/data/tinyshakespeare/input.txt
+          --publisher-tree ci-input/publisher-tree.json
+          --publisher-readme ci-input/publisher/Readme.md
+          --output-dir ci-artifacts/langdepth106-source
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LANGDEPTH106-TRAIN-only
+          path: ci-artifacts/langdepth106-source/training/
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LANGDEPTH106-heldout-source
+          path: |
+            ci-artifacts/langdepth106-source/evaluation/
+            ci-artifacts/langdepth106-source/source_receipt.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Install CPU inspection runtime
+        run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy pytest
+      - name: Verify source, optimizer resume and evaluation accounting fixtures
+        env:
+          PYTHONPATH: 'src:.'
+        run: python -m pytest -q research/langdepth106/test_source.py research/langdepth106/test_train.py research/langdepth106/test_evaluate.py
+  smoke:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [four, eight]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGDEPTH106-TRAIN-only
+          path: ci-input/training
+      - name: Eight actual optimizer updates and checkpoint readback
+        env:
+          PYTHONPATH: 'src:.'
+        run: >-
+          python research/langdepth106/train.py
+          --train-bin ci-input/training/train.bin
+          --receipt ci-input/training/source_receipt.json
+          --arm '${{ matrix.arm }}' --seed 10601
+          --smoke --steps 8
+          --output ci-artifacts/langdepth106-smoke
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGDEPTH106-smoke-${{ matrix.arm }}-attempt-${{ github.run_attempt }}
+          path: ci-artifacts/langdepth106-smoke/
+          if-no-files-found: warn
+          retention-days: 90
+  fit:
+    needs: [prepare, smoke]
+    if: needs.smoke.result == 'success'
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGDEPTH106-TRAIN-only
+          path: ci-input/training
+      - name: Train the registered 1M model for all 4096 updates
+        env:
+          PYTHONPATH: 'src:.'
+        run: >-
+          python research/langdepth106/train.py
+          --train-bin ci-input/training/train.bin
+          --receipt ci-input/training/source_receipt.json
+          --arm '${{ matrix.arm }}' --seed ${{ matrix.seed }}
+          --output ci-artifacts/langdepth106-fit
+      - name: Preserve original weights, optimizer, RNG, curves and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGDEPTH106-fit-${{ matrix.arm }}-${{ matrix.seed }}-attempt-${{ github.run_attempt }}
+          path: ci-artifacts/langdepth106-fit/
+          if-no-files-found: warn
+          retention-days: 90
+  evaluate:
+    needs: fit
+    if: needs.fit.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: LANGDEPTH106-fit-*
+          path: ci-input/fits
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGDEPTH106-heldout-source
+          path: ci-input/corpus
+      - name: Audit all six checkpoints then perform the frozen final evaluation
+        env:
+          PYTHONPATH: 'src:.'
+        run: >-
+          python research/langdepth106/evaluate.py
+          --protocol research/langdepth106/PROTOCOL.json
+          --corpus-dir ci-input/corpus
+          --run-dir ci-input/fits
+          --output ci-artifacts/langdepth106-evaluation
+          --authorize-final-test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGDEPTH106-final-evaluation-attempt-${{ github.run_attempt }}
+          path: ci-artifacts/langdepth106-evaluation/
+          if-no-files-found: warn
+          retention-days: 90
