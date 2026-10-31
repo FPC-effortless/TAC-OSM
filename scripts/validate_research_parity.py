@@ -286,8 +286,17 @@ def _check_manifest_parity_only(m,phase="preflight"):
     text_field(m.get("study_id"),"study_id")
     kind=m.get("study_type")
     demand(kind in ("architecture_comparison","single_model_training","noncomparative_diagnostic",
-                    "within_family_objective_comparison", "within_family_objective_program"),
+                    "within_family_objective_comparison", "within_family_objective_program",
+                    "owner_two_lane_program"),
         "study_type must distinguish comparison, single-model fit and no-fit diagnostics")
+    if kind == "owner_two_lane_program":
+        # Exact LANGMATH101 user-requested split-lane contract only. Ordinary
+        # architecture_comparison retains all simultaneous parity requirements.
+        from tac_osm.research_owner_two_lane import validate_program
+        try:
+            return validate_program(m, phase)
+        except (ValueError, KeyError, OSError) as exc:
+            raise ParityError("owner two-lane internal program gate: " + str(exc)) from exc
     if kind == "within_family_objective_comparison":
         from tac_osm.research_objective_budget import validate_comparison
         try:
@@ -579,10 +588,10 @@ def check_changed(base_head,root):
         # qualifies for training: the trusted evaluator's preflight receipt is
         # supplied to the runner at execution, not embedded in source files.
         result=_check_manifest_parity_only(manifest,"preflight")
-        if manifest["study_type"] in ("architecture_comparison", "single_model_training", "within_family_objective_comparison", "within_family_objective_program"):
+        if manifest["study_type"] in ("architecture_comparison", "single_model_training", "within_family_objective_comparison", "within_family_objective_program", "owner_two_lane_program"):
             demand(requires_100k_policy(manifest["study_id"]) is True,
                    "historical experiment registration is immutable")
-        if manifest["study_type"] in ("architecture_comparison","single_model_training", "within_family_objective_comparison", "within_family_objective_program"):
+        if manifest["study_type"] in ("architecture_comparison","single_model_training", "within_family_objective_comparison", "within_family_objective_program", "owner_two_lane_program"):
             workflows=list((root/".github/workflows").glob(study+"*.yml"))
             workflows+=list((root/".github/workflows").glob(study+"*.yaml"))
             demand(bool(workflows),
@@ -650,3 +659,4 @@ def main():
 
 if __name__=="__main__":
     sys.exit(main())
+

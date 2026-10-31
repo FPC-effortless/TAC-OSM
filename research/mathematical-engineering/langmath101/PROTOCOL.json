@@ -5,23 +5,124 @@
   "purpose": "Complete bounded trained pilots for the remaining LANGMATH100 architecture stages, preserving original 10M frozen attribution separately.",
   "owner_contract": "owner-2026-10-31-langmath100-two-lane",
   "owner_instruction_quote": "Compare A0 against A3 at nominal depths of 1, 2, 4 and 8 blocks, first under matched parameters and then under matched training FLOPs.",
-  "parameter_target": {"minimum": 95000, "maximum": 105000, "maximum_pairwise_relative_gap": 0.01},
-  "seeds": [10101, 10102, 10103],
+  "parameter_target": {
+    "minimum": 95000,
+    "maximum": 105000,
+    "maximum_pairwise_relative_gap": 0.01
+  },
+  "seeds": [
+    10101,
+    10102,
+    10103
+  ],
   "unique_architectures": 23,
   "fit_jobs": 138,
-  "lanes": ["parameter_exposure_matched", "counted_arithmetic_matched"],
-  "parameter_lane": {"updates": 512, "batch_size": 4, "dense_context": 272, "real_language_context": 128},
-  "counted_lane": {"stop": "first actual step reaching the common frozen dense-arithmetic target", "minimum_steps": 200, "maximum_steps": 4096, "maximum_overshoot_fraction": 0.005},
+  "lanes": [
+    "parameter_exposure_matched",
+    "counted_arithmetic_matched"
+  ],
+  "parameter_lane": {
+    "updates": 512,
+    "batch_size": 4,
+    "dense_context": 272,
+    "real_language_context": 128
+  },
+  "counted_lane": {
+    "stop": "first actual step reaching the common frozen dense-arithmetic target",
+    "minimum_steps": 200,
+    "maximum_steps": 4096,
+    "maximum_overshoot_fraction": 0.005
+  },
   "arithmetic_convention": "actual_ATen_mm_addmm_bmm_units",
   "full_model_FLOPs_status": "INCONCLUSIVE_NOT_CLAIMED",
-  "training": {"optimizer": "AdamW", "learning_rate": 0.001, "weight_decay": 0.01, "grad_clip": 1.0, "prefix_weight": 0.5, "schedule": "constant", "tuning_trials": 0, "dtype": "FP32", "threads": 2},
-  "resource_bounds": {"per_fit_seconds": 2100, "GPU_minutes": 0, "maximum_concurrent_fit_jobs": 12, "maximum_all_fit_CPU_minutes": 4830},
-  "data": {"cohort": "original authenticated LANGTRAIN099 FIT/DEV", "source_manifest_sha256": "f587e98c45b28c8fd9cecdf4de60a72019599839993d92c75dac609e7c1c1d4f", "FIT_archive_sha256": "d392f2e45b2ffac2cf9453c509dcb6602629d46053deacddf04ca8044e13f39c", "DEV_archive_sha256": "a933af65d33a97bf0e631ca126c50d805bb0ae9b03b299e9cb6b406f9f1654da", "external_source_acquisition": false},
-  "controls": ["all fits sealed before any candidate DEV neural inference", "no best checkpoint selection", "all initial/final optimizer and RNG archives retained", "same 4096-item frozen per-seed schedule; counted runs consume an unedited prefix", "all fit workers receive FIT only", "all source files and original source bytes hash checked", "cold reload of actual saved final weights", "state reset, full donor, direct-history, query-only and selective interventions", "raw current-byte decoder bypass forbidden in patch candidates"],
-  "primary_outcomes": ["held-out language NLL and bits per byte", "complete lexical and ARC task success", "paired causal intervention differences", "actual data presentations and counted dense training arithmetic", "trained prefill/decode time and complete carried memory bytes"],
-  "statistics": {"unit": "source file for language; source cluster for lexical; task for ARC", "bootstrap_replicates": 10000, "report": "all seeds and paired confidence intervals; exploratory exposed DEV only; multiplicity corrected within declared outcome family", "protected_TEST_access": false},
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "prefix_weight": 0.5,
+    "schedule": "constant",
+    "tuning_trials": 0,
+    "dtype": "FP32",
+    "threads": 2
+  },
+  "resource_bounds": {
+    "per_fit_seconds": 3600,
+    "GPU_minutes": 0,
+    "maximum_concurrent_fit_jobs": 12,
+    "maximum_all_fit_CPU_minutes": 8280
+  },
+  "data": {
+    "cohort": "original authenticated LANGTRAIN099 FIT/DEV",
+    "source_manifest_sha256": "f587e98c45b28c8fd9cecdf4de60a72019599839993d92c75dac609e7c1c1d4f",
+    "FIT_archive_sha256": "d392f2e45b2ffac2cf9453c509dcb6602629d46053deacddf04ca8044e13f39c",
+    "DEV_archive_sha256": "a933af65d33a97bf0e631ca126c50d805bb0ae9b03b299e9cb6b406f9f1654da",
+    "external_source_acquisition": false
+  },
+  "controls": [
+    "all optimized fits sealed before candidate DEV scoring and measured model comparison; pre-fit public DEV technical API exposure separately disclosed",
+    "no best checkpoint selection",
+    "all initial/final optimizer and RNG archives retained",
+    "same 4096-item frozen per-seed schedule; counted runs consume an unedited prefix",
+    "all fit workers receive FIT only",
+    "all source files and original source bytes hash checked",
+    "cold reload of actual saved final weights",
+    "state reset, full donor, direct-history, query-only and selective interventions",
+    "raw current-byte decoder bypass forbidden in patch candidates"
+  ],
+  "primary_outcomes": [
+    "held-out language NLL and bits per byte",
+    "complete lexical and ARC task success",
+    "paired causal intervention differences",
+    "actual data presentations and counted dense training arithmetic",
+    "trained prefill/decode time and complete carried memory bytes"
+  ],
+  "statistics": {
+    "unit": "source file for language; source cluster for lexical; task for ARC",
+    "bootstrap_replicates": 10000,
+    "report": "all seeds and paired confidence intervals; exploratory exposed DEV only; multiplicity corrected within declared outcome family",
+    "protected_TEST_access": false
+  },
   "stage007_limit": "Original data contain no authenticated unseen rule-family/composition labels or strict hidden-history necessity benchmark. Existing exact tasks and surface controls cannot certify structure discovery or novel compositional transfer.",
   "stage009_limit": "Internal replay and collaborating agents are not independent protected replication. External assessor and protected source are absent.",
   "stage010_gate": "Integrate only mechanisms with reproducible complete-task benefit and favorable recorded quality/resource tradeoff. No automatic A6 construction from NLL alone.",
-  "claim_limits": ["split lanes do not establish simultaneous full parameter/data/compute parity", "ATen dense arithmetic excludes uncharged operations and is not complete training FLOPs", "hierarchy timescales are proposed architectural priors, not demonstrated learned concepts", "discrete/adaptive training uses a declared surrogate derivative", "full whole-model IEEE/autodifferentiation proof remains OPEN", "no architecture superiority, independent qualification or checkpoint promotion"]
+  "claim_limits": [
+    "split lanes do not establish simultaneous full parameter/data/compute parity",
+    "ATen dense arithmetic excludes uncharged operations and is not complete training FLOPs",
+    "hierarchy timescales are proposed architectural priors, not demonstrated learned concepts",
+    "discrete/adaptive training uses a declared surrogate derivative",
+    "full whole-model IEEE/autodifferentiation proof remains OPEN",
+    "no architecture superiority, independent qualification or checkpoint promotion"
+  ],
+  "prefit_technical_exposure": {
+    "receipt": "PRE_FIT_TECHNICAL_EXPOSURE.json",
+    "description": "An implementation smoke check used observed bytes from two previously exposed DEV actors in eight untrained candidate APIs. The loader authenticated judge file bytes by SHA only; no judge parsing, target-value use, optimization, scoring or selection occurred. This is DEV neural inference, disclosed before first fit. All subsequent API checks use FIT.",
+    "qualification": "internal previously exposed DEV only"
+  },
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "f587e98c45b28c8fd9cecdf4de60a72019599839993d92c75dac609e7c1c1d4f",
+    "partitions": [
+      "FIT",
+      "DEV"
+    ]
+  },
+  "causal_protocol": "Causal original byte streams; untrained public DEV technical exposure disclosed separately. All optimized fits sealed before measured DEV comparison; actors receive only acquisition/query/owned state with fixed generation budgets; judges loaded after prediction sealing.",
+  "checkpoint_policy": "No best checkpoint or loss-based stopping. All initial/final model, actual AdamW state, RNG and every-step source/operator journals retained. Cold actual-file reload and semantic state plus next real FIT continuation checked. Technical failures preserved.",
+  "resource_revision_before_first_fit": {
+    "old_per_fit_seconds": 2100,
+    "new_per_fit_seconds": 3600,
+    "reason": "Actual zero-update traced adaptive source profile4.30s/step predicts2782s under512updates and1.25headroom; no optimizer, DEV scoring or architecture selection used."
+  }
 }

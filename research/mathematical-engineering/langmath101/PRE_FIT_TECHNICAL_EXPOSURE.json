@@ -1,0 +1,28 @@
+{
+  "event": "UNTRAINED_EVALUATOR_API_DRY_RUN_ON_EXPOSED_DEV_OBSERVATIONS",
+  "records": "Original099 DEV_ACTOR rows0and1, observed acquisition/query bytes only",
+  "arms": [
+    "native098",
+    "stateless_current",
+    "stateless_window4",
+    "stack_assoc_2",
+    "hierarchy_assoc_3",
+    "gru",
+    "selective_ssm",
+    "transformer"
+  ],
+  "checks": [
+    "finite256-byte logits",
+    "fixed4-byte generation length",
+    "carry/direct-history equivalence within3e-5",
+    "unsupported intervention dimensions refuse"
+  ],
+  "target_values_used_or_scored": false,
+  "optimizer_steps": 0,
+  "architecture_selection_or_tuning": false,
+  "qualification": "Disclose pre-fit candidate DEV neural inference. The data loader hashed every EVAL manifest file, including raw DEV_JUDGE bytes, for identity only; judge JSON was not parsed and no target values or scores were accessed. No architecture selection, fitting, tuning, or task-result interpretation occurred. Subsequent API checks use authentic FIT only.",
+  "judge_file_bytes_authenticated_by_SHA256": true,
+  "judge_JSON_parsed": false,
+  "target_values_accessed": false,
+  "judge_file_authenticated_by_SHA_only": true
+}
