@@ -1,0 +1,228 @@
+name: LANGMATH101 bounded trained research program
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmath101/**'
+      - 'research/phone_queue/langmath101-*.json'
+      - '.github/workflows/langmath101.yml'
+permissions:
+  contents: read
+  actions: read
+env:
+  OMP_NUM_THREADS: '2'
+  MKL_NUM_THREADS: '2'
+  OPENBLAS_NUM_THREADS: '1'
+  PYTHONPATH: src
+  SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+  STUDY: research/mathematical-engineering/langmath101
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      fit: ${{ steps.route.outputs.fit }}
+      matrix: ${{ steps.route.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Route immutable scientific source without retraining results commits
+        id: route
+        run: |
+          python - <<'PY'
+          import json,os,subprocess
+          from pathlib import Path
+          root=Path(os.environ['STUDY']);reg=json.loads((root/'REGISTER.json').read_text())
+          paths=subprocess.check_output(['git','diff-tree','--root','--no-commit-id','--name-only','-r',os.environ['SOURCE_COMMIT']],text=True).splitlines()
+          def scientific(p):
+              return p.startswith(str(root)+'/') and not any('/'+s+'/' in p for s in ('results','reports')) and (p.endswith('.py') or Path(p).name in ('REGISTER.json','PROTOCOL.json','FAIR_COMPARISON.json'))
+          fit=reg['fit_enabled'] and any(map(scientific,paths))
+          rows=json.loads((root/'FAIR_COMPARISON.json').read_text())['arms']
+          profile=json.loads((root/'profiles/PROFILE_INDEX.json').read_text()); wall={(r['architecture'],r['seed']):r['profile_wall_seconds'] for r in profile['models']}
+          rows.sort(key=lambda r:-wall[r['architecture'],r['seed']]*r['budget']['steps'])
+          matrix={'include':[{k:r[k] for k in ('architecture','seed','lane')} for r in rows]}
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('fit='+str(fit).lower()+'\nmatrix='+json.dumps(matrix,separators=(',',':'))+'\n')
+          print({'fit_enabled':fit,'planned_fits':len(rows)})
+          PY
+      - run: python -m pip install numpy==2.3.5 'pytest>=8,<9' cryptography==46.0.3
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Independent full source references and causal interfaces
+        run: |
+          python -m pytest -q "$STUDY/math/test_reference.py"
+          python -m pytest -q "$STUDY/adaptive/test_models.py"
+          python -m pytest -q "$STUDY/candidates/test_models.py" "$STUDY/candidates/test_conventional.py"
+          python -m pytest -q tests/test_research_parity_gate.py tests/test_research_probe_agnostic.py tests/test_langmath101_accounting.py tests/test_langmath101_artifact_downloads.py
+      - name: Check actual frozen prefit receipts and mathematics readiness
+        if: steps.route.outputs.fit == 'true'
+        run: |
+          python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
+          python scripts/phone_lab.py plan research/phone_queue/langmath101-profile.json
+          python "$STUDY/readiness.py"
+      - uses: actions/download-artifact@v4
+        if: steps.route.outputs.fit == 'true'
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41153068368
+          name: langtrain099-FIT-only
+          path: /tmp/langmath101-FIT
+      - name: Download all 69 exact original initializations by frozen archive ID
+        if: steps.route.outputs.fit == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/download-langmath101-artifacts.py --repository '${{ github.repository }}' --run-id 41169500006 --registry "$STUDY/ORIGINAL_INITIALIZATIONS.json" --expected 69 --output /tmp/langmath101-original-inits
+      - name: Recheck every frozen real FIT profile before corrected optimization
+        if: steps.route.outputs.fit == 'true'
+        run: python "$STUDY/check_frozen_profiles.py" --fit /tmp/langmath101-FIT --initials /tmp/langmath101-original-inits --output ci-artifacts/FROZEN_PROFILE_RECHECK.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langmath101-prefit-recheck
+          path: ci-artifacts/
+          if-no-files-found: ignore
+  fit:
+    needs: preflight
+    if: needs.preflight.outputs.fit == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix: ${{ fromJSON(needs.preflight.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41153068368
+          name: langtrain099-FIT-only
+          path: /tmp/langmath101-FIT
+      - name: Fixed CPU proposal and exact prefit resource gate
+        run: |
+          python scripts/phone_lab.py plan research/phone_queue/langmath101-seed-${{ matrix.seed }}.json
+          python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41169500006
+          name: langmath101-fit-${{ matrix.architecture }}-${{ matrix.seed }}-parameter_exposure_matched
+          path: /tmp/langmath101-original-init
+      - name: Original-source optimization with actual per-update arithmetic
+        run: python "$STUDY/train.py" --manifest "$STUDY/FAIR_COMPARISON.json" --fit /tmp/langmath101-FIT --tokenizers "$STUDY/profiles" --initial /tmp/langmath101-original-init/INITIAL_MODEL.pt --arm '${{ matrix.architecture }}' --seed ${{ matrix.seed }} --lane '${{ matrix.lane }}' --output ci-artifacts/fit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langmath101-fit-${{ matrix.architecture }}-${{ matrix.seed }}-${{ matrix.lane }}
+          path: ci-artifacts/fit/
+          if-no-files-found: error
+          retention-days: 90
+  seal:
+    needs: [preflight, fit]
+    if: needs.fit.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Download all 138 fit archives with complete pagination
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/download-langmath101-artifacts.py --repository '${{ github.repository }}' --run-id ${{ github.run_id }} --prefix langmath101-fit- --expected 138 --output /tmp/langmath101-fits
+      - name: Reopen every original checkpoint and gate actual consumed resources before DEV
+        run: |
+          python "$STUDY/finalize.py" --manifest "$STUDY/FAIR_COMPARISON.json" --fitsdir /tmp/langmath101-fits --output ci-artifacts/seal
+          python scripts/validate_research_parity.py --manifest ci-artifacts/seal/FINAL_MEASURED_MANIFEST.json --phase final
+      - uses: actions/upload-artifact@v4
+        with:
+          name: langmath101-sealed-all-fits
+          path: ci-artifacts/seal/
+          if-no-files-found: error
+  evaluate:
+    needs: [preflight, seal]
+    if: needs.seal.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix: ${{ fromJSON(needs.preflight.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          name: langmath101-fit-${{ matrix.architecture }}-${{ matrix.seed }}-${{ matrix.lane }}
+          path: /tmp/langmath101-fit
+      - uses: actions/download-artifact@v4
+        with:
+          name: langmath101-sealed-all-fits
+          path: /tmp/langmath101-seal
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41153068368
+          name: langtrain099-FIT-only
+          path: /tmp/langmath101-FIT
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41153068368
+          name: langtrain099-EVAL-only
+          path: /tmp/langmath101-EVAL
+      - name: All registered predictions and complete-task scoring
+        run: python "$STUDY/evaluate.py" --checkpoint /tmp/langmath101-fit/MODEL.pt --fit /tmp/langmath101-FIT --data /tmp/langmath101-EVAL --fits-seal /tmp/langmath101-seal/SEALED_ALL_FITS.json --output ci-artifacts/evaluation --conditions full
+      - name: Trained serial decoding and complete state accounting
+        run: python "$STUDY/efficiency.py" --checkpoint /tmp/langmath101-fit/MODEL.pt --output ci-artifacts/evaluation/EFFICIENCY.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langmath101-eval-${{ matrix.architecture }}-${{ matrix.seed }}-${{ matrix.lane }}
+          path: ci-artifacts/evaluation/
+          if-no-files-found: error
+          retention-days: 90
+  report:
+    needs: [seal, evaluate]
+    if: needs.evaluate.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - name: Download all 138 evaluation archives with complete pagination
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/download-langmath101-artifacts.py --repository '${{ github.repository }}' --run-id ${{ github.run_id }} --prefix langmath101-eval- --expected 138 --output /tmp/langmath101-evaluations
+      - run: python "$STUDY/aggregate.py" --manifest "$STUDY/FAIR_COMPARISON.json" --evaluations /tmp/langmath101-evaluations --output ci-artifacts/report
+      - uses: actions/upload-artifact@v4
+        with:
+          name: langmath101-complete-report
+          path: ci-artifacts/report/
+          if-no-files-found: error
+          retention-days: 90

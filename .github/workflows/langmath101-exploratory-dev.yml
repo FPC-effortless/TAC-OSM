@@ -1,0 +1,210 @@
+name: LANGMATH101 exploratory mixed-provenance DEV (not preregistered)
+on:
+  pull_request:
+    paths:
+      - '.github/scripts/langmath101-exploratory-dev.py'
+      - '.github/workflows/langmath101-exploratory-dev.yml'
+permissions:
+  contents: read
+  actions: read
+env:
+  OMP_NUM_THREADS: '2'
+  MKL_NUM_THREADS: '2'
+  OPENBLAS_NUM_THREADS: '1'
+  PYTHONPATH: src
+  SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+  STUDY: research/mathematical-engineering/langmath101
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prove original evaluator source unchanged, amended gate isolated
+        run: python .github/scripts/langmath101-exploratory-dev.py self-test
+      - name: Plan complete 138-fit evaluation, retaining original vs posthoc provenance
+        id: plan
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path('research/mathematical-engineering/langmath101')
+          manifest=json.loads((root/'FAIR_COMPARISON.json').read_text())
+          exceptions={('a5_adaptive',10102,'counted_arithmetic_matched'),
+                      ('a5_adaptive',10103,'counted_arithmetic_matched'),
+                      ('a5_adaptive',10103,'parameter_exposure_matched')}
+          rows=[{'architecture':r['architecture'],'seed':r['seed'],'lane':r['lane'],
+                 'source':'posthoc' if (r['architecture'],r['seed'],r['lane']) in exceptions else 'original'}
+                 for r in manifest['arms']]
+          assert len(rows)==138 and len(set((r['architecture'],r['seed'],r['lane']) for r in rows))==138
+          assert sum(r['source']=='posthoc' for r in rows)==3
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:
+              out.write('matrix='+json.dumps({'include':rows},separators=(',',':'))+'\n')
+          print({'planned':138,'original':135,'posthoc':3})
+          PY
+  seal_exploratory:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify frozen original source and frozen experimental preflight
+        run: |
+          python .github/scripts/langmath101-exploratory-dev.py self-test
+          python scripts/validate_research_parity.py --manifest "$STUDY/FAIR_COMPARISON.json" --phase preflight
+      - name: Download all 138 original FIT archives, including three failed-state records
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/download-langmath101-artifacts.py --repository '${{ github.repository }}' --run-id 41174892770 --prefix langmath101-fit- --expected 138 --output /tmp/langmath101-original-fits
+      - name: Download all three posthoc training recoveries separately
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/download-langmath101-artifacts.py --repository '${{ github.repository }}' --run-id 41179897888 --prefix langmath101-posthoc- --expected 3 --output /tmp/langmath101-recovered-fits
+      - name: Verify every original fit, recovered checkpoint, AdamW state and source ledger BEFORE DEV
+        run: >-
+          python .github/scripts/langmath101-exploratory-dev.py seal
+          --original /tmp/langmath101-original-fits
+          --recovery /tmp/langmath101-recovered-fits
+          --output ci-artifacts/exploratory-seal
+      - name: Upload explicitly NOT original-study 138-checkpoint mixed-provenance seal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: langmath101-exploratory-mixed-provenance-seal
+          path: ci-artifacts/exploratory-seal/
+          if-no-files-found: error
+          retention-days: 90
+  evaluate_exploratory:
+    needs: [preflight, seal_exploratory]
+    if: needs.seal_exploratory.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix: ${{ fromJSON(needs.preflight.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Recheck source-only exploratory evaluator patch
+        run: python .github/scripts/langmath101-exploratory-dev.py self-test
+      - uses: actions/download-artifact@v4
+        with:
+          name: langmath101-exploratory-mixed-provenance-seal
+          path: /tmp/langmath101-seal
+      - uses: actions/download-artifact@v4
+        if: matrix.source == 'original'
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41174892770
+          name: langmath101-fit-${{ matrix.architecture }}-${{ matrix.seed }}-${{ matrix.lane }}
+          path: /tmp/langmath101-checkpoint
+      - uses: actions/download-artifact@v4
+        if: matrix.source == 'posthoc'
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41179897888
+          name: langmath101-posthoc-${{ matrix.architecture }}-${{ matrix.seed }}-${{ matrix.lane }}
+          path: /tmp/langmath101-checkpoint
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41153068368
+          name: langtrain099-FIT-only
+          path: /tmp/langmath101-FIT
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 41153068368
+          name: langtrain099-EVAL-only
+          path: /tmp/langmath101-EVAL
+      - name: Score full original DEV outcomes using audited mixed-provenance barrier only
+        run: |
+          if [ "${{ matrix.source }}" = "posthoc" ]; then
+            checkpoint=/tmp/langmath101-checkpoint/POSTHOC_MODEL.pt
+          else
+            checkpoint=/tmp/langmath101-checkpoint/MODEL.pt
+          fi
+          python .github/scripts/langmath101-exploratory-dev.py evaluate \
+            --checkpoint "$checkpoint" \
+            --seal /tmp/langmath101-seal \
+            --fit /tmp/langmath101-FIT \
+            --data /tmp/langmath101-EVAL \
+            --arm '${{ matrix.architecture }}' \
+            --seed ${{ matrix.seed }} \
+            --lane '${{ matrix.lane }}' \
+            --output ci-artifacts/evaluation
+      - name: Measure trained prefill/decode within explicit time budget
+        run: |
+          if [ "${{ matrix.source }}" = "posthoc" ]; then
+            checkpoint=/tmp/langmath101-checkpoint/POSTHOC_MODEL.pt
+          else
+            checkpoint=/tmp/langmath101-checkpoint/MODEL.pt
+          fi
+          python "$STUDY/efficiency.py" --checkpoint "$checkpoint" \
+            --output ci-artifacts/evaluation/EFFICIENCY.json || code=$?
+          if [ "${code:-0}" != 0 ]; then
+            echo "Efficiency benchmark incomplete; audited result file retained"
+            test -f ci-artifacts/evaluation/EFFICIENCY.json
+          fi
+      - name: Upload independently labeled exploratory DEV result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: langmath101-exploratory-eval-${{ matrix.architecture }}-${{ matrix.seed }}-${{ matrix.lane }}
+          path: ci-artifacts/evaluation/
+          if-no-files-found: error
+          retention-days: 90
+  report_exploratory:
+    needs: [preflight, seal_exploratory, evaluate_exploratory]
+    if: needs.evaluate_exploratory.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - uses: actions/download-artifact@v4
+        with:
+          name: langmath101-exploratory-mixed-provenance-seal
+          path: /tmp/langmath101-seal
+      - name: Download every original-source DEV result across all pages with archive verification
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/download-langmath101-artifacts.py --repository '${{ github.repository }}' --run-id '${{ github.run_id }}' --prefix langmath101-exploratory-eval- --expected 138 --output /tmp/langmath101-exploratory-evaluations
+      - name: Paired all-architecture DEV comparison with explicit posthoc scientific limits
+        run: >-
+          python .github/scripts/langmath101-exploratory-dev.py aggregate
+          --evaluations /tmp/langmath101-exploratory-evaluations
+          --seal /tmp/langmath101-seal
+          --output ci-artifacts/exploratory-report
+      - uses: actions/upload-artifact@v4
+        with:
+          name: langmath101-exploratory-comparison-report
+          path: ci-artifacts/exploratory-report/
+          if-no-files-found: error
+          retention-days: 90
