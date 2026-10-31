@@ -217,7 +217,7 @@ def gated_eval_source():
     start=src.index('    if not getattr(args, "fits_seal", None):')
     end=src.index('    payload = torch.load(args.checkpoint',start)
     old=src[start:end]
-    if old.count('SEALED_ALL_FITS_BEFORE_DEV')!=1 or old.count('FINAL_OWNER_GATE.json')!=1:
+    if old.count('SEALED_ALL_FITS_BEFORE_DEV')!=1 or old.count('FINAL_OWNER_GATE.json')!=2:
         raise ValueError("Unexpected original DEV gate text")
     new='''    if not getattr(args, "fits_seal", None):
         raise ValueError("Exploratory seal required")
