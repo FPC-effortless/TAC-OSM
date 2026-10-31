@@ -1,0 +1,48 @@
+name: LANGMATH100 trained state attribution
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/langmath100/**'
+      - 'research/phone_queue/langmath100-replay.json'
+      - '.github/workflows/langmath100.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  replay-and-attribute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [9901, 9902, 9903]
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 'pytest>=8,<9'
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - run: python scripts/phone_lab.py plan research/phone_queue/langmath100-replay.json
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmath100/FAIR_COMPARISON.json --phase preflight
+      - name: Original source and intervention boundary tests
+        run: python -m pytest -q tests/test_langtrain099.py tests/test_research_probe_agnostic.py research/mathematical-engineering/langmath100/test_interventions.py
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 41153068368
+          github-token: ${{ github.token }}
+          pattern: langtrain099-*
+          path: /tmp/langmath100-originals
+      - name: Reproduce frozen baseline and run all state combinations
+        run: python research/mathematical-engineering/langmath100/run.py --artifacts /tmp/langmath100-originals --model research/mathematical-engineering/langtrain099/model.py --output ci-artifacts/langmath100-${{ matrix.seed }} --seed ${{ matrix.seed }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langmath100-frozen-predictions-${{ matrix.seed }}
+          path: ci-artifacts/
+          if-no-files-found: warn
