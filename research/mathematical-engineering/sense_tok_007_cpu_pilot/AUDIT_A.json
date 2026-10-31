@@ -1,0 +1,110 @@
+{
+  "status": "PASS_READ_ONLY_LOCAL_REPLAY_NOT_INDEPENDENT_QUALIFICATION",
+  "checkpoint_records": [
+    {
+      "step": 0,
+      "sha256": "d5b10ff80c6c58c9122dd6c8d3b30c03e40a95694d497648523e2bbdc965ee43",
+      "optimizer_state_records": 0,
+      "optimizer_parameter_steps": []
+    },
+    {
+      "step": 32,
+      "sha256": "6953e3b1d3563e8003bdf482aea6b6c81c428b132928bce38212560a057c5c6d",
+      "optimizer_state_records": 11,
+      "optimizer_parameter_steps": [
+        32
+      ]
+    },
+    {
+      "step": 64,
+      "sha256": "890b3889fbe938f31d3ec865b1d15b461ba0a15cfd6f9403abf05fcf25048c29",
+      "optimizer_state_records": 11,
+      "optimizer_parameter_steps": [
+        64
+      ]
+    },
+    {
+      "step": 96,
+      "sha256": "5501db03f44853375dccfd1eaac0a537f71ca7344c8dffdd048cc720ce0f6510",
+      "optimizer_state_records": 11,
+      "optimizer_parameter_steps": [
+        96
+      ]
+    },
+    {
+      "step": 128,
+      "sha256": "f027782d8fcb08a132cbdb92b212a66f0e907ee649ce5582bb2097d9330489a6",
+      "optimizer_state_records": 11,
+      "optimizer_parameter_steps": [
+        128
+      ]
+    }
+  ],
+  "prediction_replay": {
+    "0": {
+      "logits_file": "AUDIT_A-logits-0.pt",
+      "logits_sha256": "2080e8793f0dc776f954be07492b2177241060fab17d2709eea584cb2f0dafc9",
+      "bpb": 8.03754351097307,
+      "forced_mode_bpb_posthoc": {
+        "byte": 8.030741911660156,
+        "token": 8.095399610786187
+      },
+      "future_prefix_invariance": "PASS"
+    },
+    "128": {
+      "logits_file": "AUDIT_A-logits-128.pt",
+      "logits_sha256": "aa039dc6b6ac4d381202014ecf4652861a908153de4da345d595474324031919",
+      "bpb": 5.461519270965537,
+      "forced_mode_bpb_posthoc": {
+        "byte": 5.461053599308763,
+        "token": 5.857633533826126
+      },
+      "future_prefix_invariance": "PASS"
+    }
+  },
+  "parameter_change_l2": {
+    "backbone.position_recency": 0.06485027503478613,
+    "backbone.byte_emb.weight": 0.46572710904186515,
+    "backbone.gru_cell.weight_ih": 1.3783264682392937,
+    "backbone.gru_cell.weight_hh": 3.0374707101695804,
+    "backbone.gru_cell.bias_ih": 0.27585620125405447,
+    "backbone.gru_cell.bias_hh": 0.2807286377870001,
+    "backbone.byte_head.weight": 3.3921655444431487,
+    "backbone.byte_head.bias": 0.22770576494552994,
+    "backbone.mode_gate.weight": 0.24094566011664942,
+    "backbone.mode_gate.bias": 0.018757743760943413,
+    "backbone.token_codes.weight": 0.3082065680876425
+  },
+  "posthoc_single_prefix_codebook_intervention": {
+    "evidence_class": "EVALUATOR_ONLY_INTERVENTION_NOT_CAPABILITY_EVIDENCE",
+    "token_events": 31,
+    "baseline_bits_per_byte": 5.216061788706866,
+    "interventions": {
+      "joint_row_permutation": {
+        "max_logit_change": 0.0,
+        "route_schedule_preserved": true,
+        "selector_ids_preserved": false,
+        "bits_per_byte": 5.216061788706866
+      },
+      "wrong_values_fixed_keys": {
+        "max_logit_change": 0.28304290771484375,
+        "route_schedule_preserved": true,
+        "selector_ids_preserved": true,
+        "bits_per_byte": 5.239382826482045
+      },
+      "zero_values_fixed_keys": {
+        "max_logit_change": 0.236893892288208,
+        "route_schedule_preserved": true,
+        "selector_ids_preserved": true,
+        "bits_per_byte": 5.242472916369425
+      }
+    },
+    "value_knockout_may_be_out_of_distribution": true,
+    "joint_permutation_invariance_requires_no_relevant_argmax_tie": true
+  },
+  "journal_steps": 128,
+  "sample_order_verified": true,
+  "test_accessed": false,
+  "new_optimizer_steps": 0,
+  "note": "Forced modes and value intervention are posthoc, same-checkpoint diagnostics, not trained comparator results."
+}
