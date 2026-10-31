@@ -122,6 +122,10 @@ def seal(a):
             report=read(original/"FAILURE.json")
             if report.get("status")!="FAILED_RETAINED_NOT_EVALUABLE" or report.get("exception")!="TimeoutError":
                 raise ValueError("Incorrect original failed-state evidence %s"%(key,))
+            if sha(original/"FAILED_MODEL.pt") != report.get("failed_checkpoint_sha256"):
+                raise ValueError("Original failed checkpoint differs from failure receipt")
+            if int(report.get("actual_steps",0)) < 1:
+                raise ValueError("Original failed fit has no authenticated optimizer progress")
             if (original/"FIT_RECEIPT.json").exists() or (original/"MODEL.pt").exists():
                 raise ValueError("Original failed archive must not be eligible")
             substitute=a.recovery/archive_name("langmath101-posthoc",key)
@@ -166,6 +170,7 @@ def seal(a):
     recoveries={p.name for p in a.recovery.iterdir() if p.is_dir() and p.name.startswith("langmath101-posthoc-")}
     if originals!=seen_original or recoveries!=seen_recovery:
         raise ValueError("Extra/missing original or exploratory recovery artifacts")
+    shutil.rmtree(a.output/"verification_staging",ignore_errors=True)
     if len(selected)!=138 or sum(not p["original_preregistered_fit_eligible"] for p in selected)!=3:
         raise ValueError("Mixed cohort cardinality differs")
     # This validates the measured operator/matched arithmetic convention, but
