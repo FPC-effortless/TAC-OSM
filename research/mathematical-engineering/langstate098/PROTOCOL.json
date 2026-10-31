@@ -1,0 +1,41 @@
+{
+  "study_id": "LANGMATH098-STATE-SEPARATION-DIAG001",
+  "qualification": "untrained_mechanism_diagnostic_only",
+  "source_commit": "427db08e1d2c971b4fb4c3c579214e289211762e",
+  "source_git_blob": "1636ec81fe0a23e631f7f4da67914d365883d3ef",
+  "seeds": [98001, 98002, 98003],
+  "optimizer_steps": 0,
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "no_protected_TEST_access": true,
+  "stimuli": "Constructed byte streams for unit/mechanism tests; never primary capability evidence",
+  "modes": {
+    "A": "Only current observed byte(s), all persistent tensors freshly zeroed",
+    "B_snapshot": "Same frozen 098 with an externally serialized complete state",
+    "B_replay": "Same frozen 098, zero initial state, external raw history replayed on every query",
+    "C": "Unmodified 098 with complete native carried state",
+    "D": "Not executed: no trained predictive-state variant exists in pinned source"
+  },
+  "prediction_boundary": "Model receives only observed byte IDs, legitimate owners/clock and permitted prior state. Labels, future bytes and evaluator material never enter it.",
+  "controls": [
+    "balanced conflicting histories and identical current observation",
+    "full reset preserving logical clock plus true fresh-start control",
+    "same-clock donor state with metadata preserved",
+    "bank-only reset; context-only reset; lexical-only reset; previous-key reset",
+    "zero write mask versus full reset",
+    "external state save/load and raw replay equivalence",
+    "decoder-only parameter perturbation must preserve all updated state",
+    "future-only poison, owner isolation, weight identity, fresh-process replay",
+    "one future prediction loss gradient through acquired state; detached-state negative control"
+  ],
+  "thresholds": {
+    "FP32_chunk_replay_atol": 0.00002,
+    "FP32_chunk_replay_rtol": 0.00002,
+    "exact_snapshot_and_determinism": true,
+    "state_effect_min_max_logit_delta": 0.00000001,
+    "timing_warmups": 5,
+    "timing_samples": 30
+  },
+  "cost_reporting": "CPU FP32 one thread; p50/p95; streaming update, external snapshot transport and full raw-history replay separately. Profiler FLOPs cover supported ATen operations only, not all arithmetic, hardware instructions, energy or production latency.",
+  "claims_not_tested": ["learning", "useful retention", "unseen-task transfer", "closed-loop success", "adaptive discovery of state necessity", "H1 vs H2 vs H3", "predictive-state sufficiency"]
+}
