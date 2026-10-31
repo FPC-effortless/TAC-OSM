@@ -292,3 +292,111 @@ def test_new_study_above_target_still_invalid_when_arms_match_to_1_percent():
         row["deployed_parameters"]=109500
     with pytest.raises(ParityError,match="100k target"):
         check_manifest(m)
+
+
+# LANGCAP102 prospective scale-v2 fixtures. These numbers are synthetic
+# validator tests only, NOT trained models, measured compute, or scientific wins.
+def v2_scale_fixture(target=1_000_000):
+    m=fixture()
+    m["study_id"]="LANGCAP102_NEW_SCALE_COMPARISON"
+    m["model_scale_policy"]="declared-target-v2"
+    m["parameter_scale"]={
+        "target_trainable_parameters":target,
+        "target_deployed_parameters":target,
+        "relative_tolerance":0.05,
+        "registered_before_first_fit":True,
+        "rationale":"Permit scientifically meaningful modern matched neural comparisons"
+    }
+    for arm in m["arms"]:
+        capacity=target if arm["architecture"]=="TAC native" else int(target*1.004)
+        arm["trainable_parameters"]=capacity
+        arm["deployed_parameters"]=capacity
+        arm["measured"]["trainable_parameters"]=capacity
+        arm["measured"]["deployed_parameters"]=capacity
+    return m
+
+
+def test_v2_one_million_and_hundred_million_matched_arms_pass_size_and_parity():
+    for target in (1_000_000,100_000_000):
+        m=v2_scale_fixture(target)
+        assert check_manifest(m,"preflight")["status"]=="PASS"
+        assert check_manifest(m,"final")["status"]=="PASS"
+
+
+def test_v2_declared_scale_and_tolerance_must_be_explicit_and_locked():
+    m=v2_scale_fixture()
+    del m["model_scale_policy"]
+    with pytest.raises(ParityError, match="explicit model_scale_policy"):
+        check_manifest(m)
+    m=v2_scale_fixture()
+    m["parameter_scale"]["relative_tolerance"]=0.10
+    with pytest.raises(ParityError, match="5%"):
+        check_manifest(m)
+    m=v2_scale_fixture()
+    m["parameter_scale"]["registered_before_first_fit"]=False
+    with pytest.raises(ParityError, match="before"):
+        check_manifest(m)
+    m=v2_scale_fixture()
+    m["model_scale_policy"]="unknown-policy"
+    with pytest.raises(ParityError, match="Unknown"):
+        check_manifest(m)
+
+
+def test_v2_rejects_out_of_band_capacity_and_unmatched_architecture_sizes():
+    m=v2_scale_fixture()
+    m["arms"][0]["trainable_parameters"]=1_060_000
+    m["arms"][0]["deployed_parameters"]=1_060_000
+    with pytest.raises(ParityError, match="declared v2"):
+        check_manifest(m)
+    m=v2_scale_fixture()
+    # Both within the 5% absolute band, but not within 1% between arms.
+    for row in m["arms"]:
+        if row["architecture"]=="GRU control":
+            row["trainable_parameters"]=1_040_000
+            row["deployed_parameters"]=1_040_000
+    with pytest.raises(ParityError, match="parameters mismatch"):
+        check_manifest(m)
+
+
+def test_v2_final_counts_must_still_match_frozen_registration_and_deployed():
+    m=v2_scale_fixture()
+    m["arms"][0]["measured"]["trainable_parameters"]=999_999
+    with pytest.raises(ParityError, match="postfit actual model parameter"):
+        check_manifest(m,"final")
+    m=v2_scale_fixture()
+    m["arms"][0]["deployed_parameters"]=900_000
+    with pytest.raises(ParityError, match="deployed|Deployed"):
+        check_manifest(m)
+
+
+def test_v2_cannot_be_applied_retroactively_to_historical_models():
+    m=v2_scale_fixture()
+    m["study_id"]="ME066_ORIGINAL_IMMUTABLE"
+    with pytest.raises(ParityError, match="Historical model-size"):
+        check_manifest(m)
+
+
+def test_v2_single_model_can_preregister_large_size_without_superiority():
+    m={"schema_version":"tac-osm.parity.v1",
+       "study_id":"LANGCAP102_NEW_SINGLE_MODEL",
+       "study_type":"single_model_training",
+       "registered_before_first_fit":True,
+       "model_scale_policy":"declared-target-v2",
+       "parameter_scale":{
+           "target_trainable_parameters":10_000_000,
+           "target_deployed_parameters":10_000_000,
+           "relative_tolerance":0.05,
+           "registered_before_first_fit":True,
+           "rationale":"Test long-horizon architecture capacity at ten million parameters"},
+       "real_world_source":{"name":"Authentic source fixture","sha256":source_hash("a"),
+                            "observed_real_outcomes":True},
+       "models":[{"variant":"candidate","seed":101,
+                  "trainable_parameters":10_000_000,"deployed_parameters":10_000_000}]}
+    result=check_manifest(m,"preflight")
+    assert result["eligible_for_architecture_superiority"] is False
+    m["models"][0]["measured"]={"trainable_parameters":10_000_000,
+       "deployed_parameters":10_000_000,"checkpoint_sha256":source_hash("b")}
+    assert check_manifest(m,"final")["status"]=="PASS_SINGLE_MODEL"
+    m["models"][0]["measured"]["deployed_parameters"]=9_000_000
+    with pytest.raises(ParityError, match="deployed"):
+        check_manifest(m,"final")
