@@ -34,6 +34,22 @@ Use the original `torch==2.15.0+cpu` and NumPy. Default mode rejects a missing
 fit. `--allow-partial` labels a partial audit explicitly and lists all missing
 models; it cannot report an incomplete cohort as completed.
 
+`trained_equations.py` additionally reuses the source-hashed verification
+helpers from commit `0b21f0feed5d6f89bb49218d8ca320cca6220850` (LANGCAP103 /
+PNDS PR #103). It first checks that the helpers instantiate byte-identical
+original model code. For each actually trained checkpoint it compares full
+logits, state and every parameter gradient against the separate PNDS Python
+equations at FP32 and cast FP64 on two nine-byte original FIT prefixes. Native
+serial/parallel and carried-state checks, GRU carry, future-byte poisoning and
+a deliberately wrong readout falsifier are included. These finite tests do
+not establish global floating-point equivalence or a full mathematical release.
+
+The read-only Actions workflow downloads original run artifacts with an
+`actions: read` token, records their run/commit/digests, independently repeats
+the checkpoint and equation checks, and invokes the original cohort auditor
+once all eighteen artifacts are available. A green partial-audit job remains
+explicitly **partial**, never a completed-training claim.
+
 ## Preserved limits
 
 - Original code repeatedly overwrites `LATEST.pt`, then deletes it after
@@ -54,8 +70,11 @@ models; it cannot report an incomplete cohort as completed.
 
 The first nine 1M fits passed direct checkpoint and first-loss replay checks.
 `results/1M_CHECKPOINT_REPLAY_AUDIT.json` is intentionally a partial report.
-The original training run continues the nine 10M fits. A final all-18 audit is
-required before declaring this cohort complete.
+The three 10M TAC fits then completed and passed the same checks; preserve that
+stage in `results/TWELVE_CHECKPOINT_AUDIT.json`. All twelve trained models also
+passed 24 FP32/FP64 source/equation cases in `results/TWELVE_TRAINED_GRAPH_AUDIT.json`.
+The six 10M Transformer/GRU fits are still running/queued. A final all-18 audit
+is required before declaring this cohort complete.
 
 `results/AUDITOR_NEGATIVE_CONTROLS.json` records six deliberately corrupted
 temporary copies rejected by this auditor: nonfinite weights, incorrect AdamW
