@@ -1,0 +1,70 @@
+name: LANGMATH100 sealed prediction scoring
+on:
+  pull_request:
+    paths:
+      - 'research/results/langmath100/score.py'
+      - 'research/results/langmath100/benchmark.py'
+      - '.github/workflows/langmath100-score.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  score-frozen-originals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 41164962393
+          github-token: ${{ github.token }}
+          pattern: langmath100-frozen-predictions-*
+          path: /tmp/langmath100-predictions
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 41153068368
+          github-token: ${{ github.token }}
+          name: langtrain099-EVAL-only
+          path: /tmp/langmath100-eval
+      - name: Validate sealed prediction hashes and score all 138 sets
+        run: python research/results/langmath100/score.py --predictions /tmp/langmath100-predictions --data /tmp/langmath100-eval --output ci-artifacts/langmath100/RESULTS.json
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langmath100/FAIR_COMPARISON.json --phase final
+      - uses: actions/upload-artifact@v4
+        with:
+          name: langmath100-complete-scoring
+          path: ci-artifacts/langmath100/
+  trained-reference-timing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5
+      - run: python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 41153068368
+          github-token: ${{ github.token }}
+          name: langtrain099-original-seed-9901
+          path: /tmp/langmath100-checkpoint
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 41153068368
+          github-token: ${{ github.token }}
+          name: langtrain099-EVAL-only
+          path: /tmp/langmath100-eval
+      - run: python research/results/langmath100/benchmark.py --checkpoint /tmp/langmath100-checkpoint/MODEL.pt --data /tmp/langmath100-eval --output ci-artifacts/langmath100-timing
+      - uses: actions/upload-artifact@v4
+        with:
+          name: langmath100-trained-reference-timing
+          path: ci-artifacts/langmath100-timing/
