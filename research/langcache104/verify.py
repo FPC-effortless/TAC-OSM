@@ -80,7 +80,8 @@ def numeric_case(dtype):
 def run(out):
     torch.set_num_threads(2)
     test_paths = ["research/langcache104/test_kernels.py", "research/langcache104/test_model.py",
-                  "research/langcache104/test_exact_store.py", "tests/test_research_probe_agnostic.py"]
+                  "research/langcache104/test_exact_store.py", "research/langcache104/test_config_state.py",
+                  "tests/test_research_probe_agnostic.py"]
     with tempfile.TemporaryDirectory(prefix="langcache104-no-fit-") as directory:
         junit = Path(directory)/"junit.xml"
         result = subprocess.run([sys.executable, "-m", "pytest", "-q", *test_paths,
@@ -93,7 +94,7 @@ def run(out):
         tests = {name: sum(int(suite.get(name, 0)) for suite in suites)
                  for name in ("tests", "failures", "errors", "skipped")}
     files = ["model.py", "kernels.py", "exact_store.py", "probe_adapter.py",
-             "test_model.py", "test_kernels.py", "test_exact_store.py", "verify.py"]
+             "test_model.py", "test_kernels.py", "test_exact_store.py", "test_config_state.py", "verify.py"]
     hashes = {"research/langcache104/"+name: hashlib.sha256(
         (ROOT/"research/langcache104"/name).read_bytes()).hexdigest() for name in files}
     report = {"schema": "tac-osm.langcache104-engineering.v1",

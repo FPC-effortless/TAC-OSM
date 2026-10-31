@@ -173,6 +173,16 @@ which synchronizes a GPU. Production kernel fusion and asynchronous diagnostics
 must be designed and verified separately rather than timed as though this
 reference interface were already optimized for deployment.
 
+Serialized state schema v2 binds the complete configuration, including RoPE
+semantics, by a checked signature. It does not bind weight/checkpoint identity;
+the runner must preserve that identity and handle stale state across optimizer
+updates. Local RoPE phases use integer clocks and FP64 trigonometry before
+casting to the state dtype, avoiding the FP32 adjacent-position collision beyond
+2^24. Streams beyond the explicit 2^53 observation-clock limit are rejected.
+This is a reference numerical policy, not a long-horizon error proof, and its
+FP64 GPU overhead must be measured. A qualified relative-phase kernel remains
+future optimization work.
+
 ## Actual untrained construction
 
 `construct_presets.py` instantiates declared, prospectively selected geometries;

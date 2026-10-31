@@ -7,7 +7,9 @@ inference; it is not a claim of measured GPU speed or trained capability.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, fields
+from dataclasses import asdict, dataclass, fields
+import hashlib
+import json
 import math
 from typing import Any
 
@@ -70,6 +72,7 @@ class State104:
     owners: tuple[str, ...]
     clock: int
     layers: tuple[LayerState104, ...]
+    config_signature: str
 
     @property
     def arm(self):
@@ -77,7 +80,8 @@ class State104:
 
     def detach(self):
         """Explicit truncated-BPTT boundary; forward never detaches silently."""
-        return State104(self.owners, self.clock, tuple(x.detach() for x in self.layers))
+        return State104(self.owners, self.clock, tuple(x.detach() for x in self.layers),
+                        self.config_signature)
 
     def state_bytes(self):
         return sum(v.numel() * v.element_size()
@@ -88,17 +92,21 @@ class State104:
 
     def payload(self):
         """Plain metadata and named tensors; caller chooses safe serialization."""
-        return {"schema": "tac-osm.langcache104-state.v1", "owners": self.owners,
-                "clock": self.clock,
+        return {"schema": "tac-osm.langcache104-state.v2", "owners": self.owners,
+                "clock": self.clock, "config_signature": self.config_signature,
                 "layers": [layer.tensors() for layer in self.layers]}
 
     @classmethod
     def from_payload(cls, payload: dict[str, Any]):
-        expected = {"schema", "owners", "clock", "layers"}
+        expected = {"schema", "owners", "clock", "layers", "config_signature"}
         if not isinstance(payload, dict) or set(payload) != expected:
             raise ValueError("complete LANGCACHE104 state payload required")
-        if payload["schema"] != "tac-osm.langcache104-state.v1":
+        if payload["schema"] != "tac-osm.langcache104-state.v2":
             raise ValueError("unsupported state schema")
+        signature = payload["config_signature"]
+        if (type(signature) is not str or len(signature) != 64 or
+                any(char not in "0123456789abcdef" for char in signature)):
+            raise ValueError("canonical SHA-256 config signature required")
         owners = payload["owners"]
         if not isinstance(owners, (tuple, list)):
             raise ValueError("owners must be an ordered collection")
@@ -109,7 +117,7 @@ class State104:
                for layer in payload["layers"]):
             raise ValueError("complete layer tensor payloads required")
         return cls(tuple(owners), payload["clock"],
-                   tuple(LayerState104(**layer) for layer in payload["layers"]))
+                   tuple(LayerState104(**layer) for layer in payload["layers"]), signature)
 
 
 class RMSNorm104(nn.Module):
@@ -190,9 +198,16 @@ class Block104(nn.Module):
         if c.local_rope:
             # Cached keys are already rotated at their original stream position.
             # Positive associative addresses remain nonnegative and unrotated.
-            positions = torch.arange(clock, clock+t, device=x.device, dtype=x.dtype)
-            phase = positions[:, None] * self.local_frequencies.to(x.dtype)[None, :]
-            cosine, sine = phase.cos()[None, None], phase.sin()[None, None]
+            if type(clock) is not int or clock < 0 or clock+t > 2**53:
+                raise ValueError("RoPE observation positions must remain in exact float64 integer range")
+            # Use integer positions and double phase/trigonometry even for FP32
+            # source activations. FP32 absolute clocks otherwise merge adjacent
+            # positions after 2**24. This strict reference path is potentially
+            # expensive on GPUs; relative phase kernels remain future work.
+            positions = torch.arange(clock, clock+t, device=x.device, dtype=torch.long).to(torch.float64)
+            phase = positions[:, None] * self.local_frequencies.to(torch.float64)[None, :]
+            cosine = phase.cos().to(x.dtype)[None, None]
+            sine = phase.sin().to(x.dtype)[None, None]
             def rotate(z):
                 pairs = z.reshape(b, c.n_heads, t, c.key_dim//2, 2)
                 u, v = pairs.unbind(-1)
@@ -264,6 +279,11 @@ class DeepCacheTAC104(nn.Module):
     def __init__(self, config: Config104 | None = None):
         super().__init__()
         self.config = config or Config104()
+        if not isinstance(self.config, Config104):
+            raise ValueError("Config104 required")
+        self.config_signature = hashlib.sha256(json.dumps(
+            asdict(self.config), sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")).hexdigest()
         c = self.config
         self.embedding = nn.Embedding(256, c.d_model)
         nn.init.normal_(self.embedding.weight, mean=0., std=0.02)
@@ -297,7 +317,7 @@ class DeepCacheTAC104(nn.Module):
             new((b, c.n_heads, c.value_dim, c.key_dim)), new((b, c.n_heads, c.key_dim)),
             new((b, c.n_heads, c.value_dim)), new((b, c.n_heads, 0, c.key_dim)),
             new((b, c.n_heads, 0, c.value_dim))) for _ in range(c.n_layers))
-        return State104(owners, 0, states)
+        return State104(owners, 0, states, self.config_signature)
 
     def validate(self, tokens, state, owners):
         if (not isinstance(tokens, torch.Tensor) or tokens.dtype != torch.long or tokens.ndim != 2 or
@@ -314,7 +334,11 @@ class DeepCacheTAC104(nn.Module):
                 type(state.clock) is not int or state.clock < 0 or
                 tokens.shape[0] != len(owners) or len(state.layers) != self.config.n_layers):
             raise ValueError("complete same-owner layer state and legal clock required")
+        if state.config_signature != self.config_signature:
+            raise ValueError("carried state configuration does not match model")
         c, b = self.config, len(owners)
+        if c.local_rope and state.clock+tokens.shape[1] > 2**53:
+            raise ValueError("RoPE observation positions must remain in exact float64 integer range")
         cache_length = min(state.clock, c.window-1)
         shapes = {"fast_memory": (b,c.n_heads,c.value_dim,c.key_dim),
                   "slow_memory": (b,c.n_heads,c.value_dim,c.key_dim),
@@ -356,7 +380,8 @@ class DeepCacheTAC104(nn.Module):
             x, final = block(x, layer_state, write_mask, mode, state.clock)
             final_layers.append(final)
         logits = self.output(self.output_norm(x))
-        return logits, State104(owners, state.clock+tokens.shape[1], tuple(final_layers))
+        return logits, State104(owners, state.clock+tokens.shape[1], tuple(final_layers),
+                                self.config_signature)
 
     def step(self, tokens, *, state, owners, write_mask=None):
         if not isinstance(tokens, torch.Tensor) or tokens.ndim != 2 or tokens.shape[1] != 1:

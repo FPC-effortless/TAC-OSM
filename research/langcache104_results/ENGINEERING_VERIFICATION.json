@@ -10,20 +10,21 @@
   "cuda_available": false,
   "gpu_speed_or_precision_qualification": "INCONCLUSIVE_NOT_EXECUTED",
   "tests": {
-    "tests": 82,
+    "tests": 86,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "source_files_sha256": {
-    "research/langcache104/model.py": "fa53ab6711175a0465c992fd811d7c0e0928b19b95488f09eaf70cc2dcc4e79a",
+    "research/langcache104/model.py": "84507fd17ace7eb2e880d5f15ee7a3a80c41543041eee103ca926966bcd1e882",
     "research/langcache104/kernels.py": "1c2782bbaaac7aa54722f420bbbad8c5215f260ed591a6cef154c0540f41b8d1",
     "research/langcache104/exact_store.py": "bbc5fffc65639b044c0cf78588287fadf1a5f7783f5d0dde369d06f4049e5a3b",
     "research/langcache104/probe_adapter.py": "84f5119e2b239c7f25f4b76f6c580004f18b6122b11214bb6316f85de80f67e1",
     "research/langcache104/test_model.py": "099a4f91c9d1b988735016f463563e83a6b3a69e051c5351f3ff48d1f6e90d70",
     "research/langcache104/test_kernels.py": "5f665eb59dff86fd86220a29d07ff1f421deee74d019ff65c4b61278e89882f6",
     "research/langcache104/test_exact_store.py": "09fa37bd3e85a42da896e662022763d91e07ed036ff802dc3eb7e76b95052337",
-    "research/langcache104/verify.py": "c07d65859bae5de4df271279f714e9febab962a63ad0bbda9b35feccf7361c39"
+    "research/langcache104/test_config_state.py": "df6cb65cbfe9040fe05455f651ed19839ae875c6d060c138c693444e7264a8f1",
+    "research/langcache104/verify.py": "a4ac8b48d514dc849070a638048b510d84173a11ab78d7d0e6d1edec0a1adb7a"
   },
   "cases": [
     {
@@ -49,99 +50,99 @@
       },
       "parameter_and_buffer_sha256": "e57c9de4911bd1fa3e70c45c412f2f4407be54f449218e59569d160b9d3380b6",
       "unchanged_parameters_and_buffers": true,
-      "logit_max_abs_error": 2.086162567138672e-07,
-      "state_max_abs_error": 4.544854164123535e-07,
+      "logit_max_abs_error": 1.1920928955078125e-07,
+      "state_max_abs_error": 8.940696716308594e-07,
       "all_parameter_gradients": [
         {
           "name": "embedding.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 3.073364496231079e-08
+          "max_absolute_parity_error": 2.8870999813079834e-08
         },
         {
           "name": "blocks.0.memory_norm.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.5029294192790985e-09
+          "max_absolute_parity_error": 2.3283064365386963e-09
         },
         {
           "name": "blocks.0.fast.query.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.3096723705530167e-10
+          "max_absolute_parity_error": 1.1641532182693481e-10
         },
         {
           "name": "blocks.0.fast.key.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.9099388737231493e-10
+          "max_absolute_parity_error": 1.673470251262188e-10
         },
         {
           "name": "blocks.0.fast.value.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.3969838619232178e-09
+          "max_absolute_parity_error": 7.566995918750763e-10
         },
         {
           "name": "blocks.0.fast.retention.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.0186340659856796e-09
+          "max_absolute_parity_error": 5.529727786779404e-10
         },
         {
           "name": "blocks.0.fast.retention.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.3283064365386963e-10
+          "max_absolute_parity_error": 5.820766091346741e-11
         },
         {
           "name": "blocks.0.fast.eligibility.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 4.656612873077393e-10
+          "max_absolute_parity_error": 2.9103830456733704e-10
         },
         {
           "name": "blocks.0.fast.eligibility.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.0372681319713593e-10
+          "max_absolute_parity_error": 1.4551915228366852e-10
         },
         {
           "name": "blocks.0.slow.query.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.3096723705530167e-10
+          "max_absolute_parity_error": 1.673470251262188e-10
         },
         {
           "name": "blocks.0.slow.key.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.2369127944111824e-10
+          "max_absolute_parity_error": 1.6007106751203537e-10
         },
         {
           "name": "blocks.0.slow.value.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.3969838619232178e-09
+          "max_absolute_parity_error": 9.313225746154785e-10
         },
         {
           "name": "blocks.0.slow.retention.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 9.313225746154785e-10
+          "max_absolute_parity_error": 1.3969838619232178e-09
         },
         {
           "name": "blocks.0.slow.retention.bias",
@@ -155,7 +156,7 @@
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 6.984919309616089e-10
+          "max_absolute_parity_error": 4.656612873077393e-10
         },
         {
           "name": "blocks.0.slow.eligibility.bias",
@@ -169,14 +170,14 @@
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 3.4924596548080444e-10
+          "max_absolute_parity_error": 2.9103830456733704e-10
         },
         {
           "name": "blocks.0.local_key.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 4.656612873077393e-10
+          "max_absolute_parity_error": 3.4924596548080444e-10
         },
         {
           "name": "blocks.0.local_value.weight",
@@ -190,77 +191,77 @@
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 7.566995918750763e-10
+          "max_absolute_parity_error": 4.656612873077393e-10
         },
         {
           "name": "blocks.0.rotary_retention.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.9103830456733704e-10
+          "max_absolute_parity_error": 1.1641532182693481e-10
         },
         {
           "name": "blocks.0.rotary_angle.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 5.704350769519806e-09
+          "max_absolute_parity_error": 3.259629011154175e-09
         },
         {
           "name": "blocks.0.rotary_angle.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 5.122274160385132e-09
+          "max_absolute_parity_error": 3.725290298461914e-09
         },
         {
           "name": "blocks.0.rotary_offer.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.1641532182693481e-09
+          "max_absolute_parity_error": 7.566995918750763e-10
         },
         {
           "name": "blocks.0.rotary_offer.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.1641532182693481e-09
+          "max_absolute_parity_error": 4.656612873077393e-10
         },
         {
           "name": "blocks.0.perspective_out.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 6.05359673500061e-09
+          "max_absolute_parity_error": 4.190951585769653e-09
         },
         {
           "name": "blocks.0.ffn_norm.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.5133991837501526e-09
+          "max_absolute_parity_error": 4.656612873077393e-10
         },
         {
           "name": "blocks.0.ffn_value.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.7462298274040222e-09
+          "max_absolute_parity_error": 1.3969838619232178e-09
         },
         {
           "name": "blocks.0.ffn_gate.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.280568540096283e-09
+          "max_absolute_parity_error": 9.313225746154785e-10
         },
         {
           "name": "blocks.0.ffn_out.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.3969838619232178e-09
+          "max_absolute_parity_error": 9.313225746154785e-10
         },
         {
           "name": "blocks.1.memory_norm.weight",
@@ -274,14 +275,14 @@
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 4.1382008930668235e-11
+          "max_absolute_parity_error": 4.547473508864641e-11
         },
         {
           "name": "blocks.1.fast.key.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 3.2741809263825417e-11
+          "max_absolute_parity_error": 5.093170329928398e-11
         },
         {
           "name": "blocks.1.fast.value.weight",
@@ -295,42 +296,42 @@
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.0372681319713593e-10
+          "max_absolute_parity_error": 1.709850039333105e-10
         },
         {
           "name": "blocks.1.fast.retention.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.0186340659856796e-10
+          "max_absolute_parity_error": 6.548361852765083e-11
         },
         {
           "name": "blocks.1.fast.eligibility.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.1641532182693481e-10
+          "max_absolute_parity_error": 1.0277290130034089e-10
         },
         {
           "name": "blocks.1.fast.eligibility.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.9103830456733704e-11
+          "max_absolute_parity_error": 3.001332515850663e-11
         },
         {
           "name": "blocks.1.slow.query.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 4.729372449219227e-11
+          "max_absolute_parity_error": 6.912159733474255e-11
         },
         {
           "name": "blocks.1.slow.key.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 6.548361852765083e-11
+          "max_absolute_parity_error": 5.4569682106375694e-11
         },
         {
           "name": "blocks.1.slow.value.weight",
@@ -344,133 +345,133 @@
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.0372681319713593e-10
+          "max_absolute_parity_error": 3.4924596548080444e-10
         },
         {
           "name": "blocks.1.slow.retention.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 8.731149137020111e-11
+          "max_absolute_parity_error": 2.1827872842550278e-11
         },
         {
           "name": "blocks.1.slow.eligibility.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.7462298274040222e-10
+          "max_absolute_parity_error": 4.0745362639427185e-10
         },
         {
           "name": "blocks.1.slow.eligibility.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.9103830456733704e-11
+          "max_absolute_parity_error": 1.8189894035458565e-11
         },
         {
           "name": "blocks.1.local_query.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.4551915228366852e-10
+          "max_absolute_parity_error": 1.6007106751203537e-10
         },
         {
           "name": "blocks.1.local_key.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.3283064365386963e-10
+          "max_absolute_parity_error": 2.1100277081131935e-10
         },
         {
           "name": "blocks.1.local_value.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.1641532182693481e-09
+          "max_absolute_parity_error": 9.313225746154785e-10
         },
         {
           "name": "blocks.1.rotary_retention.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.0372681319713593e-10
+          "max_absolute_parity_error": 2.473825588822365e-10
         },
         {
           "name": "blocks.1.rotary_retention.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.0186340659856796e-10
+          "max_absolute_parity_error": 1.4551915228366852e-10
         },
         {
           "name": "blocks.1.rotary_angle.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.2118911147117615e-09
+          "max_absolute_parity_error": 8.149072527885437e-10
         },
         {
           "name": "blocks.1.rotary_angle.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.1641532182693481e-09
+          "max_absolute_parity_error": 5.529727786779404e-10
         },
         {
           "name": "blocks.1.rotary_offer.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 4.656612873077393e-10
+          "max_absolute_parity_error": 3.219611244276166e-10
         },
         {
           "name": "blocks.1.rotary_offer.bias",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.6193447411060333e-10
+          "max_absolute_parity_error": 2.3283064365386963e-10
         },
         {
           "name": "blocks.1.perspective_out.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 9.313225746154785e-10
+          "max_absolute_parity_error": 1.0477378964424133e-09
         },
         {
           "name": "blocks.1.ffn_norm.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 2.3283064365386963e-10
+          "max_absolute_parity_error": 4.0745362639427185e-10
         },
         {
           "name": "blocks.1.ffn_value.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 1.3969838619232178e-09
+          "max_absolute_parity_error": 9.313225746154785e-10
         },
         {
           "name": "blocks.1.ffn_gate.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 7.566995918750763e-10
+          "max_absolute_parity_error": 5.238689482212067e-10
         },
         {
           "name": "blocks.1.ffn_out.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 9.022187441587448e-10
+          "max_absolute_parity_error": 6.984919309616089e-10
         },
         {
           "name": "output_norm.weight",
           "connected": true,
           "finite": true,
           "nonzero": true,
-          "max_absolute_parity_error": 6.984919309616089e-10
+          "max_absolute_parity_error": 3.4924596548080444e-10
         }
       ],
       "state_tensor_bytes_batch2_after_11_bytes": 2432,
