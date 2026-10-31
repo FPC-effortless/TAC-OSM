@@ -58,9 +58,9 @@ byte-compute elimination or persistent cross-session state is established.
 
 ## What has actually run
 
-- Complete local source snapshot suite: **1,299 passed** (Python 3.11,
+- Complete local source snapshot suite: **1,300 passed** (Python 3.11,
   torch 2.5.1+cpu, pytest 8.4.2; no separate subtest count claimed).
-- 24 new no-fit regression cases cover candidate gradients/counts/RNG pairing,
+- 25 new no-fit regression cases cover candidate gradients/counts/RNG pairing,
   random-policy replay/entity/prefix isolation, relabelling/value interventions,
   complete-horizon independent scoring, target alignment and fail-closed setup.
 - The phone planner selects GitHub CPU and `READY_NO_FIT`; it explicitly
@@ -91,6 +91,10 @@ the original-byte BPB denominator, the inherited 0.02 BPB advancement target,
 DEV-only decision horizons 1/8/32, data boundaries, negative controls,
 complete cost accounting and checkpoint/replay obligations. It is explicitly
 unreviewed and cannot pass as an architecture-comparison training manifest.
+The reviewable numerical proposal is AdamW at 3e-4, 128-step warmup/cosine,
+2,048 updates of four 256-byte sequences per arm/seed (2,097,152 targets),
+no hyperparameter search, and identical predeclared DEV checkpoint opportunities.
+These are proposed budgets, not measured or approved resource receipts.
 
 Actual original FIT/DEV and sealed TEST custody, fixed numerical training/
 tuning/calibration budgets, whole-graph FLOP parity, independently signed

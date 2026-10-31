@@ -175,3 +175,23 @@ def test_training_readiness_cli_returns_failure_and_draft_cannot_be_a_training_m
     protocol = json.loads((root / 'research/sensory_tokenizers/SENSE-TOK-006-TRAINING-PROTOCOL.json').read_bytes())
     with pytest.raises(ParityError):
         check_manifest(protocol, 'preflight')
+
+
+def test_source_peer_parity_never_accepts_drift_or_moving_draft_branches(monkeypatch, capsys):
+    import io
+    from research.scripts import check_pnds_remote_parity as peer
+    local = peer.LOCAL.read_bytes()
+    seen = []
+    def identical(url, **kwargs):
+        seen.append(url)
+        return io.BytesIO(local)
+    monkeypatch.setattr(peer.urllib.request, 'urlopen', identical)
+    peer.verify('a'*40)
+    assert '/'+('a'*40)+'/' in seen[-1]
+    peer.verify()
+    assert '/main/' in seen[-1]
+    with pytest.raises(ValueError):
+        peer.verify('research/moving-branch')
+    monkeypatch.setattr(peer.urllib.request, 'urlopen', lambda *a, **k: io.BytesIO(b'{}'))
+    with pytest.raises(SystemExit):
+        peer.verify()

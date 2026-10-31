@@ -17,5 +17,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate every original source-pinned variant and dual formulation reference
         run: python3 research/scripts/check_pnds_math_links.py
-      - name: Verify byte-equivalent semantic JSON in PNDS remote draft branch
-        run: python3 research/scripts/check_pnds_remote_parity.py
+      - name: Verify exact semantic JSON against PNDS peer snapshot
+        env:
+          IS_DRAFT: ${{ github.event.pull_request.draft }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ "$IS_DRAFT" = "true" ]; then
+            # Paired draft snapshot only. Ready PRs/manual runs use production.
+            python3 research/scripts/check_pnds_remote_parity.py --peer-ref 219334d9aec85f2b53ac2175b6a32013640b5980
+          else
+            python3 research/scripts/check_pnds_remote_parity.py
+          fi
