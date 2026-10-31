@@ -158,6 +158,20 @@ def train(args):
        betas=tuple(optimizer_policy["betas"]),eps=optimizer_policy["eps"],
        weight_decay=optimizer_policy["weight_decay"])
     stream=sample_stream(blocks,args.seed)
+    from source import canonical
+    order=manifest.get("sample_order_contract",{})
+    require(order.get("sequence_length")==SEQUENCE and
+            order.get("batch_size")==BATCH and
+            order.get("file_boundaries_preserved") is True,
+            "Frozen training order/geometry missing")
+    milestones=order.get("milestones",{}).get(str(args.seed),[])
+    expected_orders={r["steps"]:r["sample_order_sha256"] for r in milestones}
+    require(set(expected_orders)=={2560,12800,25600},
+            "Every registered FIT order milestone required")
+    schedule_hash=hashlib.sha256(canonical({
+         "source":source["source_sha256"],"seed":args.seed,
+         "sequence":SEQUENCE,"batch":BATCH,
+         "order":"whole-FIT-chunk-permutations.v1"}))
     total=manifest["compute"]["training_steps"]
     maximum=manifest["compute"]["approved_gpu_minutes"]*60
     started=time.monotonic();losses=[];steps=0;observed=0
@@ -175,6 +189,8 @@ def train(args):
             require(time.monotonic()-started < maximum,
                     "Approved GPU budget expired; retain partial weights only")
             batch_rows=[next(stream) for _ in range(BATCH)]
+            for name,offset in batch_rows:
+                schedule_hash.update(canonical([name,offset])+b"\\n")
             tokens=[];targets=[]
             for name,offset in batch_rows:
                 raw=data[name][offset:offset+SEQUENCE+1]
@@ -194,6 +210,9 @@ def train(args):
             optimizer.step()
             steps=index;observed+=BATCH*SEQUENCE
             losses.append(float(loss.detach().cpu()))
+            if index in expected_orders:
+                require(schedule_hash.hexdigest()==expected_orders[index],
+                        "Actual FIT sample order differs from frozen registration")
             if index in (1,256,2560,12800,25600):
                 print(json.dumps({"status":"FIT_PROGRESS_NOT_QUALIFIED","arm":args.arm,
                     "seed":args.seed,"steps":steps,"loss":losses[-1],"observed_bytes":observed}),flush=True)
@@ -209,6 +228,7 @@ def train(args):
             "required_steps":total,"losses":losses,
             "source_sha256":EXPECTED_SOURCE_SHA,"manifest_sha256":manifest_sha,
             "checkpoint_sha256":ck,"observed_fit_bytes":observed,
+            "actual_fit_order_sha256":schedule_hash.hexdigest(),
             "training_elapsed_seconds":time.monotonic()-started,
             "no_dev_scoring":True,"protected_test_access":False,
             "postfit_independent_attestation":"NOT_PERFORMED",
