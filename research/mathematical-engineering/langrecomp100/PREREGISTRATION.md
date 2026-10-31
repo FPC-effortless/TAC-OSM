@@ -29,3 +29,5 @@ The source-reviewed100 probe adapter exposes original099 state/owner dimensions 
 Internally measured, not independently qualified. Same-model execution policies deliberately spend different computation; this is a time–space tradeoff measurement, not matched-training-FLOP architectural superiority. Default100K policy outside the explicit owner100 continuation remains unchanged. No external attestation, safety claim, protected evaluation, autonomous intelligence or commercial usefulness follows from this trial.
 
 The exact reciprocal source/proof IDs are pinned in PNDS_SOURCE_BRIDGE.json before continuation enablement.
+
+Pre-optimizer proof-build correction: the reserved Lean argument name prefix was renamed; failed source/run and corrected proof source remain in the reciprocal record. No100 real-input training or budget change occurred.
