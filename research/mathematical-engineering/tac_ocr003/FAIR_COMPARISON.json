@@ -1,0 +1,32 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "TAC-OCR-003",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "model_scale_policy": "declared-target-v2",
+  "parameter_scale": {
+    "target_trainable_parameters": 1309376,
+    "target_deployed_parameters": 23121728,
+    "relative_tolerance": 0.05,
+    "registered_before_first_fit": true,
+    "rationale": "Use the existing unchanged four-layer TAC-OCR-001 decoder and the identical pretrained frozen TrOCR-small vision encoder; count both. Establish image-grounded transcription before any architecture comparison or scaling."
+  },
+  "real_world_source": {
+    "name": "Original publisher CORD-v2 train/validation receipt region crops, original transcriptions preserved",
+    "license": "CC-BY-4.0",
+    "revision": "7f0115a4b758a71d6473b8d085751692da2fef98",
+    "sha256": "7dd4c52f306c98756997b7dfc7a92aff1b30ade2ef60888b55438b658044c87d",
+    "observed_real_outcomes": true,
+    "outcome_semantics": "publisher-provided supervised text transcription, not a policy reward or verified counterfactual benefit",
+    "independent_source_qualification": "OPEN; source checks do not substitute for a signed access-separated attestation"
+  },
+  "models": [
+    {"variant": "TAC-OCR-001-TAC", "seed": 1101, "trainable_parameters": 1309376, "deployed_parameters": 23121728},
+    {"variant": "TAC-OCR-001-TAC", "seed": 1102, "trainable_parameters": 1309376, "deployed_parameters": 23121728}
+  ],
+  "frozen_protocol": "research/tac_ocr003/PROTOCOL.json",
+  "no_architecture_superiority_claim": true,
+  "no_other_architecture_is_fitted": true,
+  "matched_control_study": "Separate future registration required before fitting or comparing Transformer/GRU controls",
+  "scientific_qualification": "BLOCKED_BEFORE_FIT_WITHOUT_INDEPENDENT_SIGNED_SOURCE_GOAL_SCORER_ACL_EVIDENCE"
+}
