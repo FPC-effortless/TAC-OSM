@@ -88,3 +88,5 @@ reading-order guarantee; no learned relevance/SSA selector; no whole-document
 image-to-trained-TAC transcript; no production readiness claim. The first
 research milestone is genuine image-grounded transcription under a frozen
 encoder, followed by a separate authentic long-document test.
+
+GitHub verification at the initial implementation head: [OCR engineering passed](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41319322845) and [mathematical source links passed](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41319322738). The [initial PNDS build](https://github.com/FPC-effortless/pnds-lean/actions/runs/41319170333) failed because Std did not expose List.ofFn; the revised formulation imports Mathlib and requires a fresh CI build. Historical map bytes and that failure are retained.

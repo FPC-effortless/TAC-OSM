@@ -161,3 +161,5 @@ Prior art: [TrOCR](https://arxiv.org/abs/2109.10282),
 [LANGCACHE104](https://github.com/FPC-effortless/TAC-OSM/pull/684),
 [CORD publisher](https://github.com/clovaai/cord),
 and [Tesseract performance guidance](https://tesseract-ocr.github.io/tessdoc/FAQ).
+
+Implementation review: [TAC-OSM #690](https://github.com/FPC-effortless/TAC-OSM/pull/690). Mathematical companion: [PNDS #105](https://github.com/FPC-effortless/pnds-lean/pull/105).
