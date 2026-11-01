@@ -1,0 +1,72 @@
+{
+  "schema": "pnds.tac_ocr001.source_map.v1",
+  "variant_id": "TAC-OCR-001-GRU",
+  "tac_repository": "FPC-effortless/TAC-OSM",
+  "tac_commit": "6360aedb1aba97a6600afbc7d56d1b9fe0c2e3d8",
+  "tac_source_paths": [
+    "research/tac_ocr001/model.py",
+    "research/tac_ocr001/steady.py",
+    "research/tac_ocr001/encoder.py",
+    "research/tac_ocr001/tokenizer.py",
+    "research/tac_ocr001/presets.py",
+    "research/tac_ocr001/probe_adapter.py",
+    "research/tac_ocr001/pipeline.py",
+    "research/langcache104/model.py",
+    "research/langcache104/kernels.py"
+  ],
+  "tac_source_sha256": {
+    "research/tac_ocr001/model.py": "db17b400af293c4c03ffe98f9fb87abe07446a1b41305205def2eeb103138fcb",
+    "research/tac_ocr001/steady.py": "52aabae41fb93b52214ea1cf227e19264f1e6df2d121cfe90af635242c8118d6",
+    "research/tac_ocr001/encoder.py": "5cde42ec290880f869c2c44025df9f04285729f3fe28e79b0885614741c13d9e",
+    "research/tac_ocr001/tokenizer.py": "09e35bff24a091f4648c67ca47256f9db6c2f52a179b482a16c7322bbda686ec",
+    "research/tac_ocr001/presets.py": "e225eda514fe56f4efd6f21f366ae0db8082e8aa16a440418dec522bed7d82d3",
+    "research/tac_ocr001/probe_adapter.py": "8b988dfebb8a2369013aa685a520eacc5ded743f20df0560336251e7ce2afd88",
+    "research/tac_ocr001/pipeline.py": "725f6719333e1307f8cf7edca21d667ecfe4c5e505dad7e6754912efc8327275",
+    "research/langcache104/model.py": "84507fd17ace7eb2e880d5f15ee7a3a80c41543041eee103ca926966bcd1e882",
+    "research/langcache104/kernels.py": "1c2782bbaaac7aa54722f420bbbad8c5215f260ed591a6cef154c0540f41b8d1"
+  },
+  "ancestry": [
+    "LANGCACHE104",
+    "TAC-OCR-001"
+  ],
+  "family": "gru",
+  "lean_module": "PNDS/TACOCR001.lean",
+  "lean_namespace": "PNDS.TACOCR001",
+  "python_reference": "foundation/tac_ocr001/math_reference.py",
+  "python_kernel_entrypoints": [
+    "attention_reference"
+  ],
+  "mathematical_files_sha256": {
+    "PNDS/TACOCR001.lean": "b0d3cbd7c37af77b3d8b6ca55537d2b3337f8f12c28648b228741ca99eb47101",
+    "foundation/tac_ocr001/FORMULATION.md": "9f548bc99c25384506dcd6dc11fc2731122aef050a680ab9a68895c14cd0e88e",
+    "foundation/tac_ocr001/math_reference.py": "c87951af2081c7db36eaf47c7cb90e0e3b35e7562fc356f3209ca704fcf5fbd4",
+    "foundation/tac_ocr001/test_math_reference.py": "95fe5bdcb295387c35cd791f5b17a9bd96b02b3598d9b453e3e34e5167dc3e4f",
+    "foundation/tac_ocr001/test_reciprocal_candidate.py": "782b1a7be3c0ff3b59f93130a7fd06e4593e34bad846b3e76665c0511f7257a2"
+  },
+  "lean_scope": "PARTIAL_TYPED_FLOAT_FORMULAS_AND_LIST_CAPACITY_NOT_FULL_SOURCE",
+  "lean_compiled_locally": false,
+  "local_lean_status": "INCONCLUSIVE_RUNTIME_FAILED_TO_LOCATE_APPLICATION",
+  "python_source_equivalence_verified": false,
+  "observed_checks": [
+    "partial scalar visual attention forward and sampled derivative",
+    "FP64 chunk/step logits and state",
+    "gradient connectivity",
+    "bounded physical inference state",
+    "batch/document isolation",
+    "causal token poison",
+    "fixed-geometry frozen/eager TAC checks when applicable"
+  ],
+  "full_model_mathematical_readiness": false,
+  "new_optimizer_updates": 0,
+  "trained_capability_claim": false,
+  "gpu_speed_claim": false,
+  "open_obligations": [
+    "WHOLE_ENCODER_BRIDGE_CORE_SOURCE_LOWERING",
+    "ALL_PARAMETER_AND_STATE_GRADIENT_CORRESPONDENCE",
+    "FINITE_PRECISION_STABILITY",
+    "POOLING_INFORMATION_RETENTION",
+    "FROZEN_GRAPH_UNIVERSAL_EQUIVALENCE",
+    "REAL_IMAGE_TO_TRAINED_TRANSCRIPTION",
+    "SOURCE_QUALIFIED_MATCHED_TRAINING_AND_HELDOUT_OCR"
+  ]
+}
