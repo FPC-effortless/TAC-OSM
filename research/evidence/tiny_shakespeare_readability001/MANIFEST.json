@@ -1,0 +1,187 @@
+{
+  "schema": "tac-osm.tiny-shakespeare-readability001.v1",
+  "study_id": "TINY_SHAKESPEARE_READABILITY001",
+  "recorded_date": "2026-11-01",
+  "status": "internally_measured_not_independently_qualified",
+  "execution_level": "internal_research",
+  "study_design": {
+    "post_hoc": true,
+    "preregistered": false,
+    "blinded_human_review": false,
+    "new_model_fits": 0,
+    "checkpoint_weights_changed": false,
+    "protected_holdout_newly_accessed": false,
+    "recorded_holdout_metrics_reused": true,
+    "checkpoint_promotion_performed": false,
+    "release_decision_performed": false,
+    "architecture_superiority_claim_eligible": false
+  },
+  "corpus": {
+    "name": "Tiny Shakespeare",
+    "upstream_url": "https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt",
+    "bytes": 1115394,
+    "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "included_in_repository": false,
+    "provenance_note": "The diagnostic records the upstream location and exact byte hash. Upstream licensing and publisher provenance were not independently re-audited for this evidence package."
+  },
+  "generation_protocol": {
+    "prompts": [
+      "ROMEO:\n",
+      "KING LEAR:\nWhat have you done?\n"
+    ],
+    "generated_bytes_per_prompt": 1024,
+    "temperature": 0.7,
+    "top_k": 40,
+    "sampling_seed": 1234,
+    "device": "cpu",
+    "checkpoint_count": 9,
+    "passage_count": 18,
+    "generated_bytes_total": 18432,
+    "load_mode": {
+      "torch_weights_only": true,
+      "strict_state_dict": true,
+      "checkpoint_sha256_verified": true
+    },
+    "decode_mode": "carried recurrent state or Transformer cache"
+  },
+  "sampling_sensitivity_protocol": {
+    "prompt": "ROMEO:\n",
+    "models": [
+      "tac-4-10601",
+      "transformer-10601"
+    ],
+    "temperatures": [
+      0.0,
+      0.4,
+      0.7
+    ],
+    "top_k": 40,
+    "sampling_seed": 1234,
+    "generated_bytes_per_run": 1024,
+    "device": "cpu"
+  },
+  "checkpoints": [
+    {
+      "model": "tac-4-10601",
+      "family": "tac-osm",
+      "layers": 4,
+      "seed": 10601,
+      "parameters": 998024,
+      "recorded_training_step": 4096,
+      "checkpoint_sha256": "574e5792ecf64f830f88c3ba83ae50e7142af9d6dbfca68c2a4f4e507486c5a4",
+      "receipt_sha256": "371d3e991ada5a0beabe3d66de44e2a0af169019f5776965347013e4e94be7b9"
+    },
+    {
+      "model": "tac-4-10602",
+      "family": "tac-osm",
+      "layers": 4,
+      "seed": 10602,
+      "parameters": 998024,
+      "recorded_training_step": 4096,
+      "checkpoint_sha256": "3b73554ea2caf0826cc44a75ded990cff5bf0ff1204564316c87b20f8a55f360",
+      "receipt_sha256": "f27c6854e70abfe60c7c4ce0f0129c3303e727840aac315bfc39a95c848a614a"
+    },
+    {
+      "model": "tac-4-10603",
+      "family": "tac-osm",
+      "layers": 4,
+      "seed": 10603,
+      "parameters": 998024,
+      "recorded_training_step": 4096,
+      "checkpoint_sha256": "26a727c781610e842fcb6cc2f5c945f081eb5e8ddeb7ba1834ec30dfa26864be",
+      "receipt_sha256": "c4abdfff7e296775873a8e4cc850b8c7be37d11558a190ffee9476388f848138"
+    },
+    {
+      "model": "tac-8-10601",
+      "family": "tac-osm",
+      "layers": 8,
+      "seed": 10601,
+      "parameters": 999784,
+      "recorded_training_step": 4096,
+      "checkpoint_sha256": "6404e6208ab5f7d841aec037f0afcb79fc213667b483ef3af6581b683148a6a0",
+      "receipt_sha256": "3eea6dc9e26528e345bd147024de4341d9c9ce1326df1ec2e93b09de22fd9537"
+    },
+    {
+      "model": "tac-8-10602",
+      "family": "tac-osm",
+      "layers": 8,
+      "seed": 10602,
+      "parameters": 999784,
+      "recorded_training_step": 4096,
+      "checkpoint_sha256": "758f2230bd33f995d8cc1123260fc20f0917505850532ea2103021deab68b10c",
+      "receipt_sha256": "2a3d04cf08f3b1df64dc0cf10e568bf13191d4cfbd7205d833f8d452a8fabd78"
+    },
+    {
+      "model": "tac-8-10603",
+      "family": "tac-osm",
+      "layers": 8,
+      "seed": 10603,
+      "parameters": 999784,
+      "recorded_training_step": 4096,
+      "checkpoint_sha256": "ef374bde2c17bc4623ce199a1c131e9994c6856d23543b8c67b199b6a72d4a53",
+      "receipt_sha256": "8210762aa6898d52d7500c49f9a90bd918ae172eecba5860f1b270a1aa1c59e1"
+    },
+    {
+      "model": "transformer-10601",
+      "family": "causal-transformer",
+      "layers": 4,
+      "seed": 10601,
+      "parameters": 998816,
+      "recorded_training_step": 4096,
+      "checkpoint_sha256": "a0c62977e74623df0f15540d8d672c07d8f095b9e982e5195099d6612e831f02",
+      "receipt_sha256": "2cc8eb28bc091097d99fe3d76dcf8b1f35d0c21f134dc2dfaffdf919712bb8da"
+    },
+    {
+      "model": "transformer-10602",
+      "family": "causal-transformer",
+      "layers": 4,
+      "seed": 10602,
+      "parameters": 998816,
+      "recorded_training_step": 4096,
+      "checkpoint_sha256": "909ca9642d682c5351f1c6e4915ccc8e07d4c86a6e324e070e130141720f2afc",
+      "receipt_sha256": "2ae6d7aa5466329e9235ee0a9b6d1c6ff8ecc888e7f40781147485a5ff9bc862"
+    },
+    {
+      "model": "transformer-10603",
+      "family": "causal-transformer",
+      "layers": 4,
+      "seed": 10603,
+      "parameters": 998816,
+      "recorded_training_step": 4096,
+      "checkpoint_sha256": "fea4c18aa792bdd269a33c7926f0c0260ee89234b21d8774776ec0e71f3dfd9b",
+      "receipt_sha256": "766288fe983e9fdb376ac88c44a70d6d2298b95946628e7c9737ba2603fbf5fc"
+    }
+  ],
+  "source_implementations": {
+    "core.py_sha256": "5337079720e4f9b1333925ccbccb7522be947103410c4c706ee6d8243bc8b6f5",
+    "tac_model.py_sha256": "84507fd17ace7eb2e880d5f15ee7a3a80c41543041eee103ca926966bcd1e882",
+    "transformer_model.py_sha256": "5ef73259b752478106632f81bb859530d708ff25c2a556eb9af367ecdefaa6e0",
+    "tac_result.json_sha256": "c1d48d50e25d8c5e3b8597a541e366e6010d1ab2d6a9427d6a3f4ba739f1ffe0",
+    "transformer_result.json_sha256": "5a5b15007bc0da4f85c0087bb73767035867fc68442f68c137f088e19d9c8443"
+  },
+  "committed_artifacts": {
+    "README.md_sha256": "2f9b7d0ee71b4d9e4fb1eec56a8a3607da0c2feeb7782dfbbf7a43951535fabc",
+    "RESULTS.md_sha256": "06c0a85aa89e18283179b9d24c2ebd008cc771714191c0a41061df050f91db79",
+    "MATCHED_SAMPLES.json_sha256": "6c71c14cde1981e4905a797af25c82445194aa80b681b45c0f52534e38001b1e",
+    "SAMPLING_SENSITIVITY.json_sha256": "90cebe09525f337234de72e41080e87c8d9d56deffaf95b68cbac5b26a4e2e25",
+    "RECORDED_BENCHMARKS.json_sha256": "4f87b9136b4b01588f3658f7803d95e867683f94d326a65a188552b3e11d8a8b",
+    "METRICS.json_sha256": "83c909a7dafcdaff0c8d2ca7855108705886f2af99312cab6ca9509d49cb6a52",
+    "analyze_samples.py_sha256": "d53977c18d2a2180f3055e9b561fc6107631898d3d193b0d993766b0be707804"
+  },
+  "comparability": {
+    "parameter_counts_close": true,
+    "recorded_updates_equal": true,
+    "training_data_claimed_shared_by_source_receipts": true,
+    "training_flop_parity_independently_reaudited": false,
+    "tuning_parity_independently_reaudited": false,
+    "checkpoint_selection_parity_independently_reaudited": false,
+    "conclusion": "Useful for an internal checkpoint diagnostic; ineligible for an architectural-superiority claim."
+  },
+  "known_limitations": [
+    "Only two matched prompts and one sampling seed were used per checkpoint.",
+    "Human reading was post-hoc, unblinded, and performed by one reviewer.",
+    "Corpus-vocabulary and speaker-label measures are surface-form diagnostics, not semantic or grammatical scores.",
+    "Tiny Shakespeare is a synthetic language-model fixture for this repository and is not real-world capability evidence.",
+    "The committed samples and benchmark receipts support audit of this diagnostic, but the original checkpoint binaries are not duplicated in this directory."
+  ]
+}
