@@ -1,0 +1,31 @@
+{
+  "schema": "tac-ocr002.data-preparation.v1",
+  "created_before_source_payload_inspection": true,
+  "kind": "source_audit",
+  "no_new_model_fits": true,
+  "new_optimizer_updates": 0,
+  "source_repository": "naver-clova-ix/cord-v2",
+  "source_revision": "7f0115a4b758a71d6473b8d085751692da2fef98",
+  "publisher_license": "CC-BY-4.0",
+  "download_allowed": ["data/train-*.parquet", "data/validation-*.parquet", "README.md", "dataset_infos.json"],
+  "download_denied": ["data/test-*.parquet"],
+  "expected_receipts": {"train": 800, "validation": 100},
+  "intended_use": "initial real printed-region OCR grounding and matched-decoder development, conditional on publisher-provided region boxes",
+  "not_covered": ["complete-page transcription", "learned region detection", "long-document understanding", "Nigerian Pidgin", "Naira-symbol coverage", "handwriting", "tables/formulas"],
+  "preprocessing": {
+    "unit": "publisher valid_line words grouped by row_id within their annotated field",
+    "label": "original word texts in publisher order joined with one ASCII space; preserve case, Unicode, punctuation and spelling",
+    "crop": "axis-aligned union of source quadrilaterals, floor/ceil plus 2-pixel margin, clamped to original image",
+    "source_pixel_limit": 40000000,
+    "missing_row_id": "retain as an explicitly flagged publisher field region, not a certified physical line",
+    "invalid_quad_or_text": "record explicit exclusion and retain original annotations",
+    "model_input_boundary": "image pixels and previous target bytes only; IDs, categories, annotations and current/future labels remain outside the predictor",
+    "teacher_forcing": "ids = [BOS] + list(text.encode('utf-8')) + [EOS]; inputs = ids[:-1]; labels = ids[1:]; padded targets use ignore_index"
+  },
+  "checks": ["publisher file SHA256", "original split counts", "image decodability and source dimensions", "annotation parent/child keys", "finite/in-range geometry", "nonempty UTF-8 labels", "document-ID uniqueness", "exact image overlap across splits", "perceptual near-duplicate candidates", "exact crop overlaps and conflicting labels", "character/length/crop distributions", "Naira character occurrence count"],
+  "near_duplicate_rule": "64-bit difference-hash Hamming distance <= 2 across different receipts; candidates for review, not automatic deletion",
+  "split_policy": "preserve original receipt-level train/validation assignments; do not resplit crops",
+  "deduplication_policy": "content-address crop bytes to save storage; preserve every source row and report duplicates/conflicts",
+  "test_policy": "no TEST shard/image/annotation payload opened by this run; public-web example exposure and pretrained-model contamination remain unaudited",
+  "scientific_qualification": "source bytes and software checks do not replace independently signed source/outcome/reward/ACL prefit evidence"
+}
