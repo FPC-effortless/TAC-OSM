@@ -43,13 +43,22 @@ def verify():
     candidates = compare_existing_snapshot(local, remote)
     root = LOCAL.parents[1]
     candidate_pin = root / "research/langcache104/PNDS_PIN.json"
-    if candidate_pin.exists() or candidates:
-        if (len(candidates) != 1 or
-                candidates[0].get("id") != "LANGCACHE104-DEEP-ASSOCIATIVE-CARRIED-CACHE"):
-            raise ValueError("every new candidate needs its own reviewed pinned-peer verifier")
-        sys.path.insert(0, str(root))
+    ocr_pin = root / "research/tac_ocr001/PNDS_PIN.json"
+    expected = set()
+    if candidate_pin.exists():
+        expected.add("LANGCACHE104-DEEP-ASSOCIATIVE-CARRIED-CACHE")
+    if ocr_pin.exists():
+        expected.update(("TAC-OCR-001-TAC", "TAC-OCR-001-TRANSFORMER", "TAC-OCR-001-GRU"))
+    actual = [row.get("id") for row in candidates]
+    if len(actual) != len(set(actual)) or set(actual) != expected:
+        raise ValueError("every new candidate needs its own reviewed pinned-peer verifier")
+    sys.path.insert(0, str(root))
+    if candidate_pin.exists():
         from research.langcache104.verify_math_pins import verify as verify_candidate
         verify_candidate()
+    if ocr_pin.exists():
+        from research.tac_ocr001.verify_math_pins import verify as verify_ocr
+        verify_ocr()
     print(json.dumps({"existing_snapshot_equal": True,
                       "separately_verified_prospective_candidates": len(candidates),
                       "cross_repository_linked_variants": len(local["variants"]),
