@@ -1,0 +1,137 @@
+{
+  "schema": "tac-ocr001.cpu-profile.v1",
+  "torch_version": "2.15.0+cpu",
+  "python_version": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+  "threads": 1,
+  "timed_rounds": 3,
+  "warmup_rounds": 1,
+  "decode_steps_per_round": 64,
+  "encoder_execution_included": false,
+  "timing_scope": "random-weight decoder and cached visual projection only",
+  "qualification": "engineering_execution_only_no_OCR_quality_or_GPU_claim",
+  "models": [
+    {
+      "family": "tac",
+      "config": {
+        "family": "tac",
+        "d_model": 128,
+        "n_layers": 4,
+        "n_heads": 4,
+        "ffn_dim": 384,
+        "feature_dim": 384,
+        "reference_budget": 128,
+        "window": 128,
+        "chunk_size": 32,
+        "key_dim": 16,
+        "value_dim": 16,
+        "write_rank": 1
+      },
+      "counts": {
+        "trainable": 1309376,
+        "decoder_deployed": 1309376,
+        "frozen_encoder": 0,
+        "total_deployed": 1309376
+      },
+      "visual_projection_median_ms": 1.1488059972180054,
+      "prefill_128_bytes_median_ms": 12.99314500647597,
+      "decode_median_ms_per_byte": 2.6798940016306005,
+      "decode_p90_ms_per_byte": 3.493918993626721,
+      "decode_bytes_per_second_from_median": 373.1490870129725,
+      "carried_tensor_bytes": 295936,
+      "cached_visual_kv_bytes": 131072,
+      "physical_compact_storage_verified": true,
+      "new_optimizer_updates": 0,
+      "initialized_randomly": true,
+      "steady_torchscript": {
+        "median_ms_per_byte": 1.4974884979892522,
+        "bytes_per_second": 667.7847618480855,
+        "speedup_over_same_eager_weights": 1.7895923776570033,
+        "compile_seconds": 1.315354752005078,
+        "eager_max_logit_error_12_steps": 0.0,
+        "shape_specialized": true,
+        "warning_count": 4,
+        "warnings": [
+          "Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!",
+          "`torch.jit.freeze` is deprecated. Please use `torch.compile` instead.",
+          "`torch.jit.trace_method` is deprecated. Please switch to `torch.compile` or `torch.export`.",
+          "`torch.jit.trace` is deprecated. Please switch to `torch.compile` or `torch.export`."
+        ],
+        "cold_start_included_in_decode_latency": false,
+        "gpu_verified": false
+      }
+    },
+    {
+      "family": "transformer",
+      "config": {
+        "family": "transformer",
+        "d_model": 128,
+        "n_layers": 4,
+        "n_heads": 4,
+        "ffn_dim": 520,
+        "feature_dim": 384,
+        "reference_budget": 128,
+        "window": 128,
+        "chunk_size": 32,
+        "key_dim": 16,
+        "value_dim": 16,
+        "write_rank": 1
+      },
+      "counts": {
+        "trainable": 1309312,
+        "decoder_deployed": 1309312,
+        "frozen_encoder": 0,
+        "total_deployed": 1309312
+      },
+      "visual_projection_median_ms": 1.3672310014953837,
+      "prefill_128_bytes_median_ms": 8.74397398729343,
+      "decode_median_ms_per_byte": 1.6430995019618422,
+      "decode_p90_ms_per_byte": 2.3978800018085167,
+      "decode_bytes_per_second_from_median": 608.6058688509195,
+      "carried_tensor_bytes": 520192,
+      "cached_visual_kv_bytes": 131072,
+      "physical_compact_storage_verified": true,
+      "new_optimizer_updates": 0,
+      "initialized_randomly": true
+    },
+    {
+      "family": "gru",
+      "config": {
+        "family": "gru",
+        "d_model": 128,
+        "n_layers": 4,
+        "n_heads": 4,
+        "ffn_dim": 433,
+        "feature_dim": 384,
+        "reference_budget": 128,
+        "window": 128,
+        "chunk_size": 32,
+        "key_dim": 16,
+        "value_dim": 16,
+        "write_rank": 1
+      },
+      "counts": {
+        "trainable": 1309824,
+        "decoder_deployed": 1309824,
+        "frozen_encoder": 0,
+        "total_deployed": 1309824
+      },
+      "visual_projection_median_ms": 1.1640879965852946,
+      "prefill_128_bytes_median_ms": 13.147955003660172,
+      "decode_median_ms_per_byte": 0.9917024945025332,
+      "decode_p90_ms_per_byte": 1.5799760003574193,
+      "decode_bytes_per_second_from_median": 1008.3669301463531,
+      "carried_tensor_bytes": 2048,
+      "cached_visual_kv_bytes": 131072,
+      "physical_compact_storage_verified": true,
+      "new_optimizer_updates": 0,
+      "initialized_randomly": true
+    }
+  ],
+  "source_sha256": {
+    "profile.py": "33fdca4eb170b6f3985c4d552a0050631575de66df6c2af07d8d00e9a0d5f152",
+    "model.py": "db17b400af293c4c03ffe98f9fb87abe07446a1b41305205def2eeb103138fcb",
+    "presets.py": "e225eda514fe56f4efd6f21f366ae0db8082e8aa16a440418dec522bed7d82d3",
+    "steady.py": "52aabae41fb93b52214ea1cf227e19264f1e6df2d121cfe90af635242c8118d6"
+  }
+}

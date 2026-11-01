@@ -1,0 +1,43 @@
+name: TAC-OCR-001 efficient OCR engineering (ZERO FITS)
+on:
+  pull_request:
+    paths:
+      - 'research/tac_ocr001/**'
+      - 'research/phone_queue/tac-ocr001-engineering.json'
+      - '.github/workflows/tac-ocr001-engineering.yml'
+permissions:
+  contents: read
+jobs:
+  no-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Plan bounded no-fit engineering
+        run: python scripts/phone_lab.py plan research/phone_queue/tac-ocr001-engineering.json
+      - name: Install local recognition and verification dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install pytest numpy pillow pymupdf cryptography
+      - name: Engineering, causality, ownership, gradients and cache allocation
+        env:
+          PYTHONPATH: 'src:.'
+        run: |
+          python -m pytest -q research/tac_ocr001 tests/test_research_probe_agnostic.py
+          python research/tac_ocr001/verify_math_pins.py
+          python -m research.tac_ocr001 profile --output ci-artifacts/tac-ocr001/CPU_PROFILE.json --steps 32
+          python -m research.tac_ocr001 transcribe research/tac_ocr001/fixtures/phototest.tif --output ci-artifacts/tac-ocr001/transcription --workers 1
+      - name: Preserve exact engineering evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TAC-OCR-001-no-fit-engineering
+          path: ci-artifacts/tac-ocr001/
+          retention-days: 90
