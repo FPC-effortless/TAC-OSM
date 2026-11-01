@@ -1,0 +1,66 @@
+{
+  "status": "PASS_PRETRAINED_ENCODER_TO_RANDOM_DECODER_GRAPH_ONLY",
+  "model_id": "microsoft/trocr-small-printed",
+  "revision": "04e994ab854b0089d4929f48c2b4dbe2ce78a340",
+  "encoder_parameters": 21960192,
+  "feature_shape": [
+    1,
+    576,
+    384
+  ],
+  "box_shape": [
+    1,
+    576,
+    4
+  ],
+  "elapsed_including_first_load_seconds": 24.561335113001405,
+  "new_optimizer_updates": 0,
+  "models": [
+    {
+      "family": "tac",
+      "logits_shape": [
+        1,
+        3,
+        259
+      ],
+      "finite": true,
+      "counts": {
+        "trainable": 1309376,
+        "decoder_deployed": 1309376,
+        "frozen_encoder": 21960192,
+        "total_deployed": 23269568
+      }
+    },
+    {
+      "family": "transformer",
+      "logits_shape": [
+        1,
+        3,
+        259
+      ],
+      "finite": true,
+      "counts": {
+        "trainable": 1309312,
+        "decoder_deployed": 1309312,
+        "frozen_encoder": 21960192,
+        "total_deployed": 23269504
+      }
+    },
+    {
+      "family": "gru",
+      "logits_shape": [
+        1,
+        3,
+        259
+      ],
+      "finite": true,
+      "counts": {
+        "trainable": 1309824,
+        "decoder_deployed": 1309824,
+        "frozen_encoder": 21960192,
+        "total_deployed": 23270016
+      }
+    }
+  ],
+  "capability_qualified": false
+}

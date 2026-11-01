@@ -1,0 +1,50 @@
+{
+  "schema": "tac-ocr001.engineering-verification.v1",
+  "new_optimizer_updates": 0,
+  "custom_ocr_trained": false,
+  "existing_repository_tests": {
+    "passed": 1211,
+    "command": "PYTHONPATH=src:. python -m pytest -q tests/",
+    "source_base": "27faca538342e10e52d53eeeefc3bf09e56c31c0"
+  },
+  "focused_plus_shared_tests": {
+    "passed": 56,
+    "focused_unique_new_tests": 34,
+    "shared_existing_tests": 22,
+    "command": "PYTHONPATH=src:. python -m pytest -q research/tac_ocr001 tests/test_research_probe_agnostic.py"
+  },
+  "encoder_integration": "PASS_PRETRAINED_ENCODER_TO_RANDOM_DECODER_GRAPH_ONLY",
+  "local_lean_compile": {
+    "status": "INCONCLUSIVE_MANAGED_RUNTIME_APP_LOCATOR",
+    "exit_code": 1,
+    "stderr": "error: failed to locate application",
+    "full_model_proof": "OPEN"
+  },
+  "training_prefit": "BLOCKED_MISSING_ORIGINAL_SOURCE_QUALIFICATION_PARITY_AND_INDEPENDENT_SIGNED_EVIDENCE",
+  "sealed_test_opened": false,
+  "source_sha256": {
+    "research/tac_ocr001/probe_adapter.py": "8b988dfebb8a2369013aa685a520eacc5ded743f20df0560336251e7ce2afd88",
+    "research/tac_ocr001/steady.py": "52aabae41fb93b52214ea1cf227e19264f1e6df2d121cfe90af635242c8118d6",
+    "research/tac_ocr001/__init__.py": "e44be4c88160b1086fb5013a4bfbebc0bdf0accf679fc74f94b11b427261ed53",
+    "research/tac_ocr001/smoke.py": "953189dd36d313fe4a70adbdacc6aeeb9b73b4de7fdef9eaf5511e6aff1cca6b",
+    "research/tac_ocr001/tokenizer.py": "09e35bff24a091f4648c67ca47256f9db6c2f52a179b482a16c7322bbda686ec",
+    "research/tac_ocr001/test_model.py": "435b916ba77018b96e14a676b0d57ac073e58e2c8cea1490ffed9482fe235fa5",
+    "research/tac_ocr001/pipeline.py": "d0534993d94b864a339b6cccaae0afd8746df875ec177a77f66c2375b9368d95",
+    "research/tac_ocr001/__main__.py": "18e02bebef8d0dfa8d77da01150ffa400b5afcdc71a58c2b9f5644532d18d088",
+    "research/tac_ocr001/encoder.py": "5cde42ec290880f869c2c44025df9f04285729f3fe28e79b0885614741c13d9e",
+    "research/tac_ocr001/profile.py": "33fdca4eb170b6f3985c4d552a0050631575de66df6c2af07d8d00e9a0d5f152",
+    "research/tac_ocr001/test_steady.py": "0cd132836ab88cad6c320594a4b6661c93bbfc8a835e414d2554a899abc96a6c",
+    "research/tac_ocr001/test_encoder.py": "826c278e9246ee245cc1fe0729f38e7f84bd34d63a37d588e0413213b3361a14",
+    "research/tac_ocr001/test_pipeline.py": "a0cd1dbe6c63a6aee7e1472744cb3e90b226d21579315db95d3c9c10c05d6234",
+    "research/tac_ocr001/verify_math_pins.py": "bbd5f4b69d05cc961bc0712804c677dbaada891413ccc81bb8fd33a6953ebb08",
+    "research/tac_ocr001/math_reference.py": "c87951af2081c7db36eaf47c7cb90e0e3b35e7562fc356f3209ca704fcf5fbd4",
+    "research/tac_ocr001/presets.py": "e225eda514fe56f4efd6f21f366ae0db8082e8aa16a440418dec522bed7d82d3",
+    "research/tac_ocr001/model.py": "db17b400af293c4c03ffe98f9fb87abe07446a1b41305205def2eeb103138fcb"
+  },
+  "resume_regression": {
+    "reproduced_before_fix": true,
+    "initial_failure": "rejected configuration resume cleared the existing search index",
+    "repair": "validate header before rebuilding; transactional index recovery with rollback",
+    "after_fix": "PASS_EXISTING_RESUME_TEST_WITH_PRESERVATION_ASSERTION"
+  }
+}
