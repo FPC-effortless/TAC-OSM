@@ -81,8 +81,8 @@ work.mkdir(exist_ok=True)
 for name, expected in assets['files'].items():
     if P(name).name != name or digest(inputs / name) != expected['sha256']:
         raise RuntimeError('input asset changed: ' + name)
-extract(inputs / 'source.zip', work / 'source')
-extract(inputs / 'wheels.zip', work / 'wheels')
+extract(inputs / 'source.bin', work / 'source')
+extract(inputs / 'wheels.bin', work / 'wheels')
 subprocess.run([sys.executable, '-m', 'pip', 'install', '--quiet', '--no-index', '--no-deps',
     '--find-links', str(work / 'wheels'), '--target', str(work / 'vendor'),
     'transformers==4.52.1', 'huggingface_hub==0.36.0', 'tokenizers==0.21.4',
@@ -106,8 +106,8 @@ except Exception:
 subprocess.run([sys.executable, '-c',
     'from research.tac_ocr003.core import require_prefit; require_prefit()'],
     cwd=work / 'source', env=env, check=True)
-extract(inputs / 'data.zip', work / 'data')
-extract(inputs / 'encoder.zip', work / 'hf/hub')
+extract(inputs / 'data.bin', work / 'data')
+extract(inputs / 'encoder.bin', work / 'hf/hub')
 command = [sys.executable, '-m', 'research.tac_ocr003.train', '--data', str(work / 'data'),
            '--output', str(work / 'outputs')]
 subprocess.run(command, cwd=work / 'source', env=env, check=True)
@@ -146,20 +146,21 @@ def package(*, commit, data_zip, encoder, wheels, destination, kaggle_user):
     dataset, notebook = destination / "dataset", destination / "notebook"
     dataset.mkdir(parents=True)
     notebook.mkdir()
-    shutil.copyfile(data_zip, dataset / "data.zip")
-    files = source_zip(commit, dataset / "source.zip")
+    shutil.copyfile(data_zip, dataset / "data.bin")
+    files = source_zip(commit, dataset / "source.bin")
     hf_prefix = f"models--microsoft--trocr-small-printed/snapshots/{protocol['encoder_revision']}"
-    with zipfile.ZipFile(dataset / "encoder.zip", "w", compression=zipfile.ZIP_STORED) as archive:
+    with zipfile.ZipFile(dataset / "encoder.bin", "w", compression=zipfile.ZIP_STORED) as archive:
         for name in ENCODER_FILES:
             archive.write(encoder / name, hf_prefix + "/" + name)
-    with zipfile.ZipFile(dataset / "wheels.zip", "w", compression=zipfile.ZIP_STORED) as archive:
+    with zipfile.ZipFile(dataset / "wheels.bin", "w", compression=zipfile.ZIP_STORED) as archive:
         for path in sorted(wheels.glob("*.whl")):
             archive.write(path, path.name)
     asset_files = {name: {"sha256": sha256(dataset / name), "bytes": (dataset / name).stat().st_size}
-                   for name in ("data.zip", "source.zip", "encoder.zip", "wheels.zip")}
+                   for name in ("data.bin", "source.bin", "encoder.bin", "wheels.bin")}
     assets = {"schema": "tac-ocr003.offline-assets.v1", "source_commit": commit,
               "files": asset_files, "source_file_count": len(files),
               "contains_kaggle_credentials": False, "training_started": False,
+              "archive_storage": "ZIP bytes named .bin to prevent Kaggle upload-time extraction",
               "runtime_network": "disabled", "test_payload": "not_included"}
     write_json(dataset / "TAC_OCR003_ASSETS.json", assets)
     dataset_id = kaggle_user + "/tac-ocr003-cord-grounding"
@@ -168,10 +169,10 @@ def package(*, commit, data_zip, encoder, wheels, destination, kaggle_user):
         "licenses": [{"name": "other"}],
         "description": "Private research bundle. CORD-v2 original region crops CC-BY-4.0 (Clova AI); Microsoft TrOCR publisher checkpoint and model card; source-pinned TAC-OSM pilot code; offline dependency wheels. See ATTRIBUTION.txt. No API credentials or TEST payload. No fits performed; independently signed preflight required."})
     (dataset / "ATTRIBUTION.txt").write_text(
-        "CORD v2: https://github.com/clovaai/cord; CC-BY-4.0; original license is inside data.zip. "
+        "CORD v2: https://github.com/clovaai/cord; CC-BY-4.0; original license is inside data.bin. "
         "Region preparation preserves original images, text and source receipts.\n"
         "Pretrained Microsoft TrOCR: https://huggingface.co/microsoft/trocr-small-printed/tree/"
-        + protocol["encoder_revision"] + "; publisher card inside encoder.zip. "
+        + protocol["encoder_revision"] + "; publisher card inside encoder.bin. "
         "The pinned card has no explicit license tag; upstream Microsoft UniLM repository has an MIT license. "
         "No separate licensing determination or redistribution grant asserted for the combined bundle.\n"
         "TAC-OSM source: https://github.com/FPC-effortless/TAC-OSM/tree/" + commit

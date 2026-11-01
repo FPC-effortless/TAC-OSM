@@ -98,3 +98,9 @@ byte is retained. Padded targets have index -100 and no loss contribution;
 causal masking prevents later padding from changing earlier predictions.
 Each region's recurrent state is freshly initialized, so this pilot cannot
 establish cross-page memory or long-document retention.
+
+Kaggle automatically expanded the first uploaded `.zip` inputs. Provider
+read-back detected this before any execution. The corrected package stores
+unchanged ZIP bytes under `.bin` names so input archives retain their exact
+hashes. The initial private dataset/notebook versions are preserved; neither
+executed. This is a packaging correction, not an architecture or data change.

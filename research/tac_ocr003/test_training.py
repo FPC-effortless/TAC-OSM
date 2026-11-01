@@ -126,7 +126,7 @@ def test_notebook_checks_exact_hash_and_preflight_before_images_or_training():
     driver = notebook_driver("1" * 64)
     compile(driver, "notebook", "exec")
     assert "1" * 64 in driver
-    assert driver.index("require_prefit; require_prefit()") < driver.index("extract(inputs / 'data.zip'")
+    assert driver.index("require_prefit; require_prefit()") < driver.index("extract(inputs / 'data.bin'")
     assert driver.index("require_prefit; require_prefit()") < driver.index("'research.tac_ocr003.train'")
     assert "HF_HUB_OFFLINE='1'" in driver
     assert "--no-index" in driver
