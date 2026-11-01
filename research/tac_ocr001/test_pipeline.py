@@ -78,6 +78,11 @@ def test_real_image_transcription_resume_and_torn_journal(tmp_path):
         run_document(source,output,config)
     with pytest.raises(ValueError,match="mismatch"):
         run_document(source,output,PipelineConfig(workers=2),resume=True)
+    index=ReferenceIndex(output/"references.sqlite")
+    try:
+        assert index.search("text"),"rejected resume must preserve the existing search index"
+    finally:
+        index.close()
 
 
 @pytest.mark.skipif(not shutil.which("tesseract"),reason="system OCR binary not installed")

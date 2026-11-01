@@ -218,17 +218,26 @@ def _recover_pages(path,header,index):
         if not first.endswith(b"\n") or json.loads(first)!=header:
             raise ValueError("resume source/config/backend mismatch")
         good=stream.tell()
-        while raw:=stream.readline():
-            if not raw.endswith(b"\n"):
-                break
-            page=json.loads(raw)
-            if page.get("page")!=count+1 or page.get("schema")!="tac-ocr001.page.v1":
-                raise ValueError("invalid or noncontiguous OCR journal")
-            index.add(page["page"],page["text"])
-            count+=1
-            good=stream.tell()
-    with path.open("r+b") as stream:
-        stream.truncate(good)
+        # One transaction makes rejected/corrupt resume leave the old index
+        # intact and avoids one fsync per already completed page.
+        index.db.execute("BEGIN")
+        try:
+            index.db.execute("DELETE FROM pages")
+            while raw:=stream.readline():
+                if not raw.endswith(b"\n"):
+                    break
+                page=json.loads(raw)
+                if page.get("page")!=count+1 or page.get("schema")!="tac-ocr001.page.v1":
+                    raise ValueError("invalid or noncontiguous OCR journal")
+                index.db.execute("INSERT INTO pages(page,text) VALUES(?,?)",(page["page"],page["text"]))
+                count+=1
+                good=stream.tell()
+            with path.open("r+b") as target:
+                target.truncate(good)
+            index.db.commit()
+        except Exception:
+            index.db.rollback()
+            raise
     return count
 
 
@@ -265,11 +274,12 @@ def run_document(source, output, config=None, *, resume=False):
     started=time.perf_counter()
     index=ReferenceIndex(output/"references.sqlite")
     try:
-        # Rebuild from the authoritative journal, clearing any entry committed
-        # just before a previous process crashed while writing that page.
-        index.db.execute("DELETE FROM pages")
-        index.db.commit()
-        completed=_recover_pages(journal,header,index) if resume else 0
+        if resume and journal.exists():
+            completed=_recover_pages(journal,header,index)
+        else:
+            index.db.execute("DELETE FROM pages")
+            index.db.commit()
+            completed=0
         recovered=completed
         if not journal.exists():
             with journal.open("w",encoding="utf-8") as stream:
