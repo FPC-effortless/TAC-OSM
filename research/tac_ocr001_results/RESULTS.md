@@ -50,11 +50,11 @@ transcripts were identical. Outputs were written to disk.
 
 | Pages | Page workers | End-to-end seconds | Pages/second |
 | ---: | ---: | ---: | ---: |
-| 1 | 2 | 0.285 | 3.51 |
-| 10 | 2 | 1.286 | 7.77 |
-| 50 | 2 | 6.065 | 8.24 |
-| 100 | 2 | 12.094 | 8.27 |
-| 50 | 1 | 11.702 | 4.27 |
+| 1 | 2 | 0.273 | 3.66 |
+| 10 | 2 | 1.332 | 7.51 |
+| 50 | 2 | 5.896 | 8.48 |
+| 100 | 2 | 11.603 | 8.62 |
+| 50 | 1 | 11.150 | 4.48 |
 
 Main-process high-water RSS is reported separately. The runtime did **not**
 expose OCR child processes in the sampler; total process-tree memory remains
@@ -90,3 +90,5 @@ research milestone is genuine image-grounded transcription under a frozen
 encoder, followed by a separate authentic long-document test.
 
 GitHub verification at the initial implementation head: [OCR engineering passed](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41319322845) and [mathematical source links passed](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41319322738). The [initial PNDS build](https://github.com/FPC-effortless/pnds-lean/actions/runs/41319170333) failed because Std did not expose List.ofFn; the revised formulation imports Mathlib and requires a fresh CI build. Historical map bytes and that failure are retained.
+
+The corrected Lean formulation subsequently [passed the explicit build, object and scoped axiom audit](https://github.com/FPC-effortless/pnds-lean/actions/runs/41319631213). Full-model mathematical proof remains OPEN. Final review reproduced and repaired a rejected-resume index mutation; recovery now validates ownership before an atomic index rebuild and rolls back on failure. The extended regression passes. The latest repeated-page receipt was rerun on the patched pipeline; the preceding receipt is preserved separately. Original neural implementation was 6360aedb1aba97a6600afbc7d56d1b9fe0c2e3d8; the same neural graph plus repaired operational pipeline is pinned at d2700f9b3864dab0d71a59a96643bbb72635f144.
