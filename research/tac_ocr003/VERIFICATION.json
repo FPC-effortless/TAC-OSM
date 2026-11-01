@@ -1,0 +1,20 @@
+{
+  "scope": "no-fit engineering checks only",
+  "new_optimizer_updates": 0,
+  "real_training_started": false,
+  "tests": [
+    {
+      "command": "python -m pytest -q research/tac_ocr003/test_training.py research/tac_ocr002 research/tac_ocr001/test_model.py research/tac_ocr001/test_encoder.py",
+      "passed": 48
+    },
+    {
+      "command": "python -m pytest -q research/tac_ocr003/test_training.py tests/test_research_probe_agnostic.py tests/test_reward_runner_integration.py tests/test_phone_research_ops.py",
+      "passed": 97
+    }
+  ],
+  "neural_source_changes": "",
+  "mathematical_qualification": "unchanged per-variant partial record; full-model proof OPEN",
+  "signed_preflight": "FAIL_MISSING_INDEPENDENT_EVIDENCE",
+  "actual_kaggle_gpu_allocation": "NOT_REQUESTED",
+  "sealed_test_payload_opened": false
+}

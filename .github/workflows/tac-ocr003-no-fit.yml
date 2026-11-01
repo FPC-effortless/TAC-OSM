@@ -1,0 +1,31 @@
+name: TAC-OCR-003 Kaggle preparation (NO FITS)
+on:
+  pull_request:
+    paths:
+      - 'research/tac_ocr003/**'
+      - 'research/mathematical-engineering/tac_ocr003/**'
+      - 'research/phone_queue/tac-ocr003-cord-grounding.json'
+      - 'research/kaggle_workloads/tac_ocr003.py'
+      - '.github/workflows/tac-ocr003-no-fit.yml'
+permissions:
+  contents: read
+jobs:
+  guarded-software-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/phone_lab.py plan research/phone_queue/tac-ocr003-cord-grounding.json
+      - name: Install no-fit test runtime
+        run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy pillow pytest
+      - name: Software boundaries and actual unsigned-training rejection
+        env:
+          PYTHONPATH: 'src:.'
+        run: python -m pytest -q research/tac_ocr003/test_training.py
