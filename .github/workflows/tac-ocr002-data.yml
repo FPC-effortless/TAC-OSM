@@ -1,0 +1,29 @@
+name: TAC-OCR-002 source preparation (NO DOWNLOADS OR FITS)
+on:
+  pull_request:
+    paths:
+      - 'research/tac_ocr002/**'
+      - 'research/phone_queue/tac-ocr002-source-audit.json'
+      - '.github/workflows/tac-ocr002-data.yml'
+permissions:
+  contents: read
+jobs:
+  fixture-software-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/phone_lab.py plan research/phone_queue/tac-ocr002-source-audit.json
+      - name: Install fixture runtime
+        run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install pillow pytest
+      - name: Data boundaries, geometry, labels, splits and crop integrity
+        env:
+          PYTHONPATH: 'src:.'
+        run: python -m pytest -q research/tac_ocr002
