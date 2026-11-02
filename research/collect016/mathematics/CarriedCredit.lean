@@ -6,6 +6,7 @@ import Mathlib
    straight-through surrogate; no classical hard-argmax derivative is asserted.
    Whole-model Lean / IEEE / VJP equivalence remain OPEN.
 -/
+noncomputable section
 namespace COLLECT016
 abbrev Vector (n : Nat) := Fin n → ℝ
 abbrev Matrix (v k : Nat) := Fin v → Fin k → ℝ

@@ -47,7 +47,7 @@ def validate(path=LINKS):
             p.get("lean_path") != lean or p.get("python_path") != python):
             raise ValueError(f"{name}: missing paired PNDS formulations")
         if new and (p.get("pull_request") != 107 or
-                    p.get("commit") != "fd948078115bd89b8685f1e2e62bbde166ceb4c4" or
+                    p.get("commit") != "090c7f8b1d7af0c8680c5856df156d3d7c181e2e" or
                     t.get("commit") != "2209e1328e3b42db4dd48cd702a21a55ffad24af"):
             raise ValueError(f"{name}: source-specific math authority mismatch")
         if (not row.get("kernel") or not row.get("formula") or
