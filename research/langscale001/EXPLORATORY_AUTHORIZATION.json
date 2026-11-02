@@ -1,0 +1,31 @@
+{
+  "schema": "langscale001.explicit-owner-exploration.v1",
+  "owner_authorized": false,
+  "explicit_exception": null,
+  "authorization_record": null,
+  "protocol_sha256": "103f1029cb1b1f360af5567ead8862724beaed7091d73c4ab8672ba55cb4b464",
+  "optimizer_updates_per_fit": 2560,
+  "max_parallel_jobs": 3,
+  "milestones": [
+    256,
+    512,
+    1024,
+    2048,
+    2560
+  ],
+  "independent_scientific_qualification": false,
+  "dev_access": false,
+  "test_access": false,
+  "estimated_raw_checkpoint_bytes": 9897542640,
+  "status": "PROPOSAL_ONLY_NOT_USER_AUTHORIZATION",
+  "execution_backend_proposal": "GitHub Actions CPU, two threads, one bounded fit per job; no GPU or Kaggle submission",
+  "rationale": "Historical original CPU jobs were <28 minutes; 35-minute estimated worker fits the 45-minute CPU planner limit; actual duration and quota not granted by this proposal",
+  "code_sha256": {
+    "research/langscale001/exploratory_fit.py": "625ebf03176ec5183ce7cb0e254b14fbeb0cc7403af74be69a818af22a504e8a",
+    "research/langscale001/models.py": "6d98f60c6c18d0c45b47064aaf586cc9932a4985826672696f714dd206be0dde",
+    "research/langcap103/preflight.py": "acf2aae721ab002d6ed01cc2eac8e08be3fe030951ab40be10e4e0569d953dc7",
+    "research/langcap103/vendor/models.py": "41b41b9ded06a0e1c6d3aa3f31ffc16508ddd4f2fbb678bfdc1015a878aeca5c",
+    "research/langcap103/vendor/native098.py": "e59c0aec80a39d84a6f01a7ca662d0c8baf3e2c2d33901057f017cb23c999498"
+  },
+  "estimated_max_runner_minutes": 1350
+}

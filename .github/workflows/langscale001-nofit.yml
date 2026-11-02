@@ -31,12 +31,14 @@ jobs:
           python scripts/phone_lab.py plan research/phone_queue/langscale001-nofit.json > ci-artifacts/langscale001/PLAN.log
           python research/langscale001/validate_pair.py --out ci-artifacts/langscale001/RECIPROCAL.json
           python research/langscale001/test_peer_pin.py
+          python research/langscale001/test_exploratory_guard.py
           python research/langscale001/verify.py --out ci-artifacts/langscale001/SOURCE_TESTS.json
           python research/langscale001/check_probes.py --out ci-artifacts/langscale001/ADAPTER_TESTS.json
           python -m pytest -q tests/test_research_probe_agnostic.py
       - name: Audit partial profiler coverage and report blocked training honestly
         run: |
           python research/langscale001/profile_compute.py --out ci-artifacts/langscale001/PARTIAL_PROFILE.json
+          python research/langscale001/step_census.py --out ci-artifacts/langscale001/RECIPE_CENSUS.json
           python research/langscale001/readiness.py --out ci-artifacts/langscale001/READINESS.json
       - uses: actions/upload-artifact@v4
         if: always()
