@@ -215,6 +215,12 @@ class GroundedOCRDecoder(nn.Module):
         self.output = nn.Linear(c.d_model, VOCAB_SIZE, bias=False)
         self.output.weight = self.embedding.weight
 
+    def __setstate__(self, state):
+        # Module copy/unpickle restores a distinct Python model instance. Do not
+        # inherit its source instance's trusted local cache/state identity.
+        super().__setstate__(state)
+        self.model_tag = self.signature + ":" + uuid.uuid4().hex
+
     def _load_from_state_dict(self, *args, **kwargs):
         # A strict load may fail after copying some tensors. Invalidate first,
         # including when this decoder is loaded as a child of another module.

@@ -168,7 +168,8 @@ Implementation review: [TAC-OSM #690](https://github.com/FPC-effortless/TAC-OSM/
 
 Decoder states and visual caches bind to one local model/load generation.
 Successful, failed and parent-module `load_state_dict` calls invalidate earlier
-state and references before loading tensors. Detached states retain ownership;
+state and references before loading tensors. Copied/unpickled model instances
+receive new ownership identities. Detached states retain ownership;
 legacy untagged states must be rebuilt. The optional steady session preserves
 the tag and is rebuilt after loading, including `assign=True`. The public
 configuration signature and neural tensor graph remain unchanged. Tags are

@@ -2,7 +2,7 @@
   "scope": "LOCAL_CACHE_AND_STATE_LIFECYCLE_REPAIR_NO_GRAPH_OR_PARAMETER_CHANGE_CLAIMED",
   "original_source_commit": "02f70765d6af3bad7c2600f95b3f81b99301e8ed",
   "original_model_sha256": "db17b400af293c4c03ffe98f9fb87abe07446a1b41305205def2eeb103138fcb",
-  "candidate_model_sha256": "08d572cbf3690a9c38b37bb4b7dd011463938db3bbd1970f47fe26e7b3bd5960",
+  "candidate_model_sha256": "af541347b34fd58b4b67657fb162c04327e35cb93ba7a61ee6e29c5e752b60d6",
   "checks": {
     "scope": "NO_FIT_ENGINEERING_REPAIR_CHECK; NO_IMAGES_DATASET_OR_CHECKPOINT_FILES_LOADED",
     "fitted_models": 0,
@@ -13,7 +13,7 @@
       "device": "cpu",
       "threads": 1
     },
-    "elapsed_seconds": 0.7214615345001221,
+    "elapsed_seconds": 0.5851287841796875,
     "checks": [
       {
         "family": "gru",
@@ -68,7 +68,7 @@
   },
   "source_suite": {
     "command": "PYTHONPATH=src:. ../.venv/bin/python -m pytest -q research/tac_ocr001 research/tac_ocr002 research/tac_ocr003 tests/test_research_probe_agnostic.py",
-    "passed": 95
+    "passed": 104
   },
   "math_pin_gate": "FAIL_EXPECTED_ACTUAL_MODEL_DIFFERS_FROM_IMMUTABLE_ORIGINAL_MAP; prospective reciprocal PNDS binding required before integration",
   "new_fits": 0,
@@ -80,5 +80,12 @@
     "Arbitrary in-place weight mutation outside load_state_dict remains outside eager generation guarantee",
     "Source/math pin gate deliberately remains failing; no historical maps overwritten",
     "No trained OCR quality or architecture superiority qualification"
-  ]
+  ],
+  "review_counterexample": {
+    "old_head": "57e088e1c2fb796c7e9ebe893a91f1e548524855",
+    "all_three_families": "copy.deepcopy(model) retained tag and accepted source model state/references",
+    "retained_original_result": "95 tests passed on old head but missed clone ownership",
+    "repair": "nn.Module restoration __setstate__ regenerates owner generation for shallow copy, deepcopy and trusted in-memory pickle roundtrip",
+    "additional_tests": 9
+  }
 }

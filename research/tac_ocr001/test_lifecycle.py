@@ -1,4 +1,6 @@
 """No-fit state/cache lifetime regressions; constructed inputs, no data/checkpoints."""
+import copy
+import pickle
 from dataclasses import replace
 
 import pytest
@@ -83,3 +85,31 @@ def test_steady_preserves_tag_and_rejects_cross_instance_or_generation():
         _, current = model(tokens, fresh, owners=('a', 'b'))
         with pytest.raises(ValueError):
             session.step(tokens[:, :1], fresh, owners=('a', 'b'), state=current)
+
+
+@pytest.mark.parametrize('family', ['gru', 'transformer', 'tac'])
+@pytest.mark.parametrize('clone_kind', ['shallow', 'deep', 'pickle'])
+def test_copied_or_unpickled_model_has_distinct_state_ownership(family, clone_kind):
+    model, features, boxes, refs = tiny(family)
+    tokens = torch.tensor([[256, 1], [256, 2]])
+    with torch.no_grad():
+        expected, state = model(tokens, refs, owners=('a', 'b'))
+        if clone_kind == 'shallow':
+            clone = copy.copy(model)
+        elif clone_kind == 'deep':
+            clone = copy.deepcopy(model)
+        else:
+            # Trusted in-memory module roundtrip, no dataset/checkpoint files.
+            clone = pickle.loads(pickle.dumps(model))
+        assert clone is not model and clone.model_tag != model.model_tag
+        assert clone.signature == model.signature
+        for key, value in model.state_dict().items():
+            torch.testing.assert_close(value, clone.state_dict()[key], rtol=0, atol=0)
+        with pytest.raises(ValueError, match='another'):
+            clone(tokens, refs, owners=('a', 'b'))
+        own_refs = clone.prepare_visual(features, boxes, owners=('a', 'b'), page_ids=('p1', 'p1'))
+        with pytest.raises(ValueError, match='another'):
+            clone(tokens, own_refs, owners=('a', 'b'), state=state)
+        actual, own_state = clone(tokens, own_refs, owners=('a', 'b'))
+        torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+        assert own_state.model_tag == clone.model_tag
