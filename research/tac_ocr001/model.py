@@ -10,6 +10,7 @@ from dataclasses import asdict, dataclass, replace
 import hashlib
 import json
 import math
+import uuid
 
 import torch
 from torch import nn
@@ -64,6 +65,7 @@ class DecoderState:
     signature: str
     clock: int
     layers: tuple
+    model_tag: str = ""
 
     def tensors(self):
         result = {}
@@ -190,7 +192,7 @@ class GroundedOCRDecoder(nn.Module):
         self.config = config
         self.signature = hashlib.sha256(json.dumps(asdict(config), sort_keys=True).encode()).hexdigest()
         # References cannot silently cross model instances/checkpoint loads.
-        self.model_tag = self.signature + ":" + str(id(self))
+        self.model_tag = self.signature + ":" + uuid.uuid4().hex
         c = config
         self.embedding = nn.Embedding(VOCAB_SIZE, c.d_model)
         nn.init.normal_(self.embedding.weight, std=.02)
@@ -212,6 +214,12 @@ class GroundedOCRDecoder(nn.Module):
         self.output_norm = RMSNorm104(c.d_model)
         self.output = nn.Linear(c.d_model, VOCAB_SIZE, bias=False)
         self.output.weight = self.embedding.weight
+
+    def _load_from_state_dict(self, *args, **kwargs):
+        # A strict load may fail after copying some tensors. Invalidate first,
+        # including when this decoder is loaded as a child of another module.
+        self.model_tag = self.signature + ":" + uuid.uuid4().hex
+        return super()._load_from_state_dict(*args, **kwargs)
 
     def counts(self, *, frozen_encoder_parameters=0):
         if type(frozen_encoder_parameters) is not int or frozen_encoder_parameters < 0:
@@ -250,7 +258,7 @@ class GroundedOCRDecoder(nn.Module):
                 layers.append(new((1,b,c.d_model)))
             else:
                 layers.append((new((b,c.n_heads,0,c.d_model//c.n_heads)), new((b,c.n_heads,0,c.d_model//c.n_heads))))
-        return DecoderState(owners, self.signature, 0, tuple(layers))
+        return DecoderState(owners, self.signature, 0, tuple(layers), self.model_tag)
 
     def forward(self, tokens, references, *, owners, state=None, mode="chunk"):
         owners = owners_tuple(owners)
@@ -263,8 +271,8 @@ class GroundedOCRDecoder(nn.Module):
                 references.model_tag != self.model_tag):
             raise ValueError("visual references belong to another model/document")
         state = self.start(owners) if state is None else state
-        if state.owners != owners or state.signature != self.signature or len(state.layers) != self.config.n_layers:
-            raise ValueError("decoder state belongs to another document/configuration")
+        if state.owners != owners or state.signature != self.signature or state.model_tag != self.model_tag or len(state.layers) != self.config.n_layers:
+            raise ValueError("decoder state belongs to another document/model/load generation")
         if type(state.clock) is not int or state.clock < 0 or state.clock+tokens.shape[1] > 2**53:
             raise ValueError("legal exact-integer stream clock required")
         if tokens.device != self.embedding.weight.device:
@@ -286,7 +294,7 @@ class GroundedOCRDecoder(nn.Module):
             else:
                 x, next_layer = block(x, previous)
             final.append(next_layer)
-        return self.output(self.output_norm(x)), DecoderState(owners, self.signature, state.clock+t, tuple(final))
+        return self.output(self.output_norm(x)), DecoderState(owners, self.signature, state.clock+t, tuple(final), self.model_tag)
 
     def step(self, token, references, *, owners, state):
         if token.ndim != 2 or token.shape[1] != 1:

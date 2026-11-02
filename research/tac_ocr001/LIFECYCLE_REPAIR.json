@@ -1,0 +1,84 @@
+{
+  "scope": "LOCAL_CACHE_AND_STATE_LIFECYCLE_REPAIR_NO_GRAPH_OR_PARAMETER_CHANGE_CLAIMED",
+  "original_source_commit": "02f70765d6af3bad7c2600f95b3f81b99301e8ed",
+  "original_model_sha256": "db17b400af293c4c03ffe98f9fb87abe07446a1b41305205def2eeb103138fcb",
+  "candidate_model_sha256": "08d572cbf3690a9c38b37bb4b7dd011463938db3bbd1970f47fe26e7b3bd5960",
+  "checks": {
+    "scope": "NO_FIT_ENGINEERING_REPAIR_CHECK; NO_IMAGES_DATASET_OR_CHECKPOINT_FILES_LOADED",
+    "fitted_models": 0,
+    "optimizer_steps": 0,
+    "runtime": {
+      "python": "3.12.14",
+      "torch": "2.15.0+cpu",
+      "device": "cpu",
+      "threads": 1
+    },
+    "elapsed_seconds": 0.7214615345001221,
+    "checks": [
+      {
+        "family": "gru",
+        "unchanged_parameter_keys_and_values": true,
+        "config_signature_meaning_preserved": true,
+        "detach_preserves_model_tag": true,
+        "untagged_legacy_state_rejected": true,
+        "original_candidate_max_logit_delta": 0.0,
+        "cross_model_state_rejected": true,
+        "pre_load_refs_rejected": true,
+        "pre_load_state_rejected": true,
+        "nested_parent_load_invalidates_refs": true,
+        "failed_load_invalidates_refs": true,
+        "failed_load_invalidates_state": true,
+        "fresh_postload_inference_finite": true,
+        "optimizer_steps": 0
+      },
+      {
+        "family": "transformer",
+        "unchanged_parameter_keys_and_values": true,
+        "config_signature_meaning_preserved": true,
+        "detach_preserves_model_tag": true,
+        "untagged_legacy_state_rejected": true,
+        "original_candidate_max_logit_delta": 0.0,
+        "cross_model_state_rejected": true,
+        "pre_load_refs_rejected": true,
+        "pre_load_state_rejected": true,
+        "nested_parent_load_invalidates_refs": true,
+        "failed_load_invalidates_refs": true,
+        "failed_load_invalidates_state": true,
+        "fresh_postload_inference_finite": true,
+        "optimizer_steps": 0
+      },
+      {
+        "family": "tac",
+        "unchanged_parameter_keys_and_values": true,
+        "config_signature_meaning_preserved": true,
+        "detach_preserves_model_tag": true,
+        "untagged_legacy_state_rejected": true,
+        "original_candidate_max_logit_delta": 0.0,
+        "cross_model_state_rejected": true,
+        "pre_load_refs_rejected": true,
+        "pre_load_state_rejected": true,
+        "nested_parent_load_invalidates_refs": true,
+        "failed_load_invalidates_refs": true,
+        "failed_load_invalidates_state": true,
+        "fresh_postload_inference_finite": true,
+        "optimizer_steps": 0
+      }
+    ],
+    "all_pass": true
+  },
+  "source_suite": {
+    "command": "PYTHONPATH=src:. ../.venv/bin/python -m pytest -q research/tac_ocr001 research/tac_ocr002 research/tac_ocr003 tests/test_research_probe_agnostic.py",
+    "passed": 95
+  },
+  "math_pin_gate": "FAIL_EXPECTED_ACTUAL_MODEL_DIFFERS_FROM_IMMUTABLE_ORIGINAL_MAP; prospective reciprocal PNDS binding required before integration",
+  "new_fits": 0,
+  "optimizer_updates": 0,
+  "protected_test_access": false,
+  "prior_candidate_review": "LABOPS003 separate-session review bound to model.py SHA08d572; NOT review of this integration head or steady adapter",
+  "limitations": [
+    "Trusted local generation identity, not cryptographic attestation",
+    "Arbitrary in-place weight mutation outside load_state_dict remains outside eager generation guarantee",
+    "Source/math pin gate deliberately remains failing; no historical maps overwritten",
+    "No trained OCR quality or architecture superiority qualification"
+  ]
+}

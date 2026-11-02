@@ -163,3 +163,19 @@ Prior art: [TrOCR](https://arxiv.org/abs/2109.10282),
 and [Tesseract performance guidance](https://tesseract-ocr.github.io/tessdoc/FAQ).
 
 Implementation review: [TAC-OSM #690](https://github.com/FPC-effortless/TAC-OSM/pull/690). Mathematical companion: [PNDS #105](https://github.com/FPC-effortless/pnds-lean/pull/105).
+
+## Draft state/cache lifecycle repair (TAC-OCR-004)
+
+Decoder states and visual caches bind to one local model/load generation.
+Successful, failed and parent-module `load_state_dict` calls invalidate earlier
+state and references before loading tensors. Detached states retain ownership;
+legacy untagged states must be rebuilt. The optional steady session preserves
+the tag and is rebuilt after loading, including `assign=True`. The public
+configuration signature and neural tensor graph remain unchanged. Tags are
+trusted local metadata, not cryptographic checkpoint identity. Arbitrary direct
+in-place parameter mutation is outside the eager generation guarantee.
+
+See `LIFECYCLE_REPAIR.json` for no-fit receipts. The original reciprocal PNDS
+source maps are immutable and intentionally reject the repaired source bytes.
+A prospective reciprocal PNDS source/math binding and separate exact-head
+review remain required before integration; these checks do not authorize fit.

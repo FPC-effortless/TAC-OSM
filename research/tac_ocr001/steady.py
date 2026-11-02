@@ -67,11 +67,12 @@ class SteadyTACSession:
     def __init__(self,model,references,state):
         if model.config.family!="tac" or model.training or model.config.window<2:
             raise ValueError("eval TAC and a nonempty local cache required")
-        if state.clock<model.config.window-1 or state.signature!=model.signature or state.owners!=references.owners:
+        if state.clock<model.config.window-1 or state.signature!=model.signature or state.model_tag!=model.model_tag or state.owners!=references.owners:
             raise ValueError("prefill full local window with same-owner state first")
         if references.model_tag!=model.model_tag:
             raise ValueError("same model visual references required")
         self.model,self.owners=model,state.owners
+        self.model_tag=model.model_tag
         self.reference_shape=tuple(references.keys.shape)
         self.reference_schema=tuple((tuple(x.shape),x.dtype,x.device) for x in (references.keys,references.values))
         self.state_schema=tuple((tuple(x.shape),x.dtype,x.device) for x in state.tensors().values())
@@ -92,6 +93,7 @@ class SteadyTACSession:
         if torch.is_grad_enabled():
             raise ValueError("frozen graph is inference only; use no_grad/inference_mode")
         if (tuple(owners)!=self.owners or state.owners!=self.owners or state.signature!=self.model.signature or
+                state.model_tag!=self.model_tag or self.model.model_tag!=self.model_tag or
                 references.owners!=self.owners or references.model_tag!=self.model.model_tag or
                 tuple(references.keys.shape)!=self.reference_shape):
             raise ValueError("steady kernel owner/config/reference shape changed")
@@ -109,4 +111,4 @@ class SteadyTACSession:
         values=self.graph(tokens,references.keys,references.values,
             torch.tensor(state.clock,device=tokens.device,dtype=torch.float64),*state.tensors().values())
         layers=tuple(LayerState104(*values[1+i*7:1+(i+1)*7]) for i in range(c.n_layers))
-        return values[0],DecoderState(self.owners,self.model.signature,state.clock+1,layers)
+        return values[0],DecoderState(self.owners,self.model.signature,state.clock+1,layers,self.model_tag)
