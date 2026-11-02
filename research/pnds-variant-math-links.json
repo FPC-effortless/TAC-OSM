@@ -1,7 +1,7 @@
 {
   "schema": "pnds.tac_osm.variant_math_links.v1",
   "foundation_version": "1.0.0",
-  "coverage": "17_indexed_historical_versions_only_not_full_archive",
+  "coverage": "17_indexed_historical_versions_plus_3_COLLECT016_conditions_partial_not_full_archive",
   "canonical_authority": {
     "mathematics": "FPC-effortless/pnds-lean",
     "source_and_evidence": "FPC-effortless/TAC-OSM"
@@ -532,6 +532,113 @@
       "lean_full_graph_proved": false,
       "python_source_equivalence_verified": false,
       "real_world_capability_inferred": false
+    },
+    {
+      "id": "COLLECT016-FULL_BPTT",
+      "lane": "system1",
+      "version": "COLLECT016",
+      "state_kind": "native_recurrent_with_preconditioned_phase_memory",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "2209e1328e3b42db4dd48cd702a21a55ffad24af",
+        "pull_request": 700,
+        "evidence_path": "research/collect016/results",
+        "bridge_path": "research/collect016/mathematics/variant-math-links.json"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "commit": "fd948078115bd89b8685f1e2e62bbde166ceb4c4",
+        "pull_request": 107,
+        "lean_path": "PNDS/COLLECT016.lean",
+        "lean_symbol": "COLLECT016.CausalSequenceGraph",
+        "python_path": "foundation/v1/collect016/reference.py",
+        "python_symbol": "whole_reference",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "delta",
+      "formula": "phase S' = S + g (v-Sk) (Pk/max(k^T Pk,1e-8))^T; normalized preconditioned rule, not exact RLS",
+      "operator_contracts": [
+        "OP-GATE",
+        "OP-DELTA"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false,
+      "additional_scope": "Local exact-real Lean definitions plus whole-graph Python finite numerical/surrogate-gradient fixtures; full Lean/IEEE/AD release OPEN",
+      "credit_horizon": 384,
+      "active_parameters": 99971
+    },
+    {
+      "id": "COLLECT016-DETACH_128",
+      "lane": "system1",
+      "version": "COLLECT016",
+      "state_kind": "native_recurrent_with_preconditioned_phase_memory",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "2209e1328e3b42db4dd48cd702a21a55ffad24af",
+        "pull_request": 700,
+        "evidence_path": "research/collect016/results",
+        "bridge_path": "research/collect016/mathematics/variant-math-links.json"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "commit": "fd948078115bd89b8685f1e2e62bbde166ceb4c4",
+        "pull_request": 107,
+        "lean_path": "PNDS/COLLECT016.lean",
+        "lean_symbol": "COLLECT016.CausalSequenceGraph",
+        "python_path": "foundation/v1/collect016/reference.py",
+        "python_symbol": "whole_reference",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "delta",
+      "formula": "phase S' = S + g (v-Sk) (Pk/max(k^T Pk,1e-8))^T; normalized preconditioned rule, not exact RLS",
+      "operator_contracts": [
+        "OP-GATE",
+        "OP-DELTA"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false,
+      "additional_scope": "Local exact-real Lean definitions plus whole-graph Python finite numerical/surrogate-gradient fixtures; full Lean/IEEE/AD release OPEN",
+      "credit_horizon": 128,
+      "active_parameters": 99971
+    },
+    {
+      "id": "COLLECT016-CURRENT_ONLY",
+      "lane": "system1",
+      "version": "COLLECT016",
+      "state_kind": "native_recurrent_with_current_value_phase_lane",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "2209e1328e3b42db4dd48cd702a21a55ffad24af",
+        "pull_request": 700,
+        "evidence_path": "research/collect016/results",
+        "bridge_path": "research/collect016/mathematics/variant-math-links.json"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "commit": "fd948078115bd89b8685f1e2e62bbde166ceb4c4",
+        "pull_request": 107,
+        "lean_path": "PNDS/COLLECT016.lean",
+        "lean_symbol": "COLLECT016.CausalSequenceGraph",
+        "python_path": "foundation/v1/collect016/reference.py",
+        "python_symbol": "whole_reference",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "gated",
+      "formula": "phase_read = route * sigmoid(admit) * write_mask * route * value; other native states retained",
+      "operator_contracts": [
+        "OP-GATE"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false,
+      "additional_scope": "Local exact-real Lean definitions plus whole-graph Python finite numerical/surrogate-gradient fixtures; full Lean/IEEE/AD release OPEN",
+      "credit_horizon": 384,
+      "active_parameters": 99907
     }
   ]
 }

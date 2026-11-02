@@ -1,0 +1,19 @@
+{
+  "study": "COLLECT016",
+  "status": "DECLARED_BEFORE_INSPECTING_FULL_FIT_ARTIFACTS",
+  "source_commit": "2209e1328e3b42db4dd48cd702a21a55ffad24af",
+  "all_original_steps": 512,
+  "all_original_checkpoints": [
+    0,
+    128,
+    256,
+    512
+  ],
+  "replay_cross_runtime_max_abs": 2e-05,
+  "trained_reference_FP32_atol_rtol": 3e-05,
+  "trained_reference_FP64_atol_rtol": 2e-09,
+  "objective_arithmetic_abs_tolerance": 5e-06,
+  "source_exposure": "reconstruct all 512 original batches from independent source-offset/record composition and compare integer-byte hashes; also compare paired exposure sequences",
+  "gradient_probe": "Final answer-only loss, early chunk activation/state gradients; exact zero required only for declared detach, all other norms reported without assumed lower bound.",
+  "claims": "Engineering fixture and recorded-source checks only, not independent source authentication or full formal/IEEE/AD proof"
+}
