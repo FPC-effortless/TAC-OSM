@@ -1,0 +1,87 @@
+{
+  "status": "BLOCKED_NOT_TRAINED",
+  "training_launched": false,
+  "optimizer_updates": 0,
+  "compute_plan": {
+    "schema": "tac-osm.compute-decision.v1",
+    "run_id": "langscale001",
+    "issue_number": 694,
+    "variant": "System 1",
+    "kind": "training",
+    "backend": "kaggle_t4x2",
+    "accelerator": "NvidiaTeslaT4",
+    "gpu_devices_required": 2,
+    "cpu_estimate_minutes": 600,
+    "gpu_budget_minutes": 240,
+    "state": "BLOCKED_EVIDENCE_OR_DESIGN",
+    "reasons": [
+      "declared CUDA requirement or long job with justified GPU acceleration"
+    ],
+    "blockers": [
+      "Kaggle script not source-registered",
+      "independent authorized Kaggle dataset reference absent",
+      "independent signed prefit reward/source/ACL evidence required at execution"
+    ],
+    "approved_to_train": false,
+    "approved_to_open_test": false,
+    "automatic_submissions": false,
+    "source_contract_fingerprint": "d0a1a58b66f0a261e593643d07da50baa616d47bf73e2bb53755af054f9af052"
+  },
+  "preflight": [
+    {
+      "scale": "small",
+      "canonical_preflight_exit": 2,
+      "canonical_preflight_stdout": "",
+      "canonical_preflight_stderr": "RESEARCH_PARITY_HARD_FAILURE: tac_memory_scaled dev_split_sha256 must be real 64-char SHA256 evidence\n",
+      "independent_evidence": {
+        "status": "BLOCKED",
+        "reason": "independent reward/outcome/access attestation missing"
+      }
+    },
+    {
+      "scale": "medium",
+      "canonical_preflight_exit": 2,
+      "canonical_preflight_stdout": "",
+      "canonical_preflight_stderr": "RESEARCH_PARITY_HARD_FAILURE: tac_memory_scaled dev_split_sha256 must be real 64-char SHA256 evidence\n",
+      "independent_evidence": {
+        "status": "BLOCKED",
+        "reason": "independent reward/outcome/access attestation missing"
+      }
+    }
+  ],
+  "additional_open_items": [
+    "Fresh independently qualified validation and TEST contract; do not reuse original DEV for selection",
+    "Full forward/CE/backward/AdamW FLOP accounting; partial profiler totals do not suffice",
+    "Source-matched PNDS Lean build/axiom and reciprocal checks",
+    "Private offline dual-T4 source staging, observed devices and quota execution grant"
+  ],
+  "historical_source_order_receipt": {
+    "status": "HISTORICAL_FIT_BYTES_AND_COORDINATES_AUTHENTICATED_NOT_INDEPENDENT_SIGNOFF",
+    "source_sha256": "94fc488af0e975c0643e1d566d0468a4091199fdae02b159c8669a01bebef842",
+    "source_receipt_sha256": "d9604b3c243c07030842e034a945de80ab43289db34fad50d67f2937e860295a",
+    "fit_archive_sha256": "c480d01a701766e3adec9dd3b70cbf2af01efd1504370bfd549abe48e8fe2566",
+    "fit_files": 560,
+    "fit_file_identity_sha256": "7236648103ea8b7a8d974bb20d68732ff01bf34727f4effebdf315a879baeed2",
+    "source_metadata_scope": "Original receipt includes historical DEV metadata; no DEV bytes present in FIT-only archive and no DEV scoring",
+    "new_model_data_access": false,
+    "optimizer_updates": 0,
+    "orders": {
+      "10301": {
+        "coordinates_sha256": "25d72b2a2af9f9d1d67410da29760ea4ae8d71406b7cfbc1fc5cec028e49fc80",
+        "windows": 10240,
+        "target_presentations": 1310720
+      },
+      "10302": {
+        "coordinates_sha256": "6b6593537515d77ec5d2d8343cfa5bfae56b418492fd693b699fce8b869d930f",
+        "windows": 10240,
+        "target_presentations": 1310720
+      },
+      "10303": {
+        "coordinates_sha256": "230fa0cb6962cc1bc4651e85c53a3538a205b124902524f5b140edabec920878",
+        "windows": 10240,
+        "target_presentations": 1310720
+      }
+    }
+  },
+  "public_key_injected": false
+}
