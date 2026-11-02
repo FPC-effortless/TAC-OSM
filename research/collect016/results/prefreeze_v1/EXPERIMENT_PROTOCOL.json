@@ -1,0 +1,41 @@
+{
+  "study": "COLLECT016",
+  "status": "REGISTERED_BEFORE_NEW_FITS",
+  "question": "Does connected cross-window credit plus explicit source-copy supervision produce query-dependent delayed retrieval, and does the historical phase lane help beyond a separately trained current-value lane?",
+  "arms": [
+    "full_bptt",
+    "detach_128",
+    "current_only"
+  ],
+  "seeds": [
+    16001,
+    16002,
+    16003
+  ],
+  "steps": 768,
+  "batch": 2,
+  "length": 384,
+  "chunk": 128,
+  "gradient_horizon": {
+    "full_bptt": 384,
+    "detach_128": 128,
+    "current_only": 384
+  },
+  "data": "One natural TRAIN window and one constructed source-quotation copy episode per step; no DEV/task examples enter training.",
+  "training_keys": "first character a-m; second a-z",
+  "dev_keys": "first character n-z; second a-z",
+  "values": "Verbatim 8-byte source quotations starting with a-h; supervise copying first 4 bytes.",
+  "overwrites": "one third of training steps; all held-out copy assays overwrite first half of active keys",
+  "absence": "one fifth of training steps; answer ????",
+  "loss": "natural NLL + .25 task-sequence NLL + 1 answer NLL + .01 mean Switch balance",
+  "control": "current_only removes 4096 inactive address parameters and reallocates 4032 parameters to FFNs; 99907 vs 99971 total, 0.064% difference; all compatible initializer tensors and original FFN slices shared. Other native temporal paths remain.",
+  "limitations": [
+    "Joint curriculum changes exposure and objective together; no long-context LM-only fitted control here.",
+    "Current-only FFN reallocation changes capacity distribution; not an exact same-shape intervention.",
+    "Neither a negative nor positive pilot yields a final architecture verdict.",
+    "No full FLOPs parity or competitive global-attention claim.",
+    "Constructed copy interface is mechanism evidence; ordinary real-text DEV is separate."
+  ],
+  "retention": "immutable init and 256-step model/AdamW/RNG checkpoints; fixed final, no best seed or checkpoint selection",
+  "quota_gpu_minutes": 0
+}
