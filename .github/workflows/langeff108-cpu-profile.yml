@@ -1,0 +1,37 @@
+name: LANGEFF108 CPU source profiler
+on:
+  push:
+    branches:
+      - research/langeff108-cpu-profile-2026-11-02
+    paths:
+      - research/langeff108/**
+      - .github/workflows/langeff108-cpu-profile.yml
+  pull_request:
+    paths:
+      - research/langeff108/**
+      - .github/workflows/langeff108-cpu-profile.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  profile-cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU profiler dependencies
+        run: python -m pip install torch
+      - name: Run matched source profiler (no model training)
+        run: python -m research.langeff108.profile_cpu --output ci-artifacts/langeff108/PROFILE.json
+      - name: Upload performance receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGEFF108-CPU-profile
+          path: ci-artifacts/langeff108/PROFILE.json
+          if-no-files-found: warn
