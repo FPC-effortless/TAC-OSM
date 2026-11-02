@@ -4,7 +4,7 @@ This does not weaken or impersonate canonical scientific preflight. Qualified
 training uses the separate signed gate. An owner-exploratory exception, if
 explicitly authorized, permits FIT optimization only, never qualification.
 """
-import argparse,hashlib,json,os,random,signal,sys,time
+import argparse,hashlib,json,os,random,signal,sys,time,shutil
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
 sys.path.insert(0,str(HERE))
@@ -30,6 +30,21 @@ def authorized(path):
  require(a.get('optimizer_updates_per_fit')==2560 and a.get('max_parallel_jobs')==3,'budget changed')
  require(a.get('milestones')==[256,512,1024,2048,2560],'milestone retention changed')
  return a
+
+
+def retain_resume_milestones(resume,output,completed,milestones):
+ old=json.loads((resume.parent/'FIT_RECEIPT.json').read_text())
+ copied=[]
+ for cp in old['checkpoints']:
+  if cp['steps'] not in milestones or cp['steps']>completed or not cp['path'].startswith('STEP_'):continue
+  require(cp['path']=='STEP_'+str(cp['steps']).zfill(4)+'.pt','noncanonical resume milestone path')
+  source=resume.parent/cp['path'];target=output/cp['path']
+  require(sha(source)==cp['sha256'],'prior milestone digest differs')
+  require(not target.exists(),'prior milestone target already exists')
+  shutil.copy2(source,target);require(sha(target)==cp['sha256'],'prior milestone copy differs')
+  copied.append(cp)
+ require(sorted(c['steps'] for c in copied)==[v for v in milestones if v<=completed],'prior resume milestones missing')
+ return copied
 
 def fit(args):
  # This check precedes any dataset read, model construction, output creation or optimizer.
@@ -70,6 +85,7 @@ def fit(args):
   for _ in range(completed*4):next(stream)
   torch.set_rng_state(saved['rng_cpu']);random.setstate(saved['rng_python'])
   initial_digest=saved['initial_parameter_sha256'];resume_receipt={'sha256':args.resume_sha256,'steps':completed}
+  receipts=retain_resume_milestones(args.resume,args.output,completed,a['milestones'])
  for sig in (signal.SIGTERM,signal.SIGINT):signal.signal(sig,lambda *_:abort.__setitem__(0,True))
  def checkpoint(name,status):
   target=args.output/name;temp=args.output/(name+'.tmp')
@@ -92,7 +108,7 @@ def fit(args):
   for step in range(completed+1,2561):
    if time.monotonic()-started>=40*60:abort[0]=True
    if abort[0]:
-    checkpoint('INTERRUPTED.pt','INTERRUPTED');report('INTERRUPTED_RETAINED');return
+    checkpoint('INTERRUPTED.pt','INTERRUPTED');report('INTERRUPTED_RETAINED');raise SystemExit(75)
    coordinates=[next(stream) for _ in range(4)]
    pieces=[data[n][offset:offset+129] for n,offset in coordinates]
    require(all(len(b)==129 for b in pieces),'cross-file target')

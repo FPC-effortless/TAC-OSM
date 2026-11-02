@@ -87,7 +87,7 @@ jobs:
           retention-days: 90
   audit:
     needs: [authorization-plan, fit]
-    if: needs.fit.result == 'success'
+    if: always() && needs.authorization-plan.outputs.permit == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:

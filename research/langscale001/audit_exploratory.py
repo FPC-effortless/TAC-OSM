@@ -54,4 +54,9 @@ def audit(inputs,out,authorization):
    'full_compute_parity':'OPEN','independent_scientific_qualification':False,'architecture_superiority_claim':False},indent=2)+'\n')
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--inputs',type=Path,required=True);p.add_argument('--out',type=Path,required=True)
- p.add_argument('--authorization',type=Path,default=HERE/'EXPLORATORY_AUTHORIZATION.json');a=p.parse_args();audit(a.inputs,a.out,a.authorization)
+ p.add_argument('--authorization',type=Path,default=HERE/'EXPLORATORY_AUTHORIZATION.json');a=p.parse_args()
+ try:audit(a.inputs,a.out,a.authorization)
+ except Exception as error:
+  a.out.parent.mkdir(parents=True,exist_ok=True)
+  a.out.write_text(json.dumps({'status':'EXPLORATORY_COHORT_AUDIT_FAILED_OR_INCOMPLETE','error':str(error),'optimizer_updates_during_audit':0,'independent_scientific_qualification':False},indent=2)+'\n')
+  raise
