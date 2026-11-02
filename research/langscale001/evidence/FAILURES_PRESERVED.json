@@ -1,0 +1,28 @@
+{
+  "schema": "langscale001.preserved-engineering-failures.v1",
+  "failures": [
+    {
+      "stage": "local partial profiler first invocation",
+      "error": "AttributeError: module 'profile' has no attribute 'runctx'",
+      "cause": "Study script named profile.py shadowed Python standard library profile",
+      "correction": "Renamed to profile_compute.py; full ten-configuration partial coverage retry completed",
+      "model_or_original_checkpoint_changed": false
+    },
+    {
+      "stage": "source reciprocal registry workflow",
+      "run_id": 41401196578,
+      "job_id": 125133179084,
+      "error": "TAC-OSM and PNDS mathematical version registries have drifted",
+      "cause": "Legacy checker fetched PNDS main while the registered four variants live at a pinned unmerged PNDS commit",
+      "correction": "Keep exact JSON equality; select the immutable PNDS_PIN registry commit when this study exists, preserving main fallback otherwise",
+      "check_disabled": false
+    },
+    {
+      "stage": "canonical new-study training preflight",
+      "status": "STILL_BLOCKED",
+      "error": "dev_split_sha256 must be real 64-char SHA256 evidence",
+      "separate_gate": "independent reward/outcome/access attestation missing",
+      "correction": "None claimed; training was not launched"
+    }
+  ]
+}

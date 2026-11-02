@@ -1,0 +1,188 @@
+{
+  "study_id": "LANGSCALE001",
+  "status": "DESIGN_FROZEN_EXECUTION_BLOCKED",
+  "source_lineage": "LANGCAP105; originals unchanged",
+  "prediction_boundary": "Observed bytes through t only; predict byte t+1; state per unique file stream; reset per 128-byte chunk",
+  "primary_question": "Does reallocating matched TAC parameters to larger temporal state improve its 1M-to-10M real-code FIT learning curve?",
+  "interpretation_limit": "The same-width arm trades head capacity for state; the scaled-memory arm also changes width. Neither isolates an abstract state-size-only cause.",
+  "arms": [
+    {
+      "scale": "small",
+      "target": 1000000,
+      "arm": "tac_memory_scaled",
+      "depth": 8,
+      "d": 232,
+      "c": 32,
+      "k": 8,
+      "v": 16,
+      "trainable_parameters": 1000360,
+      "deployed_parameters": 1000360,
+      "head_width": 152,
+      "head_parameters": 110464,
+      "recurrent_state_floats": 3256,
+      "nonlexical_state_floats": 2560
+    },
+    {
+      "scale": "small",
+      "target": 1000000,
+      "arm": "tac_head_to_state",
+      "depth": 8,
+      "d": 256,
+      "c": 24,
+      "k": 6,
+      "v": 12,
+      "trainable_parameters": 999652,
+      "deployed_parameters": 999652,
+      "head_width": 106,
+      "head_parameters": 82388,
+      "recurrent_state_floats": 2304,
+      "nonlexical_state_floats": 1536
+    },
+    {
+      "scale": "small",
+      "target": 1000000,
+      "arm": "tac_associative_stack",
+      "width": 256,
+      "depth": 8,
+      "trainable_parameters": 1000028,
+      "deployed_parameters": 1000028,
+      "head_width": 246,
+      "head_parameters": 190188,
+      "recurrent_state_floats": 1536,
+      "nonlexical_state_floats": 768
+    },
+    {
+      "scale": "small",
+      "target": 1000000,
+      "arm": "causal_transformer",
+      "width": 128,
+      "depth": 4,
+      "ffn": 649,
+      "trainable_parameters": 999972,
+      "deployed_parameters": 999972
+    },
+    {
+      "scale": "small",
+      "target": 1000000,
+      "arm": "stacked_gru",
+      "width": 193,
+      "depth": 4,
+      "trainable_parameters": 997680,
+      "deployed_parameters": 997680,
+      "recurrent_state_floats": 772
+    },
+    {
+      "scale": "medium",
+      "target": 10000000,
+      "arm": "tac_memory_scaled",
+      "depth": 8,
+      "d": 856,
+      "c": 64,
+      "k": 16,
+      "v": 32,
+      "trainable_parameters": 10000942,
+      "deployed_parameters": 10000942,
+      "head_width": 571,
+      "head_parameters": 1126838,
+      "recurrent_state_floats": 11784,
+      "nonlexical_state_floats": 9216
+    },
+    {
+      "scale": "medium",
+      "target": 10000000,
+      "arm": "tac_head_to_state",
+      "depth": 8,
+      "d": 992,
+      "c": 32,
+      "k": 8,
+      "v": 16,
+      "trainable_parameters": 10000888,
+      "deployed_parameters": 10000888,
+      "head_width": 116,
+      "head_parameters": 262312,
+      "recurrent_state_floats": 5536,
+      "nonlexical_state_floats": 2560
+    },
+    {
+      "scale": "medium",
+      "target": 10000000,
+      "arm": "tac_associative_stack",
+      "width": 992,
+      "depth": 8,
+      "trainable_parameters": 9999922,
+      "deployed_parameters": 9999922,
+      "head_width": 465,
+      "head_parameters": 1044770,
+      "recurrent_state_floats": 3744,
+      "nonlexical_state_floats": 768
+    },
+    {
+      "scale": "medium",
+      "target": 10000000,
+      "arm": "causal_transformer",
+      "width": 256,
+      "depth": 8,
+      "ffn": 1889,
+      "trainable_parameters": 9999880,
+      "deployed_parameters": 9999880
+    },
+    {
+      "scale": "medium",
+      "target": 10000000,
+      "arm": "stacked_gru",
+      "width": 634,
+      "depth": 4,
+      "trainable_parameters": 9987024,
+      "deployed_parameters": 9987024,
+      "recurrent_state_floats": 2536
+    }
+  ],
+  "seeds": [
+    10301,
+    10302,
+    10303
+  ],
+  "fit": {
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.1,
+    "batch_size": 4,
+    "sequence_length": 128,
+    "steps": 2560,
+    "precision": "FP32",
+    "warmup": false,
+    "gradient_clipping": false,
+    "state_carry_across_batches": false
+  },
+  "horizon": {
+    "compare_fit_learning_curves_at": [
+      256,
+      512,
+      1024,
+      2048,
+      2560
+    ],
+    "additional_training_after_2560": "requires new registration",
+    "checkpoints": "retain every listed milestone, plus first and final; never overwrite original LANGCAP105 artifacts"
+  },
+  "evaluation": {
+    "original_langcap105_dev": "ARCHIVE_ONLY_NO_RESCORING_OR_TUNING",
+    "new_validation": "NOT_YET_SOURCE_QUALIFIED",
+    "sealed_test": "UNOPENED_NOT_YET_SOURCE_QUALIFIED",
+    "model_selection": "NONE_UNTIL_INDEPENDENT_EVALUATION_REGISTRATION"
+  },
+  "information_threat_model": [
+    "No DEV or TEST files in trainer mounts",
+    "No future bytes or target metadata passed into model forward",
+    "Authentic source receipt and per-file chunk boundaries required",
+    "Seed-shared data coordinates; no cross-file carried state",
+    "Independent evaluator and signing key remain outside actor access"
+  ],
+  "scope": "New controlled follow-up, not a continuation or relabeling of original checkpoints",
+  "new_optimizer_updates": 0
+}

@@ -1,0 +1,117 @@
+name: LANGSCALE001 pending owner-exploratory FIT-only campaign
+on:
+  pull_request:
+    paths:
+      - 'research/langscale001/EXPLORATORY_AUTHORIZATION.json'
+      - 'research/langscale001/exploratory_fit.py'
+      - 'research/langscale001/audit_exploratory.py'
+      - '.github/workflows/langscale001-exploratory-fit.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: langscale001-owner-fit-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  authorization-plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      permit: ${{ steps.plan.outputs.permit }}
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Default deny; explicit owner exception must be recorded before any FIT job
+        id: plan
+        run: |
+          python - <<'PY'
+          import json,os,sys
+          from pathlib import Path
+          sys.path.insert(0,'research/langscale001')
+          from exploratory_fit import authorized
+          path=Path('research/langscale001/EXPLORATORY_AUTHORIZATION.json')
+          a=json.loads(path.read_text())
+          if a['owner_authorized'] is True:
+              authorized(path)
+              permit=True
+          else:
+              permit=False
+          p=json.load(open('research/langscale001/PROTOCOL.json'))
+          rows=[{'scale':r['scale'],'arm':r['arm'],'seed':seed} for r in p['arms'] for seed in p['seeds']]
+          assert len(rows)==30
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('permit='+str(permit).lower()+'\n')
+              f.write('matrix='+json.dumps({'include':rows},separators=(',',':'))+'\n')
+          print({'status':'EXPLICIT_OWNER_EXCEPTION_RECORDED' if permit else 'PENDING_EXPLICIT_OWNER_EXCEPTION_NO_TRAINING','planned_fits':len(rows),'qualified_scientific_preflight_passed':False})
+          PY
+  fit:
+    needs: authorization-plan
+    if: needs.authorization-plan.outputs.permit == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.authorization-plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: LANGCAP105-authentic-FIT-only-inputs
+          run-id: 41229365510
+          github-token: ${{ github.token }}
+          path: ci-input/FIT-only
+      - name: Actual FIT-only optimization after explicit owner exception, never DEV/TEST
+        run: |
+          python research/langscale001/exploratory_fit.py \
+            --scale '${{ matrix.scale }}' --arm '${{ matrix.arm }}' --seed ${{ matrix.seed }} \
+            --source-receipt ci-input/FIT-only/langcap105-source/SOURCE_RECEIPT.json \
+            --fit-archive ci-input/FIT-only/langcap105-FIT/FIT_ONLY.tar \
+            --output ci-artifacts/FIT
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGSCALE001-exploratory-${{ matrix.scale }}-${{ matrix.arm }}-${{ matrix.seed }}
+          path: ci-artifacts/FIT/
+          if-no-files-found: warn
+          retention-days: 90
+  audit:
+    needs: [authorization-plan, fit]
+    if: always() && needs.authorization-plan.outputs.permit == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install 'torch==2.15.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: LANGSCALE001-exploratory-*
+          path: ci-input/all-fits
+      - name: Verify all 30 actual FIT receipts, milestones, weights, optimizer counts and bounded graphs
+        run: |
+          mkdir -p ci-artifacts/audit
+          python research/langscale001/audit_exploratory.py --inputs ci-input/all-fits --out ci-artifacts/audit/ALL_30_FIT_AUDIT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGSCALE001-owner-exploratory-full-cohort-audit
+          path: ci-artifacts/audit/
+          if-no-files-found: error
+          retention-days: 90
