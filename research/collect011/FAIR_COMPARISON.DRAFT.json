@@ -1,0 +1,194 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "COLLECT011-LM",
+  "study_type": "architecture_comparison",
+  "status": "DRAFT_NOT_QUALIFIED_NO_FITS",
+  "registered_before_first_fit": true,
+  "model_scale_policy": "declared-target-v2",
+  "parameter_scale": {
+    "target_trainable_parameters": 208000,
+    "target_deployed_parameters": 208000,
+    "relative_tolerance": 0.05,
+    "registered_before_first_fit": true,
+    "rationale": "Four physical TAC layers retain native fast/slow/rotating-field and SSA modules; smallest selected width 32. All used parameters counted. FFNs adjusted for <=1% gap."
+  },
+  "real_world_source": {
+    "name": "Pinned Tiny Shakespeare TRAIN/DEV from TACOPT114 artifact",
+    "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "license": "OPEN: original publisher/license authority must be attached to signed source evidence",
+    "observed_real_outcomes": null
+  },
+  "arms": [
+    {
+      "architecture": "attention",
+      "trainable_parameters": 208227,
+      "deployed_parameters": 208227,
+      "ffn_dim": 64,
+      "state_bytes_per_stream_at_start": 40064,
+      "seed": 1
+    },
+    {
+      "architecture": "delta",
+      "trainable_parameters": 208231,
+      "deployed_parameters": 208231,
+      "ffn_dim": 85,
+      "state_bytes_per_stream_at_start": 105600,
+      "seed": 1
+    },
+    {
+      "architecture": "phase_p",
+      "trainable_parameters": 208231,
+      "deployed_parameters": 208231,
+      "ffn_dim": 85,
+      "state_bytes_per_stream_at_start": 171136,
+      "seed": 1
+    },
+    {
+      "architecture": "hybrid_p",
+      "trainable_parameters": 208387,
+      "deployed_parameters": 208387,
+      "ffn_dim": 83,
+      "state_bytes_per_stream_at_start": 72832,
+      "seed": 1
+    },
+    {
+      "architecture": "hybrid_hard_p",
+      "trainable_parameters": 208387,
+      "deployed_parameters": 208387,
+      "ffn_dim": 83,
+      "state_bytes_per_stream_at_start": 72832,
+      "seed": 1
+    },
+    {
+      "architecture": "phase_p_support",
+      "trainable_parameters": 208231,
+      "deployed_parameters": 208231,
+      "ffn_dim": 85,
+      "state_bytes_per_stream_at_start": 171136,
+      "seed": 1
+    },
+    {
+      "architecture": "attention",
+      "trainable_parameters": 208227,
+      "deployed_parameters": 208227,
+      "ffn_dim": 64,
+      "state_bytes_per_stream_at_start": 40064,
+      "seed": 2
+    },
+    {
+      "architecture": "delta",
+      "trainable_parameters": 208231,
+      "deployed_parameters": 208231,
+      "ffn_dim": 85,
+      "state_bytes_per_stream_at_start": 105600,
+      "seed": 2
+    },
+    {
+      "architecture": "phase_p",
+      "trainable_parameters": 208231,
+      "deployed_parameters": 208231,
+      "ffn_dim": 85,
+      "state_bytes_per_stream_at_start": 171136,
+      "seed": 2
+    },
+    {
+      "architecture": "hybrid_p",
+      "trainable_parameters": 208387,
+      "deployed_parameters": 208387,
+      "ffn_dim": 83,
+      "state_bytes_per_stream_at_start": 72832,
+      "seed": 2
+    },
+    {
+      "architecture": "hybrid_hard_p",
+      "trainable_parameters": 208387,
+      "deployed_parameters": 208387,
+      "ffn_dim": 83,
+      "state_bytes_per_stream_at_start": 72832,
+      "seed": 2
+    },
+    {
+      "architecture": "phase_p_support",
+      "trainable_parameters": 208231,
+      "deployed_parameters": 208231,
+      "ffn_dim": 85,
+      "state_bytes_per_stream_at_start": 171136,
+      "seed": 2
+    },
+    {
+      "architecture": "attention",
+      "trainable_parameters": 208227,
+      "deployed_parameters": 208227,
+      "ffn_dim": 64,
+      "state_bytes_per_stream_at_start": 40064,
+      "seed": 3
+    },
+    {
+      "architecture": "delta",
+      "trainable_parameters": 208231,
+      "deployed_parameters": 208231,
+      "ffn_dim": 85,
+      "state_bytes_per_stream_at_start": 105600,
+      "seed": 3
+    },
+    {
+      "architecture": "phase_p",
+      "trainable_parameters": 208231,
+      "deployed_parameters": 208231,
+      "ffn_dim": 85,
+      "state_bytes_per_stream_at_start": 171136,
+      "seed": 3
+    },
+    {
+      "architecture": "hybrid_p",
+      "trainable_parameters": 208387,
+      "deployed_parameters": 208387,
+      "ffn_dim": 83,
+      "state_bytes_per_stream_at_start": 72832,
+      "seed": 3
+    },
+    {
+      "architecture": "hybrid_hard_p",
+      "trainable_parameters": 208387,
+      "deployed_parameters": 208387,
+      "ffn_dim": 83,
+      "state_bytes_per_stream_at_start": 72832,
+      "seed": 3
+    },
+    {
+      "architecture": "phase_p_support",
+      "trainable_parameters": 208231,
+      "deployed_parameters": 208231,
+      "ffn_dim": 85,
+      "state_bytes_per_stream_at_start": 171136,
+      "seed": 3
+    }
+  ],
+  "proposed_fit": {
+    "steps": 1024,
+    "batch_size": 4,
+    "sequence_length": 128,
+    "optimizer": "AdamW common recipe",
+    "learning_rate": 0.001,
+    "weight_decay": 0.1,
+    "clip_norm": 1.0,
+    "warmup": 64,
+    "selection": "fixed final update",
+    "tuning_trials": 0,
+    "training_sample_order": "per-seed fixed precomputed window indices shared across arms",
+    "train_split_sha256": "a9e24e23a1ec77744dad26844bfd5a09b6e041954e1eef0000e7f24cba6db735",
+    "dev_split_sha256": "c64e90c160750d91a9d2d9b1ace5eab1a440f5a1701d32a8e97a179b7839f1c8",
+    "test_access": false,
+    "planned_training_flops": null,
+    "max_training_flops": null,
+    "execution_allocation": null
+  },
+  "unresolved": [
+    "genuine externally signed source/outcome/access evidence",
+    "full source-bound PNDS graph formulation and verification",
+    "qualified matched full-update FLOP budgets",
+    "approved compute execution allocation",
+    "sealed TEST access remains disabled"
+  ],
+  "authorization": "User explicitly requested integration and testing. Repository signed evidence and compute qualification remain unresolved; no keys/attestations are fabricated."
+}

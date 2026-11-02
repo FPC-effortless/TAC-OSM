@@ -1,0 +1,16 @@
+{
+  "study_id": "COLLECT011-COMMIT-REPAIR",
+  "status": "frozen before this new-history repair replay; follows exposed 11B failure diagnosis",
+  "namespace": 13000000000,
+  "seeds": [1, 2, 3],
+  "loads": [[32,8],[128,16],[128,32],[256,32]],
+  "histories_per_cell": 16,
+  "absent_queries_per_history": 16,
+  "model": "frozen COLLECT010 phase_wide_hardnce",
+  "ridge": 0.1,
+  "novelty_threshold": 0.25,
+  "tuning_trials": 0,
+  "modes": ["learned_hard", "validated_event"],
+  "primary_gate_each_seed_each_load": {"present_accuracy_at_least": 0.99, "complete_map_at_least": 0.95, "absent_rejection_at_least": 0.99},
+  "qualification": "Constructed grammar-specific component replay. No LM, no model updates, no sealed TEST, no broader production claim. The causal event parser is explicit additional structure."
+}

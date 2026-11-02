@@ -1,0 +1,17 @@
+{
+  "study_id": "COLLECT011-SUPPORT-REPAIR",
+  "status": "frozen before 15B histories; follows exposed 13B commit repair",
+  "namespace": 15000000000,
+  "seeds": [1,2,3],
+  "loads": [[32,8],[128,16],[128,32],[256,32]],
+  "histories_per_cell": 16,
+  "absent_queries_per_history": 16,
+  "model": "frozen COLLECT010 phase_wide_hardnce",
+  "ridge": 0.1,
+  "novelty_threshold": 0.25,
+  "tuning_trials": 0,
+  "modes": ["learned_hard","validated_event","validated_event_support"],
+  "support": {"bits":4096,"hashes":4,"hash":"BLAKE2b-256; 4 little-endian uint32 residues; person COLLECT011-role"},
+  "primary_gate_each_seed_each_load": {"present_accuracy_at_least":0.99,"complete_map_at_least":0.95,"absent_rejection_at_least":0.99},
+  "qualification": "Additional causal structure and value-independent probabilistic membership. Synthetic component only; no LM quality claim. No deletion/eviction support; saturation can increase false positives."
+}
