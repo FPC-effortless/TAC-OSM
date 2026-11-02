@@ -30,6 +30,7 @@ jobs:
           mkdir -p ci-artifacts/langscale001
           python scripts/phone_lab.py plan research/phone_queue/langscale001-nofit.json > ci-artifacts/langscale001/PLAN.log
           python research/langscale001/validate_pair.py --out ci-artifacts/langscale001/RECIPROCAL.json
+          python research/langscale001/test_peer_pin.py
           python research/langscale001/verify.py --out ci-artifacts/langscale001/SOURCE_TESTS.json
           python research/langscale001/check_probes.py --out ci-artifacts/langscale001/ADAPTER_TESTS.json
           python -m pytest -q tests/test_research_probe_agnostic.py
