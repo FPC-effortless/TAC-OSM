@@ -1,0 +1,53 @@
+{
+  "study": "COLLECT017",
+  "status": "ADDITIONAL_DIAGNOSTIC_DECLARED_AFTER_LAUNCH_BEFORE_INSPECTING_ANY_FULL_FIT_RESULTS",
+  "reason": "Distinguish local binding failure and novel-key-family transfer from distant retention; primary protocol remains unchanged.",
+  "quote_source": "Original DEV only for every stratum",
+  "histories": 24,
+  "strata": [
+    {
+      "name": "local_one_new_keys",
+      "keys": 1,
+      "gap": 0,
+      "key_family": "dev"
+    },
+    {
+      "name": "local_four_familiar_keys",
+      "keys": 4,
+      "gap": 0,
+      "key_family": "train"
+    },
+    {
+      "name": "local_four_new_keys",
+      "keys": 4,
+      "gap": 0,
+      "key_family": "dev"
+    },
+    {
+      "name": "distant_four_familiar_keys",
+      "keys": 4,
+      "gap": 256,
+      "key_family": "train"
+    },
+    {
+      "name": "primary_four_new_keys_controlled_filler",
+      "keys": 4,
+      "gap": 256,
+      "key_family": "dev"
+    }
+  ],
+  "definition": "Familiar means TRAIN key family with newly sampled identifiers and DEV source quotations; no extra fit or tuned parameters.",
+  "conditions": [
+    "normal",
+    "wrong_history",
+    "reset_all",
+    "phase_reset",
+    "query_swap"
+  ],
+  "constant_baseline": "Compute from actual source labels for each stratum; no copied assumed chance bound",
+  "primary_replacement": false,
+  "optimizer_updates": 0,
+  "cohorts_reused": "same generated histories per source/stratum across arms and seeds, not independent seed repetitions",
+  "wrong_history_control": "Source quotes change class by +1 for the same keys, but the entire post-record filler is kept exactly identical. Frozen primary wrong_history remains unchanged and may also vary filler due quote-sampling RNG consumption.",
+  "addition_status": "Post-initial-COLLECT016-null attention learnability control, registered before its first fit; not part of original primary comparison."
+}

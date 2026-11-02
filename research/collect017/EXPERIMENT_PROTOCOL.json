@@ -1,0 +1,39 @@
+{
+  "study": "COLLECT017",
+  "status": "ADDITIONAL_POST_NULL_ATTENTION_CONTROL_REGISTERED_BEFORE_ITS_FIRST_FIT",
+  "question": "Does connected cross-window credit plus explicit source-copy supervision produce query-dependent delayed retrieval, and does the historical phase lane help beyond a separately trained current-value lane?",
+  "arms": [
+    "attention"
+  ],
+  "seeds": [
+    16001,
+    16002,
+    16003
+  ],
+  "steps": 512,
+  "batch": 2,
+  "length": 384,
+  "chunk": 128,
+  "gradient_horizon": {
+    "attention": 384
+  },
+  "data": "One natural TRAIN window and one constructed source-quotation copy episode per step; no DEV/task examples enter training.",
+  "training_keys": "first character a-m; second a-z",
+  "dev_keys": "first character n-z; second a-z",
+  "values": "Verbatim 8-byte source quotations starting with a-h; supervise copying first 4 bytes.",
+  "overwrites": "one third of training steps; all held-out copy assays overwrite first half of active keys",
+  "absence": "one fifth of training steps; answer ????",
+  "loss": "natural NLL + .25 task-sequence NLL + 1 answer NLL + .01 mean Switch balance",
+  "control": "Not a pure Transformer; same active scale and original byte/target schedule; no phase balance because no phase router",
+  "limitations": [
+    "Joint curriculum changes exposure and objective together; no long-context LM-only fitted control here.",
+    "Current-only FFN reallocation changes capacity distribution; not an exact same-shape intervention.",
+    "Neither a negative nor positive pilot yields a final architecture verdict.",
+    "No full FLOPs parity or competitive global-attention claim.",
+    "Constructed copy interface is mechanism evidence; ordinary real-text DEV is separate."
+  ],
+  "retention": "immutable init and 256-step model/AdamW/RNG checkpoints; fixed final, no best seed or checkpoint selection",
+  "quota_gpu_minutes": 0,
+  "model": "native causal attention window1536; all registered histories fit; retained other TAC/SSA paths",
+  "decision": "If this also fails local copy, the training setup/budget is not yet a useful architecture discriminator. If it succeeds, investigate phase-lane learning under this setup without declaring a full-FLOPs architecture winner."
+}
