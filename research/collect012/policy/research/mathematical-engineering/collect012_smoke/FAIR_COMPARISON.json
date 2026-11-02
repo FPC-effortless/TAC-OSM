@@ -1,0 +1,84 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_type": "single_model_training",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "real_world_source": {
+    "name": "Pinned Tiny Shakespeare publisher text",
+    "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "observed_real_outcomes": true,
+    "publisher_url": "https://github.com/karpathy/char-rnn/blob/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+    "license": "MIT",
+    "license_evidence_url": "https://github.com/karpathy/char-rnn/blob/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/Readme.md#license",
+    "source_receipt": "data/SOURCE_QUALIFICATION.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "6243e6daa2918351185e13192c0f6e5ac74c7cf1957a710f0b8e8c39cc1d439d",
+    "rule": "original contiguous 90/5/5; TEST bytes absent"
+  },
+  "causal_protocol": "Input bytes x[t] predict x[t+1]; fresh state per original FIT window; no future/grammar/role labels. FIT-only optimization, fixed postfit DEV windows, no DEV selection.",
+  "checkpoint_policy": "Retain initialization and immutable 256-step model/AdamW/RNG snapshots; exact source/data/protocol hashes and input replay. Fixed final update, never best DEV.",
+  "scientific_status": "INTERNAL_LEARNABILITY_NOT_RESOURCE_MATCHED_ARCHITECTURE_COMPARISON",
+  "comparison_gate": "OPEN: measured complete charged FLOPs and independent qualification not established; do not rank architectures from these fits.",
+  "study_id": "COLLECT012-OPTIMIZER-SMOKE",
+  "fit": {
+    "steps": 8,
+    "batch_size": 4,
+    "sequence_length": 128,
+    "learning_rate": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1.0,
+    "precision": "float32",
+    "optimizer": "AdamW",
+    "schedule": "constant; no tuning",
+    "fresh_state_each_window": true,
+    "checkpoint_steps": [
+      0,
+      8
+    ],
+    "dev_windows": 64,
+    "seed_ids": [
+      12000
+    ],
+    "sample_seeds": [],
+    "allocation_gpu_minutes": 240,
+    "worker_seconds_cap": 7200
+  },
+  "models": [
+    {
+      "architecture": "attention",
+      "seed": 12000,
+      "trainable_parameters": 99875,
+      "deployed_parameters": 99875
+    },
+    {
+      "architecture": "phase_p",
+      "seed": 12000,
+      "trainable_parameters": 99879,
+      "deployed_parameters": 99879
+    },
+    {
+      "architecture": "hybrid_hard_p",
+      "seed": 12000,
+      "trainable_parameters": 99971,
+      "deployed_parameters": 99971
+    }
+  ],
+  "purpose": "8 actual optimizer updates per graph; source/checkpoint/AdamW path verification, not language capability"
+}

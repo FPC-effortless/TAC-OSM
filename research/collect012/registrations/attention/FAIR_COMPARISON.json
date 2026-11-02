@@ -1,0 +1,128 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_type": "single_model_training",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "real_world_source": {
+    "name": "Pinned Tiny Shakespeare publisher text",
+    "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "observed_real_outcomes": true,
+    "publisher_url": "https://github.com/karpathy/char-rnn/blob/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+    "license": "MIT",
+    "license_evidence_url": "https://github.com/karpathy/char-rnn/blob/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/Readme.md#license",
+    "source_receipt": "data/SOURCE_QUALIFICATION.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "6243e6daa2918351185e13192c0f6e5ac74c7cf1957a710f0b8e8c39cc1d439d",
+    "rule": "original contiguous 90/5/5; TEST bytes absent"
+  },
+  "causal_protocol": "Input bytes x[t] predict x[t+1]; fresh state per original FIT window; no future/grammar/role labels. FIT-only optimization, fixed postfit DEV windows, no DEV selection.",
+  "checkpoint_policy": "Retain initialization and immutable 256-step model/AdamW/RNG snapshots; exact source/data/protocol hashes and input replay. Fixed final update, never best DEV.",
+  "scientific_status": "INTERNAL_LEARNABILITY_NOT_RESOURCE_MATCHED_ARCHITECTURE_COMPARISON",
+  "comparison_gate": "OPEN: measured complete charged FLOPs and independent qualification not established; do not rank architectures from these fits.",
+  "study_id": "COLLECT012-ATTENTION",
+  "model_config": {
+    "width": 16,
+    "ffn_dim": 38,
+    "depth": 4
+  },
+  "fit": {
+    "steps": 1024,
+    "batch_size": 4,
+    "sequence_length": 128,
+    "learning_rate": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1.0,
+    "precision": "float32",
+    "optimizer": "AdamW",
+    "schedule": "constant; no tuning",
+    "fresh_state_each_window": true,
+    "checkpoint_steps": [
+      0,
+      256,
+      512,
+      768,
+      1024
+    ],
+    "dev_windows": 64,
+    "seed_ids": [
+      12001,
+      12002,
+      12003
+    ],
+    "sample_seeds": [
+      12011,
+      12012,
+      12013
+    ],
+    "allocation_gpu_minutes": 0,
+    "worker_seconds_cap": 2400,
+    "execution_backend": "github_actions_cpu",
+    "planned_dev_interventions": [
+      "normal",
+      "memory_zero",
+      "memory_batch_shuffle"
+    ],
+    "generation_tokens": 512,
+    "generation_temperatures": [
+      0.8,
+      1.2
+    ]
+  },
+  "models": [
+    {
+      "architecture": "attention",
+      "seed": 12001,
+      "trainable_parameters": 99875,
+      "deployed_parameters": 99875
+    },
+    {
+      "architecture": "attention",
+      "seed": 12002,
+      "trainable_parameters": 99875,
+      "deployed_parameters": 99875
+    },
+    {
+      "architecture": "attention",
+      "seed": 12003,
+      "trainable_parameters": 99875,
+      "deployed_parameters": 99875
+    }
+  ],
+  "source_hashes": {
+    "collect011/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "collect011/model.py": "075b0dbcbc2c4581e9e48756fd5dbebf5564dfbcdaf04532842eaf35974c2167",
+    "collect011/memory.py": "dfbae45dd1108c54a7fbb7fcadaa3c1749a61ac350ad7020a57b18c72d5e273c",
+    "vendor/tacopt109/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/tacopt109/optimized.py": "466968b0764c9edc71f7787dad33983e5a18a946b3ab9b3c1570a58cfd37dc70",
+    "vendor/tacopt109/paired_banks.py": "85bc97d05fbb2879919135078d8664d59d0ca5099088be0fbca6ca4e1b665643",
+    "vendor/tacopt109/reference/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/tacopt109/reference/kernels.py": "1c2782bbaaac7aa54722f420bbbad8c5215f260ed591a6cef154c0540f41b8d1",
+    "vendor/tacopt109/reference/model.py": "84507fd17ace7eb2e880d5f15ee7a3a80c41543041eee103ca926966bcd1e882",
+    "vendor/tacround110/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/tacround110/mhc.py": "520a4200054aa54b120c90eee5de20e47c1ef4ac81213371bf6de208cab190e0",
+    "vendor/tacround110/model.py": "fec2f524837e70b52e252c89a2c40c1b5c4ab7d2eebc9c52593f664994a47626",
+    "vendor/tacround110/ssa.py": "efee9895747cfed6173cccdfcf2c3198e60db18de49397b7ba6324337f73d0eb"
+  },
+  "training_source_hashes": {
+    "collect012/train.py": "ee92d628bee019a1d284a0db251ae5a216a4c4b169e5da0ae7ba084fc072500e",
+    "collect012/common.py": "dcada6a955639b489b3adfae2f24381214ac25d060c444b336b5a09016f33f49",
+    "collect012/register.py": "d214ba1371c0a5fd98c79a7fea74bba63c3dbe1cbdfdd7c038206c1bce275f0a"
+  }
+}
