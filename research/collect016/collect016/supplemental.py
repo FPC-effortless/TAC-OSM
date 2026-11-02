@@ -31,7 +31,7 @@ def main():
         for c in result['cohorts']:c.update(held_out_key_family=spec['key_family']=='dev',quote_source='DEV',key_family=spec['key_family'])
         all_results.append(dict(stratum=spec,controlled_counterfactuals=counterfactuals,**result))
     require(before==fingerprint(m),'read-only supplemental changed weights')
-    a.output.write_text(json.dumps(dict(arm=r['arm'],seed=r['seed'],checkpoint_sha256=digest(ck),protocol_sha256=digest(ROOT/'SUPPLEMENTAL_PROTOCOL.json'),
+    a.output.write_text(json.dumps(dict(arm=r['arm'],seed=r['seed'],torch=torch.__version__,checkpoint_sha256=digest(ck),protocol_sha256=digest(ROOT/'SUPPLEMENTAL_PROTOCOL.json'),
         results=all_results,optimizer_updates=0,weights_unchanged=True,caution='Additional declared-before-full-results diagnosis; primary held-out-key-family protocol unchanged'),indent=2))
     print(json.dumps(dict(arm=r['arm'],seed=r['seed'],strata=len(all_results),status='COMPLETE_READ_ONLY_SUPPLEMENTAL')))
 if __name__=='__main__':main()

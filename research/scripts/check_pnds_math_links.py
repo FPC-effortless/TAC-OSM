@@ -40,10 +40,16 @@ def validate(path=LINKS):
             not re.fullmatch("[0-9a-f]{40}", t.get("commit", "")) or
             not isinstance(t.get("pull_request"), int) or t["pull_request"] < 1):
             raise ValueError(f"{name}: missing TAC original source PR/commit")
+        new = name in {"COLLECT016-FULL_BPTT", "COLLECT016-DETACH_128", "COLLECT016-CURRENT_ONLY"}
+        lean = "PNDS/COLLECT016.lean" if new else "PNDS/TACOSMVariantContracts.lean"
+        python = "foundation/v1/collect016/reference.py" if new else "foundation/v1/variant_math.py"
         if (p.get("repository") != "FPC-effortless/pnds-lean" or
-            p.get("lean_path") != "PNDS/TACOSMVariantContracts.lean" or
-            p.get("python_path") != "foundation/v1/variant_math.py"):
+            p.get("lean_path") != lean or p.get("python_path") != python):
             raise ValueError(f"{name}: missing paired PNDS formulations")
+        if new and (p.get("pull_request") != 107 or
+                    p.get("commit") != "fd948078115bd89b8685f1e2e62bbde166ceb4c4" or
+                    t.get("commit") != "2209e1328e3b42db4dd48cd702a21a55ffad24af"):
+            raise ValueError(f"{name}: source-specific math authority mismatch")
         if (not row.get("kernel") or not row.get("formula") or
             row.get("formalization_status") != "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL" or
             row.get("lean_full_graph_proved") is not False or
