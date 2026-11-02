@@ -32,7 +32,8 @@ eight updates in about 15 seconds, with changed weights, correct AdamW counters
 and exact serialized-checkpoint replay. This is not a trained language-capability
 result. Its measured 1.68 seconds/update projects a full fit to about 29 minutes,
 inside the policy's 45-minute CPU route. Full fits are planned on bounded GitHub
-CPU workers. No Kaggle GPU is submitted by this study; Kaggle authentication was
+CPU workers. Those nine full fits subsequently completed successfully; see
+`RESULTS.md`. No Kaggle GPU is submitted by this study; Kaggle authentication was
 verified read-only. The existing protected two-T4 route remains required for any
 future GPU allocation.
 
@@ -65,3 +66,10 @@ Documentation/result publication does not rerun training. Qualified research,
 protected evaluation, full FLOPs matching and complete mathematical release are
 separate unfinished obligations. All earlier failed gates and negative findings
 remain historical evidence.
+
+Completed evidence is split deliberately: source and diagnostic protocols remain
+in this Git repository; original model/AdamW/RNG artifacts, receipts, journals,
+raw predictions and read-only audit results are retained in the linked report's
+model/evidence archive and in the original Actions run. Generated evidence is
+not a replacement for frozen fit commit
+`036d778255a416d3aae886acdbfeef8fb1b6a1ab`.

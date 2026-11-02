@@ -1,0 +1,17 @@
+{
+  "kind": "exploratory frozen-component state-cost diagnostic; not neural fitting or protected evaluation",
+  "registered_after": "negative full/block/diagonal curvature diagnostic on namespace 19000000000",
+  "namespace": 20000000000,
+  "seeds": [1, 2, 3],
+  "loads": [[256, 32]],
+  "modes": ["full", "spectral8", "spectral16", "spectral32"],
+  "owners_per_cell": 16,
+  "ridge": 0.1,
+  "algorithm": "Streaming rank-r truncated-SVD Gram sketch B plus nonnegative residual diagonal D = ridge + diagonal(full accumulated Gram) - diagonal(B^T B). Apply prior inverse by Woodbury and normalize the write direction. Update B from [B; sqrt(g) k] after the write. No rank selected post hoc as a qualified winner.",
+  "diagonal_floor": 0.00001,
+  "commit": "unchanged C11 validated syntax commit",
+  "support": "unchanged C11 support lane",
+  "frontends": "frozen C10 phase_wide_hardnce checkpoints",
+  "optimizer_updates": 0,
+  "claim_boundary": "Measure whether a compact sketch retains strict maps on this fresh diagnostic. SVD/solve work and temporary allocations preclude a speed or total peak-memory claim. This is a known matrix-approximation strategy applied here, not a claimed novel general algorithm."
+}
