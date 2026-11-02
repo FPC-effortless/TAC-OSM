@@ -1,0 +1,1 @@
+Local prefit and optimizer-smoke evidence is retained separately. The launch workflow writes remote receipts/checkpoints here and uploads originals even on failure. No successful full fit is implied by this directory.
