@@ -85,9 +85,11 @@ def audit(folder):
         routing=[dict(layer=i,observed_counts=c.tolist(),total=int(c.sum()),
             active_banks=int((c>0).sum()),qualification='observed hard routing on 64 exposed-DEV windows, not a capacity or semantic-specialization proof') for i,c in sorted(captured.items())]
     require(fingerprint(m)==before,'read-only audit changed weights')
+    remote=json.loads((folder/'EVALUATION.json').read_text())
+    require(remote['replay_exact'] and remote['replay_maximum_error']==0 and remote['weights_unchanged'],'original remote replay failed')
     return dict(arm=receipt['arm'],seed=receipt['seed'],status='PASS_READ_ONLY_TRAINED_SOURCE_AUDIT',torch=torch.__version__,
         original_checkpoint_sha256=receipt['checkpoint_sha256'],completed_updates=1024,
-        same_runtime_remote_replay_exact=json.loads((folder/'EVALUATION.json').read_text())['cold_replay_exact'],
+        same_runtime_remote_replay_exact=remote['replay_exact'],
         local_cross_runtime_maximum_logit_error=cross_error,cross_runtime_absolute_tolerance=2e-5,
         future_poison='PASS',owner_isolation='PASS',whole_graph_reference=reference_results,hard_bank_usage=routing,
         parameter_weights_unchanged=True,optimizer_updates=0,independently_qualified=False)

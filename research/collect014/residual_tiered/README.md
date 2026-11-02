@@ -112,6 +112,16 @@ candidate. No general global-retrieval or fixed-state capacity barrier is solved
 
 ## Next discriminating repairs
 
+An additional constructed scale check (`scale_check.py`, separate from the
+frozen sweep) preserves decoded output exactly under S,v -> 0.1*(S,v) with an
+inverse-scaled readout, while changing the .75-threshold admission decision.
+The absolute residual changes from .9434 to .0943. Normalizing by value norm
+removes this particular scale dependence, but does not predict future relevance
+or fix small/zero-norm calibration. A same-key postwrite residual is also zero
+after unit-gain delta, so simply moving the gate after the write cannot detect
+all older associations that subsequent writes will damage. These are operator
+counterexamples, not measured failure frequencies of a trained language model.
+
 Candidate future controls are an age/position-stratified protected quota, a
 small uniform reservoir alongside the residual cache, and a query-relevance
 predictor trained on delayed use. Each changes the hypothesis and needs a new
