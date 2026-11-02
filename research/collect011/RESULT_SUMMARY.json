@@ -1,0 +1,140 @@
+{
+  "study": "COLLECT011",
+  "status": "ENGINEERING_COMPLETE_LM_TRAINING_BLOCKED",
+  "new_fits": 0,
+  "optimizer_updates": 0,
+  "sealed_test_read": false,
+  "component": [
+    {
+      "mode": "learned_hard",
+      "cells": 12,
+      "worst_present": 0.9921875,
+      "worst_map": 0.8125,
+      "worst_absent": 0.99609375,
+      "present_evaluations": 4224,
+      "absent_evaluations": 3072,
+      "map_evaluations": 192,
+      "distinct_histories": 64
+    },
+    {
+      "mode": "validated_event",
+      "cells": 12,
+      "worst_present": 1.0,
+      "worst_map": 1.0,
+      "worst_absent": 0.99609375,
+      "present_evaluations": 4224,
+      "absent_evaluations": 3072,
+      "map_evaluations": 192,
+      "distinct_histories": 64
+    },
+    {
+      "mode": "validated_event_support",
+      "cells": 12,
+      "worst_present": 1.0,
+      "worst_map": 1.0,
+      "worst_absent": 1.0,
+      "present_evaluations": 4224,
+      "absent_evaluations": 3072,
+      "map_evaluations": 192,
+      "distinct_histories": 64
+    }
+  ],
+  "model_profile": [
+    {
+      "arm": "attention",
+      "parameters": 208227,
+      "median_seconds": 1.2153035230003297,
+      "min_seed_seconds": 1.1566188409997267,
+      "max_seed_seconds": 1.5141768579997006,
+      "state_kib": 551.125,
+      "precision_kib": 0.0
+    },
+    {
+      "arm": "delta",
+      "parameters": 208231,
+      "median_seconds": 1.9053096450006706,
+      "min_seed_seconds": 1.6323391830010223,
+      "max_seed_seconds": 3.2341030160023365,
+      "state_kib": 103.125,
+      "precision_kib": 0.0
+    },
+    {
+      "arm": "phase_p",
+      "parameters": 208231,
+      "median_seconds": 4.700609240004269,
+      "min_seed_seconds": 3.6215158729974064,
+      "max_seed_seconds": 5.538512290004292,
+      "state_kib": 167.125,
+      "precision_kib": 64.0
+    },
+    {
+      "arm": "hybrid_p",
+      "parameters": 208387,
+      "median_seconds": 2.77823108699522,
+      "min_seed_seconds": 2.351967094997235,
+      "max_seed_seconds": 3.867496967999614,
+      "state_kib": 71.125,
+      "precision_kib": 16.0
+    },
+    {
+      "arm": "hybrid_hard_p",
+      "parameters": 208387,
+      "median_seconds": 3.2499223630002234,
+      "min_seed_seconds": 2.6423739879974164,
+      "max_seed_seconds": 3.735737364004308,
+      "state_kib": 71.125,
+      "precision_kib": 16.0
+    },
+    {
+      "arm": "phase_p_support",
+      "parameters": 208231,
+      "median_seconds": 3.915923434004071,
+      "min_seed_seconds": 3.2438694299999042,
+      "max_seed_seconds": 4.79935887499596,
+      "state_kib": 167.125,
+      "precision_kib": 64.0
+    }
+  ],
+  "full_graph_cases_final": 18,
+  "timed_forward_backward_passes_final": 54,
+  "unit_tests": 12,
+  "parameter_gap": 0.0007683921873724575,
+  "preflight": {
+    "command": "validate_research_parity_v2.py --manifest FAIR_COMPARISON.DRAFT.json --phase preflight",
+    "exit_code": 2,
+    "stdout": "",
+    "stderr": "RESEARCH_PARITY_HARD_FAILURE: actual non-synthetic real observations/outcomes required\n",
+    "approved_to_train": false,
+    "unresolved": [
+      "genuine externally signed source/outcome/access evidence",
+      "full source-bound PNDS graph formulation and verification",
+      "qualified matched full-update FLOP budgets",
+      "approved compute execution allocation",
+      "sealed TEST access remains disabled"
+    ],
+    "optimizer_updates": 0
+  },
+  "pn_status": {
+    "variant": "COLLECT011 actual TAC110 LM phase-memory replacement",
+    "status": "LOCAL_PARTIAL_FORMULATION_NOT_RECIPROCALLY_REGISTERED",
+    "python_formulation": "math/reference.py",
+    "lean_formulation": "math/PhaseWrite.lean",
+    "actual_graph": "collect011/model.py + collect011/memory.py + pinned vendor sources",
+    "operator_forward_backward": "executed component reference comparisons; specific FP32/FP64 fixtures only",
+    "full_actual_graph_execution": "unit and diagnostic checks, not a mathematical equivalence proof",
+    "lean_compilation": "OPEN: Lean executable unavailable",
+    "native_backbone_and_frontend_lean": "OPEN",
+    "full_graph_AD_and_IEEE_proof": "OPEN",
+    "source_commit_reciprocal_registration": "OPEN until exact final source commit and canonical PNDS record are bound",
+    "qualification": "No compilation, theorem name, local hash or fixture is promoted to a full TAC-OSM proof."
+  },
+  "source_record": "results/RELEASE_JOURNAL.json",
+  "limitations": [
+    "new LM frontend untrained",
+    "grammar-specific commit parser",
+    "membership false positives/saturation possible",
+    "no deletion or eviction",
+    "CPU timing only, no GPU claim",
+    "hard-routing STE is a surrogate"
+  ]
+}
