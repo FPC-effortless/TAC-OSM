@@ -20,8 +20,10 @@ def run(out):
   'compute_plan':decide(proposal),'preflight':reports,
   'additional_open_items':['Fresh independently qualified validation and TEST contract; do not reuse original DEV for selection',
     'Full forward/CE/backward/AdamW FLOP accounting; partial profiler totals do not suffice',
-    'Source-matched PNDS Lean build/axiom and reciprocal checks','Private offline dual-T4 source staging, observed devices and quota execution grant'],
+    'Private offline dual-T4 source staging, observed devices and quota execution grant'],
   'historical_source_order_receipt':json.loads((HERE/'evidence/SOURCE_ORDER.json').read_text()),
+  'formal_execution':json.loads((HERE/'evidence/REMOTE_EXECUTION.json').read_text()),
+  'reciprocal_check':json.loads((out.parent/'RECIPROCAL.json').read_text()) if (out.parent/'RECIPROCAL.json').exists() else {'status':'NOT_RECHECKED_THIS_INVOCATION'},
   'public_key_injected':bool(os.environ.get('TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX'))}
  out.write_text(json.dumps(report,indent=2)+'\n')
  print(json.dumps({'status':report['status'],'training_launched':False,'optimizer_updates':0}))

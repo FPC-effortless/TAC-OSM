@@ -50,6 +50,7 @@ The phone compute planner routes the proposed long campaign to **two physical NV
 From repository root, with the original pinned Torch CPU version:
 
 ```bash
+python research/langscale001/validate_pair.py --out /tmp/RECIPROCAL.json
 python research/langscale001/verify.py --out /tmp/LANGSCALE001_SOURCE_TESTS.json
 python research/langscale001/check_probes.py --out /tmp/LANGSCALE001_ADAPTER_TESTS.json
 python research/langscale001/profile_compute.py --out /tmp/LANGSCALE001_PARTIAL_PROFILE.json
@@ -64,3 +65,5 @@ Before fitting: complete the independently reviewed new validation/TEST contract
 Remote no-fit execution [41400093289](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41400093289) succeeded on source commit `3193566e93bd3794539ef2fefac82da0ace128d9`. It reran the new graph/adapter tests, architecture-neutral regression tests, partial profiler audit and blocked-training check. This is execution evidence, not independent scientific qualification.
 
 PNDS [typed-specialization and axiom run 41400440538](https://github.com/FPC-effortless/pnds-lean/actions/runs/41400440538) and [full-root Lean run 41400440515](https://github.com/FPC-effortless/pnds-lean/actions/runs/41400440515) succeeded on formulation commit `ff3c9fc3814853188f3f9cddc5cb3efebadd76d8`. The four count theorems compiled with axiom inspection. This closes the bounded elaboration check; global IEEE equivalence and independent scientific qualification remain OPEN. See evidence/REMOTE_EXECUTION.json.
+
+The four new variants are indexed in matching `prospective_studies.LANGSCALE001` registry rows. All 17 historical rows are preserved; the existing LANGCAP103 prospective index is retained. Immutable PNDS_PIN/TAC_PIN records resolve the source graph, formulation and subsequent reciprocal registry commits separately. `validate_pair.py` checks every local source hash, the three remote Lean/Python file hashes and exact reciprocal JSON equality; failure stops the source workflow.
