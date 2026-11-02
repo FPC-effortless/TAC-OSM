@@ -533,5 +533,192 @@
       "python_source_equivalence_verified": false,
       "real_world_capability_inferred": false
     }
-  ]
+  ],
+  "prospective_graph_index": {
+    "schema": "pnds.prospective_graph_index.v1",
+    "pnds_source_map_path": "foundation/langcap103/SOURCE_MAP.json",
+    "tac_source_map_path": "research/langcap103/MATH_SOURCE_MAP.json",
+    "source_map_sha256": "01c6caf146fc9ab037991704622983ae07f707cf16da4480029ec0180abbbc4e",
+    "ids": [
+      "LANGCAP103-TAC_ASSOCIATIVE_STACK-1M",
+      "LANGCAP103-CAUSAL_TRANSFORMER-1M",
+      "LANGCAP103-STACKED_GRU-1M",
+      "LANGCAP103-TAC_ASSOCIATIVE_STACK-10M",
+      "LANGCAP103-CAUSAL_TRANSFORMER-10M",
+      "LANGCAP103-STACKED_GRU-10M"
+    ],
+    "qualification": "SOURCE_PINNED_EQUATIONS_AND_OPEN_PROOF_OBLIGATIONS_NOT_RELEASE_OR_CAPABILITY"
+  },
+  "prospective_studies": {
+    "LANGSCALE001": {
+      "schema": "pnds.prospective-study-variants.v1",
+      "qualification": "TYPED_FULL_GRAPH_BOUNDED_PYTHON_PARITY_GLOBAL_IEEE_OPEN_NOT_TRAINING_AUTHORIZATION",
+      "variants": [
+        {
+          "id": "LANGSCALE001-SMALL-TAC_MEMORY_SCALED",
+          "configuration": {
+            "scale": "small",
+            "target": 1000000,
+            "arm": "tac_memory_scaled",
+            "depth": 8,
+            "d": 232,
+            "c": 32,
+            "k": 8,
+            "v": 16,
+            "trainable_parameters": 1000360,
+            "deployed_parameters": 1000360,
+            "head_width": 152,
+            "head_parameters": 110464,
+            "recurrent_state_floats": 3256,
+            "nonlexical_state_floats": 2560
+          },
+          "tac": {
+            "repository": "FPC-effortless/TAC-OSM",
+            "commit": "3193566e93bd3794539ef2fefac82da0ace128d9",
+            "pull_request": 695,
+            "source_path": "research/langscale001/models.py",
+            "source_map_path": "research/langscale001/SOURCE_MAP.json",
+            "evidence_path": "research/langscale001/evidence/SOURCE_TESTS_LOCAL.json"
+          },
+          "pnds": {
+            "repository": "FPC-effortless/pnds-lean",
+            "commit": "ff3c9fc3814853188f3f9cddc5cb3efebadd76d8",
+            "pull_request": 106,
+            "lean_path": "PNDS/LANGSCALE001.lean",
+            "lean_symbol": "PNDS.LANGSCALE001.smallMemoryScaledStep",
+            "python_path": "foundation/langscale001/reference.py",
+            "python_symbol": "tac",
+            "source_map_path": "foundation/langscale001/SOURCE_MAP.json"
+          },
+          "lean_full_graph_proved": false,
+          "python_bounded_initialized_source_parity_verified": true,
+          "global_ieee_equivalence": "OPEN",
+          "trained_capability_inferred": false
+        },
+        {
+          "id": "LANGSCALE001-SMALL-TAC_HEAD_TO_STATE",
+          "configuration": {
+            "scale": "small",
+            "target": 1000000,
+            "arm": "tac_head_to_state",
+            "depth": 8,
+            "d": 256,
+            "c": 24,
+            "k": 6,
+            "v": 12,
+            "trainable_parameters": 999652,
+            "deployed_parameters": 999652,
+            "head_width": 106,
+            "head_parameters": 82388,
+            "recurrent_state_floats": 2304,
+            "nonlexical_state_floats": 1536
+          },
+          "tac": {
+            "repository": "FPC-effortless/TAC-OSM",
+            "commit": "3193566e93bd3794539ef2fefac82da0ace128d9",
+            "pull_request": 695,
+            "source_path": "research/langscale001/models.py",
+            "source_map_path": "research/langscale001/SOURCE_MAP.json",
+            "evidence_path": "research/langscale001/evidence/SOURCE_TESTS_LOCAL.json"
+          },
+          "pnds": {
+            "repository": "FPC-effortless/pnds-lean",
+            "commit": "ff3c9fc3814853188f3f9cddc5cb3efebadd76d8",
+            "pull_request": 106,
+            "lean_path": "PNDS/LANGSCALE001.lean",
+            "lean_symbol": "PNDS.LANGSCALE001.smallHeadToStateStep",
+            "python_path": "foundation/langscale001/reference.py",
+            "python_symbol": "tac",
+            "source_map_path": "foundation/langscale001/SOURCE_MAP.json"
+          },
+          "lean_full_graph_proved": false,
+          "python_bounded_initialized_source_parity_verified": true,
+          "global_ieee_equivalence": "OPEN",
+          "trained_capability_inferred": false
+        },
+        {
+          "id": "LANGSCALE001-MEDIUM-TAC_MEMORY_SCALED",
+          "configuration": {
+            "scale": "medium",
+            "target": 10000000,
+            "arm": "tac_memory_scaled",
+            "depth": 8,
+            "d": 856,
+            "c": 64,
+            "k": 16,
+            "v": 32,
+            "trainable_parameters": 10000942,
+            "deployed_parameters": 10000942,
+            "head_width": 571,
+            "head_parameters": 1126838,
+            "recurrent_state_floats": 11784,
+            "nonlexical_state_floats": 9216
+          },
+          "tac": {
+            "repository": "FPC-effortless/TAC-OSM",
+            "commit": "3193566e93bd3794539ef2fefac82da0ace128d9",
+            "pull_request": 695,
+            "source_path": "research/langscale001/models.py",
+            "source_map_path": "research/langscale001/SOURCE_MAP.json",
+            "evidence_path": "research/langscale001/evidence/SOURCE_TESTS_LOCAL.json"
+          },
+          "pnds": {
+            "repository": "FPC-effortless/pnds-lean",
+            "commit": "ff3c9fc3814853188f3f9cddc5cb3efebadd76d8",
+            "pull_request": 106,
+            "lean_path": "PNDS/LANGSCALE001.lean",
+            "lean_symbol": "PNDS.LANGSCALE001.mediumMemoryScaledStep",
+            "python_path": "foundation/langscale001/reference.py",
+            "python_symbol": "tac",
+            "source_map_path": "foundation/langscale001/SOURCE_MAP.json"
+          },
+          "lean_full_graph_proved": false,
+          "python_bounded_initialized_source_parity_verified": true,
+          "global_ieee_equivalence": "OPEN",
+          "trained_capability_inferred": false
+        },
+        {
+          "id": "LANGSCALE001-MEDIUM-TAC_HEAD_TO_STATE",
+          "configuration": {
+            "scale": "medium",
+            "target": 10000000,
+            "arm": "tac_head_to_state",
+            "depth": 8,
+            "d": 992,
+            "c": 32,
+            "k": 8,
+            "v": 16,
+            "trainable_parameters": 10000888,
+            "deployed_parameters": 10000888,
+            "head_width": 116,
+            "head_parameters": 262312,
+            "recurrent_state_floats": 5536,
+            "nonlexical_state_floats": 2560
+          },
+          "tac": {
+            "repository": "FPC-effortless/TAC-OSM",
+            "commit": "3193566e93bd3794539ef2fefac82da0ace128d9",
+            "pull_request": 695,
+            "source_path": "research/langscale001/models.py",
+            "source_map_path": "research/langscale001/SOURCE_MAP.json",
+            "evidence_path": "research/langscale001/evidence/SOURCE_TESTS_LOCAL.json"
+          },
+          "pnds": {
+            "repository": "FPC-effortless/pnds-lean",
+            "commit": "ff3c9fc3814853188f3f9cddc5cb3efebadd76d8",
+            "pull_request": 106,
+            "lean_path": "PNDS/LANGSCALE001.lean",
+            "lean_symbol": "PNDS.LANGSCALE001.mediumHeadToStateStep",
+            "python_path": "foundation/langscale001/reference.py",
+            "python_symbol": "tac",
+            "source_map_path": "foundation/langscale001/SOURCE_MAP.json"
+          },
+          "lean_full_graph_proved": false,
+          "python_bounded_initialized_source_parity_verified": true,
+          "global_ieee_equivalence": "OPEN",
+          "trained_capability_inferred": false
+        }
+      ]
+    }
+  }
 }
