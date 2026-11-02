@@ -1,0 +1,198 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_type": "single_model_training",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "real_world_source": {
+    "name": "Pinned Tiny Shakespeare publisher text",
+    "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "observed_real_outcomes": true,
+    "publisher_url": "https://github.com/karpathy/char-rnn/blob/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+    "license": "MIT",
+    "license_evidence_url": "https://github.com/karpathy/char-rnn/blob/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/Readme.md#license",
+    "source_receipt": "../collect012/data/SOURCE_QUALIFICATION.json"
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "6243e6daa2918351185e13192c0f6e5ac74c7cf1957a710f0b8e8c39cc1d439d",
+    "rule": "original contiguous 90/5/5; TEST bytes absent"
+  },
+  "causal_protocol": "Observed byte x[t] predicts x[t+1], fresh state per 128-byte TRAIN window. Router balance is a training loss; forward routing is owner-local and causal. No synthetic probe labels or future bytes enter FIT.",
+  "checkpoint_policy": "Retain initialization and immutable 256-step model/AdamW/RNG snapshots; exact source/data/protocol hashes and input replay. Fixed final update, never best DEV.",
+  "scientific_status": "INTERNAL_FACTORIAL_REPAIR_PILOT_NOT_FLOPS_MATCHED_ARCHITECTURE_SUPERIORITY",
+  "comparison_gate": "OPEN: full training FLOPs and independent qualification remain unmeasured; descriptive same-graph repair ablations only",
+  "study_id": "COLLECT014-WRITE_FIRST",
+  "model_config": {
+    "width": 16,
+    "ffn_dim": 57,
+    "depth": 4,
+    "read_after": true,
+    "balance": 0.0
+  },
+  "fit": {
+    "steps": 1024,
+    "batch_size": 4,
+    "sequence_length": 128,
+    "learning_rate": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1.0,
+    "precision": "float32",
+    "optimizer": "AdamW",
+    "schedule": "constant; no tuning",
+    "fresh_state_each_window": true,
+    "checkpoint_steps": [
+      0,
+      256,
+      512,
+      768,
+      1024
+    ],
+    "dev_windows": 64,
+    "seed_ids": [
+      12001,
+      12002,
+      12003
+    ],
+    "sample_seeds": [
+      140100
+    ],
+    "allocation_gpu_minutes": 0,
+    "worker_seconds_cap": 2400,
+    "execution_backend": "github_actions_cpu",
+    "planned_dev_interventions": [
+      "normal",
+      "memory_zero",
+      "memory_batch_shuffle"
+    ],
+    "generation_tokens": 512,
+    "generation_temperatures": [
+      0.8,
+      1.2
+    ],
+    "generation_rng": 140100,
+    "retrieval_protocol": "EVALUATION_PROTOCOL.json",
+    "balance_coefficient": 0.0,
+    "read_after": true
+  },
+  "models": [
+    {
+      "architecture": "write_first",
+      "seed": 12001,
+      "trainable_parameters": 99971,
+      "deployed_parameters": 99971
+    },
+    {
+      "architecture": "write_first",
+      "seed": 12002,
+      "trainable_parameters": 99971,
+      "deployed_parameters": 99971
+    },
+    {
+      "architecture": "write_first",
+      "seed": 12003,
+      "trainable_parameters": 99971,
+      "deployed_parameters": 99971
+    }
+  ],
+  "source_hashes": {
+    "research/collect011/collect011/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect011/collect011/model.py": "075b0dbcbc2c4581e9e48756fd5dbebf5564dfbcdaf04532842eaf35974c2167",
+    "research/collect011/collect011/memory.py": "dfbae45dd1108c54a7fbb7fcadaa3c1749a61ac350ad7020a57b18c72d5e273c",
+    "research/collect011/vendor/tacopt109/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect011/vendor/tacopt109/optimized.py": "466968b0764c9edc71f7787dad33983e5a18a946b3ab9b3c1570a58cfd37dc70",
+    "research/collect011/vendor/tacopt109/paired_banks.py": "85bc97d05fbb2879919135078d8664d59d0ca5099088be0fbca6ca4e1b665643",
+    "research/collect011/vendor/tacopt109/reference/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect011/vendor/tacopt109/reference/kernels.py": "1c2782bbaaac7aa54722f420bbbad8c5215f260ed591a6cef154c0540f41b8d1",
+    "research/collect011/vendor/tacopt109/reference/model.py": "84507fd17ace7eb2e880d5f15ee7a3a80c41543041eee103ca926966bcd1e882",
+    "research/collect011/vendor/tacround110/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect011/vendor/tacround110/mhc.py": "520a4200054aa54b120c90eee5de20e47c1ef4ac81213371bf6de208cab190e0",
+    "research/collect011/vendor/tacround110/model.py": "fec2f524837e70b52e252c89a2c40c1b5c4ab7d2eebc9c52593f664994a47626",
+    "research/collect011/vendor/tacround110/ssa.py": "efee9895747cfed6173cccdfcf2c3198e60db18de49397b7ba6324337f73d0eb",
+    "research/collect012/collect012/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect012/collect012/common.py": "dcada6a955639b489b3adfae2f24381214ac25d060c444b336b5a09016f33f49",
+    "research/collect012/collect012/reference104.py": "e33793b93dfe861e5154033578f99c860588274320dd6fc7c48aa9313498d99b",
+    "research/collect012/collect012/reference110.py": "30932292b6784c2b62e3559297024b2f9b04e96c4809daa3ce0279e33e85cc53",
+    "research/collect012/collect012/reference.py": "72d3b8697594ee4c775cd3defafa97d7116289f030444ad8c9652f50e55e90d5",
+    "research/collect012/collect012/train.py": "ee92d628bee019a1d284a0db251ae5a216a4c4b169e5da0ae7ba084fc072500e",
+    "research/collect012/collect012/restore_data.py": "2cfaf0e8f66c4b028fe314ec243584d2f6f32088dfb5612c592249ba74e2d8f8",
+    "research/collect014/collect014/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "research/collect014/collect014/common.py": "f2771a375a6d51b1738519757814b6e3d941f5847e4a610d2caf20b3ac387a12",
+    "research/collect014/collect014/model.py": "6acda9054382d07b975da5af606eb73a2ee338a1ffcdf46d3d2941fa5a43de96",
+    "research/collect014/collect014/reference.py": "2a0bddce6ee90967f6ab4211cfaf488e2245362833bb407a549dfb6f7a437075",
+    "research/collect014/collect014/train.py": "68592923be2a13e37d1f368ea58dd5a342ebe2ee5d320ea3c23610fe785568e5",
+    "research/collect014/collect014/evaluate.py": "3575a65e844f693077e3aaf072c4b515d70b32457603c6b83764ccf352371dc4",
+    "research/collect014/collect014/assays.py": "a4530d8e677075a4ed6d4cd8ae9dc262711ff1500e2a0800c4ad6a6a404d3a42",
+    "research/collect014/collect014/test_prefit.py": "5aa3bd79385a66a419ff6bf34a38f09c2e2ca53a6969da9682bda020c93a2ffb",
+    "research/collect014/collect014/register.py": "84485c91adee6518fbd4dfddf25afbdd2fd0c33b1df18fa47ebbd8d5dede8788",
+    "research/collect014/collect014/verify_launch.py": "fb417b7337077c3fcb5dd5d98d324f7e40df0d505f31dbb87c9e600ba462ecb6",
+    "research/collect014/WORKFLOW.yml": "0fed1710af247375ab39e30634f1c559ec30633cd6dc994b4d678bf6eee1c775"
+  },
+  "training_source_hashes": {
+    "collect014/train.py": "68592923be2a13e37d1f368ea58dd5a342ebe2ee5d320ea3c23610fe785568e5",
+    "collect014/common.py": "f2771a375a6d51b1738519757814b6e3d941f5847e4a610d2caf20b3ac387a12",
+    "collect014/register.py": "84485c91adee6518fbd4dfddf25afbdd2fd0c33b1df18fa47ebbd8d5dede8788"
+  },
+  "reused_controls": {
+    "selection": "all three original fixed-final hybrid controls, chosen before new fits; no checkpoint tuning",
+    "controls": [
+      {
+        "seed": 12001,
+        "parameters": 99971,
+        "updates": 1024,
+        "checkpoint_sha256": "36310f22a9512f1773ca30ea3d6b59830fb568f9d1eaaffc4801eb2372f651fe",
+        "initial_parameter_sha256": "05a80ce2aa799cde6ac1211e5cdaa35938e5be7988213dd062b956d212ad94bc",
+        "protocol_sha256": "3dca2923af1f889d66f64eba667de3bc76a3d0e302c810bed298b2fdff75c644",
+        "original_fit_torch": "2.5.1+cpu",
+        "original_workflow_run": 41513912016,
+        "original_source_commit": "036d778255a416d3aae886acdbfeef8fb1b6a1ab",
+        "original_dev_nll": 2.7452641874551773,
+        "eligible_for_selection": false
+      },
+      {
+        "seed": 12002,
+        "parameters": 99971,
+        "updates": 1024,
+        "checkpoint_sha256": "04c12f4a91a81d3dc43fcc0057a38e70f2081174dcfd3f243d0d8ad3b800a85c",
+        "initial_parameter_sha256": "d47fdb3c68b39c8f5474fec629a2e558aa19158f8b4aab1e232cc8d41f0d6d6c",
+        "protocol_sha256": "3dca2923af1f889d66f64eba667de3bc76a3d0e302c810bed298b2fdff75c644",
+        "original_fit_torch": "2.5.1+cpu",
+        "original_workflow_run": 41513912016,
+        "original_source_commit": "036d778255a416d3aae886acdbfeef8fb1b6a1ab",
+        "original_dev_nll": 2.7021146416664124,
+        "eligible_for_selection": false
+      },
+      {
+        "seed": 12003,
+        "parameters": 99971,
+        "updates": 1024,
+        "checkpoint_sha256": "6cb545a6bdfce605d7bbd2fd2d594e4a12bf5d60f16fa27c8e69d6f92e7b3f91",
+        "initial_parameter_sha256": "508d0d8d7e9b75cf72dae4e6cd364759259ba8a68860dfe9fdca2024359b6726",
+        "protocol_sha256": "3dca2923af1f889d66f64eba667de3bc76a3d0e302c810bed298b2fdff75c644",
+        "original_fit_torch": "2.5.1+cpu",
+        "original_workflow_run": 41513912016,
+        "original_source_commit": "036d778255a416d3aae886acdbfeef8fb1b6a1ab",
+        "original_dev_nll": 2.707941487431526,
+        "eligible_for_selection": false
+      }
+    ]
+  },
+  "repair": {
+    "read_after": true,
+    "balance": 0.0
+  }
+}

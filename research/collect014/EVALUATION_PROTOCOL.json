@@ -1,0 +1,23 @@
+{
+  "frozen_before_new_fit": true,
+  "ordinary_text": "same C12 64 exposed-DEV windows with RNG120099, 8192 targets; normal/zero-phase/shuffled-phase reads; no checkpoint selection",
+  "generation": {"bytes": 512, "temperatures": [0.8, 1.2], "rng": 140100, "prompt": "TRAIN bytes 20000:20064"},
+  "continuation": {"windows": 8, "bytes_per_window": 512, "chunk": 128, "rng": 140099, "modes": ["carry", "reset", "wrong_history"], "source": "original exposed DEV"},
+  "structured_retrieval": {
+    "source": "generated evaluation fixtures, not FIT and not a qualified real-world task",
+    "rng": 140001,
+    "unique_histories": 12,
+    "active_keys": 4,
+    "overwrite_keys": 2,
+    "absent_queries_per_history": 2,
+    "values": "a through h; ? absent marker",
+    "delays_bytes": [64, 256, 1024],
+    "modes": ["normal", "wrong_history", "reset"],
+    "decisions": "nine-way closed-set argmax; no threshold tuning; retain full-vocabulary top1 and target log probability too",
+    "safety": "query answer omitted from inputs; prefill branch immutable; no parser/role labels control writes; labels used only to score",
+    "limits": "same histories reused across seeds/delays/arms. Zero-shot unfamiliar grammar may produce floor performance. No training task-utility or production rejection guarantee."
+  },
+  "replay": "new fits exact fresh-process same-runtime replay; reused controls from a different runtime may use declared 2e-5 tolerance with maximum error retained",
+  "selection": "fixed final update1024 for every new run; all seeds retained regardless of outcomes",
+  "success_interpretation": "bank balance alone is not success. Report language loss, retrieval/overwrite/absent/map metrics, carry dependence and all seed differences. No architecture-superiority gate without full FLOPs and qualification."
+}
