@@ -1,8 +1,8 @@
 {
   "schema": "langscale001.explicit-owner-exploration.v1",
-  "owner_authorized": false,
-  "explicit_exception": null,
-  "authorization_record": null,
+  "owner_authorized": true,
+  "explicit_exception": "AUTHORIZE_LANGSCALE001_EXPLORATORY_FIT_ONLY_WITHOUT_INDEPENDENT_SIGNOFF",
+  "authorization_record": "2026-11-02: The user replied \"Yes\" directly to the request to authorize the reviewed 30-run FIT-only exploratory exception: 2,560 updates per run, up to three GitHub CPU workers, approximately 9.9 GB of checkpoints; original DEV/TEST closed; no independent scientific qualification.",
   "protocol_sha256": "103f1029cb1b1f360af5567ead8862724beaed7091d73c4ab8672ba55cb4b464",
   "optimizer_updates_per_fit": 2560,
   "max_parallel_jobs": 3,
@@ -17,9 +17,9 @@
   "dev_access": false,
   "test_access": false,
   "estimated_raw_checkpoint_bytes": 9897542640,
-  "status": "PROPOSAL_ONLY_NOT_USER_AUTHORIZATION",
+  "status": "OWNER_AUTHORIZED_EXPLORATORY_FIT_ONLY",
   "execution_backend_proposal": "GitHub Actions CPU, two threads, one bounded fit per job; no GPU or Kaggle submission",
-  "rationale": "Historical original CPU jobs were <28 minutes; 35-minute estimated worker fits the 45-minute CPU planner limit; actual duration and quota not granted by this proposal",
+  "rationale": "Explicit owner authorization applies to this frozen FIT-only CPU campaign and its declared checkpoint/runner scope. Independent scientific qualification remains blocked.",
   "code_sha256": {
     "research/langscale001/exploratory_fit.py": "91497c5af8282ba87b0517791aedee18881526514c73e799dd67efa966d14d5c",
     "research/langscale001/models.py": "6d98f60c6c18d0c45b47064aaf586cc9932a4985826672696f714dd206be0dde",

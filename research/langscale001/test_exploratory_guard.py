@@ -12,11 +12,14 @@ class GuardTests(unittest.TestCase):
  def check(self,a):
   with tempfile.TemporaryDirectory(prefix='langscale001-guard-') as tmp:
    p=Path(tmp)/'auth.json';p.write_text(json.dumps(a));return runner.authorized(p)
- def test_default_proposal_denies(self):
-  with self.assertRaisesRegex(ValueError,'BLOCKED'):runner.authorized(HERE/'EXPLORATORY_AUTHORIZATION.json')
+ def test_absent_owner_grant_denies(self):
+  a=self.fixture();a.update(owner_authorized=False,explicit_exception=None,authorization_record=None)
+  with self.assertRaisesRegex(ValueError,'BLOCKED'):self.check(a)
  def test_false_record_prevents_all_model_and_data_work(self):
-  args=SimpleNamespace(authorization=HERE/'EXPLORATORY_AUTHORIZATION.json')
-  with self.assertRaisesRegex(ValueError,'BLOCKED'):runner.fit(args)
+  a=self.fixture();a.update(owner_authorized=False,explicit_exception=None,authorization_record=None)
+  with tempfile.TemporaryDirectory(prefix='langscale001-denied-') as tmp:
+   path=Path(tmp)/'denied.json';path.write_text(json.dumps(a));args=SimpleNamespace(authorization=path)
+   with self.assertRaisesRegex(ValueError,'BLOCKED'):runner.fit(args)
  def test_new_dev_access_is_rejected(self):
   a=self.fixture();a['dev_access']=True
   with self.assertRaisesRegex(ValueError,'boundary'):self.check(a)

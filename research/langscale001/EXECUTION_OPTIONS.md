@@ -1,12 +1,12 @@
 # LANGSCALE001 execution decision — concrete proposal
 
-**No new FIT training has started. No explicit exception has been granted.**
+**The owner explicitly authorized the reviewed FIT-only exception on 2 November 2026. Independent scientific qualification and DEV/TEST access remain excluded. The execution record is EXPLORATORY_AUTHORIZATION.json.**
 
 The qualified-study route remains blocked by missing independent evaluation split/access evidence, full compute qualification and the signed prefit attestation. Those are external evidence requirements. This actor cannot honestly issue its own independent signature or label actor-accessible source as a sealed independent TEST.
 
-## Prepared exploratory alternative — authorization pending
+## Authorized exploratory FIT-only execution
 
-`EXPLORATORY_AUTHORIZATION.json` is explicitly false. The new workflow plans its matrix, prints PENDING_EXPLICIT_OWNER_EXCEPTION_NO_TRAINING and skips all FIT jobs unless the owner explicitly authorizes this narrowly scoped exception. A generic “proceed” is not recorded as that exception.
+`EXPLORATORY_AUTHORIZATION.json` now records the explicit owner grant. The workflow verifies that record and its exact source/protocol hashes before launching the matrix. Denial behavior is retained and tested with separate unit fixtures.
 
 Concrete work proposed:
 
