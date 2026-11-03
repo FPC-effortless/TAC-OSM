@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - research/pnds-variant-math-links.json
+      - research/tac_ocr001/**
+      - research/tac_ocr004/**
       - research/scripts/check_pnds_math_links.py
       - research/scripts/check_pnds_remote_parity.py
       - .github/workflows/pnds-math-link-gate.yml
@@ -17,5 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate every original source-pinned variant and dual formulation reference
         run: python3 research/scripts/check_pnds_math_links.py
+      - name: Verify explicit historical/current source boundary guards
+        run: python3 -m unittest research.tac_ocr004.test_source_versions -v
       - name: Verify existing PNDS snapshot and independently pinned candidate equations
         run: python3 research/scripts/check_pnds_remote_parity.py

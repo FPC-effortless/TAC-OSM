@@ -36,7 +36,34 @@ def compare_existing_snapshot(local, remote):
     return candidates
 
 
+def fetch_bytes(url):
+    with urllib.request.urlopen(url, timeout=30) as response:
+        raw = response.read(8 * 1024 * 1024 + 1)
+    if len(raw) > 8 * 1024 * 1024:
+        raise ValueError("immutable peer response exceeds bound")
+    return raw
+
+
+def verify_ocr004(base, read_remote):
+    """Run the separate strict contract; a pass cannot waive legacy gates."""
+    import importlib.util
+
+    contract_root = Path(base) / "research/tac_ocr004"
+    pin = json.loads((contract_root / "IMMUTABLE_PEER_PIN.json").read_text())
+    spec = importlib.util.spec_from_file_location(
+        "ocr004_native_peer_contract", contract_root / "verify_immutable_peer.py")
+    contract = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(contract)
+    result = contract.verify_immutable_peer(base, "tac", pin, read_remote)
+    # This is an intermediate scoped receipt. Overall success is emitted only
+    # after every original legacy and non-OCR004 check below still succeeds.
+    print(json.dumps({"ocr004_scoped_byte_correspondence": result,
+                      "overall_canonical_gate_established": False}, sort_keys=True))
+    return result
+
 def verify():
+    root = LOCAL.parents[1]
+    verify_ocr004(root, fetch_bytes)
     local = json.loads(LOCAL.read_text(encoding="utf-8"))
     with urllib.request.urlopen(REMOTE, timeout=30) as response:
         remote = json.loads(response.read().decode("utf-8"))
@@ -49,6 +76,7 @@ def verify():
         expected.add("LANGCACHE104-DEEP-ASSOCIATIVE-CARRIED-CACHE")
     if ocr_pin.exists():
         expected.update(("TAC-OCR-001-TAC", "TAC-OCR-001-TRANSFORMER", "TAC-OCR-001-GRU"))
+    expected.update(("TAC-OCR-004-TAC", "TAC-OCR-004-TRANSFORMER", "TAC-OCR-004-GRU"))
     actual = [row.get("id") for row in candidates]
     if len(actual) != len(set(actual)) or set(actual) != expected:
         raise ValueError("every new candidate needs its own reviewed pinned-peer verifier")
@@ -57,7 +85,7 @@ def verify():
         from research.langcache104.verify_math_pins import verify as verify_candidate
         verify_candidate()
     if ocr_pin.exists():
-        from research.tac_ocr001.verify_math_pins import verify as verify_ocr
+        from research.tac_ocr004.verify_source_versions import verify as verify_ocr
         verify_ocr()
     print(json.dumps({"existing_snapshot_equal": True,
                       "separately_verified_prospective_candidates": len(candidates),
