@@ -1,0 +1,102 @@
+name: COLLECT016 carried state and supervised source retrieval
+
+on:
+  push:
+    branches: [research/collect016-carried-supervision-2026-11-03]
+    paths: [research/collect016/LAUNCH_REQUEST.json]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: collect016-internal-fixed-recipe
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            research/collect011
+            research/collect012
+            research/collect014
+            research/collect016
+            .github/workflows
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned CPU runtime
+        run: |
+          python -m pip install numpy==1.26.4
+          python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore original licensed source bytes
+        working-directory: research/collect012
+        run: python -m collect012.restore_data
+      - name: Check exact launch and full-graph fixtures
+        working-directory: research/collect016
+        env:
+          OMP_NUM_THREADS: '1'
+          OPENBLAS_NUM_THREADS: '1'
+        run: |
+          cmp WORKFLOW.yml ../../.github/workflows/collect016-carried-supervision.yml
+          python -m collect016.verify_launch > results/REMOTE_PREFLIGHT.json
+          python -m unittest collect016.test_prefit -v
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: collect016-prefit-${{ github.run_id }}
+          path: research/collect016/results/REMOTE_PREFLIGHT.json
+          retention-days: 90
+  fit:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        arm: [full_bptt, detach_128, current_only]
+        seed: [16001, 16002, 16003]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            research/collect011
+            research/collect012
+            research/collect014
+            research/collect016
+            .github/workflows
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned CPU runtime
+        run: |
+          python -m pip install numpy==1.26.4
+          python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore original licensed source bytes
+        working-directory: research/collect012
+        run: python -m collect012.restore_data
+      - name: Verify launch inputs
+        working-directory: research/collect016
+        run: python -m collect016.verify_launch
+      - name: Execute complete registered fit
+        working-directory: research/collect016
+        env:
+          OMP_NUM_THREADS: '1'
+          OPENBLAS_NUM_THREADS: '1'
+        run: python -m collect016.train --arm '${{ matrix.arm }}' --seed '${{ matrix.seed }}' --output 'results/${{ matrix.arm }}_${{ matrix.seed }}'
+      - name: Fresh process frozen-checkpoint evaluation
+        working-directory: research/collect016
+        env:
+          OMP_NUM_THREADS: '1'
+          OPENBLAS_NUM_THREADS: '1'
+        run: python -m collect016.evaluate --run 'results/${{ matrix.arm }}_${{ matrix.seed }}' --output 'results/${{ matrix.arm }}_${{ matrix.seed }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: collect016-${{ matrix.arm }}-${{ matrix.seed }}-${{ github.run_id }}
+          path: research/collect016/results/${{ matrix.arm }}_${{ matrix.seed }}/
+          retention-days: 90

@@ -1,0 +1,518 @@
+{
+  "status": "SCORER_UNIT_TESTS_PASS_NOT_MODEL_RESULTS",
+  "torch_imported": false,
+  "model_executions": 0,
+  "optimizer_updates": 0,
+  "findings": [
+    "Actual-input oracle passes all factual and paired gates.",
+    "Query-only answers cannot pass value-swap pairs.",
+    "Always copying the latest record cannot pass two-key maps.",
+    "Memorized first-byte continuations pass first-byte checks but fail novel full-answer combinations."
+  ],
+  "algorithm_summaries": {
+    "oracle": {
+      "fixed_budget_training_first_gate": true,
+      "fixed_budget_training_exact4_gate": true,
+      "late_steps": [
+        128,
+        144
+      ],
+      "probe_scope": "Synthetic scorer unit-test stub, not a learned training probe.",
+      "cohorts": {
+        "base": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 16,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": true,
+          "all_absent_exact4": true
+        },
+        "empty_history": {
+          "queries": 16,
+          "present_queries": 0,
+          "absent_queries": 16,
+          "present_first_correct": 0,
+          "present_exact4": 0,
+          "absent_exact4": 16,
+          "all_present_first": null,
+          "all_present_exact4": null,
+          "all_absent_exact4": true
+        },
+        "overwrite": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 16,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": true,
+          "all_absent_exact4": true
+        },
+        "query_order": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 16,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": true,
+          "all_absent_exact4": true
+        },
+        "record_order": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 16,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": true,
+          "all_absent_exact4": true
+        },
+        "swapped_values": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 16,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": true,
+          "all_absent_exact4": true
+        },
+        "unseen_keys": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 16,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": true,
+          "all_absent_exact4": true
+        }
+      },
+      "complete_present_maps": 48,
+      "present_maps": 48,
+      "counterfactual_pairs": {
+        "swapped_values": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 16,
+          "all_pairs": true
+        },
+        "record_order": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 16,
+          "all_pairs": true
+        },
+        "query_order": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 16,
+          "all_pairs": true
+        }
+      },
+      "empty_history_original_first_target_retention": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "interpretation": "Finite constructed optimization and compositional held-out gates only. Never pool these into learned reliability."
+    },
+    "query_only": {
+      "fixed_budget_training_first_gate": true,
+      "fixed_budget_training_exact4_gate": true,
+      "late_steps": [
+        128,
+        144
+      ],
+      "probe_scope": "Synthetic scorer unit-test stub, not a learned training probe.",
+      "cohorts": {
+        "base": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 4,
+          "present_exact4": 3,
+          "absent_exact4": 4,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "empty_history": {
+          "queries": 16,
+          "present_queries": 0,
+          "absent_queries": 16,
+          "present_first_correct": 0,
+          "present_exact4": 0,
+          "absent_exact4": 2,
+          "all_present_first": null,
+          "all_present_exact4": null,
+          "all_absent_exact4": false
+        },
+        "overwrite": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 4,
+          "present_exact4": 3,
+          "absent_exact4": 4,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "query_order": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 4,
+          "present_exact4": 3,
+          "absent_exact4": 4,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "record_order": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 4,
+          "present_exact4": 3,
+          "absent_exact4": 4,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "swapped_values": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 1,
+          "present_exact4": 0,
+          "absent_exact4": 4,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "unseen_keys": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 0,
+          "present_exact4": 0,
+          "absent_exact4": 8,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": true
+        }
+      },
+      "complete_present_maps": 4,
+      "present_maps": 48,
+      "counterfactual_pairs": {
+        "swapped_values": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 0,
+          "all_pairs": false
+        },
+        "record_order": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 3,
+          "all_pairs": false
+        },
+        "query_order": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 3,
+          "all_pairs": false
+        }
+      },
+      "empty_history_original_first_target_retention": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "interpretation": "Finite constructed optimization and compositional held-out gates only. Never pool these into learned reliability."
+    },
+    "last_record": {
+      "fixed_budget_training_first_gate": true,
+      "fixed_budget_training_exact4_gate": true,
+      "late_steps": [
+        128,
+        144
+      ],
+      "probe_scope": "Synthetic scorer unit-test stub, not a learned training probe.",
+      "cohorts": {
+        "base": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 8,
+          "present_exact4": 8,
+          "absent_exact4": 0,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "empty_history": {
+          "queries": 16,
+          "present_queries": 0,
+          "absent_queries": 16,
+          "present_first_correct": 0,
+          "present_exact4": 0,
+          "absent_exact4": 16,
+          "all_present_first": null,
+          "all_present_exact4": null,
+          "all_absent_exact4": true
+        },
+        "overwrite": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 8,
+          "present_exact4": 8,
+          "absent_exact4": 0,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "query_order": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 8,
+          "present_exact4": 8,
+          "absent_exact4": 0,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "record_order": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 8,
+          "present_exact4": 8,
+          "absent_exact4": 0,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "swapped_values": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 8,
+          "present_exact4": 8,
+          "absent_exact4": 0,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        },
+        "unseen_keys": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 8,
+          "present_exact4": 8,
+          "absent_exact4": 0,
+          "all_present_first": false,
+          "all_present_exact4": false,
+          "all_absent_exact4": false
+        }
+      },
+      "complete_present_maps": 0,
+      "present_maps": 48,
+      "counterfactual_pairs": {
+        "swapped_values": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 8,
+          "all_pairs": false
+        },
+        "record_order": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 0,
+          "all_pairs": false
+        },
+        "query_order": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 8,
+          "all_pairs": false
+        }
+      },
+      "empty_history_original_first_target_retention": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "interpretation": "Finite constructed optimization and compositional held-out gates only. Never pool these into learned reliability."
+    },
+    "first_byte_dictionary": {
+      "fixed_budget_training_first_gate": true,
+      "fixed_budget_training_exact4_gate": true,
+      "late_steps": [
+        128,
+        144
+      ],
+      "probe_scope": "Synthetic scorer unit-test stub, not a learned training probe.",
+      "cohorts": {
+        "base": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 0,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": false,
+          "all_absent_exact4": true
+        },
+        "empty_history": {
+          "queries": 16,
+          "present_queries": 0,
+          "absent_queries": 16,
+          "present_first_correct": 0,
+          "present_exact4": 0,
+          "absent_exact4": 16,
+          "all_present_first": null,
+          "all_present_exact4": null,
+          "all_absent_exact4": true
+        },
+        "overwrite": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 0,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": false,
+          "all_absent_exact4": true
+        },
+        "query_order": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 0,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": false,
+          "all_absent_exact4": true
+        },
+        "record_order": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 0,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": false,
+          "all_absent_exact4": true
+        },
+        "swapped_values": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 0,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": false,
+          "all_absent_exact4": true
+        },
+        "unseen_keys": {
+          "queries": 24,
+          "present_queries": 16,
+          "absent_queries": 8,
+          "present_first_correct": 16,
+          "present_exact4": 0,
+          "absent_exact4": 8,
+          "all_present_first": true,
+          "all_present_exact4": false,
+          "all_absent_exact4": true
+        }
+      },
+      "complete_present_maps": 0,
+      "present_maps": 48,
+      "counterfactual_pairs": {
+        "swapped_values": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 0,
+          "all_pairs": false
+        },
+        "record_order": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 0,
+          "all_pairs": false
+        },
+        "query_order": {
+          "pairs": 16,
+          "both_factual_answers_correct_and_expected_change": 0,
+          "all_pairs": false
+        }
+      },
+      "empty_history_original_first_target_retention": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "interpretation": "Finite constructed optimization and compositional held-out gates only. Never pool these into learned reliability."
+    }
+  }
+}

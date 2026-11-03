@@ -1,0 +1,140 @@
+{
+  "schema_version": "tac-osm.synthetic-diagnostic-fit.v1",
+  "study_type": "synthetic_diagnostic_fit",
+  "study_id": "SYNTHDIAG-LOCAL-BINDING-FIXED-DEFAULT-20261103",
+  "registered_before_first_fit": true,
+  "classification": "SYNTHETIC_SINGLE_SEED_EXPLORATORY_NONCOMPARATIVE_UNQUALIFIED",
+  "diagnostic_question": "Can each unchanged model optimize eight same-query, conflicting-value cases under the fixed existing recipe, before any generalization claim?",
+  "objective": "Unchanged C18 focused objective: natural CE + .25 task CE + answer CE + 3 first CE + .01 balance. GRU balance is its existing zero. Full 256 logits.",
+  "auxiliary_loss_disclosure": "Unchanged native balance loss remains active; GRU balance remains its existing zero. This is not objective or FLOP parity.",
+  "source_commit": "cad0eab1ec9441703ffccb18b7e10333153d7f87",
+  "prohibited_claims_and_actions": {
+    "architecture_superiority": false,
+    "architecture_ranking_or_selection": false,
+    "real_world_capability": false,
+    "population_generalization": false,
+    "deployment_readiness": false,
+    "safety_qualification": false,
+    "promotion": false,
+    "protected_TEST": false,
+    "GPU": false,
+    "paid_compute": false,
+    "automatic_retry": false,
+    "adaptive_tuning": false,
+    "early_success_stop": false
+  },
+  "source": {
+    "generated_synthetic_bytes": true,
+    "observed_real_outcomes": false,
+    "recipe_sha256": "a72cd1046f4a7aa260df8e58d301709b544fcec1b71f20bbcec0a6294d4bf8f6",
+    "training_fixture_sha256": "2f8e7864c2adbffaeab5a9e10a8d9ccbe19520d95dd38e2cd557c0671e575894",
+    "heldout_fixture_sha256": "422ed7808c5ed2c3096402995d03b67047339a5668aeecd5ff5c17fed264c172",
+    "schedule_sha256": "cb8bcff2ef73f7f2b6a33baef5db59d46ba1df042102795edf1d147c935e861e",
+    "ordered_exposure_sha256": "f5e24d5b99a5fbfbad9913e381cbee62e33658bdaa40138517c4c30d068b2943"
+  },
+  "seed": 18001,
+  "stage": "fixed",
+  "regime": "default",
+  "arms": [
+    {
+      "family": "gru",
+      "seed": 18001,
+      "active_parameters": 100323,
+      "deployed_parameters": 100323,
+      "updates": 128,
+      "input_tokens": 65536,
+      "training_examples": 512,
+      "task_examples": 384,
+      "first_targets": 384,
+      "ordered_exposure_sha256": "f5e24d5b99a5fbfbad9913e381cbee62e33658bdaa40138517c4c30d068b2943"
+    },
+    {
+      "family": "phase",
+      "seed": 18001,
+      "active_parameters": 99971,
+      "deployed_parameters": 99971,
+      "updates": 128,
+      "input_tokens": 65536,
+      "training_examples": 512,
+      "task_examples": 384,
+      "first_targets": 384,
+      "ordered_exposure_sha256": "f5e24d5b99a5fbfbad9913e381cbee62e33658bdaa40138517c4c30d068b2943"
+    },
+    {
+      "family": "context",
+      "seed": 18001,
+      "active_parameters": 99971,
+      "deployed_parameters": 99971,
+      "updates": 128,
+      "input_tokens": 65536,
+      "training_examples": 512,
+      "task_examples": 384,
+      "first_targets": 384,
+      "ordered_exposure_sha256": "f5e24d5b99a5fbfbad9913e381cbee62e33658bdaa40138517c4c30d068b2943"
+    }
+  ],
+  "optimizer": {
+    "learning_rate": 0.003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1,
+    "foreach": false,
+    "epsilon": 1e-08
+  },
+  "tuning_trials": 0,
+  "selection": "fixed_checkpoints_no_selection",
+  "checkpoints": [
+    0,
+    32,
+    64,
+    112,
+    128
+  ],
+  "heldout_policy": "after_all_fits_sealed_no_tuning",
+  "state_policy": "fresh_each_batch_query_forks_immutable_prefix",
+  "optimizer_regime_control": "paired_initializers_exposures_only_declared_epsilon_differs",
+  "unchanged_family_auxiliary_losses_disclosed": true,
+  "compute_parity_claim": false,
+  "expected_counts": {
+    "model_constructors": 6,
+    "optimizer_constructors": 6,
+    "candidate_forward_calls": 795,
+    "reference_forward_calls": 6,
+    "candidate_backward_calls": 402,
+    "reference_backward_calls": 18,
+    "optimizer_updates": 384,
+    "optimizer_attempts": 384,
+    "future_poison_forward_calls": 3
+  },
+  "caps": {
+    "total_CPU": 360,
+    "total_wall": 600,
+    "outer_CPU": 5,
+    "parent_CPU": 10,
+    "child_CPU": 345,
+    "child_stop_CPU": 340,
+    "parent_stop_CPU": 8,
+    "monitor_wall": 590,
+    "poll": 1,
+    "inventory_interval": 10,
+    "cleanup": 5
+  },
+  "memory_limits": {
+    "address_space_bytes": 8589934592,
+    "per_file_bytes": 8388608,
+    "child_output_bytes": 33554432,
+    "total_output_bytes": 37748736,
+    "child_file_count": 64,
+    "total_file_count": 80
+  },
+  "runner_path": "research/synthetic_diagnostics/local-binding-fixed-20261103/code/runner.py",
+  "admission_path": "research/synthetic_diagnostics/local-binding-fixed-20261103/code/admission.py",
+  "source_manifest_sha256": "5aa2c227e4ee3a58eadd96260fd74d7409a5ced56a1db1f86b99797794589787",
+  "code_manifest_sha256": "5bfe5828a71c1d7f83fb5fd654afe15191f70c94ede22d26dbfcb9fd6740a806",
+  "wrapper_manifest_sha256": "4b6827aa17bdf2f256432c074f77a8029398207376b23529566787c9178d8f41",
+  "policy_manifest_sha256": "ea35dfb24268938d5601398ede239eaf71a84ba7b54946e4e0ded07de870d892",
+  "runtime_pin_sha256": "11835a4bbe76820bd6c7ef9a3172c513291c95d7b26f8894a78f0ed808c86838"
+}

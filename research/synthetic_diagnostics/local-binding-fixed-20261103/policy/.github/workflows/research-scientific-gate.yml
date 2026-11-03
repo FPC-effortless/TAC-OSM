@@ -1,0 +1,55 @@
+name: TAC-OSM compulsory real-research parity and novelty gate
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - AGENTS.md
+      - CHARTER.md
+      - CODEX.md
+      - research/**
+      - src/tac_osm/**
+      - scripts/**
+      - tests/test_research_parity_gate.py
+      - tests/test_reward_runner_integration.py
+      - tests/test_synthetic_diagnostic_admission.py
+      - tests/test_synthetic_registration_gate.py
+      - .github/workflows/**
+permissions:
+  contents: read
+jobs:
+  scientific-policy-gate:
+    name: scientific-parity-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify the fairness gate itself fails closed
+        run: |
+          python -m pip install 'pytest==9.1.1' 'cryptography'
+          python -m pytest -q tests/test_research_parity_gate.py tests/test_reward_runner_integration.py
+      - name: Verify the narrow synthetic path using source-only regression fixtures
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python -m pytest -q -p no:cacheprovider tests/test_synthetic_diagnostic_admission.py tests/test_synthetic_registration_gate.py
+      - name: Reject changed studies lacking their separate registration and pre/post-fit hooks
+        run: |
+          git fetch --no-tags origin "${{ github.base_ref }}"
+          python scripts/validate_research_parity.py --check-changed "origin/${{ github.base_ref }}...HEAD"
+      - name: Mandatory genuine capability design and prior-art policy is source-controlled
+        run: |
+          test -s research/REAL-WORLD-EVIDENCE-RULES.md
+          test -s research/CAPABILITY-FIRST-RESEARCH-RESET-2026-10-22.md
+          grep -q "Compulsory equal-resource architecture comparisons" research/REAL-WORLD-EVIDENCE-RULES.md
+          grep -q "Compulsory prospective model-size budget" research/REAL-WORLD-EVIDENCE-RULES.md
+          grep -q "Binding 100k trained-model scale" AGENTS.md
+          test -s research/SYNTHETIC-DIAGNOSTIC-FIT-EXCEPTION-2026-11-03.md
+          test -s scripts/synthetic_diagnostic_policy.py
+          grep -q "synthetic_diagnostic_fit" AGENTS.md
+          grep -q "synthetic_diagnostic_fit" CHARTER.md
+          grep -q "synthetic_diagnostic_fit" CODEX.md
+          echo "SYNTHETIC_REGISTRATION_ONLY__CI_IS_NOT_EXECUTION_APPROVAL"
+          echo "POLICY_GOVERNANCE_PRESENT__NEW_FITS_REQUIRE_100K_AND_PARITY_REGISTRATION"
