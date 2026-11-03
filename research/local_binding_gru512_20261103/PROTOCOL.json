@@ -1,0 +1,185 @@
+{
+  "schema": "learned-local-binding-learnability/v1",
+  "source_commit": "cad0eab1ec9441703ffccb18b7e10333153d7f87",
+  "optimizer_other_settings": {
+    "learning_rate": 0.003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1,
+    "foreach": false
+  },
+  "objective": "Unchanged C18 focused objective: natural CE + .25 task CE + answer CE + 3 first CE + .01 balance. GRU balance is its existing zero. Full 256 logits.",
+  "classification": "OWNER_APPROVED_ONE_OFF_GRU512_TRAINING_ACQUISITION_DIAGNOSTIC",
+  "allocation_id": "LABOPS026_GRU512_20261103",
+  "families": [
+    "gru"
+  ],
+  "seed": 18001,
+  "parameter_counts": {
+    "gru": 100323
+  },
+  "regimes": {
+    "default": {
+      "epsilon": 1e-08
+    }
+  },
+  "fixture_files": {
+    "fixed_train_cases.json": {
+      "sha256": "2f8e7864c2adbffaeab5a9e10a8d9ccbe19520d95dd38e2cd557c0671e575894",
+      "bytes": 5963
+    },
+    "fixed_schedule.json": {
+      "sha256": "31121da4d3bf337e0f5ad30b0c1eb363eac5055491680fb33e2db3cec0c5f4a4",
+      "bytes": 27139
+    },
+    "no_heldout_groups.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "bytes": 3
+    }
+  },
+  "observed_coordinates": {
+    "gru": {
+      "core.gru.weight_ih_l0": [
+        0,
+        0
+      ],
+      "core.output.weight": [
+        0,
+        0
+      ]
+    }
+  },
+  "retry_authorized": false,
+  "training_authorized": true,
+  "protected_TEST_authorized": false,
+  "stages": {
+    "fixed": {
+      "updates_per_arm": 512,
+      "checkpoints": [
+        0,
+        32,
+        64,
+        112,
+        128,
+        256,
+        384,
+        496,
+        512
+      ],
+      "late_optimization_gate_steps": [
+        496,
+        512
+      ],
+      "heldout_file": "no_heldout_groups.json",
+      "probe_rows": 8,
+      "probe_prefix_length_groups": 1,
+      "expected_counts": {
+        "model_constructors": 2,
+        "optimizer_constructors": 2,
+        "candidate_forward_calls": 577,
+        "reference_forward_calls": 2,
+        "candidate_backward_calls": 518,
+        "reference_backward_calls": 6,
+        "optimizer_updates": 512,
+        "optimizer_attempts": 512,
+        "future_poison_forward_calls": 1
+      },
+      "caps": {
+        "total_CPU": 360,
+        "total_wall": 600,
+        "outer_CPU": 5,
+        "parent_CPU": 10,
+        "child_CPU": 345,
+        "child_stop_CPU": 340,
+        "parent_stop_CPU": 8,
+        "monitor_wall": 590,
+        "poll": 1,
+        "inventory_interval": 10,
+        "cleanup": 5
+      },
+      "probe_scope": "Eight original fixed FIT cases; no heldout labels opened; first and exact-four gates separately at496 and512."
+    }
+  },
+  "source_probes": {
+    "adapter": "COLLECT018-GRU",
+    "source": "research/collect018/collect018/probe.py",
+    "model_deepcopies": 4,
+    "neural_forward_calls": 35,
+    "autograd_grad_calls": 1,
+    "optimizer_updates": 0,
+    "run_before_first_optimizer_update": true,
+    "extra_activity_not_in_legacy_runner_call_counter": true
+  },
+  "behavioral_gate_policy": "8/8 first-byte AND8/8 exact-four greedy training recall at both496 and512; no heldout or reliable-binding claim.",
+  "baseline_parameter_hashes": {
+    "initial": "1f42f76fc03e18dcb315f58590eb2f9ad6c542a0d91b847f1ff4f3a4314e4f0f",
+    "step128": "f0e393df5c5452440bed364d8a75698ef48e233d0684e5a18f2c1483d3a9eed3",
+    "workflow": 41623750060,
+    "source_archive_sha256": "e49ac05675858d7ad39b6b534469d2783886716c974f74e7b1b836851ed9452e",
+    "read_old_checkpoints": false,
+    "resume_authorized": false
+  },
+  "limits": [
+    "Fresh initialization and fresh allocation; no resume/reuse of consumed LABOPS025 grant.",
+    "One GRU architecture, one seed, fixed512updates, default optimizer; no phase/context fit or epsilon/varying stage.",
+    "Previously exposed heldout labels are not confirmatory; none opened by this job.",
+    "New source numerical/causal/probe gates and live100k counts must pass before optimization.",
+    "All previous failures preserved. Source graph unchanged; PNDS full graph/IEEE/AD completeness remains OPEN.",
+    "No superiority, certification, promotion, protected TEST, GPU, paid compute, publication or merge.",
+    "If128parameter hash differs, budget-causal interpretation is blocked; preserve difference, no adaptive retry."
+  ],
+  "admission": {
+    "policy_commit": "3449041ec63c7efe843422086b6213226b94167a",
+    "validator_path": "admission_policy/vendored/scripts/validate_research_parity.py",
+    "files": {
+      "admission_policy/amendment/research/RESEARCH-EXECUTION-LEVELS-2026-10-27.md": {
+        "sha256": "2d368c6f7202543bfad232141a156781aaea443a48ce83e8ecb4624b3dbc329f",
+        "bytes": 3138
+      },
+      "admission_policy/amendment/scripts/validate_research_parity.py": {
+        "sha256": "fcfb5c2122129559b620eed27feb450f5b69d0a31437436e35824d6cfe52a78e",
+        "bytes": 24097
+      },
+      "admission_policy/amendment/src/tac_osm/research_execution.py": {
+        "sha256": "b2ff2d92a2ff98d54d94e8cf0a8c0f33c3bcc66cda401f06f418f8e829a31f9a",
+        "bytes": 2562
+      },
+      "admission_policy/current/scripts/validate_research_parity.py": {
+        "sha256": "f225a2180c15666f556a58c495f8d92674cdf03c11e8d0996d06988a29ffacea",
+        "bytes": 22863
+      },
+      "admission_policy/normative/REAL-WORLD-EVIDENCE-RULES.md": {
+        "sha256": "1084830341a8ed25115f5ae777a82b1706eca2a471ebe271d81c546eef071811",
+        "bytes": 25385
+      },
+      "admission_policy/vendored/scripts/validate_research_parity.py": {
+        "sha256": "fcfb5c2122129559b620eed27feb450f5b69d0a31437436e35824d6cfe52a78e",
+        "bytes": 24097
+      },
+      "admission_policy/vendored/src/tac_osm/research_execution.py": {
+        "sha256": "b2ff2d92a2ff98d54d94e8cf0a8c0f33c3bcc66cda401f06f418f8e829a31f9a",
+        "bytes": 2562
+      },
+      "OWNER_AUTHORIZATION.json": {
+        "sha256": "5b94944d46b06fb125e2d5b7beab15b11623d6c727d336ed7a749e76a472b176",
+        "bytes": 799
+      },
+      "APPROVED_OWNER_EXCEPTION.json": {
+        "sha256": "fc6034cc838b8f1969a03c7393c531c96b6fc5a3ea09ece74cbee6695f9fe852",
+        "bytes": 1101
+      },
+      "SCOPE_CONSTANTS.json": {
+        "sha256": "dd1d663ce6daec9c9d5c18a8a071e7317a8fa77a302da1fd925a48f072183074",
+        "bytes": 431
+      },
+      "admission/registrations/fixed/default/gru/FAIR_COMPARISON.json": {
+        "sha256": "65d5888afb652125a2572180cffb3eb91933922f47ed41288c962902d7c6b789",
+        "bytes": 2617
+      }
+    },
+    "inherited_policy_rejection_preserved": true
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LABOPS026-GRU512-20261103",
+  "study_type": "single_model_training",
+  "registration_status": "FROZEN_OWNER_APPROVED_SOURCE_GATES_AND_ROOT_RELEASE_REQUIRED",
+  "registered_before_first_fit": true,
+  "no_new_model_fits": false,
+  "execution_level": "internal_research",
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Fresh unchanged GRU positive-control acquisition at fixed512updates; no architecture comparison or qualification.",
+  "real_world_source": {
+    "name": "None: wholly generated synthetic bytes",
+    "observed_real_outcomes": false,
+    "sha256": null,
+    "publicly_licensed": false,
+    "license": null
+  },
+  "synthetic_source": {
+    "generated_fixture": true,
+    "recipe_sha256": "a72cd1046f4a7aa260df8e58d301709b544fcec1b71f20bbcec0a6294d4bf8f6",
+    "files": {
+      "fixed_train_cases.json": {
+        "sha256": "2f8e7864c2adbffaeab5a9e10a8d9ccbe19520d95dd38e2cd557c0671e575894",
+        "bytes": 5963
+      },
+      "fixed_schedule.json": {
+        "sha256": "31121da4d3bf337e0f5ad30b0c1eb363eac5055491680fb33e2db3cec0c5f4a4",
+        "bytes": 27139
+      },
+      "no_heldout_groups.json": {
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "bytes": 3
+      }
+    },
+    "heldout_opening_policy": "No heldout labels opened; acquisition-only FIT diagnostic."
+  },
+  "models": [
+    {
+      "architecture": "gru",
+      "seed": 18001,
+      "trainable_parameters": 100323,
+      "deployed_parameters": 100323
+    }
+  ],
+  "source_manifest_sha256": "5aa2c227e4ee3a58eadd96260fd74d7409a5ced56a1db1f86b99797794589787",
+  "code_manifest_sha256": "670ad68fb5bdb8023bc09067afb40a8f5e22f3f06ce057dfa8f18ab21f9b461e",
+  "optimizer": {
+    "learning_rate": 0.003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1,
+    "foreach": false,
+    "epsilon": 1e-08
+  },
+  "stage": "fixed",
+  "regime": "default",
+  "updates_per_arm": 512,
+  "stage_caps": {
+    "total_CPU": 360,
+    "total_wall": 600,
+    "outer_CPU": 5,
+    "parent_CPU": 10,
+    "child_CPU": 345,
+    "child_stop_CPU": 340,
+    "parent_stop_CPU": 8,
+    "monitor_wall": 590,
+    "poll": 1,
+    "inventory_interval": 10,
+    "cleanup": 5
+  },
+  "checkpoint_steps": [
+    0,
+    32,
+    64,
+    112,
+    128,
+    256,
+    384,
+    496,
+    512
+  ],
+  "training_authorized": true,
+  "policy_amendment_approved": true,
+  "approval_evidence": "OWNER_AUTHORIZATION.json",
+  "declared_classification": "SYNTHETIC_SINGLE_SEED_EXPLORATORY_NONCOMPARATIVE_NOT_INDEPENDENTLY_QUALIFIED"
+}
