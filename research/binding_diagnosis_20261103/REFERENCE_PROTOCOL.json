@@ -1,0 +1,33 @@
+{
+  "kind": "NO_FIT_INDEPENDENT_REFERENCE_AUDIT",
+  "optimizer_updates_allowed": 0,
+  "seed": 18001,
+  "models": [
+    "phase",
+    "context"
+  ],
+  "precisions": [
+    "FP32",
+    "FP64"
+  ],
+  "models_constructed": 4,
+  "CPU_seconds": 120,
+  "wall_seconds": 180,
+  "code_sha256": {
+    "write_repair.py": "46afc6b25e93072c0e5fe6707cb15c81828554733d297da578188d94b9077c67",
+    "model_repair.py": "ec2040e75b42408b40d677a79b0ff2cb28521aa29da4f22bf9de8c03e7887dbe",
+    "repaired_reference.py": "c0d568ee040eb3239086c2d550a0090fb0d821b7e8bcc8147e726a99ef11e568",
+    "audit_reference.py": "25be7a4484dfb82aefcbced0ac8c2d8ed051a2bea0bcb6879f1005b915c401d0"
+  },
+  "FP32": {
+    "forward_state_loss_atol_rtol": 4e-05,
+    "gradient_atol_rtol": 0.0004,
+    "discrete_routes": 0
+  },
+  "FP64": {
+    "forward_state_loss_atol_rtol": 1e-09,
+    "gradient_atol_rtol": 1e-08,
+    "discrete_routes": 0
+  },
+  "scope": "Initial source/independent-equation consistency of declared surrogate. No optimizer, new fitted checkpoint, held-out query, TEST or promotion."
+}
