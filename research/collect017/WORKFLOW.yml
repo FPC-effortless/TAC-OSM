@@ -38,7 +38,6 @@ jobs:
         run: python -m collect012.restore_data
       - name: Check exact launch and full-graph fixtures
         working-directory: research/collect017
-            research/collect017
         env:
           OMP_NUM_THREADS: '1'
           OPENBLAS_NUM_THREADS: '1'
@@ -84,18 +83,15 @@ jobs:
         run: python -m collect012.restore_data
       - name: Verify launch inputs
         working-directory: research/collect017
-            research/collect017
         run: python -m collect017.verify_launch
       - name: Execute complete registered fit
         working-directory: research/collect017
-            research/collect017
         env:
           OMP_NUM_THREADS: '1'
           OPENBLAS_NUM_THREADS: '1'
         run: python -m collect017.train --arm '${{ matrix.arm }}' --seed '${{ matrix.seed }}' --output 'results/${{ matrix.arm }}_${{ matrix.seed }}'
       - name: Fresh process frozen-checkpoint evaluation
         working-directory: research/collect017
-            research/collect017
         env:
           OMP_NUM_THREADS: '1'
           OPENBLAS_NUM_THREADS: '1'
