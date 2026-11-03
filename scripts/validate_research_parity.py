@@ -17,11 +17,13 @@ Usage:
 """
 from __future__ import annotations
 import argparse
+import ast
 import json
 import math
 import re
 import subprocess
 import sys
+import types
 from collections import defaultdict
 from pathlib import Path
 
@@ -275,8 +277,20 @@ def _check_manifest_parity_only(m,phase="preflight"):
 
 
 
+def _synthetic_policy():
+    """Load the adjacent reviewed source bytes, never a stale .pyc cache."""
+    path = Path(__file__).resolve().with_name("synthetic_diagnostic_policy.py")
+    module = types.ModuleType("tac_osm_synthetic_diagnostic_policy")
+    module.__file__ = str(path)
+    exec(compile(path.read_bytes(), str(path), "exec", dont_inherit=True), module.__dict__)
+    return module
+
+
 def check_manifest(m, phase="preflight", *, reward_attestation=None,
-                   trusted_reward_public_key_hex=None):
+                   trusted_reward_public_key_hex=None, approval_bytes=None,
+                   grant_bytes=None, review_bytes=None,
+                   trusted_approval_sha256=None, trusted_grant_sha256=None,
+                   actual=None):
     """Canonical prospective gate: resource parity PLUS independently signed
     per-variant reward/outcome/access evidence. Historical studies unchanged.
 
@@ -284,6 +298,17 @@ def check_manifest(m, phase="preflight", *, reward_attestation=None,
     not genuine source evidence. For CLI runs the public key comes exclusively
     from the operator-provisioned environment, never the model manifest.
     """
+    # Additive, explicit category only. Old parity and signed-reward paths below
+    # retain their exact behavior; scope-only registration never enters here.
+    if isinstance(m, dict) and m.get("study_type") == "synthetic_diagnostic_fit":
+        try:
+            return _synthetic_policy().validate_synthetic_diagnostic(
+                m, phase, approval_bytes=approval_bytes, grant_bytes=grant_bytes,
+                review_bytes=review_bytes,
+                trusted_approval_sha256=trusted_approval_sha256,
+                trusted_grant_sha256=trusted_grant_sha256, actual=actual)
+        except ValueError as exc:
+            raise ParityError(str(exc)) from exc
     report = _check_manifest_parity_only(m, phase)
     if m["study_type"] == "noncomparative_diagnostic" or not requires_100k_policy(m["study_id"]):
         report["reward_integrity"] = "NOT_APPLICABLE_HISTORICAL_OR_NO_FIT"
@@ -311,6 +336,118 @@ def find_changed_studies(base_head):
             if m:
                 studies.add(("me" if "/me" in "/"+path.lower() else "dev")+m.group(1))
     return sorted(studies)
+
+
+def find_changed_synthetic_studies(base_head):
+    """Separate discovery; do not broaden or reinterpret the historical ME/DEV scan."""
+    check = subprocess.run(["git", "diff", "--name-only", base_head],
+                           check=True, capture_output=True, text=True)
+    studies = set()
+    prefix = "research/synthetic_diagnostics/"
+    for path in check.stdout.splitlines():
+        if path.startswith(prefix):
+            parts = path[len(prefix):].split("/")
+            if len(parts) < 2:  # Index/readme files are not study registrations.
+                continue
+            demand(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", parts[0]),
+                   "synthetic diagnostics require a named study directory")
+            studies.add(parts[0])
+    return sorted(studies)
+
+
+def _registered_python_source(root, manifest, field):
+    name = manifest.get(field)
+    demand(isinstance(name, str) and name and "\\" not in name
+           and not name.startswith("/")
+           and all(part not in ("", ".", "..") for part in name.split("/")),
+           field + " must be a normalized repository-relative path")
+    path = (root / name).resolve()
+    demand(path.is_relative_to(root.resolve()) and path.is_file() and path.suffix == ".py",
+           field + " must name an existing Python source within the repository")
+    try:
+        return path, ast.parse(path.read_bytes(), filename=str(path))
+    except (SyntaxError, UnicodeDecodeError) as exc:
+        raise ParityError(field + " is not valid Python source: " + str(exc)) from exc
+
+
+def _gate_phases(tree):
+    phases = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        name = node.func.id if isinstance(node.func, ast.Name) else (
+            node.func.attr if isinstance(node.func, ast.Attribute) else None)
+        if name not in ("validate_synthetic_diagnostic", "check_manifest"):
+            continue
+        phase = node.args[1] if len(node.args) > 1 else None
+        for item in node.keywords:
+            if item.arg == "phase":
+                phase = item.value
+        if isinstance(phase, ast.Constant) and phase.value in ("preflight", "final"):
+            phases.add(phase.value)
+    return phases
+
+
+def _check_synthetic_runner_hooks(runner, runner_tree, admission, admission_tree):
+    # This is source registration consistency, not a proof of execution order,
+    # canonical call resolution, external approval, or actual runtime checks.
+    demand(_gate_phases(admission_tree) == {"preflight", "final"},
+           "synthetic admission source must call the canonical preflight and final gates")
+    admission_name = admission.stem
+    aliases = set()
+    for node in ast.walk(runner_tree):
+        if isinstance(node, ast.Import):
+            for name in node.names:
+                if name.name.split(".")[-1] == admission_name:
+                    aliases.add(name.asname or name.name)
+        elif isinstance(node, ast.ImportFrom):
+            for name in node.names:
+                if name.name == admission_name:
+                    aliases.add(name.asname or name.name)
+    def dotted(node):
+        if isinstance(node, ast.Name):
+            return node.id
+        if isinstance(node, ast.Attribute):
+            head = dotted(node.value)
+            return head + "." + node.attr if head else None
+        return None
+    calls = {name: [] for name in ("enforce", "final")}
+    torch_imports = []
+    for node in ast.walk(runner_tree):
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+            if dotted(node.func.value) in aliases and node.func.attr in calls:
+                calls[node.func.attr].append(node.lineno)
+        if isinstance(node, ast.Import) and any(n.name.split(".")[0] == "torch" for n in node.names):
+            torch_imports.append(node.lineno)
+        elif isinstance(node, ast.ImportFrom) and node.module and node.module.split(".")[0] == "torch":
+            torch_imports.append(node.lineno)
+    demand(calls["enforce"] and calls["final"],
+           "synthetic runner must invoke its declared admission.enforce and admission.final hooks")
+    demand(min(calls["enforce"]) < min(calls["final"]),
+           "synthetic runner must declare preflight before final")
+    demand(not torch_imports or min(calls["enforce"]) < min(torch_imports),
+           "synthetic runner must declare admission before Torch imports")
+
+
+def check_changed_synthetic(base_head, root):
+    studies = find_changed_synthetic_studies(base_head)
+    for study in studies:
+        file = root / "research" / "synthetic_diagnostics" / study / "FAIR_COMPARISON.json"
+        demand(file.is_file() and file.resolve().is_relative_to(root.resolve()),
+               f"{study}: missing root FAIR_COMPARISON.json for synthetic diagnostic registration")
+        manifest = json.loads(file.read_bytes())
+        try:
+            result = _synthetic_policy().validate_scope(manifest)
+        except ValueError as exc:
+            raise ParityError(str(exc)) from exc
+        runner, runner_tree = _registered_python_source(root, manifest, "runner_path")
+        admission, admission_tree = _registered_python_source(root, manifest, "admission_path")
+        demand(runner != admission, "synthetic runner and admission must be distinct sources")
+        _check_synthetic_runner_hooks(runner, runner_tree, admission, admission_tree)
+        print(json.dumps({"study": "synthetic_diagnostics/" + study,
+                          "registration_only": result,
+                          "execution_authorized": False}, sort_keys=True))
+    return ["synthetic_diagnostics/" + study for study in studies]
 
 
 def check_changed(base_head,root):
@@ -347,7 +484,7 @@ def check_changed(base_head,root):
                    "source/reward/ACL prefit evidence and block postfit promotion "
                    "without signed factual goal/reward/checkpoint evidence")
         print(json.dumps({"study":study,"preflight":result},sort_keys=True))
-    return studies
+    return studies + check_changed_synthetic(base_head, root)
 
 
 def main():
@@ -360,7 +497,13 @@ def main():
     cli.add_argument("--deployed-parameters",type=int,
                      help="Optional complete learned parameter count for standalone prefit/final guard")
     cli.add_argument("--phase",choices=("preflight","final"),default="preflight")
-    cli.add_argument("--reward-evidence", help="evaluator-signed attestation JSON; required for prospective fits")
+    cli.add_argument("--reward-evidence", help="evaluator-signed attestation JSON; required for original prospective fit paths")
+    cli.add_argument("--synthetic-approval", help="exact externally verified scope-approval receipt bytes")
+    cli.add_argument("--synthetic-review", help="exact independent source-review receipt bytes")
+    cli.add_argument("--synthetic-grant", help="exact externally released one-shot grant bytes")
+    cli.add_argument("--trusted-synthetic-approval-sha256", help="trusted approval SHA256 injected by the external controller, never self-derived")
+    cli.add_argument("--trusted-synthetic-grant-sha256", help="trusted one-shot grant SHA256 injected by the external controller, never self-derived")
+    cli.add_argument("--synthetic-actual", help="actual final synthetic diagnostic receipt JSON")
     args=cli.parse_args()
     try:
         if args.model_parameters is not None:
@@ -376,7 +519,13 @@ def main():
                     json.loads(Path(args.reward_evidence).read_text())
                     if args.reward_evidence else None),
                 trusted_reward_public_key_hex=__import__("os").environ.get(
-                    "TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX"))
+                    "TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX"),
+                approval_bytes=Path(args.synthetic_approval).read_bytes() if args.synthetic_approval else None,
+                grant_bytes=Path(args.synthetic_grant).read_bytes() if args.synthetic_grant else None,
+                review_bytes=Path(args.synthetic_review).read_bytes() if args.synthetic_review else None,
+                trusted_approval_sha256=args.trusted_synthetic_approval_sha256,
+                trusted_grant_sha256=args.trusted_synthetic_grant_sha256,
+                actual=json.loads(Path(args.synthetic_actual).read_bytes()) if args.synthetic_actual else None)
             print(json.dumps(r,sort_keys=True))
         else:
             studies=check_changed(args.check_changed,Path.cwd())

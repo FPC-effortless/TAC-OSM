@@ -19,7 +19,9 @@ protocols, failed runs, and evidence remain intact.
    labels, simulated sensor physics, benchmark oracles and injected rewards may
    only be used as clearly labelled unit/integration tests, negative controls or
    mechanism diagnostics. Do not spend a new standalone research registration
-   optimizing synthetic task accuracy. A passing synthetic suite has *zero*
+   optimizing synthetic task accuracy, except the separately reviewed and
+   bounded `synthetic_diagnostic_fit` category specified below. A passing
+   synthetic suite has *zero*
    weight in primary scientific or product promotion.
 3. **Physical laboratory measurements are not field deployment.** A real
    instrument with an experimentally injected fault is empirical physical data,
@@ -57,7 +59,9 @@ protocols, failed runs, and evidence remain intact.
    blanks to fill with synthetic proxies.
 9. **Existing synthetic studies remain reproducible historical diagnostics.**
    Freeze their findings and preserve their hashes/checkpoints, but do not
-   extend synthetic-only pilots or promote them to primary evidence. In
+   extend synthetic-only pilots or promote them to primary evidence. The
+   exception below requires a new immutable registration, never mutation or
+   inherited authorization of a historical pilot. In
    particular, the SEQ-TRANSFER-006 synthetic pilot on PR #232 is engineering
    evidence of a narrow, supervised ability only; its reserved synthetic TEST
    cannot satisfy this policy or be treated as a world-model milestone.
@@ -76,7 +80,7 @@ protocols, failed runs, and evidence remain intact.
 
 - **Exact target:** 100,000 trainable parameters **per independent trained model**, with an inclusive ±5% tolerance: **95,000–105,000**. This is an absolute model-size requirement, not merely a condition that compared architectures have similar sizes. Count encoder, recurrent/fast/slow/associative state projections, shared experts, concept components, action encoders, all decoder passes, routing, forecasts, uncertainty and decision heads, trainable embeddings and other scored-pathway learned parameters. Count shared weights only once; repeated decoder execution does not multiply parameter count. Independently count **all deployed learned weights**, including any frozen pretrained backbone: the same 95k–105k scale applies. Report untrained deterministic priors and runtime memory separately.
 - **Fair matches remain stricter:** for two or more trained alternatives, every arm must individually lie within **95k–105k**, AND trainable and deployed counts must match **within 1% between arms**, with the original real-world data, split, optimizer steps and training/FLOP budget fair-comparison requirements unchanged. A matched pair of 40k or 125k networks **fails** the new absolute rule even if their sizes match each other perfectly. A 95k-versus-105k pair **fails** the existing 1% parity rule.
-- **Fail closed before any optimizer step:** record exact live-model `sum(p.numel() for p in model.parameters() if p.requires_grad)` and `sum(p.numel() for p in model.parameters())` from the **actual instantiated implementation**. Record these in the preregistered `FAIR_COMPARISON.json` (single trained models use `study_type: single_model_training`). Check again against the actual fitted model and checkpoint in the postfit `--phase final` evidence. New noncomparative diagnostics must declare `no_new_model_fits: true`; a purported diagnostic must not train around this rule. The machine validator `scripts/validate_research_parity.py` enforces the prospective 100k count alongside the existing 1% fair-match gate; standalone implementations may call `--model-parameters COUNT --deployed-parameters COUNT` before fitting.
+- **Fail closed before any optimizer step:** record exact live-model `sum(p.numel() for p in model.parameters() if p.requires_grad)` and `sum(p.numel() for p in model.parameters())` from the **actual instantiated implementation**. Record these in the preregistered `FAIR_COMPARISON.json` (single trained models use `study_type: single_model_training`). Check again against the actual fitted model and checkpoint in the postfit `--phase final` evidence. The existing `noncomparative_diagnostic` category must declare `no_new_model_fits: true`; a purported diagnostic must not train around this rule. Only the explicitly separate `synthetic_diagnostic_fit` exception below permits a fitted diagnostic; its actual pre/postfit 100k and within-1% control requirements remain mandatory. The machine validator `scripts/validate_research_parity.py` enforces the prospective 100k count alongside the existing 1% fair-match gate; standalone implementations may call `--model-parameters COUNT --deployed-parameters COUNT` before fitting.
 - **No gaming:** do not add unused/dummy weights, frozen weight padding, artificial width inflation, external hidden learned models, selectively uncounted heads or a materially weaker comparator just to hit the size. Make every counted trained component useful and trainable on identical eligible data; count all model-owned pretrained/frozen learned weights within the deployed total.
 - **Classical controls:** pure persistence, deterministic physics/servo rules and non-neural analytical filters with no learned neural parameter tensor remain baseline methods, not ~100k-parameter neural training candidates. Keep them as compulsory external baselines instead of artificially padding them.
 - **Historical preservation and prospective scope:** ME001–ME072 and DEV001–DEV061 are frozen legacy registrations and retain their original parameter counts, scores and checkpoints; do not retrain them, manufacture larger models or retrospectively relabel results. The first future ME-series registered model training is ME073 and later (DEV062 and later); new unrecognized study IDs also follow the 100k rule. **A new fit, resumed new experimental training, newly trained seed or new model configuration—even when forked from legacy code—falls under this rule.** Renaming a new experiment to an old legacy ID is prohibited. The software's historical-study compatibility path is only for replaying unchanged original results.
@@ -89,7 +93,9 @@ protocols, failed runs, and evidence remain intact.
 
 **Applies prospectively to ALL trained-architecture comparisons and ablations**
 including TAC-OSM vs GRU, SSM, attention, other recurrent models, and
-retrieval/planning variants. Preregister the complete arm matrix before any
+retrieval/planning variants. A bounded `synthetic_diagnostic_fit` mechanism
+screen below is noncomparative and may not rank/select architectures or
+claim a win; it is not admitted as a comparison by this contract. Preregister the complete arm matrix before any
 held-out result is inspected. A table of uncontrolled model sizes, data or
 budgets is an *exploratory systems comparison*, NOT a valid head-to-head
 architecture win.
@@ -321,3 +327,36 @@ common allocated compute budget to favor a preferred architecture.
 The earlier 56.7% TAC-versus-GRU CPU-runtime difference is an **efficiency
 measurement, not a fairness violation**. The original measured values remain
 unaltered; only their scientific interpretation is corrected.
+
+
+## Narrow prospective synthetic diagnostic-fit exception (2026-11-03)
+
+The user/operator approved a bounded synthetic diagnostic-fit category on
+2026-11-03, not an unseen implementation or any particular execution. The
+normative scope, admission sequence and collection requirements are in
+[SYNTHETIC-DIAGNOSTIC-FIT-EXCEPTION-2026-11-03.md](SYNTHETIC-DIAGNOSTIC-FIT-EXCEPTION-2026-11-03.md).
+Only `study_type: synthetic_diagnostic_fit` receives this prospective
+exception to requirements 2/9's synthetic-only fitting prohibitions and the
+general no-fit-diagnostic rule. It is a single-seed noncomparative mechanism
+screen, not an eligible architecture comparison. Existing no-fit diagnostics,
+real-source single-model training and full-comparison/signed qualification
+paths retain their original requirements and machine checks.
+
+Every trained control remains 95,000–105,000 trainable and deployed learned
+parameters with at most 1% relative gaps. Require matched synthetic data,
+ordered exposure, full fixed updates and selection privileges, no rescue
+tuning, bounded aggregate resources, exact reviewed source/runtime and
+complete actual pre/postfit/checkpoint/replay receipts. No equal CPU-time
+requirement is introduced and no FLOP-parity claim follows.
+
+Externally verified root scope approval, independently reviewed exact
+implementation and a separate one-shot bounded release are required before
+numerical work. Reviewed local CPU execution is explicitly permitted under
+that release, rather than the usual phone-queue/Actions routing. A validator
+checks declarations and external hash consistency, not cryptographic user
+authorship; the trusted controller must verify actual approval and consume
+the release once. Every result remains synthetic, exploratory, single-seed
+and not independently qualified, with zero promotion weight. No architecture
+ranking/selection, protected TEST, real corpus, private checkpoint, GPU, paid
+compute, superiority/readiness/safety claims or promotion is permitted.
+Historical copies and original evidence remain immutable.

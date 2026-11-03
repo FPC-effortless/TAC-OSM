@@ -3,7 +3,8 @@
 ## Phone-first autonomous research lab compute and status contracts (2026-10-27)
 
 Read CHARTER.md, CODEX.md and research/PHONE-FIRST-AUTONOMOUS-LAB-2026-10-27.md.
-For ALL proposed training/evaluation experiments, agents MUST preregister a
+Except for the narrowly governed `synthetic_diagnostic_fit` category below,
+for ALL proposed training/evaluation experiments, agents MUST preregister a
 reviewed research/phone_queue protocol and run scripts/phone_lab.py plan to
 choose GitHub Actions for bounded CPU/no-fit tasks or Kaggle NvidiaTeslaT4
 (EXACTLY TWO T4s) for justified CUDA/GPU speedup tasks. Never claim that
@@ -53,7 +54,7 @@ preserved but do not make a comparison scientifically invalid by themselves.
 
 ## Binding 100k trained-model scale (effective 2026-10-23)
 
-For EVERY future trained TAC-OSM neural model or comparator (including event/robot models, one-off fits and each seed), require **100,000 trainable parameters ±5% inclusive (95,000–105,000)** AND the same band for all deployed learned model parameters. For matched architecture studies, independently require **≤1% relative parameter gap between every trained arm** on exactly matching real data/budget. Count ALL active encoder, fast/slow/associative memory, concept, shared-weight decoder, routing, action, forecast, uncertainty and policy heads; no dummy padding or bypass with a frozen pretrained encoder. Measure the actual instantiated model **BEFORE the first optimizer step** and remeasure the actual final model at the postfit gate. Use `scripts/validate_research_parity.py --manifest ... --phase preflight` and `--phase final`, or `--model-parameters COUNT --deployed-parameters COUNT` for a standalone prefit. For solo training use `study_type: single_model_training`; prospective diagnostics are explicitly no-fit. If outside the band or missing receipts, DO NOT TRAIN. Do not relax the matched data, training compute, checkpoints/replay or real-world evaluation obligations, and do not require equal CPU time. Historical unchanged ME001–ME072/DEV001–DEV061 experiments and their existing model bytes remain as originally measured; any NEW trained fit belongs to this prospective rule regardless of recycled old code or paths. See rule 12 in `research/REAL-WORLD-EVIDENCE-RULES.md`.
+For EVERY future trained TAC-OSM neural model or comparator (including event/robot models, one-off fits and each seed), require **100,000 trainable parameters ±5% inclusive (95,000–105,000)** AND the same band for all deployed learned model parameters. For matched architecture studies, independently require **≤1% relative parameter gap between every trained arm** on exactly matching real data/budget. Count ALL active encoder, fast/slow/associative memory, concept, shared-weight decoder, routing, action, forecast, uncertainty and policy heads; no dummy padding or bypass with a frozen pretrained encoder. Measure the actual instantiated model **BEFORE the first optimizer step** and remeasure the actual final model at the postfit gate. Use `scripts/validate_research_parity.py --manifest ... --phase preflight` and `--phase final`, or `--model-parameters COUNT --deployed-parameters COUNT` for a standalone prefit. For real-source solo training use `study_type: single_model_training`; `noncomparative_diagnostic` remains explicitly no-fit. The separately governed `synthetic_diagnostic_fit` exception below is the only fitted synthetic diagnostic category. If outside the band or missing receipts, DO NOT TRAIN. Do not relax the matched data, training compute, checkpoints/replay or real-world evaluation obligations, and do not require equal CPU time. Historical unchanged ME001–ME072/DEV001–DEV061 experiments and their existing model bytes remain as originally measured; any NEW trained fit belongs to this prospective rule regardless of recycled old code or paths. See rule 12 in `research/REAL-WORLD-EVIDENCE-RULES.md`.
 
 ## Compulsory cross-repository mathematical-engineering rule — 2026-10-24
 
@@ -120,7 +121,9 @@ a distinct prerequisite. Keep sealed TEST unopened for iterative debugging.
 The prospective `scripts/validate_research_parity.py --phase preflight` and
 `--phase final` gates now require `--reward-evidence` plus an operator-injected
 `TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX`. This applies to single-model and
-architecture-comparison registrations **for any TAC-OSM family or seed**.
+architecture-comparison registrations **for any TAC-OSM family or seed**. The
+separate `synthetic_diagnostic_fit` path below permits only unqualified
+synthetic collection and cannot satisfy or bypass these qualification gates.
 Each registered model/seed must have signed, externally verified outcome
 evidence tied to its exact trained checkpoint. Before fit, independently
 verify original source, separated goal evaluator, protected scorer artifacts
@@ -137,3 +140,33 @@ signature implies any of six variants has achieved real-world qualification.
 ## Optional simplified experiment lab (2026-10-27)
 
 New and historical TAC-OSM workflows MAY index existing authorized FIT/DEV/diagnostic report files using `scripts/lab.py record` and view a static, offline dashboard using `scripts/lab.py report`. Use `research/LIGHTWEIGHT-LAB-2026-10-27.md` for the default GitHub/Python approach. The immutable lab receipt is *metadata only*, never a standalone source authority, checkpoint archive, fair-comparison gate, model capability result or reward-hacking certificate. Optional vendor/cloud adapters are disabled by default and must not upload originals, open TEST or incur compute charges without authorization. Preserve all existing experimental commands, source-attestation prerequisites, checkpoint-replay and PNDS Lean/Python rules. The native CI runs only no-fit fixture indexing.
+
+
+## Narrow synthetic diagnostic-fit exception (scope approved 2026-11-03)
+
+Read `research/SYNTHETIC-DIAGNOSTIC-FIT-EXCEPTION-2026-11-03.md` before preparing
+any `study_type: synthetic_diagnostic_fit` registration. The user approved
+this prospective category, not unseen implementation hashes or execution.
+Register a new immutable study/version under
+`research/synthetic_diagnostics/<study>/FAIR_COMPARISON.json`; declare the
+runner and admission source paths. Source-only CI registration checks are
+not run approval. Preserve historical copies and the old validator branches.
+
+Only this category permits a single-seed, 95k–105k, within-1%-parameter,
+matched-exposure noncomparative synthetic mechanism screen. Full fixed
+budgets, no rescue tuning, causal checks, exact source/runtime/data hashes,
+sealed generated held-out labels until all fits freeze, actual pre/postfit
+counts and complete checkpoint/resource receipts are mandatory. Never rank
+or select architecture winners or claim qualification, superiority, safety,
+readiness or promotion. CPU time is reported, not required to match.
+
+Reviewed bounded local CPU execution is this category's explicit exception
+to the general phone-queue/planner and Actions CPU routing instructions. It
+requires externally verified root scope approval, independent exact source
+review and a separate one-shot bounded release with externally supplied trust
+anchors. Check admission before Torch/model/optimizer work and live counts
+before the first update. No self-authored flag or hash proves approval.
+No autonomous retry, TEST access, real corpus, private checkpoint, GPU, paid
+compute, publication or merge is authorized. The original real-data, full
+architecture-comparison, signed qualification, anti-cheat and PNDS rules
+remain unchanged outside these explicitly scoped exceptions.
