@@ -1,0 +1,57 @@
+{
+  "status": "PASS_TRAINED_SOURCE_AUDIT",
+  "arm": "detach_128",
+  "seed": 16001,
+  "checkpoints": [
+    {
+      "step": 0,
+      "sha256": "4aa45567faf36db16ee497fca50474e26b327189ed17d4f554c56f20999eadc2"
+    },
+    {
+      "step": 128,
+      "sha256": "7a7ddf42046ed21a6d86dbb5395ad596ecd79a0dbd6283d534067d211ed62c3d"
+    },
+    {
+      "step": 256,
+      "sha256": "fe3bd52507f05359b48660bfad72515216d0d7c3d21cb87e50d19162bfd61866"
+    },
+    {
+      "step": 512,
+      "sha256": "3a6530e0407c76fd15ff54665e891991749f0a17e543e4f1d986e35063a0d3bd"
+    }
+  ],
+  "updates": 512,
+  "replay_max_abs": 1.1920928955078125e-06,
+  "trained_reference": [
+    {
+      "dtype": "torch.float32",
+      "logits_max_abs": 9.5367431640625e-07,
+      "state_max_abs": 1.9073486328125e-06,
+      "surrogate_gradient_max_abs": 4.470348358154297e-07
+    },
+    {
+      "dtype": "torch.float64",
+      "logits_max_abs": 1.7763568394002505e-15,
+      "state_max_abs": 5.329070518200751e-15,
+      "surrogate_gradient_max_abs": 5.551115123125783e-16
+    }
+  ],
+  "cross_boundary_answer_credit": {
+    "first_chunk_embedding_gradient_l1": 0.0,
+    "phase_state_gradient_l1": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "source_exposure_verified": 512,
+  "exposure_sequence_sha256": "455779d3f75b99935bfcc31b2627caf5c141c2f1b255eeac10fcb4ed1652dfa9",
+  "causal_future_poison": true,
+  "owner_isolation": true,
+  "owner_mismatch_rejected": true,
+  "prefix_branch_immutable": true,
+  "optimizer_updates_in_audit": 0,
+  "independent_qualification": false,
+  "full_Lean_IEEE_AD": "OPEN"
+}
