@@ -1,0 +1,22 @@
+{
+  "status": "PASS_PARSED_PATHS_AND_ALL_RUN_COMMANDS",
+  "directories": [
+    "research/collect012",
+    "research/collect017",
+    "research/collect012",
+    "research/collect017",
+    "research/collect017",
+    "research/collect017"
+  ],
+  "commands": [
+    "python -m pip install numpy==1.26.4\npython -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu\n",
+    "python -m collect012.restore_data",
+    "cmp WORKFLOW.yml ../../.github/workflows/collect017-attention-sanity.yml\npython -m collect017.verify_launch > results/REMOTE_PREFLIGHT.json\npython -m unittest collect017.test_prefit -v\n",
+    "python -m pip install numpy==1.26.4\npython -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu\n",
+    "python -m collect012.restore_data",
+    "python -m collect017.verify_launch",
+    "python -m collect017.train --arm '${{ matrix.arm }}' --seed '${{ matrix.seed }}' --output 'results/${{ matrix.arm }}_${{ matrix.seed }}'",
+    "python -m collect017.evaluate --run 'results/${{ matrix.arm }}_${{ matrix.seed }}' --output 'results/${{ matrix.arm }}_${{ matrix.seed }}'"
+  ],
+  "full_fit_updates_before_repair": 0
+}

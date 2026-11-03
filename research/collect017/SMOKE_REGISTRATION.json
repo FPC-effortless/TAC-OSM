@@ -1,0 +1,141 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_type": "single_model_training",
+  "execution_level": "internal_research",
+  "registered_before_first_fit": true,
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT",
+      "DEV"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "real_world_source": {
+    "name": "Pinned Tiny Shakespeare; verbatim source quotations plus explicitly generated copy-query framing",
+    "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "observed_real_outcomes": true,
+    "publisher_url": "https://github.com/karpathy/char-rnn/blob/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+    "license": "MIT",
+    "license_evidence_url": "https://github.com/karpathy/char-rnn/blob/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/Readme.md#license",
+    "source_receipt": "../collect012/data/SOURCE_QUALIFICATION.json",
+    "augmentation": "All arms receive identical constructed temporary-key copy tasks; these are mechanism supervision, not real-world facts or qualified primary intelligence evidence."
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "6243e6daa2918351185e13192c0f6e5ac74c7cf1957a710f0b8e8c39cc1d439d",
+    "rule": "original contiguous 90/5/5; TEST bytes absent"
+  },
+  "causal_protocol": "Byte-prefix causal attention; connected 384-byte BPTT; KV window 1536 covers all registered histories and generations. Exact same source copy/LM training batches as COLLECT016. No phase routing/balance loss exists.",
+  "checkpoint_policy": "Retain initialization and immutable 256-step model/AdamW/RNG snapshots; exact source/data/protocol hashes and input replay. Fixed final update, never best DEV.",
+  "scientific_status": "ADDITIONAL_POST_NULL_LEARNABILITY_CONTROL_NOT_ORIGINAL_PRIMARY_COMPARISON",
+  "comparison_gate": "OPEN full FLOPs and independently qualified architecture comparison; additional baseline is explicitly selected after initial COLLECT016 null results.",
+  "study_id": "COLLECT017-OPTIMIZER-SMOKE",
+  "model_config": {
+    "width": 16,
+    "ffn_dim": 38,
+    "depth": 4,
+    "window": 1536,
+    "attention": "causal complete registered prefix; native fast/slow/rotary/SSA retained"
+  },
+  "fit": {
+    "steps": 8,
+    "batch_size": 2,
+    "sequence_length": 384,
+    "chunk_size": 128,
+    "full_bptt": true,
+    "learning_rate": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1.0,
+    "optimizer": "AdamW",
+    "precision": "float32",
+    "schedule": "constant",
+    "seed_ids": [
+      16000
+    ],
+    "checkpoint_steps": [
+      0,
+      8
+    ],
+    "worker_seconds_cap": 300,
+    "execution_backend": "github_actions_cpu",
+    "allocation_gpu_minutes": 0,
+    "natural_coefficient": 1.0,
+    "task_lm_coefficient": 0.25,
+    "answer_coefficient": 1.0,
+    "balance_coefficient": 0.0,
+    "answer_length": 4,
+    "dev_windows": 64
+  },
+  "models": [
+    {
+      "architecture": "attention",
+      "seed": 16000,
+      "trainable_parameters": 99875,
+      "deployed_parameters": 99875
+    }
+  ],
+  "source_hashes": {
+    "research/collect011/collect011/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect011/collect011/model.py": "075b0dbcbc2c4581e9e48756fd5dbebf5564dfbcdaf04532842eaf35974c2167",
+    "research/collect011/collect011/memory.py": "dfbae45dd1108c54a7fbb7fcadaa3c1749a61ac350ad7020a57b18c72d5e273c",
+    "research/collect011/vendor/tacopt109/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect011/vendor/tacopt109/optimized.py": "466968b0764c9edc71f7787dad33983e5a18a946b3ab9b3c1570a58cfd37dc70",
+    "research/collect011/vendor/tacopt109/paired_banks.py": "85bc97d05fbb2879919135078d8664d59d0ca5099088be0fbca6ca4e1b665643",
+    "research/collect011/vendor/tacopt109/reference/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect011/vendor/tacopt109/reference/kernels.py": "1c2782bbaaac7aa54722f420bbbad8c5215f260ed591a6cef154c0540f41b8d1",
+    "research/collect011/vendor/tacopt109/reference/model.py": "84507fd17ace7eb2e880d5f15ee7a3a80c41543041eee103ca926966bcd1e882",
+    "research/collect011/vendor/tacround110/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect011/vendor/tacround110/mhc.py": "520a4200054aa54b120c90eee5de20e47c1ef4ac81213371bf6de208cab190e0",
+    "research/collect011/vendor/tacround110/model.py": "fec2f524837e70b52e252c89a2c40c1b5c4ab7d2eebc9c52593f664994a47626",
+    "research/collect011/vendor/tacround110/ssa.py": "efee9895747cfed6173cccdfcf2c3198e60db18de49397b7ba6324337f73d0eb",
+    "research/collect012/collect012/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/collect012/collect012/common.py": "dcada6a955639b489b3adfae2f24381214ac25d060c444b336b5a09016f33f49",
+    "research/collect012/collect012/reference104.py": "e33793b93dfe861e5154033578f99c860588274320dd6fc7c48aa9313498d99b",
+    "research/collect012/collect012/reference110.py": "30932292b6784c2b62e3559297024b2f9b04e96c4809daa3ce0279e33e85cc53",
+    "research/collect012/collect012/reference.py": "72d3b8697594ee4c775cd3defafa97d7116289f030444ad8c9652f50e55e90d5",
+    "research/collect012/collect012/train.py": "ee92d628bee019a1d284a0db251ae5a216a4c4b169e5da0ae7ba084fc072500e",
+    "research/collect012/collect012/restore_data.py": "2cfaf0e8f66c4b028fe314ec243584d2f6f32088dfb5612c592249ba74e2d8f8",
+    "research/collect014/collect014/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "research/collect014/collect014/common.py": "f2771a375a6d51b1738519757814b6e3d941f5847e4a610d2caf20b3ac387a12",
+    "research/collect014/collect014/model.py": "6acda9054382d07b975da5af606eb73a2ee338a1ffcdf46d3d2941fa5a43de96",
+    "research/collect014/collect014/reference.py": "2a0bddce6ee90967f6ab4211cfaf488e2245362833bb407a549dfb6f7a437075",
+    "research/collect014/collect014/train.py": "68592923be2a13e37d1f368ea58dd5a342ebe2ee5d320ea3c23610fe785568e5",
+    "research/collect014/collect014/evaluate.py": "3575a65e844f693077e3aaf072c4b515d70b32457603c6b83764ccf352371dc4",
+    "research/collect014/collect014/assays.py": "a4530d8e677075a4ed6d4cd8ae9dc262711ff1500e2a0800c4ad6a6a404d3a42",
+    "research/collect014/collect014/test_prefit.py": "5aa3bd79385a66a419ff6bf34a38f09c2e2ca53a6969da9682bda020c93a2ffb",
+    "research/collect014/collect014/register.py": "84485c91adee6518fbd4dfddf25afbdd2fd0c33b1df18fa47ebbd8d5dede8788",
+    "research/collect014/collect014/verify_launch.py": "fb417b7337077c3fcb5dd5d98d324f7e40df0d505f31dbb87c9e600ba462ecb6",
+    "research/collect014/WORKFLOW.yml": "0fed1710af247375ab39e30634f1c559ec30633cd6dc994b4d678bf6eee1c775",
+    "research/collect016/collect016/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "research/collect016/collect016/common.py": "7152e04394544a51b94123c6f80f22aa7fdc5cfe67531fd2d096118a02c306a7",
+    "research/collect016/collect016/model.py": "b47c7f6b18e060aaa42a98e9b356c36f64952b273593bb06f5b2b394ec44b319",
+    "research/collect016/collect016/data.py": "6ddf4ee71e19fc7352256d3f3165213c36bfa3b951711ef99b4625592889101f",
+    "research/collect016/collect016/reference.py": "8b70809de412eb5e6ac69835a0f7d5cc0d10fb4bf0c5dae60f612c6ee93fa5b5",
+    "research/collect016/collect016/train.py": "726ed3fd11975b144857684e8220074b296575dd5ae0641f53fb013c67690abe",
+    "research/collect016/collect016/evaluate.py": "e70ae5fa23121bb0d6986d29a6c5b3d15424138d24db5e448d30685b12e9a01a",
+    "research/collect016/collect016/test_prefit.py": "cbb27e42f2deaed8ee1f734bf75bbacd3fcade36cd1859569cd9fe4ddfece3ab",
+    "research/collect016/collect016/register.py": "7e57797b594099c8c3b69ea4a67d80fa6b61c6e97bbdbc2e0a645eae5ed5a84d",
+    "research/collect016/collect016/verify_launch.py": "3854ca24db8afe451ac9e81462c60293419a0a26effad29cf6f2e4275664f999",
+    "research/collect016/WORKFLOW.yml": "5c6182ff501ef5d6156c99d69ad35f0ef5acbffc182e8ae5abfd12267d004bf1",
+    "research/collect017/collect017/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "research/collect017/collect017/common.py": "caa0c0d596d162061d36028885ccf57c91a57affad9fe66965a03286550250ff",
+    "research/collect017/collect017/model.py": "c9e66efbed0a30081f71b2add05d49efaa2ee1547b3cc634bceccbf7005b9ef5",
+    "research/collect017/collect017/train.py": "f4a77562ad4fc30b40f4beb84f317d6b71e4cc83cebad4b336e795d9815466c2",
+    "research/collect017/collect017/evaluate.py": "370fcd0329aa2692583f759d7c2a737a1c4bbf8c8d55d42ac1fa4bf6899efdaa",
+    "research/collect017/collect017/test_prefit.py": "5b4497c7db4583acddfcedc567a67df221cb200376e9d8de5c5e9035c25b2121",
+    "research/collect017/collect017/register.py": "03d6058b6213a7062fcd3aa5c544d2b001a6ac6a7cede6452cc4624b65d8b0d5",
+    "research/collect017/collect017/verify_launch.py": "8f06bc124939f5a2a9e76a6bf27483cd75e8781da7e8483b0ad40d9ff6d0efc5",
+    "research/collect017/WORKFLOW.yml": "656c2e3cb95024ab1993e1b4cf28d05c1a68bb9508aea4f36230024d8b4017f7"
+  },
+  "evaluation_protocol_sha256": "5a8dfdeabfe03c86e8cadb86288893bf0e4a948514ce81658142cdc3ec0a1290",
+  "experiment_protocol_sha256": "e2b6bb8adcbcda7c1ff72acd65ff839a09af03e45635c9cffefbdf479d970b37",
+  "mathematical_status": "Python whole graph numerical/surrogate-gradient fixtures; Lean definitions partial, full Lean/IEEE/AD OPEN"
+}

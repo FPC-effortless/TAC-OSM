@@ -1,0 +1,42 @@
+{
+  "study": "COLLECT017",
+  "histories": 24,
+  "key_counts": [
+    4,
+    8
+  ],
+  "gaps": [
+    64,
+    256,
+    768
+  ],
+  "primary": {
+    "keys": 4,
+    "gap": 256,
+    "metric": "full-vocabulary first-byte accuracy; exact 4-byte recall, complete maps and absence reported separately"
+  },
+  "cohort_rng": 160002,
+  "conditions": [
+    "normal",
+    "wrong_history",
+    "reset_all",
+    "query_swap"
+  ],
+  "wrong_history": "same temporary keys, different source quotes; first answer class shifted by 1 for every key; correct labels remain original history",
+  "query_swap": "query another present key but score against original label; raw output retained",
+  "present_first_class_balance": "exactly equal a-h across 24 histories for each load; 12.5% constant-class baseline",
+  "source": "DEV only; held-out key families; no model-facing key parser or oracle write masks",
+  "gates": {
+    "each_seed_present_first_accuracy_min": 0.5,
+    "each_seed_normal_minus_wrong_min": 0.2,
+    "each_seed_normal_minus_reset_min": 0.2,
+    "each_seed_absent_first_min": 0.8,
+    "historical_phase_vs_trained_current_only_paired_mean_min": 0.1
+  },
+  "decision": "All gates must pass for narrow supervised query-dependent retrieval claim. Otherwise report failures by seed/condition; no capacity verdict. Gates do not qualify architecture superiority.",
+  "source_lm": "Same 8192 fresh 128-byte original DEV targets as C14; separate 16 contiguous 512-byte windows carry vs reset",
+  "logging": "All query predictions and source offsets; full 256 logits retained for primary normal/wrong/reset. Shared histories reused across arms/seeds.",
+  "sealed_test": "NOT_READ",
+  "addition_status": "Post-initial-COLLECT016-null attention learnability control, registered before its first fit; not part of original primary comparison.",
+  "phase_reset": "NOT_APPLICABLE_NO_PHASE_MEMORY"
+}
