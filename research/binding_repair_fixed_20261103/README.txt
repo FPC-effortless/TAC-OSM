@@ -6,9 +6,10 @@ not stored weights. This proposal measures whether the repair helps acquisition.
 The old one-off synthetic fitting exception was consumed by run 41623750060.
 It does not authorize this new fit; the owner approval record is explicitly false.
 
-Exactly two repaired models: phase and context, 99,971 active parameters each.
-Seed 18001, 128 optimizer updates per model, 256 total. Exact old initializer
-parameter hashes must match BEFORE optimization. Identical data, case schedule,
+Exactly two arms in the same job: original context and repaired context,
+99,971 active parameters each. Seed 18001, 128 optimizer updates per arm, 256
+total. Both initial parameter hashes must equal the original context initializer
+BEFORE any optimizer construction. Identical data, case schedule,
 full 256-byte objective, AdamW LR .003/betas .9,.95/weight decay .1/epsilon 1e-8,
 and clip norm 1. No learning-rate, architecture, gate-bias or epsilon search.
 
@@ -17,8 +18,10 @@ source/reference check, full optimizer/RNG artifacts and bitwise serialization
 replay. First-character and complete-answer success separately require all eight
 FIT cases at BOTH late checkpoints. The 16 reused synthetic DEV cases are already
 exposed; no independent-generalization claim. No early-success selection or
-failure-only extension. Compare with the preserved old phase/context results;
-no new GRU fit and no architecture-superiority claim.
+failure-only extension. The primary control is the unchanged context model
+trained alongside the repair with alternating arm order on identical batches.
+Historical failures remain preserved. One seed cannot establish generalization
+or architecture superiority. No new phase or GRU fit is proposed.
 
 Caps: 360 aggregate CPU seconds, 600 wall seconds, with the same unchanged five
 reviewed wrapper sources and 345-second child CPU hard limit. Keep all failures

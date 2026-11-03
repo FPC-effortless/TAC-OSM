@@ -1,4 +1,4 @@
-name: FLOCK013 single approved repair learning check
+name: FLOCK013 same-job context repair comparison
 on:
   push:
     branches: [repair/flock013-fixed-trial-20261103]
@@ -10,8 +10,8 @@ concurrency:
   group: flock013-fixed-repair-20261103
   cancel-in-progress: false
 jobs:
-  no-fit:
-    if: github.run_attempt == 1 && github.event.head_commit.message == 'run approved FLOCK013 repair trial 20261103 v1'
+  paired-learning-check:
+    if: github.run_attempt == 1 && github.event.head_commit.message == 'run approved FLOCK013 context pair 20261103 v2'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

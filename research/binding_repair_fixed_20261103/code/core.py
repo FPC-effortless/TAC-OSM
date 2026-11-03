@@ -77,3 +77,23 @@ def reference_losses(torch,z,y,mask,first,balance):
     joint=natural+.25*task+answer+0*firstloss+.01*balance
     focused=natural+.25*task+answer+3*firstloss+.01*balance
     return {'first_ce':firstloss,'joint':joint,'first':focused}
+
+
+def build_trial(arm, seed):
+    if arm == "context_legacy_first":
+        from collect018.common import build as legacy_build
+        return legacy_build("context_first", seed)
+    if arm == "context_repaired_first":
+        from model_repair import build as repaired_build
+        return repaired_build("context", seed)
+    raise ValueError("Only the preregistered same-job context control/repair pair is allowed")
+
+
+def trial_reference(model, *args, **kwargs):
+    if model.variant == "collect018_context":
+        from collect018.reference import whole_reference
+    elif model.variant == "FLOCK013_CONTEXT_ZERO_GAIN_ADJOINT":
+        from repaired_reference import whole_reference
+    else:
+        raise ValueError("Unregistered source/reference variant")
+    return whole_reference(model, *args, **kwargs)

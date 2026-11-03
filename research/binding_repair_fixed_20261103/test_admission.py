@@ -7,6 +7,8 @@ import sys
 import tempfile
 import unittest
 import hashlib
+from unittest.mock import patch
+import types
 
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("repair_admission", HERE/"code/admission.py")
@@ -98,6 +100,32 @@ class Scope(unittest.TestCase):
         with (self.root/"code/runner.py").open("a") as handle:
             handle.write("\n# changed\n")
         self.assertEqual(self.result()["status"], "BLOCKED_REPAIR_TRIAL")
+
+    def test_same_job_factory_routes_control_and_repair_separately(self):
+        spec = importlib.util.spec_from_file_location("repair_trial_core", HERE/"code/core.py")
+        core = importlib.util.module_from_spec(spec); spec.loader.exec_module(core)
+        parent = types.ModuleType("collect018"); parent.__path__ = []
+        old = types.ModuleType("collect018.common")
+        old.build = lambda arm, seed: ("legacy", arm, seed)
+        new = types.ModuleType("model_repair")
+        new.build = lambda family, seed: ("repaired", family, seed)
+        with patch.dict(sys.modules, {"collect018": parent, "collect018.common": old, "model_repair": new}):
+            self.assertEqual(core.build_trial("context_legacy_first", 18001), ("legacy", "context_first", 18001))
+            self.assertEqual(core.build_trial("context_repaired_first", 18001), ("repaired", "context", 18001))
+        self.assertNotIn("torch", sys.modules)
+
+    def test_each_arm_uses_its_own_reference_equations(self):
+        spec = importlib.util.spec_from_file_location("repair_trial_core", HERE/"code/core.py")
+        core = importlib.util.module_from_spec(spec); spec.loader.exec_module(core)
+        parent = types.ModuleType("collect018"); parent.__path__ = []
+        old = types.ModuleType("collect018.reference")
+        old.whole_reference = lambda model, token: "legacy-reference"
+        new = types.ModuleType("repaired_reference")
+        new.whole_reference = lambda model, token: "repaired-reference"
+        with patch.dict(sys.modules, {"collect018": parent, "collect018.reference": old, "repaired_reference": new}):
+            self.assertEqual(core.trial_reference(types.SimpleNamespace(variant="collect018_context"), None), "legacy-reference")
+            self.assertEqual(core.trial_reference(types.SimpleNamespace(variant="FLOCK013_CONTEXT_ZERO_GAIN_ADJOINT"), None), "repaired-reference")
+        self.assertNotIn("torch", sys.modules)
 
 
 if __name__ == "__main__":

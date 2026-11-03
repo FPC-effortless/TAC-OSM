@@ -5,9 +5,9 @@
   "model_source_commit": "41af8c423eceeb2bb4f1d95ae391ee807779f603",
   "independent_reference_commit": "7b637554765267b81e41ee38fe9f060767d2a19d",
   "source_manifest_sha256": "fc3c2bfb88f977f3ec0bb8226c13a4ef710f95ef23a1eea5677abe4777b5b40f",
-  "code_manifest_sha256": "7acaf1c9d278e77411b36025f7db6f45cf00fcfcef4a901aca4e6f2ea4987ad3",
+  "code_manifest_sha256": "769e241f081b3f0ed3f267ed7ad94919abef96e10d3dd8503ef58f75f4149b57",
   "wrapper_manifest_sha256": "f3cc87452523d8f16b5dba010378be29f176b5ead4946d43515880957460975b",
-  "protocol_sha256": "cb164d716f6690297614b74e6dd40d8c20c9aed212a2062277f796a584ce7966",
+  "protocol_sha256": "ec6fb4a6ca044d8c7ea4c5aafd748fd75dedb22f3a740e8a3bd310b68b9ce3d1",
   "kernel_checks": 13,
   "source_reference_comparisons": 1956,
   "original_wrapper_sources_unchanged": true,
@@ -18,6 +18,7 @@
   ],
   "model_constructions_by_trial": 0,
   "optimizer_updates_by_trial": 0,
-  "admission_scope_tests": "9 normal and optimized cases required; source-only temporary fixtures",
-  "prefit_active_parameter_gate": "All parameters must require gradients and actual active/deployed counts must equal99971 before optimizer construction"
+  "admission_scope_tests": "11 source-only cases under normal and optimized Python required",
+  "prefit_active_parameter_gate": "All parameters require gradients, active/deployed counts equal 99971, and both initial hashes match before any optimizer construction",
+  "design": "Same-job original-versus-repaired context control; same initial hashes/data/optimizer/budget"
 }

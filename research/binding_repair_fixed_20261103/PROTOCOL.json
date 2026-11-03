@@ -1,15 +1,15 @@
 {
   "schema": "learned-local-binding-learnability/v1",
-  "classification": "FLOCK013_REPAIR_DIAGNOSTIC_NEW_OWNER_EXCEPTION_REQUIRED",
+  "classification": "FLOCK013_SAME_JOB_CONTEXT_ADJOINT_REPAIR_V2_NEW_OWNER_EXCEPTION_REQUIRED",
   "source_commit": "41af8c423eceeb2bb4f1d95ae391ee807779f603",
   "families": [
-    "phase",
-    "context"
+    "context_legacy",
+    "context_repaired"
   ],
   "seed": 18001,
   "parameter_counts": {
-    "phase": 99971,
-    "context": 99971
+    "context_legacy": 99971,
+    "context_repaired": 99971
   },
   "regimes": {
     "default": {
@@ -102,13 +102,21 @@
     }
   },
   "observed_coordinates": {
-    "phase": {
-      "core.blocks.1.fast.key.weight": [
-        22,
-        14
+    "context_legacy": {
+      "core.blocks.0.fast.value.weight": [
+        55,
+        9
+      ],
+      "core.blocks.2.rotary_offer.weight": [
+        63,
+        3
+      ],
+      "core.blocks.2.phase_memory.value.weight": [
+        5,
+        2
       ]
     },
-    "context": {
+    "context_repaired": {
       "core.blocks.0.fast.value.weight": [
         55,
         9
@@ -124,7 +132,7 @@
     }
   },
   "limits": [
-    "One seed, two repaired models only; compare with the preserved old phase/context trial using identical initial parameter hashes and fixed data/exposures.",
+    "One seed, one same-job legacy/repaired context pair; identical initial parameter hashes, fixed FIT bytes/order, optimizer and budget. Historical results are retained, not used as the sole causal control.",
     "128 updates per arm, with checkpoints at 0/32/64/112/128 and success separately requiring first and exact-four correctness at 112 AND 128.",
     "The 16 reused synthetic DEV examples have already been exposed; no independent generalization or architecture superiority claim.",
     "No varying stage, epsilon sweep, automatic retry, protected TEST, GPU, paid compute or merge.",
@@ -142,13 +150,17 @@
     "status": "BLOCKED_NEW_OWNER_EXCEPTION_REQUIRED",
     "files": {
       "OWNER_AUTHORIZATION.json": {
-        "sha256": "58655514c4454f082693da82836aea9dd758a313e5b0ce0344d7de6ccb8ccc6d",
-        "bytes": 560
+        "sha256": "05d4e3538cf71be12e536a45b6b2fcccb8930828dee3118588335e3b5386e75b",
+        "bytes": 714
       },
       "INHERITED_INITIAL_HASHES.json": {
-        "sha256": "8bf33df9af2239ae9304d1de8aa96d0ddc0ebbd595988e796112e677cbf6f1e1",
-        "bytes": 240
+        "sha256": "1d8031179f43c88fd11d30fbbb05cd447278497aa0e68cf8ac4cbd1bea0308b5",
+        "bytes": 181
       }
     }
+  },
+  "model_variants": {
+    "context_legacy": "COLLECT018-CONTEXT_FIRST",
+    "context_repaired": "FLOCK013-CONTEXT-ADJOINT"
   }
 }

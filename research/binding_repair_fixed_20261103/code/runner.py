@@ -79,10 +79,8 @@ def run(root,protocol,grant,out,check):
     sm=json.loads((root/'SOURCE_MANIFEST.json').read_bytes())
     for name,row in sm['files'].items():assert sha(root/'source'/name)==row['sha256']
     finder=core.PinnedFinder(root/'source',sm['files']);__import__('sys').meta_path.insert(0,finder)
-    from model_repair import build as repaired_build
-    def build(arm,seed):return repaired_build(arm.split("_")[0],seed)
+    from core import build_trial as build,trial_reference as whole_reference
     from collect018.model import run_chunks,tensors
-    from repaired_reference import whole_reference
     from collect018.train import objective
     def load_fixture(name):
         p=root/'fixtures'/name;assert sha(p)==protocol['fixture_files'][name]['sha256'];return json.loads(p.read_bytes())
@@ -178,7 +176,10 @@ def run(root,protocol,grant,out,check):
         assert sum(p.numel() for p in models[family].parameters())==protocol['parameter_counts'][family]
         assert all(p.requires_grad for p in models[family].parameters()),'PREFIT_ACTIVE_PARAMETERS_DIFFER'
         assert sum(p.numel() for p in models[family].parameters() if p.requires_grad)==protocol['parameter_counts'][family]
-        initial_hashes[family]=core.parameter_hash(torch,models[family]);assert initial_hashes[family]==json.loads((root/"INHERITED_INITIAL_HASHES.json").read_bytes())[family],"INITIAL_WEIGHTS_NOT_MATCHED";opts[family]=torch.optim.AdamW(models[family].parameters(),lr=.003,betas=(.9,.95),weight_decay=.1,eps=eps,foreach=False);counts['optimizer_constructors']+=1
+        initial_hashes[family]=core.parameter_hash(torch,models[family]);assert initial_hashes[family]==json.loads((root/"INHERITED_INITIAL_HASHES.json").read_bytes())[family],"INITIAL_WEIGHTS_NOT_MATCHED"
+    assert len(set(initial_hashes.values()))==1,'SAME_JOB_INITIAL_WEIGHTS_DIFFER'
+    for family in protocol['families']:
+        opts[family]=torch.optim.AdamW(models[family].parameters(),lr=.003,betas=(.9,.95),weight_decay=.1,eps=eps,foreach=False);counts['optimizer_constructors']+=1
     if regime=='larger_epsilon':
         # Read only pairing/resource metadata. Do not expose the default run's
         # held-out labels or predictions to this optimizer-regime fit.
@@ -264,6 +265,6 @@ def run(root,protocol,grant,out,check):
         check(f'heldout {family}');held[family]=heldout(models[family],groups);assert core.parameter_hash(torch,models[family])==final_hashes[family]
     assert dict(counts)==spec['expected_counts'],(dict(counts),spec['expected_counts'])
     for name,row in sm['files'].items():assert sha(root/'source'/name)==row['sha256']
-    result={'status':'COMPLETE_FIXED_BUDGET_MATRIX','stage':stage,'regime':regime,'epsilon':eps,'seed':protocol['seed'],'counts':dict(counts),'updates':updates,'attempted_updates':attempted,'artifact_verification':artifacts,'initial_hashes':initial_hashes,'final_hashes':final_hashes,'admission_receipt':admission_receipt,'implementation_gate_pass':all(x['pass'] for x in gate_rows),'comparison_rows':gate_rows,'training_probe':evaluations,'heldout':held,'behavioral_gates':behavioral_summary(stage,spec,evaluations,held,protocol['families']),'source_imports':finder.loaded,'qualification':'Repaired-adjoint diagnostic; the 16 reused synthetic DEV examples are already exposed and do not establish independent generalization. Fixed-case optimization and finite synthetic held-out behavior are separate. Single seed, no architecture-superiority or reliable-binding claim. Epsilon is a changed optimizer regime, not a precision fix.'}
+    result={'status':'COMPLETE_FIXED_BUDGET_MATRIX','stage':stage,'regime':regime,'epsilon':eps,'seed':protocol['seed'],'counts':dict(counts),'updates':updates,'attempted_updates':attempted,'artifact_verification':artifacts,'initial_hashes':initial_hashes,'final_hashes':final_hashes,'admission_receipt':admission_receipt,'implementation_gate_pass':all(x['pass'] for x in gate_rows),'comparison_rows':gate_rows,'training_probe':evaluations,'heldout':held,'behavioral_gates':behavioral_summary(stage,spec,evaluations,held,protocol['families']),'source_imports':finder.loaded,'qualification':'Same-job legacy-versus-repaired context adjoint diagnostic; the 16 reused synthetic DEV examples are already exposed and do not establish independent generalization. Fixed-case optimization and finite synthetic held-out behavior are separate. Single seed, no architecture-superiority or reliable-binding claim. Epsilon is a changed optimizer regime, not a precision fix.'}
     dump(out/'PAIRING_RECEIPT.json',{'status':result['status'],'stage':stage,'regime':regime,'initial_hashes':initial_hashes,'updates':updates,'protocol_sha256':grant['protocol_sha256'],'code_manifest_sha256':grant['code_manifest_sha256']})
     return result

@@ -1,5 +1,5 @@
 {
-  "schema": "tac-osm.owner-scoped-synthetic-repair-proposal.v1",
+  "schema": "tac-osm.owner-scoped-synthetic-repair-proposal.v2",
   "study_type": "PROPOSED_SYNTHETIC_REPAIR_DIAGNOSTIC_NO_PRIMARY_CAPABILITY_WEIGHT",
   "training_authorized": false,
   "fresh_owner_exception_approved": false,
@@ -7,8 +7,8 @@
   "independently_qualified": false,
   "scope": {
     "families": [
-      "phase",
-      "context"
+      "context_legacy",
+      "context_repaired"
     ],
     "seed": 18001,
     "updates_per_arm": 128,
@@ -16,22 +16,28 @@
     "optimizer_regime": "default_epsilon1e-8",
     "CPU_seconds_max": 360,
     "wall_seconds_max": 600,
-    "retry_authorized": false
+    "retry_authorized": false,
+    "model_variants": {
+      "context_legacy": "COLLECT018-CONTEXT_FIRST",
+      "context_repaired": "FLOCK013-CONTEXT-ADJOINT"
+    }
   },
   "models": {
-    "phase": {
+    "context_legacy": {
       "trainable_parameters_expected": 99971,
-      "deployed_parameters_expected": 99971
+      "deployed_parameters_expected": 99971,
+      "variant": "COLLECT018-CONTEXT_FIRST"
     },
-    "context": {
+    "context_repaired": {
       "trainable_parameters_expected": 99971,
-      "deployed_parameters_expected": 99971
+      "deployed_parameters_expected": 99971,
+      "variant": "FLOCK013-CONTEXT-ADJOINT"
     }
   },
   "initial_parameter_hashes": "research/binding_repair_fixed_20261103/INHERITED_INITIAL_HASHES.json",
   "source_manifest_sha256": "fc3c2bfb88f977f3ec0bb8226c13a4ef710f95ef23a1eea5677abe4777b5b40f",
-  "code_manifest_sha256": "7acaf1c9d278e77411b36025f7db6f45cf00fcfcef4a901aca4e6f2ea4987ad3",
-  "protocol_sha256": "cb164d716f6690297614b74e6dd40d8c20c9aed212a2062277f796a584ce7966",
+  "code_manifest_sha256": "769e241f081b3f0ed3f267ed7ad94919abef96e10d3dd8503ef58f75f4149b57",
+  "protocol_sha256": "ec6fb4a6ca044d8c7ea4c5aafd748fd75dedb22f3a740e8a3bd310b68b9ce3d1",
   "original_negative_trial": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/41623750060",
   "reference_audit": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/41630918959",
   "prohibited": [
@@ -44,5 +50,6 @@
     "extra regime",
     "extra stage",
     "merge"
-  ]
+  ],
+  "primary_control": "same-job unchanged context architecture; historical negatives retained separately"
 }

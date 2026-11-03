@@ -4,9 +4,9 @@ import json
 from pathlib import Path
 
 SOURCE_SHA256 = "fc3c2bfb88f977f3ec0bb8226c13a4ef710f95ef23a1eea5677abe4777b5b40f"
-SCIENTIFIC_SHA256 = "34b8a2228b070fdefd6a8e0905da06a2360a655253c7ad7025345ff559badfaf"
-SCOPE = {"families": ["phase", "context"], "seed": 18001, "updates_per_arm": 128, "optimizer_updates_total": 256, "optimizer_regime": "default_epsilon1e-8", "CPU_seconds_max": 360, "wall_seconds_max": 600, "retry_authorized": False}
-SCIENCE_FIELDS = ("families", "seed", "parameter_counts", "regimes", "stages", "optimizer_other_settings", "objective", "fixture_files", "observed_coordinates")
+SCIENTIFIC_SHA256 = "29083ee944b0f945ca605c37f9daae935a3b938198ba07c2df2d656460dd69d3"
+SCOPE = {'families': ['context_legacy', 'context_repaired'], 'seed': 18001, 'updates_per_arm': 128, 'optimizer_updates_total': 256, 'optimizer_regime': 'default_epsilon1e-8', 'CPU_seconds_max': 360, 'wall_seconds_max': 600, 'retry_authorized': False, 'model_variants': {'context_legacy': 'COLLECT018-CONTEXT_FIRST', 'context_repaired': 'FLOCK013-CONTEXT-ADJOINT'}}
+SCIENCE_FIELDS = ("families", "seed", "parameter_counts", "regimes", "stages", "optimizer_other_settings", "objective", "fixture_files", "observed_coordinates", "model_variants")
 
 
 def canonical(value):
@@ -25,7 +25,7 @@ def require(condition, reason):
 def inspect(root, protocol, grant):
     root = Path(root)
     try:
-        require(grant.get("scope_id") == "FLOCK013_REPAIR_FIXED_DEFAULT_20261103" and grant.get("protocol") == "LOCAL_BINDING_LEARNABILITY_V1", "Wrong repair release identity")
+        require(grant.get("scope_id") == "FLOCK013_CONTEXT_PAIRED_V2_20261103" and grant.get("protocol") == "LOCAL_BINDING_LEARNABILITY_V1", "Wrong repair release identity")
         require(hashlib.sha256(canonical({k: protocol[k] for k in SCIENCE_FIELDS})).hexdigest() == SCIENTIFIC_SHA256, "Frozen repair scientific scope changed")
         require(digest(root/"SOURCE_MANIFEST.json") == SOURCE_SHA256 == grant.get("source_manifest_sha256"), "Frozen source identity changed")
         require(digest(root/"PROTOCOL.json") == grant.get("protocol_sha256"), "Protocol grant differs")
@@ -37,7 +37,7 @@ def inspect(root, protocol, grant):
         require(grant.get("stage") == "fixed" and grant.get("regime") == "default" and grant.get("retry_authorized") is False, "Unreleased stage, regime or retry")
         require(grant.get("caps") == protocol["stages"]["fixed"]["caps"], "Resource release differs")
         approval = json.loads((root/"OWNER_AUTHORIZATION.json").read_bytes())
-        require(approval.get("schema") == "flock013.owner-synthetic-repair-exception.v1" and approval.get("scope") == SCOPE, "Old or different owner exception does not transfer")
+        require(approval.get("schema") == "flock013.owner-synthetic-repair-exception.v2" and approval.get("scope") == SCOPE, "Old or different owner exception does not transfer")
         require(approval.get("approved") is True, "A fresh owner synthetic-fit exception has not been approved")
         require(approval.get("previous_one_off_exception_transfers") is False, "Previous one-off authority cannot transfer")
         require(approval.get("basis") == "DIRECT_USER_RESPONSE_TO_THIS_EXACT_REPAIR_TRIAL" and str(approval.get("user_response", "")).strip().lower() in {"yes", "proceed", "approved"}, "Missing direct scope-specific approval record")
