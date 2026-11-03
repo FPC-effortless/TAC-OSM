@@ -1,0 +1,12 @@
+{
+  "study": "COLLECT018",
+  "timing": "Supplemental after launch, before inspecting any full-fit score or checkpoint",
+  "primary_replacement": false,
+  "cohorts": "Exact original final DEV cells1/0,4/0 and4/256;24histories, same source facts/keys/offsets as frozen evaluator",
+  "conditions": ["normal", "phase_values_zero", "phase_all_fresh", "native_all_fresh"],
+  "scope": "Preserve owners, clock, signatures and legal shapes. phase_values_zero keeps precision, phase_all_fresh clears phase memory and precision, native_all_fresh resets native fast/slow/rotary/SSA while retaining phase. Caller-owned prefix is immutable.",
+  "interpretation": "State interventions can be out of distribution and alter query addressing. They measure dependence on implemented paths, not a trained ablation, exclusive storage location, architecture superiority or global-attention equivalence.",
+  "gru": "INCONCLUSIVE_NOT_APPLICABLE_NO_PHASE_STATE",
+  "selection": "All12native fixed-final checkpoints, no tuning or chosen seeds",
+  "optimizer_updates": 0
+}
