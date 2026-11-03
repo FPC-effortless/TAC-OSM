@@ -100,11 +100,21 @@ def collect(dest,output,allow_partial=False):
         windows=[]
         for lo,hi in ((1,64),(193,256),(449,512),(961,1024)):
             s=j[lo-1:hi];windows.append(dict(lo=lo,hi=hi,**{k:statistics.mean(r[k] for r in s) for k in ('first_accuracy','first_nll','natural_nll','answer_nll','objective','balance_loss')}))
+        bank_usage=[]
+        if not arm.startswith('gru_'):
+            for layer in range(4):
+                counts=[sum(row['bank_counts'][layer][h] for row in j[-64:]) for h in range(4)];total=sum(counts)
+                bank_usage.append(dict(layer=layer,counts=counts,dominant_share=max(counts)/total))
         result=dict(arm=arm,seed=seed,checkpoint_sha256=receipt['checkpoint_sha256'],initial_parameter_sha256=receipt['initial_parameter_sha256'],parameters=receipt['trainable_parameters'],updates=1024,
             exposure_sequence_sha256=hashlib.sha256(canonical([r['exposure']['batch_sha256'] for r in j])).hexdigest(),cohort_sha256=cohort_hash,summary=summary,gates=gates(summary,spec),ordinary_dev=ev['ordinary_dev'],stage_diagnostics=stages,
-            training_windows=windows,optimizer_seconds=receipt['total_recorded_optimizer_seconds'],fit_elapsed_seconds=receipt['elapsed_seconds'],mean_step_seconds=receipt['mean_step_seconds'],generation_state=generation['rows'][0]['payload'])
+            training_windows=windows,tail_bank_usage=bank_usage,optimizer_seconds=receipt['total_recorded_optimizer_seconds'],fit_elapsed_seconds=receipt['elapsed_seconds'],mean_step_seconds=receipt['mean_step_seconds'],generation_state=generation['rows'][0]['payload'])
         audit=ROOT/'results'/'audits'/f'{folder.name}.json'
         result['trained_source_audit']=json.loads(audit.read_text()) if audit.is_file() else dict(status='PENDING')
+        loc=ROOT/'results'/'localization'/f'{folder.name}.json'
+        if loc.is_file():
+            sub=dict(spec,cells=[dict(keys=1,gap=0),dict(keys=4,gap=0)],conditions=['normal','wrong_history','reset_all'])
+            ll=json.loads(loc.read_text());require(ll['checkpoint_sha256']==receipt['checkpoint_sha256'] and ll['optimizer_updates']==0 and ll['weights_unchanged'],'localization source differs')
+            ss,hh=audit_predictions(ll,sub,data['dev']);result['post_null_key_family_localization']=dict(summary=ss,cohort_sha256=hh,primary_replacement=False)
         results.append(result)
     require(allow_partial or not missing,'missing original models: '+str(missing))
     for seed in SEEDS:

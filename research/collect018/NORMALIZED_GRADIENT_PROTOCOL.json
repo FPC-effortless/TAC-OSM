@@ -1,0 +1,12 @@
+{
+  "timing": "POST_FAILURE_DIAGNOSTIC_AFTER_ALL18_RETRIEVAL_RESULTS_AND_MULTIPLE_TRAINED_FP32_GRADIENT_FAILURES",
+  "models": "All18original final checkpoints",
+  "fixture": "Same2x9 original saved TRAIN bytes and actual independent source equations",
+  "change": "Only probe scalar: sum(square(logits)) to mean(square(logits)), divisor4608. No weights/source equations or original thresholds changed.",
+  "tolerance": {
+    "atol": 0.0004,
+    "rtol": 0.0004
+  },
+  "optimizer_updates": 0,
+  "interpretation": "Numerical sensitivity diagnostic only. A new normalized-probe pass never clears the original sum-probe failure or establishes full mathematical/source/IEEE/AD certification."
+}
