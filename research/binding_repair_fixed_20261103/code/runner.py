@@ -176,6 +176,8 @@ def run(root,protocol,grant,out,check):
     for family in protocol['families']:
         models[family]=build(family+'_first',protocol['seed']);refs[family]=build(family+'_first',protocol['seed']);counts['model_constructors']+=2
         assert sum(p.numel() for p in models[family].parameters())==protocol['parameter_counts'][family]
+        assert all(p.requires_grad for p in models[family].parameters()),'PREFIT_ACTIVE_PARAMETERS_DIFFER'
+        assert sum(p.numel() for p in models[family].parameters() if p.requires_grad)==protocol['parameter_counts'][family]
         initial_hashes[family]=core.parameter_hash(torch,models[family]);assert initial_hashes[family]==json.loads((root/"INHERITED_INITIAL_HASHES.json").read_bytes())[family],"INITIAL_WEIGHTS_NOT_MATCHED";opts[family]=torch.optim.AdamW(models[family].parameters(),lr=.003,betas=(.9,.95),weight_decay=.1,eps=eps,foreach=False);counts['optimizer_constructors']+=1
     if regime=='larger_epsilon':
         # Read only pairing/resource metadata. Do not expose the default run's
