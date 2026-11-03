@@ -61,3 +61,15 @@ records are retained. No additional fits or retries were launched.
 CLOSURE_RECEIPT.json records consumption. RUN_REQUEST.json is the historical
 single-use grant, not a new or transferable allocation. Whole-model proof,
 independent generalization and an effective attention replacement remain OPEN.
+
+Task-interpretation correction
+
+This was eight one-record examples with the SAME key aa: delayed copying.
+It did not test choosing among multiple stored facts or varying query keys.
+Even a perfect FIT pass alone would not establish in-context recall, because
+fixed mappings could be memorized in the weights. No binding claim rests on
+this screen. TASK_INTERPRETATION.json records the correction; all original
+bytes, scores, failure records, checkpoints and allocation closure stay intact.
+Earlier capacity, absence-rejection and speed percentages: earlier experiments;
+not re-verified; different configurations. Unexecuted drafts are proposals,
+not empirical evidence. No additional run or update is released here.
