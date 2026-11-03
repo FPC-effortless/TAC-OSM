@@ -1,0 +1,42 @@
+name: FLOCK013 single approved repair learning check
+on:
+  push:
+    branches: [repair/flock013-fixed-trial-20261103]
+    paths: [research/binding_repair_fixed_20261103/RUN_REQUEST.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: flock013-fixed-repair-20261103
+  cancel-in-progress: false
+jobs:
+  no-fit:
+    if: github.run_attempt == 1 && github.event.head_commit.message == 'run approved FLOCK013 repair trial 20261103 v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.14'
+      - name: Verify frozen source, fixtures, scoped admission and compute plan
+        run: |
+          python -B research/binding_repair_fixed_20261103/bootstrap.py > repair-preflight-source.json
+          python -B research/binding_repair_fixed_20261103/test_admission.py -v
+          python -O -B research/binding_repair_fixed_20261103/test_admission.py -v
+          python -B scripts/phone_lab.py plan research/phone_queue/flock013_repair_fixed_20261103.json > repair-preflight-plan.txt
+      - name: Restore frozen CPU runtime
+        run: |
+          python -m venv research/training-cost-results-audit-20261103/torch213-env
+          research/training-cost-results-audit-20261103/torch213-env/bin/python -m pip --isolated install --disable-pip-version-check --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple torch==2.13.0+cpu Jinja2==3.1.6 MarkupSafe==3.0.3 filelock==4.2.4 fsspec==2026.9.0 mpmath==1.3.0 networkx==3.7 pip==25.0.1 setuptools==78.1.0 sympy==1.14.0 typing_extensions==4.16.0
+      - name: Execute only the newly authorized fixed repair check
+        run: python -I -B research/binding_repair_fixed_20261103/wrapper/outer.py research/binding_repair_fixed_20261103/RUN_REQUEST.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: flock013-repair-fixed-${{ github.run_id }}
+          path: |
+            research/binding_repair_fixed_20261103/runs/fixed/default/
+            repair-preflight-source.json
+            repair-preflight-plan.txt
+          retention-days: 90
