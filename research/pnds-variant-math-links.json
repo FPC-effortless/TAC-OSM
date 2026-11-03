@@ -1,7 +1,7 @@
 {
   "schema": "pnds.tac_osm.variant_math_links.v1",
   "foundation_version": "1.0.0",
-  "coverage": "17_historical_plus_3_C16_1_C17_6_C18_partial_not_full_archive",
+  "coverage": "17_historical_plus_C16_C17_C18_and_2_FLOCK013_partial_not_full_archive",
   "canonical_authority": {
     "mathematics": "FPC-effortless/pnds-lean",
     "source_and_evidence": "FPC-effortless/TAC-OSM"
@@ -878,6 +878,72 @@
       "real_world_capability_inferred": false,
       "finite_source_fp32_fp64_checks": "PASS_UNTRAINED_FIXTURES_ONLY",
       "active_parameters": 100323
+    },
+    {
+      "id": "FLOCK013-PHASE-ADJOINT",
+      "lane": "system1",
+      "version": "FLOCK013",
+      "state_kind": "native_and_phase",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "41af8c423eceeb2bb4f1d95ae391ee807779f603",
+        "pull_request": 705,
+        "evidence_path": "research/binding_diagnosis_20261103/output",
+        "bridge_path": "research/binding_diagnosis_20261103/FORMULATION_LINK.json"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "commit": "4f0ea7f3116f752542f1df12a20bde0a5bbe91be",
+        "pull_request": 111,
+        "lean_path": "PNDS/FLOCK013.lean",
+        "lean_symbol": "FLOCK013.candidate",
+        "python_path": "foundation/v1/flock013/adjoint_reference.py",
+        "python_symbol": "memory_gain_adjoint",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "delta",
+      "formula": "M(g)=M+g*(v-M*k)*d^T; zero-gain forward freeze is exact, while the declared candidate adjoint uses dM/dg=(v-M*k)*d^T; precision gain derivative uses the normalized source update.",
+      "operator_contracts": [],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false,
+      "finite_source_fp32_fp64_checks": "PASS_UNTRAINED_FIXTURES_ONLY",
+      "active_parameters": 99971,
+      "adjoint_scope": "Declared straight-through candidate adjoint at zero gain; not hard argmax differentiation; full graph/IEEE/AD correspondence OPEN."
+    },
+    {
+      "id": "FLOCK013-CONTEXT-ADJOINT",
+      "lane": "system1",
+      "version": "FLOCK013",
+      "state_kind": "context_address_native_and_phase",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "41af8c423eceeb2bb4f1d95ae391ee807779f603",
+        "pull_request": 705,
+        "evidence_path": "research/binding_diagnosis_20261103/output",
+        "bridge_path": "research/binding_diagnosis_20261103/FORMULATION_LINK.json"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "commit": "4f0ea7f3116f752542f1df12a20bde0a5bbe91be",
+        "pull_request": 111,
+        "lean_path": "PNDS/FLOCK013.lean",
+        "lean_symbol": "FLOCK013.candidate",
+        "python_path": "foundation/v1/flock013/adjoint_reference.py",
+        "python_symbol": "memory_gain_adjoint",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "delta",
+      "formula": "M(g)=M+g*(v-M*k)*d^T; zero-gain forward freeze is exact, while the declared candidate adjoint uses dM/dg=(v-M*k)*d^T; precision gain derivative uses the normalized source update.",
+      "operator_contracts": [],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false,
+      "finite_source_fp32_fp64_checks": "PASS_UNTRAINED_FIXTURES_ONLY",
+      "active_parameters": 99971,
+      "adjoint_scope": "Declared straight-through candidate adjoint at zero gain; not hard argmax differentiation; full graph/IEEE/AD correspondence OPEN."
     }
   ]
 }
