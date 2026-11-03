@@ -1,0 +1,57 @@
+{
+  "status": "PASS_SOURCE_SCOPED_GRU512_ADMISSION_NO_MODEL_EXECUTION",
+  "source_files": 63,
+  "fixed_cases": 8,
+  "exposures_per_case": 192,
+  "owner_admission": {
+    "status": "PASS_ONE_OFF_OWNER_SYNTHETIC_DIAGNOSTIC",
+    "scope_id": "LABOPS026_GRU512_20261103",
+    "owner_authorization_sha256": "5b94944d46b06fb125e2d5b7beab15b11623d6c727d336ed7a749e76a472b176",
+    "exception_sha256": "fc6034cc838b8f1969a03c7393c531c96b6fc5a3ea09ece74cbee6695f9fe852",
+    "stage": "fixed",
+    "regime": "default",
+    "total_updates_allowed": 512,
+    "inherited_receipt": {
+      "status": "BLOCKED_EXISTING_POLICY",
+      "validator_sha256": "fcfb5c2122129559b620eed27feb450f5b69d0a31437436e35824d6cfe52a78e",
+      "admitted": false,
+      "reason": "authentic real source outcomes required",
+      "manifest_sha256": "65d5888afb652125a2572180cffb3eb91933922f47ed41288c962902d7c6b789"
+    },
+    "inherited_rejections_preserved": true,
+    "real_world_outcomes": false,
+    "eligible_for_architecture_superiority": false,
+    "independently_qualified": false,
+    "promotion_authorized": false,
+    "protected_TEST_authorized": false,
+    "automatic_retry_authorized": false,
+    "new_model_executions_at_admission": 0
+  },
+  "compute_plan": {
+    "accelerator": null,
+    "approved_to_open_test": false,
+    "approved_to_train": false,
+    "automatic_submissions": false,
+    "backend": "github_actions",
+    "blockers": [
+      "source-authorized real data and preregistered scientific plan required",
+      "independent signed prefit reward/source/ACL evidence required at execution"
+    ],
+    "cpu_estimate_minutes": 6,
+    "gpu_budget_minutes": 0,
+    "gpu_devices_required": 0,
+    "issue_number": 482,
+    "kind": "training",
+    "reasons": [
+      "CPU or diagnostic workload fits small GitHub runner budget"
+    ],
+    "run_id": "LABOPS026_GRU512_20261103",
+    "schema": "tac-osm.compute-decision.v1",
+    "source_contract_fingerprint": "f502d4bd5ecb12943248644f414b64b82df9a6c93c937ac8816e20b97888e09e",
+    "state": "BLOCKED_EVIDENCE_OR_DESIGN",
+    "variant": "System 1"
+  },
+  "models_constructed": 0,
+  "optimizer_updates": 0,
+  "TEST_opened": false
+}
