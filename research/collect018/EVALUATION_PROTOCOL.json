@@ -1,0 +1,92 @@
+{
+  "study": "COLLECT018",
+  "histories": 24,
+  "cells": [
+    {
+      "keys": 1,
+      "gap": 0
+    },
+    {
+      "keys": 1,
+      "gap": 16
+    },
+    {
+      "keys": 4,
+      "gap": 0
+    },
+    {
+      "keys": 4,
+      "gap": 16
+    },
+    {
+      "keys": 4,
+      "gap": 256
+    }
+  ],
+  "conditions": [
+    "normal",
+    "wrong_history",
+    "reset_all",
+    "query_swap"
+  ],
+  "primary": {
+    "keys": 4,
+    "gap": 0,
+    "metric": "Full256-vocabulary first-answer accuracy; exact4, complete maps and absence separately"
+  },
+  "positive_control": {
+    "keys": 1,
+    "gap": 0,
+    "min_present_first_accuracy": 0.9,
+    "min_absent_first_accuracy": 0.8,
+    "normal_minus_reset_min": 0.5
+  },
+  "binding_gate": {
+    "keys": 4,
+    "gap": 0,
+    "min_present_first_accuracy": 0.75,
+    "min_absent_first_accuracy": 0.8,
+    "normal_minus_wrong_min": 0.4,
+    "normal_minus_swap_min": 0.4,
+    "normal_minus_reset_min": 0.4
+  },
+  "first_class_balance": "Present first characters exactly balanced a-h at24 histories per cell; restricted nine-character choice diagnostic only; no mask during optimization or scoring.",
+  "local_first_position": 112,
+  "delayed_first_position": 384,
+  "wrong_history": "Same keys/position and independent fixed filler offsets; change only quotation source classes by+1, preserve original labels.",
+  "query_swap": "For present4-key queries, ask the next key and score original target; one-key query_swap is an identity control and not a causal falsifier.",
+  "source": "DEV quotation offsets, TRAIN/DEV key first-character families separate; never model-facing key parser, oracle write masks or true answer tokens before any greedy generation decision.",
+  "natural_dev": {
+    "targets": 8192,
+    "seed": 140001
+  },
+  "stage_diagnostics": {
+    "checkpoints": [
+      256,
+      512
+    ],
+    "cell": {
+      "keys": 1,
+      "gap": 0
+    },
+    "histories": 24,
+    "selection": false
+  },
+  "generation": {
+    "bytes": 512,
+    "temperatures": [
+      0.8,
+      1.2
+    ]
+  },
+  "tolerances": {
+    "source_fp32": 4e-05,
+    "source_fp64": 3e-09,
+    "gradient_multiplier": 10,
+    "cross_runtime_replay": 4e-05,
+    "owner_batch_numeric": 4e-05
+  },
+  "all_seed_required": true,
+  "capacity_claim": false,
+  "sealed_test": "NOT_READ"
+}

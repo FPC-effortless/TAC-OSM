@@ -40,12 +40,15 @@ def validate(path=LINKS):
             not re.fullmatch("[0-9a-f]{40}", t.get("commit", "")) or
             not isinstance(t.get("pull_request"), int) or t["pull_request"] < 1):
             raise ValueError(f"{name}: missing TAC original source PR/commit")
+        c18 = name in {'COLLECT018-PHASE_JOINT', 'COLLECT018-PHASE_FIRST', 'COLLECT018-CONTEXT_JOINT', 'COLLECT018-CONTEXT_FIRST', 'COLLECT018-GRU_JOINT', 'COLLECT018-GRU_FIRST'}
         new = name in {"COLLECT016-FULL_BPTT", "COLLECT016-DETACH_128", "COLLECT016-CURRENT_ONLY", "COLLECT017-ATTENTION"}
-        lean = "PNDS/COLLECT016.lean" if new else "PNDS/TACOSMVariantContracts.lean"
-        python = "foundation/v1/collect016/reference.py" if new else "foundation/v1/variant_math.py"
+        lean = "PNDS/COLLECT018.lean" if c18 else "PNDS/COLLECT016.lean" if new else "PNDS/TACOSMVariantContracts.lean"
+        python = "foundation/v1/collect018/reference.py" if c18 else "foundation/v1/collect016/reference.py" if new else "foundation/v1/variant_math.py"
         if (p.get("repository") != "FPC-effortless/pnds-lean" or
             p.get("lean_path") != lean or p.get("python_path") != python):
             raise ValueError(f"{name}: missing paired PNDS formulations")
+        if c18 and (p.get('pull_request') != 109 or p.get('commit') != 'c15d2ee51991b97bcc887461f85ed89a2fac5e00' or t.get('commit') != '7b9af0d5dccc1f52c5055db850f8f8c28c3ae70c'):
+            raise ValueError(f'{name}: C18 source-specific authority mismatch')
         if new and (p.get("pull_request") != 107 or
                     p.get("commit") != "090c7f8b1d7af0c8680c5856df156d3d7c181e2e" or
                     t.get("commit") != ("e5813459c9337af058cdfb2d3e864c767c457053" if name=="COLLECT017-ATTENTION" else "2209e1328e3b42db4dd48cd702a21a55ffad24af")):

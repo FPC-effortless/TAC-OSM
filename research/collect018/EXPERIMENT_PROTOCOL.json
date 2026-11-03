@@ -1,0 +1,102 @@
+{
+  "study": "COLLECT018",
+  "status": "NEW_LOCAL_ACQUISITION_DISCRIMINATOR",
+  "question": "Can the source-native LM acquire local first-answer copy under a fixed first-byte-focused objective, and does reusing native context for address/routing help beyond the unchanged phase frontend?",
+  "families": [
+    "phase",
+    "context",
+    "gru"
+  ],
+  "objectives": {
+    "joint": "natural CE + .25 task CE + four-answer CE + .01 phase balance",
+    "first": "identical joint loss + 3 first-answer CE; no output alphabet masking"
+  },
+  "seeds": [
+    18001,
+    18002,
+    18003
+  ],
+  "steps": 1024,
+  "batch_size": 4,
+  "sequence_length": 128,
+  "chunk_size": 128,
+  "connected_bptt": true,
+  "curriculum": [
+    {
+      "steps": [
+        1,
+        256
+      ],
+      "keys": 1,
+      "max_post_record_gap": 8
+    },
+    {
+      "steps": [
+        257,
+        512
+      ],
+      "keys": 2,
+      "max_post_record_gap": 16
+    },
+    {
+      "steps": [
+        513,
+        1024
+      ],
+      "keys": 4,
+      "max_post_record_gap": 24
+    }
+  ],
+  "answer_positions": "Uniform integer96..123; leading source filler adjusts position, post-record gaps constrained to fit. Source order unchanged inside each sampled segment.",
+  "source": "Pinned original Tiny Shakespeare TRAIN; one natural row and three constructed copy episodes with original8-byte quotations and4-byte source targets. DEV remains exposed research, TEST unopened.",
+  "absence": "Each task row absent when (step*3+row)%5==0; ???? target. Present classes source-stratified a-h, actual TRAIN marginals logged.",
+  "overwrite": "Two/four-key stages overwrite first half on step%3==0; all evaluation histories overwrite first half.",
+  "optimizer": {
+    "name": "AdamW",
+    "learning_rate": 0.003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1.0,
+    "precision": "float32",
+    "schedule": "constant"
+  },
+  "active_parameters": {
+    "phase": 99971,
+    "context": 99971,
+    "gru": 100323
+  },
+  "training_allocation": {
+    "backend": "github_actions_cpu",
+    "gpu_minutes": 0,
+    "max_worker_seconds": 2400,
+    "max_jobs": 18,
+    "max_aggregate_worker_seconds": 43200
+  },
+  "checkpoints": [
+    0,
+    256,
+    512,
+    1024
+  ],
+  "selection": "Fixed final1024; no DEV checkpoint selection or seed dropping. Registered stage snapshots for learning diagnosis, not selection.",
+  "interpretation": [
+    "Objective/architecture contrasts only within this new curriculum; LR/length/data differ from C16, so do not attribute cross-round changes to one factor.",
+    "Standard GRU is a learnability control; success is not assumed.",
+    "Context uses an extra call to an existing perspective projection; parameters/state unchanged, compute cost measured.",
+    "Natural LM loss is separate from constructed copy accuracy. No architecture-superiority or real-world retrieval claim.",
+    "Finite source/reference/AD checks are engineering evidence; whole Lean/source/IEEE/AD remains OPEN."
+  ],
+  "frozen_old_rounds": [
+    "COLLECT016",
+    "COLLECT017"
+  ],
+  "policy_amendment": {
+    "commit": "3449041ec63c7efe843422086b6213226b94167a",
+    "path": "research/RESEARCH-EXECUTION-LEVELS-2026-10-27.md",
+    "execution_level": "internal_research"
+  },
+  "chunk_revision": "Before any optimizer update: full128-byte training call avoids repeated small-call overhead; carried32-byte evaluation and split-boundary reference tests remain. Auxiliary balance is defined over the complete training batch, not averaged chunk32 losses."
+}

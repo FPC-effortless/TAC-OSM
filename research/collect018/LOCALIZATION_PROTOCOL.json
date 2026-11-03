@@ -1,0 +1,27 @@
+{
+  "study": "COLLECT018",
+  "timing": "POST_PARTIAL_NULL: after6GRU and2native final-score inspection; before any result from this diagnostic",
+  "purpose": "Separate failure to acquire the local task from failure to generalize a held-out first-key-character family. No optimizer or primary replacement.",
+  "models": "All18original fixed-final checkpoints",
+  "cells": [
+    {
+      "keys": 1,
+      "gap": 0
+    },
+    {
+      "keys": 4,
+      "gap": 0
+    }
+  ],
+  "histories": 24,
+  "conditions": [
+    "normal",
+    "wrong_history",
+    "reset_all"
+  ],
+  "intervention": "Change episode family from dev n-z to train a-m with same13x26 family size and exact RNG draws. Assert all quotation offsets, source quotes, leading/middle offsets, positions and non-key bytes match the original. This changes record/query key first characters only.",
+  "scores": "Full256 first-byte accuracy, exact4, absence, alphabet mass; raw256 logits retained. Same frozen original256/512 snapshot diagnostics may be tabulated but no new checkpoint selection.",
+  "interpretation": "DEVsource with TRAINkeyfamily is an easier exposed diagnostic, not unseen-key generalization or protected evaluation. Original primary scores/gates remain unchanged.",
+  "optimizer_updates": 0,
+  "seed_selection": false
+}
