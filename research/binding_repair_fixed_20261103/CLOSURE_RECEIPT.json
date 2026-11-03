@@ -1,0 +1,116 @@
+{
+  "schema": "flock013.context-paired-v2.closure.v1",
+  "scope_id": "FLOCK013_CONTEXT_PAIRED_V2_20261103",
+  "status": "SINGLE_ALLOCATION_CONSUMED_COMPLETED_RECALL_GATES_FAILED",
+  "execution_commit": "b3b500c76203561375e966594b5701c52a0ae238",
+  "workflow_run": 41643877841,
+  "job_id": 125943999244,
+  "attempt": 1,
+  "workflow_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/41643877841",
+  "implementation_comparisons_passed": 1992,
+  "implementation_failures_retained": 0,
+  "counts": {
+    "model_constructors": 4,
+    "optimizer_constructors": 4,
+    "candidate_forward_calls": 530,
+    "reference_forward_calls": 4,
+    "candidate_backward_calls": 268,
+    "reference_backward_calls": 12,
+    "optimizer_updates": 256,
+    "optimizer_attempts": 256,
+    "future_poison_forward_calls": 2
+  },
+  "updates": {
+    "context_legacy": 128,
+    "context_repaired": 128
+  },
+  "parameter_counts": {
+    "context_legacy": 99971,
+    "context_repaired": 99971
+  },
+  "initial_parameter_hashes": {
+    "context_legacy": "01ceb784765ab5045d0300e94cc5a925c35151381570124814f1fd1bfbd05d19",
+    "context_repaired": "01ceb784765ab5045d0300e94cc5a925c35151381570124814f1fd1bfbd05d19"
+  },
+  "final_parameter_hashes": {
+    "context_legacy": "f4b2040e8bbe0f770f4841c5e16371f14536975921edd2a18854145ee2224aef",
+    "context_repaired": "95ef1bfb2f2f18ce6f151dad860193009e40ea2942cbe7f5af48a461f2a3d29a"
+  },
+  "late_FIT_scores": [
+    {
+      "family": "context_legacy",
+      "step": 112,
+      "first_correct": 1,
+      "exact4": 0,
+      "count": 8
+    },
+    {
+      "family": "context_repaired",
+      "step": 112,
+      "first_correct": 1,
+      "exact4": 0,
+      "count": 8
+    },
+    {
+      "family": "context_legacy",
+      "step": 128,
+      "first_correct": 1,
+      "exact4": 0,
+      "count": 8
+    },
+    {
+      "family": "context_repaired",
+      "step": 128,
+      "first_correct": 1,
+      "exact4": 0,
+      "count": 8
+    }
+  ],
+  "FIT_first_gate_pass": {
+    "context_legacy": false,
+    "context_repaired": false
+  },
+  "FIT_exact4_gate_pass": {
+    "context_legacy": false,
+    "context_repaired": false
+  },
+  "exposed_DEV_scores": {
+    "context_legacy": {
+      "queries": 16,
+      "first_correct": 2,
+      "exact4": 0
+    },
+    "context_repaired": {
+      "queries": 16,
+      "first_correct": 2,
+      "exact4": 0
+    }
+  },
+  "raw_artifact_id": 13234971115,
+  "raw_artifact_sha256": "2bbd0b560335cf4dc7c166967a0cb4ad3d97624ff1b7cc1811b36940a06ba3fb",
+  "resource_receipt": {
+    "status": "COMPLETE_WITH_CAPTURED_RESOURCE_ACCEPTANCE",
+    "full_wait4_parent_and_reaped_descendants_CPU": 173.22124,
+    "adopted_children": [],
+    "adopted_complete_CPU": 0,
+    "owned_group_children_reaped": true,
+    "outer_CPU_before_final_receipt": 0.080251521,
+    "captured_total_CPU": 173.301491521,
+    "wall_before_final_receipt": 176.08367625199998,
+    "child_complete_wait4_CPU": 173.12167799999997,
+    "parent_complete_CPU": 0.09956200000002013,
+    "semantic_status": "COMPLETE_FIXED_BUDGET_MATRIX",
+    "wrapper_manifest_sha256": "f3cc87452523d8f16b5dba010378be29f176b5ead4946d43515880957460975b",
+    "grant_sha256": "8680668510a8813294a2da78d59367bda21a9b1be4361253a3ade4f6df1c0832",
+    "outer_final_write_exit_tail_included": false,
+    "retry_authorized": false
+  },
+  "retry_authorized": false,
+  "future_fit_allocation_available": false,
+  "protected_TEST_opened": false,
+  "independent_generalization_established": false,
+  "architecture_superiority_established": false,
+  "whole_model_formal_equivalence": "OPEN",
+  "fresh_independent_reviewer": false,
+  "conclusion": "The corrected write adjoint changes training, but does not rescue conditional recall under this matched 128-update recipe. Preserve this negative result and all historical failures."
+}

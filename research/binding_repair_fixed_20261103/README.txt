@@ -1,4 +1,4 @@
-Approved single repair-learning check — ONE EXACT RELEASE
+Completed single repair-learning check — ALLOCATION CONSUMED
 
 The source defect is repaired and no-fit tests pass. Existing weights still
 produce the original failed answers because an adjoint repair changes learning,
@@ -41,3 +41,23 @@ new direct owner approval and releases the exact frozen job once. Scientific
 scope, source, code and resource-wrapper manifests are unchanged. Administrative
 approval/protocol/review hashes are refreshed. No new training had executed at
 release. Preserve all failures and stop after this allocation; no retry.
+
+Completed outcome
+
+Workflow 41643877841, attempt 1, execution b3b500c76203561375e966594b5701c52a0ae238:
+128 updates per arm completed; all 1,992 implementation comparisons passed.
+Both arms scored 1/8 first characters and 0/8 complete answers at BOTH updates
+112 and 128. Both frozen FIT recall gates FAIL. On the 16 already exposed DEV
+queries, each arm scored 2/16 first characters and 0/16 complete answers.
+The original arm returned aeee for all eight FIT histories; the repair returned
+aaaa for all eight. Final parameter hashes differ, and every AdamW state reached
+128, so the repair changed training without rescuing conditional retrieval.
+
+Captured experiment CPU was 173.301491521 seconds; wall before final receipt
+was 176.083676252 seconds. The outer final write/exit tail is not included in
+that receipt; runtime provisioning is outside this process accounting.
+All ten checkpoint byte hashes, optimizer/RNG serialization and source/replay
+records are retained. No additional fits or retries were launched.
+CLOSURE_RECEIPT.json records consumption. RUN_REQUEST.json is the historical
+single-use grant, not a new or transferable allocation. Whole-model proof,
+independent generalization and an effective attention replacement remain OPEN.
