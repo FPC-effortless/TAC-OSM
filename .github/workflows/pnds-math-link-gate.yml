@@ -5,6 +5,8 @@ on:
       - research/pnds-variant-math-links.json
       - research/scripts/check_pnds_math_links.py
       - research/scripts/check_pnds_remote_parity.py
+      - research/collect018/mathematics/PEER_PIN.json
+      - research/collect017/mathematics/PEER_PIN.json
       - research/collect016/mathematics/PEER_PIN.json
       - .github/workflows/pnds-math-link-gate.yml
   workflow_dispatch:
@@ -19,7 +21,9 @@ jobs:
         run: python3 research/scripts/check_pnds_math_links.py
       - name: Verify semantic JSON and pinned bytes in the peer repository
         run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -f research/collect017/mathematics/PEER_PIN.json ]; then
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -f research/collect018/mathematics/PEER_PIN.json ]; then
+            python3 research/scripts/check_pnds_remote_parity.py --peer-pin research/collect018/mathematics/PEER_PIN.json
+          elif [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -f research/collect017/mathematics/PEER_PIN.json ]; then
             python3 research/scripts/check_pnds_remote_parity.py --peer-pin research/collect017/mathematics/PEER_PIN.json
           elif [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -f research/collect016/mathematics/PEER_PIN.json ]; then
             python3 research/scripts/check_pnds_remote_parity.py --peer-pin research/collect016/mathematics/PEER_PIN.json
