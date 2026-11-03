@@ -1,0 +1,27 @@
+{
+  "date_Lagos": "2026-11-03",
+  "source": "Direct user message in this conversation immediately after the explicit scope/permission question",
+  "question": "Do you approve a one-off synthetic-training exception and this bounded trial, once its source and runtime checks pass?",
+  "user_response": "Yes",
+  "approved_scope": {
+    "models": [
+      "gru",
+      "phase",
+      "context"
+    ],
+    "seed": 18001,
+    "updates_per_model": 128,
+    "total_updates": 384,
+    "optimizer_regime": "default AdamW epsilon1e-8",
+    "max_aggregate_CPU_seconds": 360,
+    "max_wall_seconds": 600,
+    "CPU_only": true,
+    "synthetic_fit_exception": "one-off fixed-stage learnability diagnostic only"
+  },
+  "conditions": [
+    "source and runtime checks pass",
+    "preserve all other research/scientific/TEST restrictions"
+  ],
+  "no_additional_stage_retry_or_budget_approved": true,
+  "cryptographic_operator_attestation": false
+}
