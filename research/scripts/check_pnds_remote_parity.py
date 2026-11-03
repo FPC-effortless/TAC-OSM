@@ -85,7 +85,7 @@ def verify():
         from research.langcache104.verify_math_pins import verify as verify_candidate
         verify_candidate()
     if ocr_pin.exists():
-        from research.tac_ocr001.verify_math_pins import verify as verify_ocr
+        from research.tac_ocr004.verify_source_versions import verify as verify_ocr
         verify_ocr()
     print(json.dumps({"existing_snapshot_equal": True,
                       "separately_verified_prospective_candidates": len(candidates),
