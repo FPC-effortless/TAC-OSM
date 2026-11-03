@@ -1,0 +1,41 @@
+{
+  "schema": "flock013.no-fit-diagnosis.v1",
+  "source_commit": "c4666aed949e408a58dd9b1b99f825da415feb3f",
+  "source_manifest_sha256": "5aa2c227e4ee3a58eadd96260fd74d7409a5ced56a1db1f86b99797794589787",
+  "original_result_sha256": "e4820c6a2b4a1cb787d7517e54f7fb7d9728de14faaa1c56c5059dc7bb7c6264",
+  "original_workflow_run_id": 41623750060,
+  "original_artifact_id": 13224742667,
+  "original_artifact_sha256": "b8c1ac33e6663dfa50cd85c55320f131e88db4757b335745a2f3b4331f9555d0",
+  "checkpoint_sha256": {
+    "context_checkpoint_0000.pt": "3de8805ba5551480a14fdb479da61891726282679ba51e6bee244369d8bb69cd",
+    "context_checkpoint_0128.pt": "b61fe42657a0facdc9d85f3fe4f10c48326ce68ea28c65f95c2ac83564c6983b",
+    "gru_checkpoint_0000.pt": "ac0bb2052a1d98f8936b0011ca80c14ba34d44e8553166416d84b136437ebefa",
+    "gru_checkpoint_0128.pt": "121f16bd4256aa627541fa96d549816fbc0035f59d4d3c8bf83458dab2d73482",
+    "phase_checkpoint_0000.pt": "22ff1882cd526904ed2038fcf67fd46b802f5c7524e352bbcb082d5a59044fc5",
+    "phase_checkpoint_0128.pt": "021e93aae8af937cbe8d2c61901267305adc2ffe1869cb5979fb3f145cdc3419"
+  },
+  "fixed_fit_fixture_sha256": "2f8e7864c2adbffaeab5a9e10a8d9ccbe19520d95dd38e2cd557c0671e575894",
+  "code_sha256": {
+    "diagnose.py": "9f7895371b496bd37bb597fad961dc08b6fa842070af80e2848172ebfbec3bd6",
+    "write_repair.py": "46afc6b25e93072c0e5fe6707cb15c81828554733d297da578188d94b9077c67",
+    "model_repair.py": "ec2040e75b42408b40d677a79b0ff2cb28521aa29da4f22bf9de8c03e7887dbe",
+    "kernel_checks.py": "bf250c2f10d48f42a186ca5c1a908b6427acf71e885cfe87a09ee92e011d0cd3",
+    "preflight.py": "5c058a305895216bfc0f89c5ab3213d6dbeace79a0595bd2236fcea39005c7f7",
+    "adjoint_reference.py": "d9fc9231ca53d3b472021688f3b93d48546499f51934277c9af4cfe335d55dd9",
+    "FLOCK013.lean": "5160457d4df3bf918331d6fbeb9ad9df983f62abfe4e8e537af02a20215ba911"
+  },
+  "seed": 18001,
+  "optimizer_updates_allowed": 0,
+  "heldout_queries_allowed": 0,
+  "protected_TEST_reads_allowed": 0,
+  "max_CPU_seconds": 290,
+  "max_wall_seconds": 300,
+  "max_neural_forwards": 100,
+  "model_constructors": 5,
+  "checkpoint_loads": 8,
+  "neural_backwards": 5,
+  "new_model_graph_claim": "AD-only prospective repair; forward graph inherited; whole-model/math/source/IEEE/AD completeness OPEN",
+  "review": "root source review; no fresh independent reviewer claimed",
+  "authorization": "Current user request: Diagnose the model rigorously and fix the issues; ordinary no-fit source and engineering tests only. Prior one-off synthetic fit exception is exhausted and is not extended.",
+  "probe_adapter": "Inherited actual-source collect018.probe.adapter; same state/interface dimensions, changed write adjoint explicitly declared."
+}

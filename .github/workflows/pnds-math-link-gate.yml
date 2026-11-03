@@ -5,6 +5,7 @@ on:
       - research/pnds-variant-math-links.json
       - research/scripts/check_pnds_math_links.py
       - research/scripts/check_pnds_remote_parity.py
+      - research/binding_diagnosis_20261103/PEER_PIN.json
       - research/collect018/mathematics/PEER_PIN.json
       - research/collect017/mathematics/PEER_PIN.json
       - research/collect016/mathematics/PEER_PIN.json
@@ -18,10 +19,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate original and appended source-pinned dual formulation references
-        run: python3 research/scripts/check_pnds_math_links.py
+        run: |
+          python3 research/scripts/check_pnds_math_links.py
+          python3 -m unittest research/binding_diagnosis_20261103/test_links.py -v
+          python3 -O -m unittest research/binding_diagnosis_20261103/test_links.py -v
       - name: Verify semantic JSON and pinned bytes in the peer repository
         run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -f research/collect018/mathematics/PEER_PIN.json ]; then
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -f research/binding_diagnosis_20261103/PEER_PIN.json ]; then
+            python3 research/scripts/check_pnds_remote_parity.py --peer-pin research/binding_diagnosis_20261103/PEER_PIN.json
+          elif [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -f research/collect018/mathematics/PEER_PIN.json ]; then
             python3 research/scripts/check_pnds_remote_parity.py --peer-pin research/collect018/mathematics/PEER_PIN.json
           elif [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -f research/collect017/mathematics/PEER_PIN.json ]; then
             python3 research/scripts/check_pnds_remote_parity.py --peer-pin research/collect017/mathematics/PEER_PIN.json

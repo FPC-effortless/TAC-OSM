@@ -40,13 +40,18 @@ def validate(path=LINKS):
             not re.fullmatch("[0-9a-f]{40}", t.get("commit", "")) or
             not isinstance(t.get("pull_request"), int) or t["pull_request"] < 1):
             raise ValueError(f"{name}: missing TAC original source PR/commit")
+        f13 = name in {"FLOCK013-PHASE-ADJOINT", "FLOCK013-CONTEXT-ADJOINT"}
         c18 = name in {'COLLECT018-PHASE_JOINT', 'COLLECT018-PHASE_FIRST', 'COLLECT018-CONTEXT_JOINT', 'COLLECT018-CONTEXT_FIRST', 'COLLECT018-GRU_JOINT', 'COLLECT018-GRU_FIRST'}
         new = name in {"COLLECT016-FULL_BPTT", "COLLECT016-DETACH_128", "COLLECT016-CURRENT_ONLY", "COLLECT017-ATTENTION"}
-        lean = "PNDS/COLLECT018.lean" if c18 else "PNDS/COLLECT016.lean" if new else "PNDS/TACOSMVariantContracts.lean"
-        python = "foundation/v1/collect018/reference.py" if c18 else "foundation/v1/collect016/reference.py" if new else "foundation/v1/variant_math.py"
+        lean = "PNDS/FLOCK013.lean" if f13 else "PNDS/COLLECT018.lean" if c18 else "PNDS/COLLECT016.lean" if new else "PNDS/TACOSMVariantContracts.lean"
+        python = "foundation/v1/flock013/adjoint_reference.py" if f13 else "foundation/v1/collect018/reference.py" if c18 else "foundation/v1/collect016/reference.py" if new else "foundation/v1/variant_math.py"
         if (p.get("repository") != "FPC-effortless/pnds-lean" or
             p.get("lean_path") != lean or p.get("python_path") != python):
             raise ValueError(f"{name}: missing paired PNDS formulations")
+        if f13 and (t.get("commit") != "41af8c423eceeb2bb4f1d95ae391ee807779f603" or t.get("pull_request") != 705 or
+                    p.get("commit") != "4f0ea7f3116f752542f1df12a20bde0a5bbe91be" or p.get("pull_request") != 111 or
+                    p.get("lean_symbol") != "FLOCK013.candidate" or p.get("python_symbol") != "memory_gain_adjoint"):
+            raise ValueError(f"{name}: FLOCK013 source-specific adjoint authority mismatch")
         if c18 and (p.get('pull_request') != 109 or p.get('commit') != 'c15d2ee51991b97bcc887461f85ed89a2fac5e00' or t.get('commit') != '7b9af0d5dccc1f52c5055db850f8f8c28c3ae70c'):
             raise ValueError(f'{name}: C18 source-specific authority mismatch')
         if new and (p.get("pull_request") != 107 or
