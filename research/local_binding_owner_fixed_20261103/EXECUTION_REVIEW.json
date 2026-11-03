@@ -1,0 +1,36 @@
+{
+  "status": "ROOT_SOURCE_REVIEW_PASS_ONE_OFF_SCOPE",
+  "reviewer": "root_current_task",
+  "fresh_independent_review_of_new_admission_code": false,
+  "prior_independent_scientific_review": {
+    "archive_library_file_id": "libfile_9bf7f919646881918c100352c595d269",
+    "unchanged_scientific_files": [
+      "code/core.py",
+      "code/fixtures.py",
+      "code/runner.py",
+      "code/audit_scorer.py"
+    ],
+    "all_five_wrapper_sources_unchanged": true,
+    "coverage_note": "Prior conditional reviews cover their frozen original code; no independent review of the new admission implementation is claimed."
+  },
+  "owner_authorization_sha256": "69c73cd73e58822b14049da7bea2ce8e733b8432c2f7596436836eb75d2a9750",
+  "source_manifest_sha256": "5aa2c227e4ee3a58eadd96260fd74d7409a5ced56a1db1f86b99797794589787",
+  "code_manifest_sha256": "d55c9e0a39929b54f7aca3127096752effca0cd47caa8abafb099f58a0ebbe72",
+  "wrapper_manifest_sha256": "f3cc87452523d8f16b5dba010378be29f176b5ead4946d43515880957460975b",
+  "protocol_sha256": "35c353ab80e58dbe31f2d40c2d1f28fe5fb1ded4288789d2920ccc7277fc9592",
+  "gate_tests": {
+    "normal": "14 passed",
+    "optimized": "14 passed",
+    "log_sha256": {
+      "NORMAL": "a7de669c4267e6e65bd27fa6039dc1e86c95d1f803f7b48f1575cfef4d50198a",
+      "OPTIMIZED": "34e3378a13e36a44af5fc26ddf86834552387e2c37bbaa843566097ae14366fc"
+    }
+  },
+  "live_model_parameter_and_numerical_checks": "MANDATORY_IN_SINGLE_TRIAL_NOT_YET_RUN",
+  "new_model_executions": 0,
+  "new_optimizer_updates": 0,
+  "compute_backend": "github_actions_cpu",
+  "old_planner_and_real_data_rejections": "PRESERVED; owner-approved exception remains separate and unqualified",
+  "source_changes": "Only scalar admission, provenance and bootstrap; no model, loss, fixture, optimizer setting or scientific-runner changes",
+  "review_limit": "Root review and finite tests do not establish independent qualification, full graph/AD/IEEE proof or resource sufficiency."
+}

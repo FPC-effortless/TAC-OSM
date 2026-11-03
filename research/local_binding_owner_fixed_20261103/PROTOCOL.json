@@ -1,0 +1,311 @@
+{
+  "schema": "learned-local-binding-learnability/v1",
+  "classification": "OWNER_APPROVED_ONE_OFF_SYNTHETIC_FIXED_DEFAULT_DIAGNOSTIC_NOT_REGISTERED_C19",
+  "source_commit": "cad0eab1ec9441703ffccb18b7e10333153d7f87",
+  "families": [
+    "gru",
+    "phase",
+    "context"
+  ],
+  "seed": 18001,
+  "parameter_counts": {
+    "gru": 100323,
+    "phase": 99971,
+    "context": 99971
+  },
+  "regimes": {
+    "default": {
+      "epsilon": 1e-08
+    },
+    "larger_epsilon": {
+      "epsilon": 1e-06
+    }
+  },
+  "stages": {
+    "fixed": {
+      "updates_per_arm": 128,
+      "checkpoints": [
+        0,
+        32,
+        64,
+        112,
+        128
+      ],
+      "late_optimization_gate_steps": [
+        112,
+        128
+      ],
+      "heldout_file": "fixed_heldout_groups.json",
+      "probe_rows": 8,
+      "probe_prefix_length_groups": 1,
+      "expected_counts": {
+        "model_constructors": 6,
+        "optimizer_constructors": 6,
+        "candidate_forward_calls": 795,
+        "reference_forward_calls": 6,
+        "candidate_backward_calls": 402,
+        "reference_backward_calls": 18,
+        "optimizer_updates": 384,
+        "optimizer_attempts": 384,
+        "future_poison_forward_calls": 3
+      },
+      "caps": {
+        "total_CPU": 360,
+        "total_wall": 600,
+        "outer_CPU": 5,
+        "parent_CPU": 10,
+        "child_CPU": 345,
+        "child_stop_CPU": 340,
+        "parent_stop_CPU": 8,
+        "monitor_wall": 590,
+        "poll": 1,
+        "inventory_interval": 10,
+        "cleanup": 5
+      },
+      "probe_scope": "All eight fixed cases, first and exact-four gates separately."
+    },
+    "varying": {
+      "updates_per_arm": 144,
+      "checkpoints": [
+        0,
+        36,
+        72,
+        128,
+        144
+      ],
+      "late_optimization_gate_steps": [
+        128,
+        144
+      ],
+      "heldout_file": "varying_heldout_groups.json",
+      "probe_rows": 12,
+      "probe_prefix_length_groups": 3,
+      "expected_counts": {
+        "model_constructors": 6,
+        "optimizer_constructors": 6,
+        "candidate_forward_calls": 3315,
+        "reference_forward_calls": 6,
+        "candidate_backward_calls": 450,
+        "reference_backward_calls": 18,
+        "optimizer_updates": 432,
+        "optimizer_attempts": 432,
+        "future_poison_forward_calls": 3
+      },
+      "caps": {
+        "total_CPU": 480,
+        "total_wall": 900,
+        "outer_CPU": 5,
+        "parent_CPU": 10,
+        "child_CPU": 465,
+        "child_stop_CPU": 460,
+        "parent_stop_CPU": 8,
+        "monitor_wall": 890,
+        "poll": 1,
+        "inventory_interval": 10,
+        "cleanup": 5
+      },
+      "probe_scope": "Twelve present-only examples from first four training batches; no absent query; not all 432 training episodes.",
+      "heldout_independent_base_histories": 8,
+      "heldout_transformed_groups": 56,
+      "heldout_queries": 160
+    }
+  },
+  "optimizer_other_settings": {
+    "learning_rate": 0.003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1,
+    "foreach": false
+  },
+  "objective": "Unchanged C18 focused objective: natural CE + .25 task CE + answer CE + 3 first CE + .01 balance. GRU balance is its existing zero. Full 256 logits.",
+  "fixture_files": {
+    "INPUT_AUDIT.json": {
+      "sha256": "fcb28e94fe716a64c0117583f4e00652d860ed1a1140c0b0c638cb0727bd71d7",
+      "bytes": 12841
+    },
+    "SCORER_UNIT_TESTS.json": {
+      "sha256": "5666e7c7941054900f028f70e1f3643388527fad8c3a877c9b3fdcf12b985937",
+      "bytes": 15064
+    },
+    "fixed_heldout_groups.json": {
+      "sha256": "422ed7808c5ed2c3096402995d03b67047339a5668aeecd5ff5c17fed264c172",
+      "bytes": 9129
+    },
+    "fixed_schedule.json": {
+      "sha256": "cb8bcff2ef73f7f2b6a33baef5db59d46ba1df042102795edf1d147c935e861e",
+      "bytes": 6787
+    },
+    "fixed_train_cases.json": {
+      "sha256": "2f8e7864c2adbffaeab5a9e10a8d9ccbe19520d95dd38e2cd557c0671e575894",
+      "bytes": 5963
+    },
+    "varying_heldout_groups.json": {
+      "sha256": "38404903c73730291586d7039fad6adf95ea7cb938d8095214f23574ad167b32",
+      "bytes": 44285
+    },
+    "varying_train_batches.json": {
+      "sha256": "7e75c14b1c257a881c446f1ff74f9ae658743067ccb9408f3a0be2af89485fe1",
+      "bytes": 374477
+    }
+  },
+  "observed_coordinates": {
+    "gru": {
+      "core.gru.weight_ih_l0": [
+        0,
+        0
+      ],
+      "core.output.weight": [
+        0,
+        0
+      ]
+    },
+    "phase": {
+      "core.blocks.1.fast.key.weight": [
+        22,
+        14
+      ]
+    },
+    "context": {
+      "core.blocks.0.fast.value.weight": [
+        55,
+        9
+      ],
+      "core.blocks.2.rotary_offer.weight": [
+        63,
+        3
+      ],
+      "core.blocks.2.phase_memory.value.weight": [
+        5,
+        2
+      ]
+    }
+  },
+  "limits": [
+    "One seed is exploratory, not architecture superiority.",
+    "128/144 updates are bounded screens, not evidence of sufficient optimization.",
+    "Epsilon changes optimizer regime/effective step sizes; improvement is not proof of roundoff causation.",
+    "Fresh initialization and optimizer for each stage; no curriculum or checkpoint warm start.",
+    "Each 3-arm matrix requires a separate exact resource release. No early success stop or failure-only extension.",
+    "Held-out labels read by runner only after all three fits are sealed. No test selection or tuning.",
+    "Any initial same-weight implementation gate failure prevents training; final failures block architecture-inability interpretations.",
+    "Preserve all previous 20 diagnostic and 15 historical failures unchanged.",
+    "This is proposed new synthetic fitting, not a no-fit diagnostic. Existing inherited admission rejects it.",
+    "Varying training probe is present-only and has 12 examples; 56 held-out groups derive from eight base histories and are correlated."
+  ],
+  "training_authorized": true,
+  "retry_authorized": false,
+  "behavioral_gate_policy": "The fixed eight-case and varying twelve-present-case optimization gates require all probe cases at both late steps. The varying probe does not test absence acquisition or all training cases. Report each held-out cohort, complete maps and paired interventions separately, noting eight base histories. No automatic next-stage release or population reliability claim.",
+  "paired_regime_metadata_only": true,
+  "no_training_model_work_yet": true,
+  "admission_status": "OWNER_EXCEPTION_APPROVED_TECHNICAL_GATES_REQUIRED",
+  "admission": {
+    "status": "OWNER_SCOPED_EXCEPTION_APPROVED",
+    "policy_commit": "3449041ec63c7efe843422086b6213226b94167a",
+    "model_source_policy_copy_commit": "cad0eab1ec9441703ffccb18b7e10333153d7f87",
+    "validator_path": "admission_policy/vendored/scripts/validate_research_parity.py",
+    "policy_change_approved": true,
+    "approval_evidence": "OWNER_AUTHORIZATION.json",
+    "draft_proposal_is_not_executable": true,
+    "files": {
+      "admission_policy/amendment/research/RESEARCH-EXECUTION-LEVELS-2026-10-27.md": {
+        "sha256": "2d368c6f7202543bfad232141a156781aaea443a48ce83e8ecb4624b3dbc329f",
+        "bytes": 3138
+      },
+      "admission_policy/amendment/scripts/validate_research_parity.py": {
+        "sha256": "fcfb5c2122129559b620eed27feb450f5b69d0a31437436e35824d6cfe52a78e",
+        "bytes": 24097
+      },
+      "admission_policy/amendment/src/tac_osm/research_execution.py": {
+        "sha256": "b2ff2d92a2ff98d54d94e8cf0a8c0f33c3bcc66cda401f06f418f8e829a31f9a",
+        "bytes": 2562
+      },
+      "admission_policy/current/scripts/validate_research_parity.py": {
+        "sha256": "f225a2180c15666f556a58c495f8d92674cdf03c11e8d0996d06988a29ffacea",
+        "bytes": 22863
+      },
+      "admission_policy/normative/REAL-WORLD-EVIDENCE-RULES.md": {
+        "sha256": "1084830341a8ed25115f5ae777a82b1706eca2a471ebe271d81c546eef071811",
+        "bytes": 25385
+      },
+      "admission_policy/vendored/scripts/validate_research_parity.py": {
+        "sha256": "fcfb5c2122129559b620eed27feb450f5b69d0a31437436e35824d6cfe52a78e",
+        "bytes": 24097
+      },
+      "admission_policy/vendored/src/tac_osm/research_execution.py": {
+        "sha256": "b2ff2d92a2ff98d54d94e8cf0a8c0f33c3bcc66cda401f06f418f8e829a31f9a",
+        "bytes": 2562
+      },
+      "admission/registrations/fixed/default/context/FAIR_COMPARISON.json": {
+        "sha256": "23c9dddd434696468a99f162069d977c8b0a29512a337507fc8479fa67094170",
+        "bytes": 3220
+      },
+      "admission/registrations/fixed/default/gru/FAIR_COMPARISON.json": {
+        "sha256": "110477047621a0c392306eeb9ab5823e9a66c0adb393a14bfbff2e604445c801",
+        "bytes": 3214
+      },
+      "admission/registrations/fixed/default/phase/FAIR_COMPARISON.json": {
+        "sha256": "81d6d68ef94514b779214b30a307620aad470a4cf43d81e7248d71e562559a55",
+        "bytes": 3216
+      },
+      "admission/registrations/fixed/larger_epsilon/context/FAIR_COMPARISON.json": {
+        "sha256": "8b0ae623044d4d11fbb4a80b69af0d825085a128a54916fe6e3bf0dab0dfa6e6",
+        "bytes": 3234
+      },
+      "admission/registrations/fixed/larger_epsilon/gru/FAIR_COMPARISON.json": {
+        "sha256": "f2db63872fecbb36ed6d43d807f5593b6ac4cb8cb17ff63e93da1bb0c5c681ca",
+        "bytes": 3228
+      },
+      "admission/registrations/fixed/larger_epsilon/phase/FAIR_COMPARISON.json": {
+        "sha256": "c1b521bb98640ac229fd4e7d5f23a0f64f7bfc203acf5d3feba60b59368cd464",
+        "bytes": 3230
+      },
+      "admission/registrations/varying/default/context/FAIR_COMPARISON.json": {
+        "sha256": "e06bfe78d14f383bf6500850ce949e32b3e123448f06735bdca1e9bc2280440a",
+        "bytes": 3224
+      },
+      "admission/registrations/varying/default/gru/FAIR_COMPARISON.json": {
+        "sha256": "29141246beabddc09959d54667088905d2c9dbf865b29fbfe9321c4138004858",
+        "bytes": 3218
+      },
+      "admission/registrations/varying/default/phase/FAIR_COMPARISON.json": {
+        "sha256": "110a39781b98a84f18eef3c1a7ce4edd0d551e39cdc68057489f18600815c7ba",
+        "bytes": 3220
+      },
+      "admission/registrations/varying/larger_epsilon/context/FAIR_COMPARISON.json": {
+        "sha256": "89e6148e37130a91fd0d650e6f0972b4c6b87ec83689e5b45a2ae6426784177d",
+        "bytes": 3238
+      },
+      "admission/registrations/varying/larger_epsilon/gru/FAIR_COMPARISON.json": {
+        "sha256": "1698b6246c8bf484fc24e0c37dcfb4b972f8a9648b0109e0ab3036047364bfe3",
+        "bytes": 3232
+      },
+      "admission/registrations/varying/larger_epsilon/phase/FAIR_COMPARISON.json": {
+        "sha256": "4f5d95c3375dc11b6aebf0f6b220c5f2b0be18a616bf3b554c4ba1fc80d5e57f",
+        "bytes": 3234
+      },
+      "OWNER_AUTHORIZATION.json": {
+        "sha256": "69c73cd73e58822b14049da7bea2ce8e733b8432c2f7596436836eb75d2a9750",
+        "bytes": 928
+      },
+      "APPROVED_OWNER_EXCEPTION.json": {
+        "sha256": "ac57dd42176da92adc9a88e85fe3f6ec37839b251bc0daa81cbc9d4e12410c2a",
+        "bytes": 1639
+      },
+      "UNCHANGED_SCIENTIFIC_CODE.json": {
+        "sha256": "fa4dcb751099bd41f63ea0611375fea0db444eeaeba21e28f0671d9f3d765c01",
+        "bytes": 518
+      },
+      "ORIGINAL_ADMISSION.json": {
+        "sha256": "4c5f0ffc00ba4ef33ea6f5a89756f170eee10cbd07362e122a80eba245d7b04c",
+        "bytes": 3953
+      },
+      "code/approved_scope.py": {
+        "sha256": "1a3fda90f2c564f5f4c85384e9979309b3d9abd40aaf1f9affe9961164cf8f19",
+        "bytes": 4303
+      }
+    }
+  }
+}

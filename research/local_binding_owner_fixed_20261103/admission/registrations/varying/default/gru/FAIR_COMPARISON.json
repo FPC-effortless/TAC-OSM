@@ -1,0 +1,101 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LOCAL-BINDING-LEARNABILITY-20261103-varying-default-gru",
+  "study_type": "single_model_training",
+  "registration_status": "DRAFT_FROZEN_BEFORE_ANY_FIT_NOT_ADMITTED",
+  "registered_before_first_fit": true,
+  "no_new_model_fits": false,
+  "execution_level": "internal_research",
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Exploratory noncomparative synthetic optimization and conditional supplied-binding diagnostics, not primary evidence.",
+  "real_world_source": {
+    "name": "None: wholly generated synthetic bytes",
+    "observed_real_outcomes": false,
+    "sha256": null,
+    "publicly_licensed": false,
+    "license": null
+  },
+  "synthetic_source": {
+    "generated_fixture": true,
+    "recipe_sha256": "a72cd1046f4a7aa260df8e58d301709b544fcec1b71f20bbcec0a6294d4bf8f6",
+    "files": {
+      "INPUT_AUDIT.json": {
+        "sha256": "fcb28e94fe716a64c0117583f4e00652d860ed1a1140c0b0c638cb0727bd71d7",
+        "bytes": 12841
+      },
+      "SCORER_UNIT_TESTS.json": {
+        "sha256": "5666e7c7941054900f028f70e1f3643388527fad8c3a877c9b3fdcf12b985937",
+        "bytes": 15064
+      },
+      "fixed_heldout_groups.json": {
+        "sha256": "422ed7808c5ed2c3096402995d03b67047339a5668aeecd5ff5c17fed264c172",
+        "bytes": 9129
+      },
+      "fixed_schedule.json": {
+        "sha256": "cb8bcff2ef73f7f2b6a33baef5db59d46ba1df042102795edf1d147c935e861e",
+        "bytes": 6787
+      },
+      "fixed_train_cases.json": {
+        "sha256": "2f8e7864c2adbffaeab5a9e10a8d9ccbe19520d95dd38e2cd557c0671e575894",
+        "bytes": 5963
+      },
+      "varying_heldout_groups.json": {
+        "sha256": "38404903c73730291586d7039fad6adf95ea7cb938d8095214f23574ad167b32",
+        "bytes": 44285
+      },
+      "varying_train_batches.json": {
+        "sha256": "7e75c14b1c257a881c446f1ff74f9ae658743067ccb9408f3a0be2af89485fe1",
+        "bytes": 374477
+      }
+    },
+    "heldout_opening_policy": "Only after all three fits in this stage/regime are sealed; no selection or tuning."
+  },
+  "models": [
+    {
+      "architecture": "gru",
+      "seed": 18001,
+      "trainable_parameters": 100323,
+      "deployed_parameters": 100323
+    }
+  ],
+  "source_manifest_sha256": "5aa2c227e4ee3a58eadd96260fd74d7409a5ced56a1db1f86b99797794589787",
+  "code_manifest_sha256": "c69d40402d6cb010cb103fe8486f547d94477f96a89602be7312a2489b96b372",
+  "optimizer": {
+    "learning_rate": 0.003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.1,
+    "clip_norm": 1,
+    "foreach": false,
+    "epsilon": 1e-08
+  },
+  "stage": "varying",
+  "regime": "default",
+  "updates_per_arm": 144,
+  "stage_caps": {
+    "total_CPU": 480,
+    "total_wall": 900,
+    "outer_CPU": 5,
+    "parent_CPU": 10,
+    "child_CPU": 465,
+    "child_stop_CPU": 460,
+    "parent_stop_CPU": 8,
+    "monitor_wall": 890,
+    "poll": 1,
+    "inventory_interval": 10,
+    "cleanup": 5
+  },
+  "checkpoint_steps": [
+    0,
+    36,
+    72,
+    128,
+    144
+  ],
+  "training_authorized": false,
+  "policy_amendment_approved": false,
+  "approval_evidence": null,
+  "declared_classification": "SYNTHETIC_SINGLE_SEED_EXPLORATORY_NONCOMPARATIVE_NOT_INDEPENDENTLY_QUALIFIED"
+}
