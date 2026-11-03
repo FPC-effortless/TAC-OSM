@@ -1,0 +1,32 @@
+{
+  "status": "FAILED_DERIVED_BUNDLE_VERIFICATION_RETAINED",
+  "expected": {
+    "path": "/workspace/scratch/dd0d3071414b/collect016_017_deliverables/COLLECT016_017_MODELS_A.zip",
+    "bytes": 35407751,
+    "sha256": "07c53cbff8fd8f65ff30ce5424e36d9f6d43ebffa7394b81adc11ba91e80a5d2",
+    "entries": 6
+  },
+  "observed": {
+    "bytes": 29504344,
+    "sha256": "29b1a4c7eabc3588d1d7c22e53ec2cff8236b47b458c2fa692dd5cc6f9b0b4c7",
+    "entries": [
+      "EVALUATION.json",
+      "FINAL_PARTIAL_MANIFEST.json",
+      "FIT_RECEIPT.json",
+      "REPLAY.pt",
+      "RETRIEVAL.json",
+      "checkpoint_0000.pt",
+      "checkpoint_0000.sha256",
+      "checkpoint_0128.pt",
+      "checkpoint_0128.sha256",
+      "checkpoint_0256.pt",
+      "checkpoint_0256.sha256",
+      "checkpoint_0512.pt",
+      "checkpoint_0512.sha256",
+      "journal.jsonl"
+    ]
+  },
+  "reason": "Readback lacked the outer manifest and had a smaller size than the completed build receipt; cause not established.",
+  "original_training_artifacts_affected": false,
+  "repair": "Reject delivery, rebuild through a temporary non-ZIP path and atomic rename; verify all originals and final bundles again."
+}
