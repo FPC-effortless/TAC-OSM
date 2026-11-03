@@ -1,0 +1,39 @@
+{
+  "status": "FAILED_FIRST_ADAPTER_TOLERANCE",
+  "rows": [
+    {
+      "family": "phase",
+      "schema": "tac-osm-observatory/model-agnostic-isolation-v1",
+      "adapter": "COLLECT018-full_bptt",
+      "status": "FAIL",
+      "entities": 2,
+      "max_absolute_difference": 1.0371208190917969e-05,
+      "tolerance": 1e-05,
+      "within_tolerance": false,
+      "qualification": "model_batch_isolation_not_source_identity_authentication"
+    },
+    {
+      "family": "context",
+      "schema": "tac-osm-observatory/model-agnostic-isolation-v1",
+      "adapter": "COLLECT018-collect018_context",
+      "status": "PASS",
+      "entities": 2,
+      "max_absolute_difference": 3.814697265625e-06,
+      "tolerance": 1e-05,
+      "within_tolerance": true,
+      "qualification": "model_batch_isolation_not_source_identity_authentication"
+    },
+    {
+      "family": "gru",
+      "schema": "tac-osm-observatory/model-agnostic-isolation-v1",
+      "adapter": "COLLECT018-GRU",
+      "status": "PASS",
+      "entities": 2,
+      "max_absolute_difference": 2.384185791015625e-07,
+      "tolerance": 1e-05,
+      "within_tolerance": true,
+      "qualification": "model_batch_isolation_not_source_identity_authentication"
+    }
+  ],
+  "optimizer_updates": 0
+}

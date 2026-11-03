@@ -1,0 +1,9 @@
+{
+  "optimizer_updates_before_revision": 0,
+  "steps": 1024,
+  "old_training_chunk": 32,
+  "new_training_chunk": 128,
+  "reason": "No-fit profiles show avoidable repeated-call overhead; preserve complete128-byte BPTT, all samples/targets and update budget. Auxiliary balancing now defined over entire training batch, a declared common objective detail.",
+  "original_bytes_retained": "results/prefreeze_chunk32",
+  "numerical_equivalence": "Source forward/state split-boundary tests passed; auxiliary loss granularity deliberately changed before fitting, not asserted equivalent."
+}
