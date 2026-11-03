@@ -5,9 +5,9 @@ on:
       - research/pnds-variant-math-links.json
       - research/scripts/check_pnds_math_links.py
       - research/scripts/check_pnds_remote_parity.py
+      - research/collect016/mathematics/PEER_PIN.json
       - .github/workflows/pnds-math-link-gate.yml
   workflow_dispatch:
-
 jobs:
   mathematical-variant-links:
     runs-on: ubuntu-latest
@@ -15,7 +15,12 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - name: Validate every original source-pinned variant and dual formulation reference
+      - name: Validate original and appended source-pinned dual formulation references
         run: python3 research/scripts/check_pnds_math_links.py
-      - name: Verify byte-equivalent semantic JSON in PNDS remote draft branch
-        run: python3 research/scripts/check_pnds_remote_parity.py
+      - name: Verify semantic JSON and pinned bytes in the peer repository
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -f research/collect016/mathematics/PEER_PIN.json ]; then
+            python3 research/scripts/check_pnds_remote_parity.py --peer-pin research/collect016/mathematics/PEER_PIN.json
+          else
+            python3 research/scripts/check_pnds_remote_parity.py
+          fi
