@@ -1,10 +1,11 @@
-Proposed single repair-learning check — NOT RELEASED
+Approved single repair-learning check — ONE EXACT RELEASE
 
 The source defect is repaired and no-fit tests pass. Existing weights still
 produce the original failed answers because an adjoint repair changes learning,
 not stored weights. This proposal measures whether the repair helps acquisition.
 The old one-off synthetic fitting exception was consumed by run 41623750060.
-It does not authorize this new fit; the owner approval record is explicitly false.
+It does not transfer. The new direct owner response "Proceed" authorizes only
+the exact context control/repair pair documented below.
 
 Exactly two arms in the same job: original context and repaired context,
 99,971 active parameters each. Seed 18001, 128 optimizer updates per arm, 256
@@ -35,8 +36,8 @@ Kernel diagnosis: https://github.com/FPC-effortless/TAC-OSM/actions/runs/4162895
 FP32/FP64 reference audit: https://github.com/FPC-effortless/TAC-OSM/actions/runs/41630918959
 No-fit checks are technical evidence, not a new synthetic-fit exception.
 
-REQUEST_TEMPLATE.json is disabled. There is deliberately no RUN_REQUEST.json.
-Only a fresh direct owner approval of this exact scope can enable the scoped
-admission record, refresh administrative hashes, and release the frozen job.
-Code and scientific scope must remain unchanged when doing so. No new training
-has been executed by this proposal or its source/bootstrap checks.
+REQUEST_TEMPLATE.json remains a disabled example. RUN_REQUEST.json records the
+new direct owner approval and releases the exact frozen job once. Scientific
+scope, source, code and resource-wrapper manifests are unchanged. Administrative
+approval/protocol/review hashes are refreshed. No new training had executed at
+release. Preserve all failures and stop after this allocation; no retry.
