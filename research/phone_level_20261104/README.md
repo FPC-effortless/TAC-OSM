@@ -73,3 +73,17 @@ history remains separately exploratory. H64/PR483 and later failures preserved.
 Next: review this compatibility diff, then independently review an exact new
 GRU512 candidate with all source/runtime/math/probe/resource gates. Do not
 launch training from this source-only report.
+
+## Hosted verification
+
+[Source-only Actions41792416198](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41792416198)
+PASS at5acd473205dd4eb8355fbd1c3dfe2fd7b1d99668:71tests and the same Torch-free
+integration audit. [Artifact13304201924](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41792416198/artifacts/13304201924),
+ZIP SHA25619480811ea87c5165ffc2fa7b17d6941d250c698e0aeb3351891bf9f8b2f3619,
+downloaded/hash verified. Exact ZIP is preserved losslessly as base64 alongside
+HOSTED_INTEGRATION, HOSTED_CPU_PLAN and CI_RECEIPT. This provides durable source
+engineering evidence; REPO_REPLAY=NOT_APPLICABLE_NO_CHECKPOINT_EXECUTION.
+Original rejection, expanded-queue fixture failure and every older model failure
+remain visible. Review [draft708](https://github.com/FPC-effortless/TAC-OSM/pull/708)
+separately from any execution release. No independent exact-candidate review,
+new model/quality/device measurement or qualification is claimed.
