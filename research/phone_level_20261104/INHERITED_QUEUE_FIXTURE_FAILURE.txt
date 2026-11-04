@@ -1,0 +1,19 @@
+..............................F....                                      [100%]
+=================================== FAILURES ===================================
+____________ test_phone_scan_reports_both_queues_and_never_runs_gpu ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-0/test_phone_scan_reports_both_q0')
+
+    def test_phone_scan_reports_both_queues_and_never_runs_gpu(tmp_path):
+        p = subprocess.run([sys.executable, str(ROOT / "scripts/phone_lab.py"),
+                            "scan", "--out", str(tmp_path)],
+                           cwd=ROOT, capture_output=True, text=True)
+        assert p.returncode == 0, p.stderr
+        status = json.loads((tmp_path / "progress.json").read_text())
+>       assert status["total"] == 2
+E       assert 12 == 2
+
+tests/test_phone_research_ops.py:178: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_phone_research_ops.py::test_phone_scan_reports_both_queues_and_never_runs_gpu
+1 failed, 34 passed in 0.20s
