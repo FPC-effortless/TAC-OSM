@@ -169,17 +169,21 @@ def test_kaggle_staging_rejects_unavailable_gpu_workload(tmp_path):
                 kaggle_user="operator", destination=missing)
 
 
-def test_phone_scan_reports_both_queues_and_never_runs_gpu(tmp_path):
-    p = subprocess.run([sys.executable, str(ROOT / "scripts/phone_lab.py"),
-                        "scan", "--out", str(tmp_path)],
-                       cwd=ROOT, capture_output=True, text=True)
-    assert p.returncode == 0, p.stderr
-    status = json.loads((tmp_path / "progress.json").read_text())
+def test_phone_scan_reports_both_queues_and_never_runs_gpu(tmp_path, monkeypatch):
+    from scripts import phone_lab
+    queue = tmp_path / "research/phone_queue"
+    queue.mkdir(parents=True)
+    (queue / "cpu.json").write_text(json.dumps(proposal(run_id="phone-lab-diagnostics")))
+    (queue / "gpu.json").write_text(json.dumps(kaggle_plan(run_id="dual-t4-readiness")))
+    monkeypatch.setattr(phone_lab, "ROOT", tmp_path)
+    output = tmp_path / "report"
+    assert phone_lab.main(["scan", "--out", str(output)]) == 0
+    status = json.loads((output / "progress.json").read_text())
     assert status["total"] == 2
     data = {r["run_id"]: r for r in status["runs"]}
     assert data["phone-lab-diagnostics"]["backend"] == "github_actions"
     assert data["dual-t4-readiness"]["backend"] == "kaggle_t4x2"
-    assert "Kaggle 2× T4" in (tmp_path / "progress.md").read_text()
+    assert "Kaggle 2× T4" in (output / "progress.md").read_text()
 
 
 def test_phone_dispatch_workflow_requires_external_gpu_enablement_and_secrets():

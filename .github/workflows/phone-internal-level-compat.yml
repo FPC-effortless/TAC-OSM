@@ -1,0 +1,40 @@
+name: Source-only phone execution-level compatibility
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/phone_research_ops.py'
+      - 'src/tac_osm/research_execution.py'
+      - 'tests/test_phone_research_ops.py'
+      - 'tests/test_phone_internal_level_compat.py'
+      - 'scripts/check_phone_internal_level_compat.py'
+      - 'research/phone_level_20261104/**'
+      - '.github/workflows/phone-internal-level-compat.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-only-compatibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install pytest==8.4.2
+      - name: No-model planner, source and policy tests
+        run: |
+          mkdir -p phone-level-evidence
+          python scripts/phone_lab.py plan research/phone_queue/phone_level_20261104.json > phone-level-evidence/CURRENT_CPU_PLAN.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_phone_research_ops.py tests/test_phone_internal_level_compat.py
+          python scripts/check_phone_internal_level_compat.py --output phone-level-evidence/INTEGRATION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: PHONELEVEL20261104-source-only-evidence
+          path: phone-level-evidence/
+          retention-days: 90

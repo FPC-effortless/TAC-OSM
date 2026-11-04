@@ -63,8 +63,10 @@ def decide(proposal: dict) -> dict:
                 "estimated_gpu_minutes", "gpu_strategy", "seeds", "real_source_sha256",
                 "study_manifest", "workload", "diagnostic", "dataset_sources",
                 "budget_gpu_minutes"}
-    if set(proposal) != required:
+    if set(proposal) not in (required, required | {"execution_level"}):
         raise ResearchPlanError("exact proposal contract required; missing or unknown fields")
+    from tac_osm.research_execution import execution_level, INTERNAL
+    level = execution_level(proposal)
     run_id = proposal["run_id"]
     if not isinstance(run_id, str) or not ID.fullmatch(run_id):
         raise ResearchPlanError("unsafe run ID")
@@ -135,13 +137,15 @@ def decide(proposal: dict) -> dict:
         if not seeds:
             blockers.append("trained comparison/replay requires frozen seeds")
         # The source-controlled proposal itself NEVER qualifies evidence.
-        blockers.append("independent signed prefit reward/source/ACL evidence required at execution")
-        if kind == "evaluation":
+        if level != INTERNAL:
+            blockers.append("independent signed prefit reward/source/ACL evidence required at execution")
+        if kind == "evaluation" and level != INTERNAL:
             blockers.append("independent evaluator and protected evaluation authorization required")
     if kind == "replay" and not seeds:
         blockers.append("checkpoint replay requires frozen seeds and verifiable checkpoint")
     state = ("BLOCKED_EVIDENCE_OR_DESIGN" if blockers else
              "READY_NO_FIT" if kind in ("no_fit", "source_audit") else
+             "READY_INTERNAL_RESEARCH_PLAN" if level == INTERNAL else
              "AWAITING_OPERATOR_APPROVAL")
     return {
         "schema": "tac-osm.compute-decision.v1",
@@ -151,6 +155,7 @@ def decide(proposal: dict) -> dict:
         "gpu_devices_required": 2 if wants_gpu else 0,
         "cpu_estimate_minutes": cpu, "gpu_budget_minutes": budget,
         "state": state, "reasons": reasons, "blockers": blockers,
+        "execution_level": level,
         "approved_to_train": False, "approved_to_open_test": False,
         "automatic_submissions": False,
         "source_contract_fingerprint": hashlib.sha256(
