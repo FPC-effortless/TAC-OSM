@@ -275,3 +275,15 @@ def test_rotary_relative_offset_stable_at_large_absolute_position():
     near_scores=near@near.transpose(-1,-2)
     far_scores=far@far.transpose(-1,-2)
     torch.testing.assert_close(near_scores,far_scores,atol=2e-5,rtol=2e-5)
+
+
+
+@pytest.mark.parametrize('invalid_depth',[0,1,3,-1,False,2.0])
+def test_explicit_invalid_exit_never_falls_back_to_full_depth(invalid_depth):
+    model = CSL125R1(cfg()).eval()
+    tokens = torch.tensor([[13, 17]], dtype=torch.long)
+    with pytest.raises(ValueError, match='registered CSL125R1 exit'):
+        model(tokens, depth=invalid_depth, emit_token_logits=False)
+    out, state = model(tokens, depth=None, emit_token_logits=False)
+    assert len(state.layers)==model.config.layers
+    assert set(out)=={model.config.layers}

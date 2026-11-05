@@ -213,6 +213,17 @@ class CSL125R1(CSL125):
         if self.parameter_count() > config.max_parameters:
             raise ValueError('CSL-125-R1 learned parameters exceed hard cap')
 
+    def forward(self, tokens: Tensor, *, depth: Optional[int] = None, **kwargs):
+        """Reject invalid exit requests instead of silently evaluating full depth.
+
+        The original CSL-125 uses `depth or layers`, which maps requested depth
+        zero to the full model. R1 fails closed; this does not alter valid-rung
+        logits, trained weights, or the mathematical memory recurrence.
+        """
+        if depth is not None and (type(depth) is not int or depth not in self.config.rungs):
+            raise ValueError('requested depth is not a registered CSL125R1 exit')
+        return super().forward(tokens, depth=depth, **kwargs)
+
     def nested_next_token_loss(self, tokens: Tensor,
             weights: Optional[Dict[int, float]] = None,
             loss_mask: Optional[Tensor] = None) -> Tensor:
