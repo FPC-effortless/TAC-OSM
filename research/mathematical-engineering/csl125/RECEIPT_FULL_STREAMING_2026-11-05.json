@@ -1,0 +1,45 @@
+{
+  "kind": "CSL125_123699534_FULL_GEOMETRY_CAUSAL_STREAM_TEST",
+  "source_sha256": "0bf0ba779cf570084179675dd83a8b2a423867275282a129359a5f5a5828e85b",
+  "precision": "fp32",
+  "weights": "random_init",
+  "optimizer_steps": 0,
+  "sequence": 24,
+  "chunks": [
+    7,
+    6,
+    11
+  ],
+  "rows": [
+    {
+      "depth": 2,
+      "max_abs_stream_logits": 6.103515625e-05,
+      "max_abs_stream_state": 7.450580596923828e-09,
+      "max_abs_kv": 0.0,
+      "max_abs_future_poison_on_prior_logits": 0.0,
+      "wall_seconds": 0.285254779000752,
+      "pass": true
+    },
+    {
+      "depth": 8,
+      "max_abs_stream_logits": 0.0001220703125,
+      "max_abs_stream_state": 1.1175870895385742e-08,
+      "max_abs_kv": 4.172325134277344e-07,
+      "max_abs_future_poison_on_prior_logits": 0.0,
+      "wall_seconds": 0.4149081859995931,
+      "pass": true
+    },
+    {
+      "depth": 20,
+      "max_abs_stream_logits": 0.0001220703125,
+      "max_abs_stream_state": 1.1175870895385742e-08,
+      "max_abs_kv": 5.066394805908203e-07,
+      "max_abs_future_poison_on_prior_logits": 0.0,
+      "wall_seconds": 0.7890576280005916,
+      "pass": true
+    }
+  ],
+  "peak_rss_kib": 811328,
+  "overall_status": "PASS",
+  "limits": "Numerical/causal software consistency only; no learned key binding, language quality, or GPU result."
+}
