@@ -1,0 +1,23 @@
+{
+  "study_id": "CSL125-SCALEV2-PROPOSED-001",
+  "status": "PROPOSED_NOT_REGISTERED_OR_APPROVED",
+  "model_scale_policy": "declared-target-v2",
+  "parameter_scale": {
+    "target_trainable_parameters": 123699534,
+    "target_deployed_parameters": 123699534,
+    "relative_tolerance": 0.05,
+    "registered_before_first_fit": false,
+    "rationale": "Evaluate depth-adaptive 125M state ladder on genuine language and typed tool tasks"
+  },
+  "rungs": [2, 8, 20],
+  "primary_competitors": ["parameter-matched modern GQA Transformer", "parameter-matched delta-only / competent SSM"],
+  "controls": ["memory-off", "role-routing-off", "local-attention-off", "fixed-depth", "learned-depth"],
+  "data_source": "UNSELECTED; must confirm source, license, FIT/DEV boundaries and byte-fallback tokenizer fit",
+  "target_hardware": "Kaggle dual NVIDIA T4 only after resource and evidence preflight",
+  "gpu_authorized_for_this_study": false,
+  "optimizer_updates": 0,
+  "real_source_preflight": "OPEN",
+  "matched_parameter_compute_data_parity": "OPEN",
+  "independent_verifier": "OPEN",
+  "protected_test": "SEALED_NOT_ACCESSED"
+}
