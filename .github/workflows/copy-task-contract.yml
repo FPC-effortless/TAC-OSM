@@ -1,0 +1,37 @@
+name: Copy task contract source-only audit
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/copy_task_contract.py'
+      - 'scripts/audit_copy_task_contract.py'
+      - 'tests/test_copy_task_contract.py'
+      - 'research/copy_contract_20261105/**'
+      - '.github/workflows/copy-task-contract.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixture-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install pytest==8.4.2
+      - name: Source-only plan and contract checks
+        run: |
+          mkdir -p copy-contract-evidence
+          python -B scripts/phone_lab.py plan research/phone_queue/copy_contract_20261105.json > copy-contract-evidence/CPU_PLAN.json
+          cmp copy-contract-evidence/CPU_PLAN.json research/copy_contract_20261105/COMPUTE_DECISION.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_copy_task_contract.py tests/test_phone_internal_level_compat.py
+          python -B scripts/audit_copy_task_contract.py --output copy-contract-evidence/audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: COPYCONTRACT20261105-source-only
+          path: copy-contract-evidence/
+          retention-days: 90

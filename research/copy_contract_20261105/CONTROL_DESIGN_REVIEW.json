@@ -1,0 +1,9 @@
+{
+  "status": "ENGINEERING_REVIEW_CORRECTION_BEFORE_MODEL_USE",
+  "initial_controls": "initial_uniform_controls",
+  "finding": "Uniform four-byte values permit exact-four reconstruction from a single observed value byte. Initial engineering rows and audit retained; no model was evaluated.",
+  "change": "Use8deterministic balanced four-byte codes: each position has2values, first3positions jointly identify8strings. No single byte identifies the full answer. All values disjoint from the frozen8training answers.",
+  "scope": "Necessary exposed engineering controls only, no neural score optimization or old registration change",
+  "old_protocol_unchanged": true,
+  "training_updates": 0
+}
