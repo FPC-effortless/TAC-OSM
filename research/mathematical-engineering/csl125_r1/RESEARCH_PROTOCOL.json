@@ -1,0 +1,38 @@
+{
+  "variant_id": "CSL-125-R1",
+  "program": "Woyengi Compositional State Ladder independent scientific development",
+  "stage": "DRAFT_G0_ENGINEERING_ONLY_NO_FIT",
+  "training_authorized": false,
+  "optimizer_updates_completed": 0,
+  "gpu_jobs_submitted": 0,
+  "max_learned_parameters": 125000000,
+  "instantiated_parameters": 123699534,
+  "tokenizer": "UNFITTED_32768_CAPACITY_AND_TIED_EMBEDDING_ONLY",
+  "parent_variant": "CSL-125",
+  "parent_source_sha256": "0bf0ba779cf570084179675dd83a8b2a423867275282a129359a5f5a5828e85b",
+  "policy": "new-study-declared-target-v2",
+  "hypotheses": [
+    {"id":"H_ROLE","claim":"balanced initial role logits enable learned identity separation","test":"8-slot entropy and identity-disjoint 2-key retrieval vs original CSL-125"},
+    {"id":"H_NORM","claim":"positive-mass normalization removes scale attenuation but may add runtime costs","test":"same-parameter trained normalized-vs-unnormalized memory and checked CPU/GPU state readout"},
+    {"id":"H_TAU","claim":"long timescales improve distant retained-value fidelity under controlled interference","test":"time-gap sweep with key replacements, not only old-state coefficient"},
+    {"id":"H_SPEED","claim":"fused scan could amortize added mass arithmetic","test":"GPU/CPU matched numerical parity and end-to-end time/energy"}
+  ],
+  "positive_controls": ["source-independent exact symbolic key store", "trained full-history attention", "trained capable Gated DeltaNet family"],
+  "negative_controls": ["input-only", "shuffled_key_label", "shuffled_address", "state_reset", "future_label_poison"],
+  "primary_metrics": ["six-query complete history success", "heldout next-token NLL at each rung", "pre/post replacement correctness", "absent-key abstention", "time to NLL", "actual FLOPs and tokens per second", "peak memory", "persistent state bytes", "hardware energy when available"],
+  "gates": {
+    "G0_local_source_tests": "PARTIAL_PASS_49_NO_FIT_TESTS",
+    "G0_full_source_probe": "AWAITING_CI",
+    "G0_pnds_lean_compiled": "OPEN",
+    "G0_full_source_parity": "OPEN",
+    "G1_learned_binding": "NOT_TESTED",
+    "G2_source_and_tokenizer": "NOT_READY",
+    "G2_matched_architecture_controls": "NOT_REGISTERED",
+    "G3_independently_signed_train_preflight": "NOT_READY",
+    "G3_kaggle_dual_T4_budget": "NO_BUDGET_SUBMISSION",
+    "G4_quantization_and_device": "NOT_READY"
+  },
+  "source_data_selection": "UNREGISTERED_NO_TRAIN_OR_TEST_SELECTION",
+  "training_data_license": "UNVERIFIED_FOR_THIS_STUDY",
+  "status": "NO_FIT_MATH_ENGINEERING_AND_NEGATIVE_CPU_EFFICIENCY_ONLY"
+}

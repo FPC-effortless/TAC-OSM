@@ -1,0 +1,118 @@
+{
+  "stage": "CPU_FP32_B1_NO_FIT_REFERENCE",
+  "torch": "2.10.0+cpu",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "threads": 1,
+  "prompt_tokens": 64,
+  "decode_tokens": 8,
+  "repetitions": 3,
+  "optimizer_updates": 0,
+  "arms": {
+    "CSL125_CONTROL": {
+      "parameter_count": 123699534,
+      "depths": {
+        "2": {
+          "prefill_samples_ms": [
+            83.513,
+            78.69,
+            83.761
+          ],
+          "decode_samples_ms": [
+            99.348,
+            96.857,
+            100.332
+          ],
+          "prefill_tokens_per_s": 766.3,
+          "decode_tokens_per_s": 80.5,
+          "state_bytes": 45056
+        },
+        "8": {
+          "prefill_samples_ms": [
+            153.179,
+            156.134,
+            173.916
+          ],
+          "decode_samples_ms": [
+            215.926,
+            234.027,
+            266.433
+          ],
+          "prefill_tokens_per_s": 409.9,
+          "decode_tokens_per_s": 34.2,
+          "state_bytes": 401408
+        },
+        "20": {
+          "prefill_samples_ms": [
+            336.764,
+            309.866,
+            304.437
+          ],
+          "decode_samples_ms": [
+            446.931,
+            421.895,
+            419.05
+          ],
+          "prefill_tokens_per_s": 206.5,
+          "decode_tokens_per_s": 19.0,
+          "state_bytes": 892928
+        }
+      }
+    },
+    "CSL125_R1": {
+      "parameter_count": 123699534,
+      "depths": {
+        "2": {
+          "prefill_samples_ms": [
+            98.999,
+            85.586,
+            84.496
+          ],
+          "decode_samples_ms": [
+            105.88,
+            108.964,
+            108.436
+          ],
+          "prefill_tokens_per_s": 747.8,
+          "decode_tokens_per_s": 73.8,
+          "state_bytes": 77824
+        },
+        "8": {
+          "prefill_samples_ms": [
+            187.496,
+            184.963,
+            174.261
+          ],
+          "decode_samples_ms": [
+            223.933,
+            218.425,
+            223.75
+          ],
+          "prefill_tokens_per_s": 346.0,
+          "decode_tokens_per_s": 35.8,
+          "state_bytes": 532480
+        },
+        "20": {
+          "prefill_samples_ms": [
+            359.627,
+            383.658,
+            394.07
+          ],
+          "decode_samples_ms": [
+            442.327,
+            462.356,
+            482.584
+          ],
+          "prefill_tokens_per_s": 166.8,
+          "decode_tokens_per_s": 17.3,
+          "state_bytes": 1220608
+        }
+      }
+    }
+  },
+  "limitations": "No fitting, fused kernel, GPU, INT8 or physical device. Time includes PyTorch CPU overhead. Do not compare language capability.",
+  "peak_process_rss_kib": 1308232,
+  "source_sha256": {
+    "control": "0bf0ba779cf570084179675dd83a8b2a423867275282a129359a5f5a5828e85b",
+    "r1": "f5037b5d632bdd3b4ff308c5b6d5012ab023e0419163cd49dc88bf6a31910e85"
+  }
+}

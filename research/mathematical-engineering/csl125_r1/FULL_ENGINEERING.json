@@ -1,0 +1,38 @@
+{
+  "stage": "SOURCE_BOUND_FULL_123699534_NO_FIT",
+  "source_sha256": "f5037b5d632bdd3b4ff308c5b6d5012ab023e0419163cd49dc88bf6a31910e85",
+  "torch": "2.10.0+cpu",
+  "device": "cpu",
+  "threads": 1,
+  "precision": "fp32",
+  "tokenizer_fitted": false,
+  "total_parameters": 123699534,
+  "parameter_breakdown": {
+    "embedding_and_tied_lm_head": 25165824,
+    "role_state_conv_ffn": 92605480,
+    "local_attention": 5901316,
+    "task_and_calibration_heads": 26146,
+    "final_norm": 768
+  },
+  "activation_depths": [
+    2,
+    8,
+    20
+  ],
+  "batch": 1,
+  "length": 8,
+  "optimizer_steps": 0,
+  "weights": "random_untrained",
+  "forward_seconds": 0.19399,
+  "backward_seconds": 0.51648,
+  "constructed_and_checked_seconds": 1.65306,
+  "random_label_loss": 740.2821655273438,
+  "tensor_count": 328,
+  "nonzero_grad_tensors": 328,
+  "missing_grads": [],
+  "nonfinite_grads": [],
+  "zero_grads": [],
+  "peak_RSS_kib": 1466240,
+  "status": "PASS",
+  "limits": "Not a trained model, no optimizer updates, no real corpus, no CUDA, no full mathematical or anti-leakage proof."
+}
