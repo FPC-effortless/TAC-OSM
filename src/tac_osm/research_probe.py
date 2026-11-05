@@ -142,11 +142,25 @@ def _replay(adapter: ResearchProbeAdapter, model: nn.Module,
         if before.keys() != now.keys():
             raise ValueError("state component names changed during replay")
         if trace:
+            components = {}
+            for k, current in now.items():
+                previous = before[k]
+                report = _stats(current)
+                if current.shape == previous.shape:
+                    report["change_l2"] = _norm(current - previous)
+                    report["shape_changed"] = False
+                else:
+                    # Causal KV caches legitimately grow and truncate. Subtracting
+                    # different shapes is invalid, and padding/truncating them
+                    # silently would falsely suggest a measured state delta.
+                    report["previous_shape"] = list(previous.shape)
+                    report["shape_changed"] = True
+                    report["change_l2"] = None
+                    report["change_l2_status"] = "INCONCLUSIVE_SHAPE_TRANSITION"
+                components[k] = report
             timeline.append({
                 "event_index": t,
-                "components": {
-                    k: {**_stats(now[k]), "change_l2": _norm(now[k] - before[k])}
-                    for k in now},
+                "components": components,
             })
         prev = now
     return state, timeline
