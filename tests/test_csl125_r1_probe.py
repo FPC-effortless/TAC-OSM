@@ -25,6 +25,14 @@ def test_adapter_memory_and_isolation_on_actual_r1_computation():
     assert result['query_does_not_write_state']
     assert 'layer0.fast_mass' in result['state_components']
     assert 'kv3.k' in result['state_components']
+    # The true KV state grows from zero to the history length; the diagnostic
+    # must not pad, silently truncate, fake a 0 norm or crash on new shapes.
+    growth = [row['components']['kv3.k'] for row in result['timeline']]
+    assert growth[0]['previous_shape'][2] == 0
+    assert growth[0]['shape'][2] == 1
+    assert growth[0]['shape_changed'] is True
+    assert growth[0]['change_l2'] is None
+    assert growth[0]['change_l2_status'] == 'INCONCLUSIVE_SHAPE_TRANSITION'
     assert result['candidate_permutation']['status']=='INCONCLUSIVE_NOT_DECLARED'
     isolated=probe_entity_isolation(m,s,adapter)
     assert isolated['status']=='PASS'
