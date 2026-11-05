@@ -1,0 +1,152 @@
+{
+  "stage": "NO_FIT_REFERENCE_CPU",
+  "torch": "2.10.0+cpu",
+  "threads": 1,
+  "seed": 1252,
+  "batch": 1,
+  "prefill_tokens": 64,
+  "decode_tokens": 8,
+  "optimizer_steps": 0,
+  "full_vocabulary_projection": false,
+  "device": "cpu",
+  "replicates_per_arm": 3,
+  "limitations": "No tokenizer, trained loss, CUDA, kernel fusion, energy or model utility. CPU PyTorch runtime includes Python/kernel overhead; no matched FLOPs claim.",
+  "arms": {
+    "R1": {
+      "parameters": 123699534,
+      "rungs": {
+        "2": {
+          "prefill": {
+            "median_ms": 46.8072,
+            "samples_ms": [
+              43.7648,
+              46.9092,
+              46.8072
+            ]
+          },
+          "decode": {
+            "median_ms": 51.7259,
+            "samples_ms": [
+              54.2413,
+              51.7259,
+              39.8092
+            ]
+          },
+          "prefill_tps": 1367.3,
+          "decode_tps": 154.7,
+          "state_bytes_after_prefill": 77824
+        },
+        "8": {
+          "prefill": {
+            "median_ms": 162.9608,
+            "samples_ms": [
+              171.6843,
+              162.9608,
+              152.0214
+            ]
+          },
+          "decode": {
+            "median_ms": 189.5151,
+            "samples_ms": [
+              195.2189,
+              189.5151,
+              177.7371
+            ]
+          },
+          "prefill_tps": 392.7,
+          "decode_tps": 42.2,
+          "state_bytes_after_prefill": 507904
+        },
+        "20": {
+          "prefill": {
+            "median_ms": 364.4608,
+            "samples_ms": [
+              389.3047,
+              364.4608,
+              344.1033
+            ]
+          },
+          "decode": {
+            "median_ms": 422.1928,
+            "samples_ms": [
+              412.5323,
+              422.1928,
+              443.6847
+            ]
+          },
+          "prefill_tps": 175.6,
+          "decode_tps": 18.9,
+          "state_bytes_after_prefill": 1171456
+        }
+      }
+    },
+    "R2": {
+      "parameters": 123822574,
+      "rungs": {
+        "2": {
+          "prefill": {
+            "median_ms": 40.6363,
+            "samples_ms": [
+              40.6363,
+              48.0339,
+              40.3695
+            ]
+          },
+          "decode": {
+            "median_ms": 36.964,
+            "samples_ms": [
+              35.9084,
+              37.8625,
+              36.964
+            ]
+          },
+          "prefill_tps": 1574.9,
+          "decode_tps": 216.4,
+          "state_bytes_after_prefill": 77824
+        },
+        "8": {
+          "prefill": {
+            "median_ms": 157.1664,
+            "samples_ms": [
+              155.6611,
+              163.8908,
+              157.1664
+            ]
+          },
+          "decode": {
+            "median_ms": 174.3018,
+            "samples_ms": [
+              180.9144,
+              172.6892,
+              174.3018
+            ]
+          },
+          "prefill_tps": 407.2,
+          "decode_tps": 45.9,
+          "state_bytes_after_prefill": 507904
+        },
+        "20": {
+          "prefill": {
+            "median_ms": 418.0526,
+            "samples_ms": [
+              446.9564,
+              418.0526,
+              406.3363
+            ]
+          },
+          "decode": {
+            "median_ms": 430.9475,
+            "samples_ms": [
+              431.6339,
+              430.9475,
+              430.7888
+            ]
+          },
+          "prefill_tps": 153.1,
+          "decode_tps": 18.6,
+          "state_bytes_after_prefill": 1171456
+        }
+      }
+    }
+  }
+}

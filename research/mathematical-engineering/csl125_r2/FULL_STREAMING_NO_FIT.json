@@ -1,0 +1,37 @@
+{
+  "stage": "CSL125R2_FULL_WIDTH_NO_FIT_STREAMING",
+  "model_source_sha256": "e1349869ea05efe59fc12fee2bf386779760570395e419dd90578b26a24e9afa",
+  "model_parameters": 123822574,
+  "device": "cpu",
+  "precision": "FP32",
+  "threads": 1,
+  "input_length": 24,
+  "chunks": [
+    7,
+    6,
+    11
+  ],
+  "future_mutation_start": 16,
+  "optimizer_steps": 0,
+  "rungs": {
+    "2": {
+      "chunk_vs_full_max_logit_diff": 1.9073486328125e-05,
+      "future_token_poison_max_previous_logit_diff": 0.0,
+      "status": "PASS"
+    },
+    "8": {
+      "chunk_vs_full_max_logit_diff": 0.0001220703125,
+      "future_token_poison_max_previous_logit_diff": 0.0,
+      "status": "PASS"
+    },
+    "20": {
+      "chunk_vs_full_max_logit_diff": 0.0001220703125,
+      "future_token_poison_max_previous_logit_diff": 0.0,
+      "status": "PASS"
+    }
+  },
+  "claims": "causal source-local numerical checks only, not global information-flow proof or trained recall",
+  "status": "PASS_ALL_EXITS",
+  "elapsed_seconds": 2.9522,
+  "rss_peak_kib": 841636
+}
