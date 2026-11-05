@@ -1,0 +1,215 @@
+{
+  "stage": "SINGLE_CPU_OPERATOR_PROFILE_NO_FIT",
+  "threads": 1,
+  "batch": 1,
+  "length": 64,
+  "depth": 20,
+  "no_vocab_head": true,
+  "optimizer_steps": 0,
+  "operators": {
+    "R1": [
+      {
+        "operator": "aten::mm",
+        "self_cpu_ms": 181.9017,
+        "calls": 152
+      },
+      {
+        "operator": "aten::cumsum",
+        "self_cpu_ms": 74.9367,
+        "calls": 40
+      },
+      {
+        "operator": "aten::mul",
+        "self_cpu_ms": 69.4415,
+        "calls": 494
+      },
+      {
+        "operator": "aten::div",
+        "self_cpu_ms": 17.4497,
+        "calls": 100
+      },
+      {
+        "operator": "aten::exp",
+        "self_cpu_ms": 10.5943,
+        "calls": 120
+      },
+      {
+        "operator": "aten::add",
+        "self_cpu_ms": 8.4735,
+        "calls": 301
+      },
+      {
+        "operator": "aten::cat",
+        "self_cpu_ms": 4.6314,
+        "calls": 140
+      },
+      {
+        "operator": "aten::mkldnn_convolution",
+        "self_cpu_ms": 3.9707,
+        "calls": 20
+      },
+      {
+        "operator": "aten::copy_",
+        "self_cpu_ms": 1.7644,
+        "calls": 345
+      },
+      {
+        "operator": "aten::bmm",
+        "self_cpu_ms": 1.5421,
+        "calls": 60
+      },
+      {
+        "operator": "aten::tanh",
+        "self_cpu_ms": 1.0987,
+        "calls": 20
+      },
+      {
+        "operator": "aten::silu",
+        "self_cpu_ms": 1.0875,
+        "calls": 20
+      },
+      {
+        "operator": "aten::einsum",
+        "self_cpu_ms": 1.0506,
+        "calls": 60
+      },
+      {
+        "operator": "aten::matmul",
+        "self_cpu_ms": 1.0135,
+        "calls": 152
+      },
+      {
+        "operator": "aten::_scaled_dot_product_flash_attention_for_cpu",
+        "self_cpu_ms": 0.9695,
+        "calls": 4
+      },
+      {
+        "operator": "aten::sigmoid",
+        "self_cpu_ms": 0.7749,
+        "calls": 60
+      },
+      {
+        "operator": "aten::as_strided",
+        "self_cpu_ms": 0.7138,
+        "calls": 1342
+      },
+      {
+        "operator": "aten::pow",
+        "self_cpu_ms": 0.6942,
+        "calls": 45
+      },
+      {
+        "operator": "aten::sum",
+        "self_cpu_ms": 0.6346,
+        "calls": 45
+      },
+      {
+        "operator": "aten::_to_copy",
+        "self_cpu_ms": 0.6168,
+        "calls": 314
+      }
+    ],
+    "R2": [
+      {
+        "operator": "aten::mm",
+        "self_cpu_ms": 175.4021,
+        "calls": 152
+      },
+      {
+        "operator": "aten::mul",
+        "self_cpu_ms": 139.2587,
+        "calls": 974
+      },
+      {
+        "operator": "aten::add",
+        "self_cpu_ms": 22.7941,
+        "calls": 501
+      },
+      {
+        "operator": "aten::cat",
+        "self_cpu_ms": 22.2422,
+        "calls": 620
+      },
+      {
+        "operator": "aten::expm1",
+        "self_cpu_ms": 6.8766,
+        "calls": 40
+      },
+      {
+        "operator": "aten::exp",
+        "self_cpu_ms": 5.2153,
+        "calls": 80
+      },
+      {
+        "operator": "aten::mkldnn_convolution",
+        "self_cpu_ms": 3.6604,
+        "calls": 20
+      },
+      {
+        "operator": "aten::div",
+        "self_cpu_ms": 2.7275,
+        "calls": 60
+      },
+      {
+        "operator": "aten::neg",
+        "self_cpu_ms": 2.1905,
+        "calls": 160
+      },
+      {
+        "operator": "aten::copy_",
+        "self_cpu_ms": 1.9632,
+        "calls": 525
+      },
+      {
+        "operator": "aten::bmm",
+        "self_cpu_ms": 1.4735,
+        "calls": 60
+      },
+      {
+        "operator": "aten::slice",
+        "self_cpu_ms": 1.4502,
+        "calls": 1828
+      },
+      {
+        "operator": "aten::silu",
+        "self_cpu_ms": 1.3814,
+        "calls": 20
+      },
+      {
+        "operator": "aten::as_strided",
+        "self_cpu_ms": 1.3727,
+        "calls": 3622
+      },
+      {
+        "operator": "aten::_to_copy",
+        "self_cpu_ms": 1.2832,
+        "calls": 474
+      },
+      {
+        "operator": "aten::tanh",
+        "self_cpu_ms": 1.0116,
+        "calls": 20
+      },
+      {
+        "operator": "aten::einsum",
+        "self_cpu_ms": 1.0041,
+        "calls": 60
+      },
+      {
+        "operator": "aten::matmul",
+        "self_cpu_ms": 0.9918,
+        "calls": 152
+      },
+      {
+        "operator": "aten::all",
+        "self_cpu_ms": 0.9033,
+        "calls": 200
+      },
+      {
+        "operator": "aten::_scaled_dot_product_flash_attention_for_cpu",
+        "self_cpu_ms": 0.896,
+        "calls": 4
+      }
+    ]
+  }
+}

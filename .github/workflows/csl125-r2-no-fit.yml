@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'src/tac_osm/csl125_r2*'
+      - 'scripts/screen_csl125_r2_fast_scan.py'
       - 'src/tac_osm/csl125_r1_binding_fixture.py'
       - 'tests/test_csl125_r2.py'
       - 'tests/test_csl125_r1_binding_fixture.py'
@@ -35,7 +36,8 @@ jobs:
             tests/test_csl001.py tests/test_csl001_math.py \
             tests/test_csl125.py tests/test_csl125_math.py \
             tests/test_csl125_r1.py tests/test_csl125_r1_probe.py \
-            tests/test_csl125_r1_binding_fixture.py tests/test_csl125_r2.py
+            tests/test_csl125_r1_binding_fixture.py tests/test_csl125_r2.py \
+            tests/test_csl125_r2_fast_scan.py
       - name: Verify full 123.8M graph gradients without optimizer
         env:
           PYTHONPATH: src
