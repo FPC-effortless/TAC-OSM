@@ -134,6 +134,10 @@ def test_independent_pnds_record_reference_matches_observed_wire(controls, origi
     import importlib.util
     from tac_osm.copy_task_contract import records_from_prefix
     path = ROOT / "research/copy_contract_20261105/pnds_reference.py"
+    bridge = json.loads((ROOT / "research/copy_contract_20261105/PNDS_MATH_LINK.json").read_text())
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == bridge["pnds_paths_sha256"]["foundation/v1/copy_task_contract_reference.py"]
+    for source, digest in bridge["source_paths_sha256"].items():
+        assert hashlib.sha256((ROOT / source).read_bytes()).hexdigest() == digest
     spec = importlib.util.spec_from_file_location("copy_contract_reference", path)
     ref = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(ref)
