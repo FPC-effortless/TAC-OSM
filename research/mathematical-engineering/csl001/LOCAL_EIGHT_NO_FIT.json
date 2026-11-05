@@ -1,0 +1,148 @@
+{
+  "stage": "NO_FIT_ENGINEERING_TIMING",
+  "device": "cpu",
+  "variant": "eight",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "torch": "2.10.0+cpu",
+  "cuda_gpu": null,
+  "torch_threads": 1,
+  "batch": 1,
+  "sequence": 128,
+  "decode_steps": 24,
+  "repeats": 15,
+  "optimizer_steps": 0,
+  "model_sha256": "45ef72bf9303849d3b1eebdae0cee87937ce837d3c5f8d4b91b942b299f3902f",
+  "model_parameters": 98194,
+  "storage_lower_bounds_bytes": {
+    "32": 392776,
+    "8": 98194,
+    "4": 49097,
+    "2.125": 26083
+  },
+  "rungs": {
+    "2": {
+      "state_bytes_batch1": 1536,
+      "prefill": {
+        "median_ms": 1.7971,
+        "min_ms": 1.4352,
+        "p90_ms": 2.3406,
+        "samples_ms": [
+          1.8826,
+          1.5613,
+          1.7971,
+          1.544,
+          1.7108,
+          1.5493,
+          1.665,
+          1.8087,
+          1.8903,
+          1.5736,
+          2.4437,
+          1.4352,
+          1.8182,
+          2.3493,
+          2.3406
+        ]
+      },
+      "prefill_tokens_per_second": 71225.86,
+      "decode_total": {
+        "median_ms": 24.0911,
+        "min_ms": 22.209,
+        "p90_ms": 27.0297,
+        "samples_ms": [
+          27.0297,
+          24.0911,
+          27.514,
+          24.5485,
+          22.8907,
+          22.8874,
+          22.209
+        ]
+      },
+      "decode_tokens_per_second": 996.22
+    },
+    "4": {
+      "state_bytes_batch1": 3072,
+      "prefill": {
+        "median_ms": 3.159,
+        "min_ms": 2.8689,
+        "p90_ms": 3.4024,
+        "samples_ms": [
+          3.2806,
+          3.159,
+          3.1262,
+          2.9112,
+          2.9643,
+          3.6125,
+          3.4024,
+          3.3586,
+          2.9293,
+          3.4794,
+          3.3046,
+          3.398,
+          2.8689,
+          3.0536,
+          2.9562
+        ]
+      },
+      "prefill_tokens_per_second": 40519.15,
+      "decode_total": {
+        "median_ms": 49.1969,
+        "min_ms": 44.82,
+        "p90_ms": 49.9633,
+        "samples_ms": [
+          44.82,
+          49.9633,
+          56.4751,
+          47.1678,
+          49.1969,
+          49.3354,
+          48.0485
+        ]
+      },
+      "decode_tokens_per_second": 487.84
+    },
+    "8": {
+      "state_bytes_batch1": 6144,
+      "prefill": {
+        "median_ms": 6.5121,
+        "min_ms": 5.6742,
+        "p90_ms": 7.4524,
+        "samples_ms": [
+          6.8335,
+          6.5059,
+          7.4524,
+          5.9204,
+          6.1057,
+          6.5121,
+          6.7758,
+          6.4888,
+          8.0466,
+          7.0038,
+          9.5625,
+          5.7847,
+          6.0907,
+          5.6742,
+          7.0643
+        ]
+      },
+      "prefill_tokens_per_second": 19655.72,
+      "decode_total": {
+        "median_ms": 88.2979,
+        "min_ms": 82.0073,
+        "p90_ms": 98.6448,
+        "samples_ms": [
+          82.0073,
+          97.2307,
+          99.3182,
+          98.6448,
+          88.2979,
+          85.8871,
+          83.8673
+        ]
+      },
+      "decode_tokens_per_second": 271.81
+    }
+  },
+  "limits": "No real model training, int8 or CQ2 kernel, language accuracy, effective FLOPs, RAM/RSS or energy measurement. Decode uses a PyTorch FP32 loop of individual steps."
+}
