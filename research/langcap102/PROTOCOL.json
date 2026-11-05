@@ -1,0 +1,164 @@
+{
+  "schema": "langcap102.capability-first.design.v1",
+  "study_id": "LANGCAP102",
+  "created_utc": "2026-10-31",
+  "status": "DESIGN_ONLY_NO_NEW_MODEL_FITS",
+  "training_enabled": false,
+  "dev_scoring_enabled": false,
+  "protected_test_access": false,
+  "checkpoint_promotion": false,
+  "independent_replication": false,
+  "prior_evidence": {
+    "original_pr": 679,
+    "original_run": 41174892770,
+    "original_preregistered_passes": 135,
+    "original_failures": 3,
+    "recovery_run": 41179897888,
+    "recovery_passes": 3,
+    "recovery_is_posthoc": true,
+    "exploratory_eval_runs": [
+      41198664516,
+      41198692495
+    ],
+    "scientific_claim": "INCONCLUSIVE_ARCHITECTURE_SUPERIORITY"
+  },
+  "hypotheses": [
+    {
+      "id": "H1",
+      "claim": "Relevant long-past evidence causally improves task performance compared with its removal on genuine annotated records.",
+      "required_observation": "Evidence-present vs evidence-removed within model under equal contemporaneous query.",
+      "reject_on": "No significant benefit or source-label shortcut."
+    },
+    {
+      "id": "H2",
+      "claim": "TAC native associative structure offers a quality/resource benefit over a trained and faithful attention or recurrent comparator on genuinely history-dependent work.",
+      "required_observation": "Matched real source, model capacity, access and measured training compute; paired held-out success and cost.",
+      "reject_on": "Credible comparator equal or better or resource parity missing."
+    },
+    {
+      "id": "H3",
+      "claim": "Adaptive compute reduces resource cost at matched accuracy compared with fixed route on real cases.",
+      "required_observation": "Causal route interventions and accuracy-FLOP-latency-memory Pareto frontier.",
+      "reject_on": "No Pareto gain or unexplained uncharged operations."
+    }
+  ],
+  "datasets": [
+    {
+      "id": "longbench_v2",
+      "role": "POTENTIAL_PRIMARY_EXPOSED_DEV",
+      "url": "https://longbench2.github.io/",
+      "source_type": "human_curated_real_documents",
+      "licence_review": "PENDING",
+      "publisher_raw_hash": "PENDING",
+      "split_review": "PENDING",
+      "answer_provenance": "PENDING",
+      "status": "NOT_ACCEPTED"
+    },
+    {
+      "id": "repoqa",
+      "role": "POTENTIAL_PRIMARY_EXPOSED_DEV",
+      "url": "https://arxiv.org/abs/2406.06025",
+      "source_type": "real_code_repositories",
+      "licence_review": "PENDING",
+      "publisher_raw_hash": "PENDING",
+      "split_review": "PENDING",
+      "answer_provenance": "PENDING",
+      "status": "NOT_ACCEPTED"
+    },
+    {
+      "id": "ruler",
+      "role": "DIAGNOSTIC_ONLY",
+      "url": "https://github.com/NVIDIA/RULER",
+      "source_type": "synthetic",
+      "status": "DIAGNOSTIC_NOT_PRIMARY"
+    },
+    {
+      "id": "nolima",
+      "role": "DIAGNOSTIC_ONLY",
+      "url": "https://github.com/adobe-research/NoLiMa",
+      "source_type": "synthetic_benchmark",
+      "status": "DIAGNOSTIC_NOT_PRIMARY"
+    },
+    {
+      "id": "babilong",
+      "role": "DIAGNOSTIC_ONLY",
+      "url": "https://arxiv.org/abs/2406.10149",
+      "source_type": "synthetic_embedded_long_context",
+      "status": "DIAGNOSTIC_NOT_PRIMARY"
+    }
+  ],
+  "capabilities": [
+    "long_document_reasoning",
+    "natural_code_understanding",
+    "delayed_evidence_memory",
+    "multi_hop_evidence_composition",
+    "adaptive_compute_quality_cost"
+  ],
+  "primary_controls": [
+    "faithful_decoder_only_transformer",
+    "fully_specified_recurrent_or_ssm",
+    "native_tac_osm"
+  ],
+  "diagnostic_controls": [
+    "window4",
+    "query_only",
+    "history_reset",
+    "history_shuffle",
+    "relevant_evidence_ablation",
+    "irrelevant_evidence_ablation",
+    "untrained_weights"
+  ],
+  "positive_control_policy": "Independent strong-capable model/human on easy real evidence-dependent slices must be demonstrated; absent -> TASK_INCONCLUSIVE",
+  "shortcuts_policy": "No answer in query; no source-ID to answer shortcut; evidence must be necessary by reviewed counterfactual deletion; preserve all rejected cases",
+  "information_access_policy": "Equal observed evidence bytes and allowed external history; report bounded and unbounded memory regimes separately",
+  "parameter_policy": {
+    "policy": "declared-target-v2",
+    "status": "SCALE_POLICY_APPROVED_NOT_MODEL_PREREGISTERED",
+    "size_freedom": "NO_GLOBAL_SIZE_CEILING",
+    "example_scale_targets": [
+      100000,
+      1000000,
+      10000000,
+      50000000,
+      100000000
+    ],
+    "each_fit_requires_separate_registered_targets": true,
+    "per_model_target_band_fraction": 0.05,
+    "between_arms_max_relative_gap": 0.01,
+    "pretrained_deployed_weights_count": true,
+    "train_from_scratch_permitted": "ONLY_AFTER_SEPARATE_SIGNED_REAL_DATA_AND_RESOURCE_PREFLIGHT",
+    "preregistered_trainable_target": null,
+    "preregistered_deployed_target": null
+  },
+  "training_policy": {
+    "minimum_seeds": 3,
+    "source_preserving": true,
+    "optimizer_updates": "NOT_REGISTERED",
+    "training_flops": "NOT_REGISTERED",
+    "tuning_budget": "NOT_REGISTERED",
+    "trainable_parameter_count": "NOT_YET_MEASURED",
+    "training_enabled": false,
+    "model_scale_registration": "PENDING"
+  },
+  "statistical_policy": {
+    "paired_cases": true,
+    "source_cluster_intervals": true,
+    "multiplicity_correction": "Holm",
+    "missing_or_unanswerable": "INCONCLUSIVE_NO_OMISSION",
+    "cost_metrics": [
+      "actual_training_flops",
+      "trained_prefill_latency",
+      "trained_decode_latency",
+      "total_state_and_cache_bytes",
+      "peak_rss_bytes"
+    ]
+  },
+  "qualification": {
+    "max_level": "DESIGN_ONLY",
+    "synthetic_capability_claim": false,
+    "real_primary_data_received": false,
+    "holdout_judge_access": false,
+    "model_superiority": false,
+    "commercial_readiness": false
+  }
+}

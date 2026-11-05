@@ -14,7 +14,7 @@ T4s. The user approves actual quota through the protected GitHub environment,
 which is not configured by source control. Do not silently substitute other
 accelerators or consume Kaggle minutes. Training and promotion still require
 trusted independently signed source/outcome/reward/ACL attestations and full
-checkpoint/replay, 100k scale, data/compute parity and sealed TEST policy.
+checkpoint/replay, registered model scale, data/compute parity and sealed TEST policy.
 Research agents may draft PRs but MUST NOT autonomously merge novel-model
 research or represent no-fit diagnostics as intelligence. GitHub Issues and
 Actions provide compact phone-first progress, blockers, and result evidence.
@@ -51,9 +51,11 @@ budgets and equal evaluation conditions; see the latest amendment to
 preserved but do not make a comparison scientifically invalid by themselves.
 
 
-## Binding 100k trained-model scale (effective 2026-10-23)
+## Binding model-scale policy v2 (effective 2026-10-31)
 
-For EVERY future trained TAC-OSM neural model or comparator (including event/robot models, one-off fits and each seed), require **100,000 trainable parameters ±5% inclusive (95,000–105,000)** AND the same band for all deployed learned model parameters. For matched architecture studies, independently require **≤1% relative parameter gap between every trained arm** on exactly matching real data/budget. Count ALL active encoder, fast/slow/associative memory, concept, shared-weight decoder, routing, action, forecast, uncertainty and policy heads; no dummy padding or bypass with a frozen pretrained encoder. Measure the actual instantiated model **BEFORE the first optimizer step** and remeasure the actual final model at the postfit gate. Use `scripts/validate_research_parity.py --manifest ... --phase preflight` and `--phase final`, or `--model-parameters COUNT --deployed-parameters COUNT` for a standalone prefit. For solo training use `study_type: single_model_training`; prospective diagnostics are explicitly no-fit. If outside the band or missing receipts, DO NOT TRAIN. Do not relax the matched data, training compute, checkpoints/replay or real-world evaluation obligations, and do not require equal CPU time. Historical unchanged ME001–ME072/DEV001–DEV061 experiments and their existing model bytes remain as originally measured; any NEW trained fit belongs to this prospective rule regardless of recycled old code or paths. See rule 12 in `research/REAL-WORLD-EVIDENCE-RULES.md`.
+For every genuinely NEW model study, preregister `model_scale_policy: declared-target-v2` and explicit integer trainable/deployed targets in `FAIR_COMPARISON.json`, with a fixed ±5% absolute band and scientific rationale. There is no global size ceiling. Count every learned encoder, memory, router, head and deployed pretrained/frozen weight; no dummy padding. Independently require **≤1% trainable/deployed parameter gap between matched arms**, identical authentic data/access, training/tuning budgets and measured compute. Measure actual instantiated counts BEFORE optimization and actual checkpoint counts after fitting. Run the full signed `scripts/validate_research_parity.py --manifest ... --phase preflight` and `--phase final` gates. A standalone `--model-parameters` check is count-only and NEVER authorizes training. Missing receipts or failed gates block fitting. CPU time is an efficiency result, not a parity requirement.
+
+Historical registrations remain immutable: LANGMATH101 and existing v1 studies retain 95,000–105,000 trainable/deployed parameters; unchanged ME001–ME072/DEV001–DEV061 retain their original grandfathering. Never edit an old registration to adopt v2; use a new study ID. Real-source, signed independent evidence, PNDS, checkpoint/replay, sealed TEST and compute-execution requirements remain binding. See rule 12 in `research/REAL-WORLD-EVIDENCE-RULES.md`.
 
 ## Compulsory cross-repository mathematical-engineering rule — 2026-10-24
 
@@ -75,7 +77,7 @@ uninstrumented checks are UNKNOWN/INCONCLUSIVE, never automatically PASS.
 A passed constructed fixture or source file hash is engineering evidence, not
 proof of real-world model intelligence or source authenticity. Do not promote
 an architecture or unseal TEST on these grounds. Real-world, matched-budget,
-100k and PNDS rules remain binding. Audit existing physical-window adapters
+registered model-scale and PNDS rules remain binding. Audit existing physical-window adapters
 using src/tac_osm/robot_anticheat.py; other variants MUST integrate their
 own actual graph interfaces before claiming end-to-end information isolation.
 
