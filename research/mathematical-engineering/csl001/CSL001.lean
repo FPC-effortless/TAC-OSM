@@ -1,10 +1,11 @@
+import Mathlib
+
 /-!
 CSL-001 limited mathematical reference (NOT full-source formal verification).
 Exact real-field algebra only, distinct from fp32 rounding, Torch autodiff,
 role routing, masked data, tool authority, or any trained capability.
 Lean build/axiom audit: OPEN until independently compiled in PNDS.
 -/
-import Mathlib
 
 namespace CSL001
 
