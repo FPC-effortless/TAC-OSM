@@ -1,0 +1,67 @@
+{
+  "kind": "ACTUAL_FULL_GEOMETRY_NO_FIT_CPU",
+  "torch": "2.10.0+cpu",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "threads": 1,
+  "weights": "random_initialized_untrained",
+  "model_parameters": 123699534,
+  "construction_seconds": 2.452,
+  "input_shape": [
+    1,
+    16
+  ],
+  "output": "tool_only_no_vocab_projection",
+  "optimizer_steps": 0,
+  "data_kind": "random_indices",
+  "rungs": {
+    "2": {
+      "median_ms_batch1_t16": 10.894,
+      "samples_ms": [
+        10.199,
+        13.806,
+        12.633,
+        10.84,
+        10.894
+      ],
+      "state_bytes_role_conv": 45056,
+      "state_bytes_gqa_kv": 0,
+      "tool_logits_shape": [
+        1,
+        17
+      ]
+    },
+    "8": {
+      "median_ms_batch1_t16": 62.922,
+      "samples_ms": [
+        66.19,
+        63.205,
+        62.922,
+        59.599,
+        53.866
+      ],
+      "state_bytes_role_conv": 180224,
+      "state_bytes_gqa_kv": 49152,
+      "tool_logits_shape": [
+        1,
+        17
+      ]
+    },
+    "20": {
+      "median_ms_batch1_t16": 143.59,
+      "samples_ms": [
+        143.59,
+        165.75,
+        165.46,
+        132.736,
+        104.011
+      ],
+      "state_bytes_role_conv": 450560,
+      "state_bytes_gqa_kv": 98304,
+      "tool_logits_shape": [
+        1,
+        17
+      ]
+    }
+  },
+  "process_peak_rss_kib": 768300
+}

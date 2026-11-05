@@ -1,0 +1,47 @@
+{
+  "variant": "CSL-125",
+  "status": "NO_FIT_NO_WEIGHTS_UTILITY_ONLY",
+  "vocab_size": 32768,
+  "tokenizer_status": "PROPOSED_BYTE_FALLBACK_BPE_NOT_FITTED",
+  "width": 768,
+  "layers": 20,
+  "rungs": [
+    2,
+    8,
+    20
+  ],
+  "role_slots": 8,
+  "state_width": 256,
+  "local_attention_layers": [
+    4,
+    8,
+    14,
+    20
+  ],
+  "attention_window": 128,
+  "query_heads": 12,
+  "kv_heads": 3,
+  "parameter_groups": {
+    "embedding_and_tied_lm_head": 25165824,
+    "role_state_conv_ffn": 92605480,
+    "local_attention": 5901316,
+    "task_and_calibration_heads": 26146,
+    "final_norm": 768
+  },
+  "instantiated_parameters": 123699534,
+  "parameter_cap": 125000000,
+  "headroom": 1300466,
+  "weights_mib_ideal_lower_bound": {
+    "32": 471.876,
+    "16": 235.938,
+    "8": 117.969,
+    "4": 58.985,
+    "2.125": 31.336
+  },
+  "optimizer_steps": 0,
+  "warnings": [
+    "2.125-bit entry is an unachieved packing lower bound, not exported CQ2",
+    "No tokenizer model, training, quantized inference, memory RSS, FLOPs, latency, quality or MCU results",
+    "TAC-OSM future training policy currently requires 100k+/-5%; no exception or compute approval"
+  ]
+}
