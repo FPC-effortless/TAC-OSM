@@ -1,0 +1,140 @@
+{
+  "stage": "NO_FIT_SIZE_LADDER_CPU_REFERENCE",
+  "device": "cpu",
+  "threads": 1,
+  "batch": 1,
+  "sequence": 32,
+  "optimizer_steps": 0,
+  "corpus": "NONE",
+  "tokenizers_fitted": false,
+  "independent_parameterizations": true,
+  "controls": {
+    "1m": {
+      "parameters": 1037060,
+      "vocab_size": 4096,
+      "width": 112,
+      "layers": 8,
+      "rungs": {
+        "2": {
+          "ms_samples": [
+            2.6359740004409105,
+            2.7527559996087803,
+            2.5225370000043768
+          ],
+          "median_ms": 2.6359740004409105,
+          "prefill_tok_per_s": 12139.725200114823
+        },
+        "4": {
+          "ms_samples": [
+            6.713892999869131,
+            19.88471999993635,
+            7.459260000359791
+          ],
+          "median_ms": 7.459260000359791,
+          "prefill_tok_per_s": 4289.9697823184215
+        },
+        "8": {
+          "ms_samples": [
+            9.908208999149792,
+            13.334399000086705,
+            11.861156999657396
+          ],
+          "median_ms": 11.861156999657396,
+          "prefill_tok_per_s": 2697.881834033923
+        }
+      },
+      "ff_width": 128,
+      "state_width": 16,
+      "attention_layers": [
+        4,
+        8
+      ]
+    },
+    "10m": {
+      "parameters": 9739421,
+      "vocab_size": 8192,
+      "width": 256,
+      "layers": 12,
+      "rungs": {
+        "2": {
+          "ms_samples": [
+            6.00984500033519,
+            5.6584680005471455,
+            6.072677999327425
+          ],
+          "median_ms": 6.00984500033519,
+          "prefill_tok_per_s": 5324.596557517748
+        },
+        "6": {
+          "ms_samples": [
+            19.505772000229626,
+            25.056490999304515,
+            18.705662000684242
+          ],
+          "median_ms": 19.505772000229626,
+          "prefill_tok_per_s": 1640.540041154141
+        },
+        "12": {
+          "ms_samples": [
+            44.451419999859354,
+            49.882932000400615,
+            42.96459799934382
+          ],
+          "median_ms": 44.451419999859354,
+          "prefill_tok_per_s": 719.8870137354724
+        }
+      },
+      "ff_width": 576,
+      "state_width": 80,
+      "attention_layers": [
+        4,
+        8,
+        12
+      ]
+    },
+    "125m": {
+      "parameters": 123822574,
+      "vocab_size": 32768,
+      "width": 768,
+      "layers": 20,
+      "rungs": {
+        "2": {
+          "ms_samples": [
+            24.295715000334894,
+            24.53942900046968,
+            22.33243700084131
+          ],
+          "median_ms": 24.295715000334894,
+          "prefill_tok_per_s": 1317.104682844646
+        },
+        "8": {
+          "ms_samples": [
+            90.54766099961853,
+            115.67606400058139,
+            98.41761899951962
+          ],
+          "median_ms": 98.41761899951962,
+          "prefill_tok_per_s": 325.14503322983455
+        },
+        "20": {
+          "ms_samples": [
+            216.96362500006217,
+            283.8265609998416,
+            265.2895900000658
+          ],
+          "median_ms": 265.2895900000658,
+          "prefill_tok_per_s": 120.62290118504862
+        }
+      },
+      "ff_width": 1408,
+      "state_width": 256,
+      "attention_layers": [
+        4,
+        8,
+        14,
+        20
+      ]
+    }
+  },
+  "limitations": "not trained, GPU, energy or cross-scale intelligence evidence"
+}

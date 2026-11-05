@@ -1,0 +1,61 @@
+name: CSL125-R2 selective-admission no-fit engineering
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/csl125_r2*'
+      - 'scripts/screen_csl125_r2_fast_scan.py'
+      - 'scripts/profile_csl125_r2_scales.py'
+      - 'src/tac_osm/csl125_r1_binding_fixture.py'
+      - 'tests/test_csl125_r2.py'
+      - 'tests/test_csl125_r2_fast_scan.py'
+      - 'tests/test_csl125_r2_scaling.py'
+      - 'tests/test_csl125_r1_binding_fixture.py'
+      - 'scripts/verify_csl125_r2_engineering.py'
+      - 'research/mathematical-engineering/csl125_r2/**'
+      - '.github/workflows/csl125-r2-no-fit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  no-fit-cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test-only dependencies
+        run: python -m pip install --quiet 'pytest>=8,<9' 'numpy==2.3.3' torch
+      - name: Original-control and selective-admission tests (zero optimizer updates)
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m pytest -q \
+            tests/test_csl001.py tests/test_csl001_math.py \
+            tests/test_csl125.py tests/test_csl125_math.py \
+            tests/test_csl125_r1.py tests/test_csl125_r1_probe.py \
+            tests/test_csl125_r1_binding_fixture.py tests/test_csl125_r2.py \
+            tests/test_csl125_r2_fast_scan.py \
+            tests/test_csl125_r2_scaling.py
+      - name: Verify full 123.8M graph gradients without optimizer
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: python scripts/verify_csl125_r2_engineering.py
+      - name: Validate the saved no-fit receipt's scientific boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('research/mathematical-engineering/csl125_r2/RESEARCH_PROTOCOL.json').read_text())
+          assert p['model_parameters']==123822574 and p['model_hard_cap']==125000000
+          assert p['training_authorized'] is False and p['no_new_optimizer_steps'] is True
+          assert p['readiness']['MODEL_TRAINING']=='NOT_RUN'
+          print('PASS: NO_FIT and 125M hard cap retained')
+          PY

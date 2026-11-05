@@ -1,0 +1,61 @@
+{
+  "schema": "woyengi.csl125-r2.research-protocol.v1",
+  "variant": "CSL-125-R2",
+  "parent": "CSL-125-R1",
+  "source_sha256": "e1349869ea05efe59fc12fee2bf386779760570395e419dd90578b26a24e9afa",
+  "stage": "NO_FIT_ENGINEERING_REVIEW",
+  "training_authorized": false,
+  "model_scale_policy": "declared-target-v2",
+  "model_parameters": 123822574,
+  "model_hard_cap": 125000000,
+  "tokenizer": "UNFITTED_32768_BYTE_FALLBACK_CAPACITY",
+  "no_new_optimizer_steps": true,
+  "operator_only_synthetic_fixtures": true,
+  "measured_cpu_tests": 75,
+  "full_geometry_gradients": 368,
+  "hypothesis": "input-dependent learned write admission reduces irrelevant-token interference beyond mere slower decay",
+  "positive_controls": [
+    "external symbolic keyed store (oracle-only)",
+    "trained full-history attention",
+    "competent trained delta/SSM"
+  ],
+  "ablation_controls": [
+    "CSL125-R1 unchanged",
+    "write gate fixed to constant",
+    "shuffled write gates at inference",
+    "memory reset",
+    "input-only",
+    "future target poison"
+  ],
+  "success_metrics": [
+    "complete six-query history accuracy",
+    "replacement/untouched/absent correctness",
+    "per-exit token NLL",
+    "train/heldout discrepancy",
+    "gate discrimination",
+    "effective FLOPs",
+    "prefill/decode and state bytes"
+  ],
+  "falsifiers": [
+    "gate collapse all open or all closed",
+    "no improved value protection vs R1",
+    "same scores with gate shuffling",
+    "no positive control acquisition",
+    "source leakage"
+  ],
+  "readiness": {
+    "PYTHON_REFERENCE": "PASS_LOCAL_NO_FIT",
+    "FULL_SIZE_GRADIENT": "PASS_LOCAL_NO_FIT",
+    "FIXED_GATES_CAUSAL_HOLD": "PASS_LOCAL_NO_FIT",
+    "LEAN": "DRAFT_NOT_LOCAL_COMPILED",
+    "SOURCE_TO_PROOF_PARITY": "OPEN",
+    "AUTHENTIC_FIT_DEV": "OPEN",
+    "REGISTERED_FAIR_COMPARISON": "OPEN",
+    "REWARD_ACCESS_VERIFIER": "OPEN",
+    "DUAL_T4_GPU_BUDGET": "NOT_SUBMITTED",
+    "MODEL_TRAINING": "NOT_RUN",
+    "LANGUAGE_QUALITY": "NOT_MEASURED",
+    "EXTERNAL_DEVICE": "NOT_MEASURED"
+  },
+  "rejected_evidence": "No local fixture or one-seed untrained timing is a model superiority claim; no training authority inferred."
+}
