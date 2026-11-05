@@ -51,8 +51,10 @@ correction; the preregistered no-fit scope and old fixtures remain unchanged.
 Preregister96068940 and saved GitHub CPU5min plan preceded implementation/tests.
 Local51targeted checks PASS (15task-contract tests,36inherited planner checks),
 plus independent Python finite-record reference and receipt-parser checks.
-Dedicated source CI and scoped Lean results are pending; proof claims must wait
-for actual compilation/axiom audit. Original SHA and old capsule immutability
+Dedicated source CI41987895451 PASS at9064121e,51tests plus exact wire audit.
+PNDS112 scoped Lean/Python CI41987762748 PASS at96c48005:7compiled declarations
+and all7axiom reports, no sorryAx; dependencies are empty or propext only.
+These proofs concern finite task logic, not neural retrieval or parser refinement. Original SHA and old capsule immutability
 are checked. Full repository neural suite NOT RUN under this source-only scope.
 
 PNDS companion: exact finite-record latest-write semantics, singleton key-blind
@@ -69,3 +71,29 @@ GPU/TEST, promotion, merge, deployment or product work. New neural research stay
 500k history stays separately exploratory. Independent protected reward/safety/
 promotion gates remain. Device target unavailable; operator support, numerical
 agreement, physical p50/p95,RAM,energy,airplane-mode all NOT RUN. No remote fallback.
+
+## Archived hosted evidence and prior art
+
+[TAC run](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41987895451) ·
+[artifact13396777394](https://github.com/FPC-effortless/TAC-OSM/actions/runs/41987895451/artifacts/13396777394),
+SHA256fbcbc54a9a80304c5d0370f1ae0c6ffe4e64f03ea576745a5b9f079572f21ab9.
+[PNDS run](https://github.com/FPC-effortless/pnds-lean/actions/runs/41987762748) ·
+[proof13396497194](https://github.com/FPC-effortless/pnds-lean/actions/runs/41987762748/artifacts/13396497194),
+SHA256a0079a377149e15921e2e89bedbc81513fd89f02f16be56ec828129ed4aae60f.
+Both original ZIPs were downloaded and SHA-verified; lossless base64 archives,
+hosted scalar results, axiom output and seven-declaration receipt are retained
+in hosted_evidence beyond Actions retention. Original initial uniform cases
+and corrected local controls are also retained. No checkpoint bytes were read.
+REPO_REPLAY=NOT_APPLICABLE_NO_NEW_MODEL_OR_CHECKPOINT_EXECUTION.
+
+Relevant established prior art: *Zoology: Measuring and Improving Recall in
+Efficient Language Models*, https://arxiv.org/abs/2312.04927 (title and abstract
+inspected). It distinguishes multi-query associative recall from easy synthetic
+recall and language quality. The need for query-dependent controls is reused
+research methodology, not a newly discovered TAC mechanism; this work claims
+only source-specific fixture validation and limited task logic.
+
+Next: independently review these necessary controls before a separately
+registered neural study; retain707 as its original unlaunched acquisition
+proposal. No prototype/model capability, new experimental allocation or
+real-world qualification follows from this source-only check.
