@@ -27,7 +27,7 @@ theorem retentionStep_fixed (decay observed : α) :
   dsimp [retentionStep]
   ring
 
-/-! Boundedness under 0≤decay≤1 and 0≤old,observed≤1. -/
+/-! Nonnegativity only: 0≤decay≤1 and old,observed≥0. -/
 theorem retentionStep_nonneg (decay old observed : α)
     (hd0 : 0 ≤ decay) (hd1 : decay ≤ 1)
     (ho : 0 ≤ old) (hz : 0 ≤ observed) :
