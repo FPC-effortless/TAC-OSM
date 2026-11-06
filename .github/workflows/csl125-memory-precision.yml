@@ -1,0 +1,61 @@
+name: CSL125 targeted memory precision (no fit)
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/csl125_memory_precision.py'
+      - 'tests/test_csl125_memory_precision.py'
+      - 'scripts/qualify_csl125_memory_precision.py'
+      - 'research/csl125_memory_precision/**'
+      - 'research/phone_queue/csl125_r4_memory_precision_20261106.json'
+      - '.github/workflows/csl125-memory-precision.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: csl125-memory-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+jobs:
+  precision-qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONPATH: src
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Route bounded CPU research without training authority
+        run: |
+          mkdir -p ci-artifacts/csl125-memory-precision
+          python scripts/phone_lab.py plan research/phone_queue/csl125_r4_memory_precision_20261106.json > ci-artifacts/csl125-memory-precision/COMPUTE_DECISION.json
+      - name: Pin CPU and source-test dependencies
+        run: |
+          python -m pip install --quiet torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet 'pytest>=8,<9' numpy==2.3.3 jsonschema==4.26.0 xgrammar==0.2.8
+      - name: Precision boundaries, serial parameter gradients, stream and CPU AMP
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_csl125_memory_precision.py tests/test_csl125_r3.py tests/test_csl125_tool_model.py tests/test_csl125_schema_runtime.py tests/test_csl125_schema_edges.py --junitxml=ci-artifacts/csl125-memory-precision/tests.xml | tee ci-artifacts/csl125-memory-precision/TESTS.log
+      - name: Frozen operator cases, actual 123.87M gradients and same-weight CPU cost
+        run: |
+          set -euo pipefail
+          python scripts/qualify_csl125_memory_precision.py | tee ci-artifacts/csl125-memory-precision/QUALIFICATION.log
+      - name: Preserve exact source and environment
+        if: always()
+        run: |
+          mkdir -p ci-artifacts/csl125-memory-precision/source
+          git rev-parse HEAD > ci-artifacts/csl125-memory-precision/COMMIT.txt
+          python -m pip freeze > ci-artifacts/csl125-memory-precision/ENVIRONMENT.txt
+          cp src/tac_osm/csl125_memory_precision.py tests/test_csl125_memory_precision.py scripts/qualify_csl125_memory_precision.py research/csl125_memory_precision/PROTOCOL.md ci-artifacts/csl125-memory-precision/source/
+          sha256sum src/tac_osm/csl125_memory_precision.py tests/test_csl125_memory_precision.py scripts/qualify_csl125_memory_precision.py src/tac_osm/csl125_r2.py src/tac_osm/csl125_tool_model.py > ci-artifacts/csl125-memory-precision/SHA256.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: csl125-memory-precision-no-fit
+          path: ci-artifacts/csl125-memory-precision/
