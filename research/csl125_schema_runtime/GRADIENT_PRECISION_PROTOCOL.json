@@ -1,0 +1,24 @@
+{
+  "study": "csl125-r4-inherited-gradient-precision-attribution",
+  "parent_audit": "research/csl_scan_audit_20261106/PROTOCOL.json",
+  "stage": "NO_FIT_OPERATOR_DIAGNOSIS",
+  "cases": "all seven original fixtures",
+  "chunks": [1, 7, 32, 64],
+  "objectives": ["linear_state", "normalized_read", "normalized_read_source_default"],
+  "arms": ["source_scan32_loss32", "source_scan32_loss64", "diagnostic_scan64_loss32", "diagnostic_scan64_loss64"],
+  "reference": "original independent serial_torch with float64 leaves and float64 objective",
+  "input_values": "original FP32 fixtures, exactly cast; evaluated leaves FP32 in every arm",
+  "tolerance": {"gradient_atol": 0.000005, "gradient_rtol": 0.00005},
+  "rules": [
+    "Retain all four input derivative arrays and per-case comparison receipts.",
+    "Source scan remains unchanged; double scan is a separately named diagnostic copy of its affine-prefix formula.",
+    "Objective includes its dtype-dependent probe weights; this is precision attribution, not unique instruction causality.",
+    "No tolerances relaxed, no dropped failing cases, no model instantiated, no optimizer or corpus.",
+    "Passing diagnostic float64 arithmetic does not promote a production kernel or resolve full-model training qualification."
+  ],
+  "model_parameters_allocated": 0,
+  "optimizer_steps": 0,
+  "gpu_minutes": 0,
+  "production_patch_authorized": false,
+  "hypothesis": "isolating scan and normalized-objective precision will identify whether higher-precision loss alone suffices on the inherited failing fixtures"
+}
