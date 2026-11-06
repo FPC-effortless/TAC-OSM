@@ -39,3 +39,32 @@ Teacher-forced training computes per-token base and revised NLL, a risk BCE targ
 - If R3 simply imitates adding a slightly larger FFN, or trained Transformer/SSM dominates at comparable budget: no novel efficiency or architecture claim.
 - If any numerical/gradient audit that affects the trained path remains unresolved: training and 125M scale promotion blocked.
 - Corrector is **read-only on persistent memory**. Verified retrospective memory correction, authority management and persistent evidence provenance are separate future research, not implemented here.
+
+
+## Optional candidate-only revision: compute screen (source, not measured speed)
+
+R3 also implements \`candidate_repair_topk=K\`, where the parent base
+logits select K candidate IDs and the correction residual only re-scores the
+associated K embedding rows. This does **not** construct a revised vocabulary
+distribution and does **not** find a target excluded from the base top-K. The
+option fails closed if K is not an integer in [1,min(128,V)] or the base logits
+are disabled; it cannot authorize generation, acceptance or external actions.
+
+For V=32768, d=768, rank=32 and K=32, first-order per-token extra dense
+linear/gather dot-product MAC counts are:
+
+- Full revised projection: V*d + 2*d*rank + d = **25,215,744 MAC**.
+- Candidate-only revised scores: K*d + 2*d*rank + d = **74,496 MAC**.
+- Pure operator-count ratio for the added revision path: ~338.5x smaller.
+
+These are **analytical MAC estimates**, exclude base V*d projection, top-K
+selection/comparisons, nonlinearity, softmax, kernel launch, data movement,
+memory bandwidth and all earlier model layers. Do not call this a 338.5x
+inference speedup. Report actual tokens/s, p50/p95, RSS/VRAM, kernel dispatch
+and overall compute in a separately qualified hardware experiment.
+
+Additional falsifier: if the true answer is absent from base top-K, this path
+is structurally incapable of recovering it. Report top-K oracle recall and
+candidate-only net fixes minus breakages for K in {4,16,32,128} separately
+from unrestricted revised logits and never score a truncated K distribution
+as though it were full-vocabulary NLL.
