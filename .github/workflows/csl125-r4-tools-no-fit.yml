@@ -1,0 +1,43 @@
+name: CSL125-R4 tool-calling source and no-fit checks
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/csl125_tool_*'
+      - 'tests/test_csl125_tool_*'
+      - 'research/mathematical-engineering/csl125_r4/**'
+      - '.github/workflows/csl125-r4-tools-no-fit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tool-contract-cpu-no-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test-only dependencies
+        run: python -m pip install --quiet 'pytest>=8,<9' 'numpy==2.3.3' torch
+      - name: Test typed contracts, grammar and no-fit model gradients
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m pytest -q             tests/test_csl125_tool_protocol.py             tests/test_csl125_tool_model.py             tests/test_csl125_tool_review.py             tests/test_csl125_tool_eval.py             tests/test_csl125_tool_capacity.py             tests/test_csl125_r3.py
+      - name: Full-size meta vocabulary choices and lower-bound packing
+        env:
+          PYTHONPATH: src
+        run: python scripts/profile_csl125_r4_tool_vocab.py
+      - name: Verify the R4 scientific hold did not authorize fitting
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('research/mathematical-engineering/csl125_r4/PROTOCOL.md').read_text()
+          assert 'NO optimizer updates' in p
+          assert '11/84' in p and '123,873,263' in p
+          assert 'JSON syntax-only' in p and 'no executor' in p
+          print('PASS: tool caller is a no-fit proposal-only research module')
+          PY
