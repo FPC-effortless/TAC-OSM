@@ -1,0 +1,9 @@
+# Escaped-string compatibility repair, separate from source adapter
+
+Initial expanded run42264533850 failed2 and passed46. Quoted-value and newline-value gold targets failed at the backslash token under XGrammar0.2.8's bounded string conversion. Original tests/limits retained. This matches upstream issue800 (https://github.com/mlc-ai/xgrammar/issues/800). It is not a model learning failure.
+
+The new opt-in EscapedBPEToolGrammar retains caller schemas and the independent post-validator. To avoid changing unrelated conversion rules, each non-enum bounded string schema is replaced temporarily by a unique constant sentinel, the surrounding schema is converted with the pinned upstream frontend, then the sentinel literal is replaced in EBNF with quote + one-decoded-Unicode-scalar repeated minLength..maxLength + quote. Raw control characters and isolated surrogates are excluded; each simple JSON escape, BMP escape or valid UTF-16 surrogate pair consumes one scalar of the unchanged length budget. Unknown string constraints or changed upstream serialization fail closed. All outer objects, tool names, numeric and array constraints are unchanged. This uses the documented EBNF round-trip interface, not arbitrary relaxation of JSON Schema.
+
+New boundary checks include exactly-one scalar raw ASCII/emoji, quote/backslash/newline/tab escapes, BMP escapes, surrogate pairs, overlength values, raw controls, invalid escapes and isolated surrogates. Original two failing BPE cases must pass unchanged before corpus preparation. The original compiler path remains source-preserved; this repair applies to the new BPE path, not a claim that all previous byte-only deployments are fixed.
+
+Failed artifact13526042972 SHA256bfbe9cae6a62f40ef7880d4cc3d3ce23c1de779861eb826eea49db7889e39aaa is retained. No neural fit or external effects.

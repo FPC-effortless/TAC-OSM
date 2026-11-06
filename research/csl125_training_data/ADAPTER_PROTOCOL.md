@@ -1,0 +1,17 @@
+# Frozen corpus adapter and tokenizer qualification
+
+Source audit at parent32a490 acquired official publisher TRAIN at42563ae614280d2891d57f1e7057c4bc50dd27bd; TEST and preformatted mirror were never opened. Source hashes are pinned in the new data module.
+
+The original10,071 rows contain zero no-call examples. In10,019 rows the supplied tool-name set exactly equals the answer tool-name set. The new inference prompt NEVER uses row.tools: all retained rows receive the same publisher-derived21-tool catalogue independent of labels. This removes that selection shortcut but does not resolve semantic-label truth, template overlap, catalogue-order overfitting or unseen-tool generalization.
+
+Conservative source adapter: explicit primitive/list argument types, source required flags, closed objects, runtime-supported length bounds. Three APIs excluded (two dictionary contracts, one overlong description). Rows with unsupported APIs, unresolved prior-result references, wrong typed/null values or >4 calls are quarantined with original line hashes and overlapping reasons. Gold argument values are not rewritten. All effects are conservatively high-impact pending an independently supplied host registry. No executor exists.
+
+Normalized NFKC/casefold/whitespace request groups define deterministic FIT/DEV assignment from official TRAIN only. Original request text is not normalized for model input. Conflicting labels within a group quarantine the whole group; duplicates remain traceable. This is an exact-request split, NOT an unseen-tool or paraphrase-held-out test.
+
+Fit byte-level BPE capacities4096/8192/16384 on FIT only with all256 UTF-8 bytes represented, no unknown token and no normalization. Compare actual achieved vocabulary, prompt/response/EOS token lengths and all-in model parameter estimates; actual vocabulary can be below the requested cap. Separate prompt/target encodings prevent a merge across the supervision boundary. Round-trip every retained example and check every gold target against the actual BPE-vocabulary XGrammar matcher and independent post-validator. Never interpret BPE IDs as raw bytes. PAD/EOS are explicitly excluded from schema content; model SFT includes terminalEOS while generation terminates on schema completion.
+
+Right-padding integration: supervised next-token response positions only, no padding loss and no packed documents; every sequence starts with fresh state. Check gradients using the opt-in precise-memory R4 on source-owned fixture data, poison padded tokens, assert variable lengths actually differ, and verify saved tokenizer reload. These backward passes perform zero optimizer updates and do not measure capability.
+
+First source acquisition workflow42262211349 failed before network access due to using a publisher description in the planner's Kaggle dataset attachment field. Corrected that field to[] without changing planner policy; source declaration remains in PROTOCOL and source receipt. Successful acquisition42262433533 artifact13524439750 SHA2561961ffdf01f7979d61c0ff9b04093dea3d5a2b7afb1e7c46c8ea6966cf667dc7 is retained.
+
+Neural model fitting, arbitrary new schema coverage, no-call capability, real execution goals, independent source/evaluator/ACL signatures, complete matched-baseline registration and GPU/CUDA qualification remain OPEN. BPE fitting is preprocessing, not a trained neural checkpoint. Do not auto-merge or claim tool-use improvement.
