@@ -679,6 +679,119 @@ re-queues on this top-K evidence alone, recorded as "top-K signal intact" and
 
 ---
 
+
+
+---
+
+## C15 — Clean integrated multimodal PLM works end to end on the collision-free E2E-008 benchmark
+
+> On the independently validated collision-free E2E-008 synthetic multimodal benchmark, the integrated PLM achieves perfect q2 accuracy on all registered held-out compositions and all four fixed Boolean operators across five seeds.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** core integration result · **LAYER:** L3 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** none for this exact integrated claim.
+
+**NOT INHERITED:** real-world multimodal understanding; semantic or learned long-horizon memory; learned semantic addressing; learned operator discovery; scaling laws; compute efficiency; AGI.
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-INTEGRATED-E2E-008`, workflow run **37569324347**, artifact **11459479033**, benchmark generator `integrated-e2e-v7-collision-free-payload-only`.
+
+Across five seeds and 12 registered held-out compositions, q2 accuracy was **1.0000 for every seed** and **1.0000 for every composition/operator**. The composition-bootstrap 95% interval was **[1.0000, 1.0000]**.
+
+The benchmark identity was SHA-256 **3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e**. All five evaluation fingerprints were independently pinned and later reproduced exactly by the reset/recompute attribution run. Training/evaluation semantic overlap was zero, held-out composition exclusion passed, evaluation was generated after training, and the known image/entity side-channel collision was absent.
+
+This establishes that the integrated multimodal PLM implementation can solve this **specific synthetic task end to end**. It does **not** establish that temporal persistence is necessary: the subsequent reset/recompute control reproduced the same 1.0000 q2 result without carrying the q1 outcome-gated state update across the action boundary.
+
+The current implementation remains scaffolded: entity addressing is explicit, operator identity is provided by the public query, and the Boolean operators are executed by fixed closed-form CASM logic. The saturated 1.0000 score therefore has no headroom for fine-grained comparison, and it does not support claims of learned addressing, learned operator discovery, semantic multimodal competence, or scaling.
+
+**BLOCKER:** relax explicit addressing and fixed operator dispatch, then test whether the same integrated performance survives under learned representational routing and operator discovery without reusing E2E-008 held-out outcomes for selection.
+
+
+## C16 — Residual state writing improves state-content recovery on the registered development split
+
+> In a preregistered paired development comparison, residual-linear persistent-state writing improved queried state-content recovery and development task accuracy relative to the existing linear write interface.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** mechanism · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** residual connections and MLP state transforms are standard architectural primitives; the result is about their use at this TAC-OSM persistent-state boundary.
+
+**NOT INHERITED:** superiority outside the registered development distribution, general state-memory superiority, or any conclusion about the sealed confirmatory test sets.
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-STATE-CONTENT-DEV-001`, workflow run 37563125986, with paired evaluation episodes, zero train/evaluation overlap, and classifier decision integrity passing.
+
+On the same five seeds and development episodes, mean q2 was **0.8470** for the linear write, **0.9080** for residual-linear, and **0.9020** for residual-MLP. Mean XOR q2 was **0.8320**, **0.8920**, and **0.8760**, respectively. All three arms had zero classifier-decision mismatches. The development run therefore selected residual-linear before E2E-007.
+
+The result identifies the persistent-state write transformation as a practical optimization bottleneck in the current synthetic implementation. It does not prove that residual-linear is universally superior, and it does not use E2E-006 or E2E-007 held-out outcomes for selection.
+
+**BLOCKER:** determine whether the same gain survives a preregistered paired comparison against the linear write on a new held-out set, rather than inferring superiority from separate confirmatory runs.
+
+
+## C17 — The integrated PLM outperforms a parameter-matched feed-forward control on E2E-008
+
+> On the clean E2E-008 synthetic benchmark, the integrated PLM materially outperforms a feed-forward baseline matched to 74,124 versus 74,126 parameters and given direct q1/q2 representations plus detached q1 environment outcome.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** architectural attribution · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-MATCHED-FF-002`, workflow run **37573976369**, artifact **11461179857**.
+
+PLM q2 mean was **1.0000** versus **0.6287** for FF-002, a gap of **0.3713**. The composition-bootstrap 95% intervals were **[1.0000, 1.0000]** for PLM and **[0.5560, 0.7007]** for FF-002, satisfying the preregistered materiality and non-overlap rule.
+
+The FF-002 control received the q1 representation, q2 representation, q2 query indices/operator, and detached q1 environment outcome. Giving the feed-forward model this cross-boundary outcome information did not close the gap. FF-001 showed the same qualitative result, with mean q2 **0.6317**.
+
+This supports a bounded **integrated-architecture advantage** over the registered feed-forward controls on this synthetic task. It does not isolate temporal carry from the PLM state representation/CASM/verifier machinery; the subsequent reset/recompute result provides that separate attribution test.
+
+**BLOCKER:** replace fixed operator execution and explicit addressing with learned mechanisms before treating the architectural advantage as evidence for a more general PLM capability.
+
+---
+
+## C18 — Temporal carry across the q1→q2 action boundary is not load-bearing on E2E-008
+
+> Removing the post-q1 outcome-gated state update and recomputing the state from the original observations reproduces the normal PLM's q2 performance on the registered E2E-008 held-out benchmark.
+
+**STATUS: SUPPORTED, bounded negative attribution**
+
+**TYPE:** causal ablation · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001`, workflow run **37593010244**, artifact **11469064681**.
+
+Normal PLM q2 mean = **1.0000** and reset/recompute q2 mean = **1.0000** across all five seeds. The normal-minus-reset gap is **0.0000**; the paired composition-bootstrap 95% interval is **[0.0000, 0.0000]**. The preregistered materiality threshold was **0.05**, so the temporal-carry support criterion failed.
+
+All intervention integrity checks passed: q1 prediction/action/outcome pair equality held; the recomputed pre-q1 state was byte-identical to the original pre-q1 state; train/evaluation semantic overlap was zero; the benchmark SHA-256 and all five E2E-008 evaluation fingerprints matched exactly; and the independent artifact validator passed.
+
+The bounded interpretation is that **temporal carry across the action boundary is not necessary for this E2E-008 task**. In combination with C17, the measured PLM advantage is therefore better localized to the integrated state representation/CASM computation than to temporal carry itself.
+
+This does not establish that persistent memory is useless in general, nor does it address longer horizons, tasks in which the relevant information is only available after the action, learned semantic addressing, operator discovery, or real-world multimodal memory.
+
+**NEXT TEST:** remove the fixed Boolean/CASM and explicit addressing scaffolds while preserving the same strict split, provenance, and causal-control discipline.
+
+
+## C19 — Removing explicit operator-ID dispatch yields partial latent operator induction on E2E-008
+
+> The PLM can infer a hidden Boolean operator from an order-randomized four-row truth table and apply it to the held-out target without receiving an operator ID in the query, but the preregistered all-seed robustness criterion is not met.
+
+**STATUS: PARTIALLY SUPPORTED, bounded**
+
+**TYPE:** mechanism · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-LATENT-OPERATOR-001`, workflow run **37594557416**, artifact **11470476991**.
+
+The hidden operator was never supplied to the model. Held-out q2 accuracy was **0.9293 mean** with composition-bootstrap 95% interval **[0.8817, 0.9747]**. Operator-selection accuracy was **0.9500 mean** with composition-bootstrap interval **[0.9000, 1.0000]**.
+
+The preregistered criterion required operator-selection accuracy of at least **0.90 mean and 0.80 on every seed**. The criterion therefore failed because seed 3 reached **0.75** operator selection and **0.7117** q2 accuracy. Seed 3 selected the wrong operator on all three XNOR held-out compositions, while seeds 0, 1, 2 and 4 each reached 1.00 operator selection.
+
+The diagnostic structure is informative: oracle-operator q2 was **0.9740**, shuffled-support q2 was **0.6793**, and no-memory q2 was **0.6250**. This indicates that the support context is functionally used and that the seed-3 loss is primarily an operator-selection failure rather than a wholesale failure of state/content computation.
+
+This establishes a **partial scaffold-removal result**, not robust learned operator discovery. The execution library is still a fixed Boolean primitive set, and explicit entity addressing remains in place.
+
+**BLOCKER:** establish operator-induction robustness without changing the preregistered outcome after inspection of seed 3. A new contract must define any added demonstrations, losses, or training changes before measurement.
+
+---
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
@@ -719,3 +832,136 @@ An entry changes when the measurement changes, not when the prose does. A
 claim found in a doc with no entry here is unsupported by definition, and a
 `SUPPORTED` entry whose experiment cannot be re-run is a `PARTIALLY
 SUPPORTED` entry waiting to be discovered.
+
+
+---
+
+## C12 — Integrated multimodal E2E-001 fails the registered capability criterion
+
+> Under the registered synthetic benchmark, the first jointly trained text/image/audio persistent-computation chain did not reach the capability threshold and showed no measurable contribution from persistent state or image alignment.
+
+**STATUS: NOT ESTABLISHED**
+
+**TYPE:** negative · **LAYER:** L3
+
+**PRIOR ART:** none for this exact integrated claim.
+
+**NOT INHERITED:** the negative does not establish that PLM, multimodal fusion,
+persistent state, or CASM is impossible. It does not concern real-world
+language, vision or audio competence, arbitrary learned operator synthesis, or
+scaling.
+
+**REQUIRED EVIDENCE:** TACOSM-PLM-INTEGRATED-E2E-001, workflow run
+37062142549, experiment head ca74399b713931abe6393de3b76bd859585635b26,
+artifact 11251182171.
+
+The five registered seed q2 accuracies were 0.5475, 0.4925, 0.5075, 0.5425,
+and 0.5100. Mean = **0.5200**; deterministic seed-bootstrap 95% interval
+= **[0.5020, 0.5385]**. The preregistered threshold was 0.80.
+
+No-memory, image-shuffle, text-only, image-only, and audio-only controls all
+also averaged **0.5200**, with memory and alignment drops exactly zero.
+
+Target-slot attention averaged **0.060937** against the uniform 16-slot
+reference of **0.0625**.
+
+Operator-selection accuracy was **1.0000**, but the operator identity was
+provided explicitly by the query and supervised, so this does not establish
+autonomous operator discovery or routing.
+
+The result therefore localizes the current implementation failure toward
+representation/state addressing rather than providing evidence against the
+PLM hypothesis itself.
+
+**BLOCKER:** persistent-state write/read addressing and the shared multimodal
+representation remain unresolved. The next experiment should diagnose the
+write path, read path, and shared address space with preregistered controls
+rather than tune the failed model toward the primary threshold.
+## C12 — Integrated multimodal E2E-001 fails the registered capability criterion
+
+> Under the registered synthetic benchmark, the first jointly trained text/image/audio persistent-computation chain did not reach the capability threshold and showed no measurable contribution from persistent state or image alignment.
+
+**STATUS: SUPERSEDED — VOID FOR BENCHMARK VALIDITY**
+
+**TYPE:** negative · **LAYER:** L3
+
+**PRIOR ART:** none for this exact integrated claim.
+
+**NOT INHERITED:** the negative does not establish that PLM, multimodal fusion,
+persistent state, or CASM is impossible. It does not concern real-world
+language, vision or audio competence, arbitrary learned operator synthesis, or
+scaling.
+
+**REQUIRED EVIDENCE:** TACOSM-PLM-INTEGRATED-E2E-001, workflow run
+37062142549, experiment head ca74399b713931abe6393de3b76bd859585635b26,
+artifact 11251182171.
+
+The five registered seed q2 accuracies were 0.5475, 0.4925, 0.5075, 0.5425,
+and 0.5100. Mean = **0.5200**; deterministic seed-bootstrap 95% interval
+= **[0.5020, 0.5385]**. The preregistered threshold was 0.80.
+
+No-memory, image-shuffle, text-only, image-only, and audio-only controls all
+also averaged **0.5200**, with memory and alignment drops exactly zero.
+
+Target-slot attention averaged **0.060937** against the uniform 16-slot
+reference of **0.0625**.
+
+Operator-selection accuracy was **1.0000**, but the operator identity was
+provided explicitly by the query and supervised, so this does not establish
+autonomous operator discovery or routing.
+
+The numeric result is retained only as a provenance record. It does not support
+any conclusion about persistent-state addressing, multimodal fusion, or the PLM
+hypothesis because the task generator violated the registered q1/q2 entity
+separation.
+
+**REPLACED BY:** corrected benchmark generation and a new preregistered
+experiment. The invalid result must not be used for tuning or baseline selection.
+
+
+---
+
+## C13 — E2E-002 address diagnosis is superseded before measurement
+
+**STATUS: SUPERSEDED — NO VALID RESULT**
+
+E2E-002 inherited the same malformed episode generator as E2E-001, so its
+registered address-path diagnosis was not the task it claimed to test. The
+confirmatory run 37067955696 produced no artifact and therefore contributes no
+scientific number.
+
+The branch is closed. A corrected experiment with a new ID must independently
+generate q1/q2 queries and assert distinct target entities before measurement.
+
+
+---
+
+## C14 — Corrected integrated temporal/address benchmark fails the primary capability criterion
+
+**STATUS: NOT ESTABLISHED**
+
+**TYPE:** negative · **LAYER:** L3
+
+The corrected integrated multimodal persistent-computation benchmark did not
+reach the preregistered primary threshold.
+
+Evidence:
+workflow 37069959733; experiment head
+d638ce29a828084d6cdcaa0fd38fd70b5cb89d53; combined artifact 11254731258.
+
+Explicit-both q2 mean = **0.5200** with seed-bootstrap 95% interval
+**[0.5020, 0.5385]** and minimum seed **0.4925**.
+
+Explicit-write, explicit-read, and explicit-both all produced the identical
+five seed q2 values and mean 0.5200. Explicit-both no-memory, image-shuffle,
+text-only, image-only, and audio-only controls were also exactly 0.5200.
+
+This result is bounded to the corrected synthetic implementation. It does not
+establish impossibility of PLM, persistent state, multimodal fusion, or CASM,
+and it does not test natural multimodal competence, learned semantic
+addressing, autonomous operator discovery, or scaling.
+
+Immediate blocker:
+the representation-to-executable-state content interface remains unresolved.
+The representation bit projection and the CASM state bit projection are
+separate learned maps.

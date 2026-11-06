@@ -1,3 +1,24 @@
+
+
+
+**Cloud Codex on your Android phone:** Use the existing ChatGPT Codex Cloud as your coding/research agent, not a second agent subscription. [Phone-to-Codex task instructions and a reusable research prompt](research/CODEX-CLOUD-PHONE-HANDOFF-2026-10-27.md). A published repository-connected Codex Cloud environment is required; the GitHub scheduled CI does not by itself launch Codex tasks.
+
+## Research from a phone — autonomous planning and Kaggle T4 x2
+
+[Phone-first lab guide](research/PHONE-FIRST-AUTONOMOUS-LAB-2026-10-27.md):
+GitHub Issues are the progress board, GitHub Actions runs no-fit science
+checks and tracks source-controlled studies, and permissioned Kaggle workloads
+request NvidiaTeslaT4 (exactly two Tesla T4 devices). The research agents
+follow CHARTER.md/CODEX.md, preregister a compute decision, and cannot
+silently train, spend GPU minutes, change the original TEST protocol or grant
+their own independent evaluator approval. Original GitHub/Python research
+tooling remains fully supported. Remote Kaggle authentication/quotas and a
+live coding agent still require operator connection and authorization.
+
+## Lightweight Research Lab (no new platform required)
+
+Existing experiment scripts and source-qualified scientific gates remain unchanged. The optional [research lab quickstart](research/LIGHTWEIGHT-LAB-2026-10-27.md) provides a zero-dependency run ledger, report/checkpoint SHA256 provenance, an offline metrics dashboard, CI artifacts, and read-only recipes for MLflow, W&B, Comet, DVC, Hugging Face, Docker, Slurm, Ray, Kubernetes, Jupyter, GitHub, and notifications. Run your existing experiments first; then index a source file with `python scripts/lab.py record`. Logging a metric is never a capability or reward-integrity qualification.
+
 # TAC-OSM v0.1
 
 > **A controlled experimental environment for studying persistent-state-
@@ -8,6 +29,17 @@ v0.1 does not demonstrate a capability. It demonstrates a *instrument*: a loop
 in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
+
+## Active architecture development — 2026-10-22
+
+The [integrated predictive-state candidate](research/predictive-state-capability-2026-10-22/README.md)
+implements native fast/slow associative state, action-conditioned prediction
+and masked outcome correction. It is **untrained**; no new capability gain is
+claimed. The publisher OBD example is checksum-verified and rejected for
+entity-memory research because it lacks documented persistent IDs. New fits
+remain blocked by dataset qualification and the
+[compulsory parity policy](research/CAPABILITY-FIRST-RESEARCH-RESET-2026-10-22.md).
+This draft includes governance PR #318; neither branch is merged into master.
 
 ## The central claim under test
 

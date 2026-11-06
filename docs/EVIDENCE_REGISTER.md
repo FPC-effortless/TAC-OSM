@@ -154,7 +154,7 @@ Layer 2 and Layer 3 rows, and each one has a standing blocker.
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
 | Runtime retrieval boundary can preserve capability while bounding router input in an exact synthetic control | L3 | integration | deterministic lookup is an L0 control mechanism | semantic retrieval, learned addressing, and end-to-end compute scaling are not inherited | TACOSM-SELECTIVE-001 run 36509506303: indexed success=1.0 across H={8,64,256}, K={2,4}; actual router input bounded by K | **does not establish C5** |
-| Persistent state makes useful computation reusable across time | L4 | — | — | no temporal capability evidence yet | the hardened write-at-t/read-at-t+k benchmark plus carry/reset/shuffle/corrupt controls | **temporal persistence measurement not run** |
+| Persistent state makes useful computation reusable across time | L4 | — | — | no general temporal-persistence claim is inherited from the current E2E-008 result | E2E-008 plus a task where post-action information is necessary, with carry/reset/shuffle/corrupt controls | **E2E-008 reset/recompute found no temporal-carry advantage; longer-horizon/post-action-necessary measurement remains required** |
 | The integrated system is more economical than full-context at capability parity | L4 | — | — | everything — this is the program's thesis, not a result | the curve in `ROADMAP.md` §"M3.1", measured | all of the above |
 
 ---
@@ -209,3 +209,132 @@ checked by running rather than by reading:
   row above and bears repeating: it certifies that a run matched its design.
   It says nothing about whether the design was a good idea, or whether the
   hypothesis the design was built to test is true.
+
+
+---
+
+## E2E-006 fresh confirmatory integration evidence
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| E2E-006 mean q2 = 0.8665 on a fresh held-out composition set | L3 | integration | the selected hidden_dim=64 integrated multimodal chain crosses the preregistered 0.80 synthetic capability threshold | real-world multimodal understanding, semantic memory, learned addressing, learned operator discovery, scaling or efficiency | fixed public operator dispatch and deterministic entity addressing remain scaffolds; independent validation must pass |
+| No-memory/control drops | L3 | localization | persistent state, image alignment, and all three modalities contribute under the registered intervention protocol | causal generality outside this synthetic benchmark | controls reuse identical evaluation episode objects; diagnostic endpoints are not primary |
+| Fresh held-out split excludes sealed E2E-005 and development compositions | L3 | protocol | the E2E-006 result was not selected on the same test compositions | universal generalization | E2E-006 tests only the registered fresh held-out compositions |
+| Classifier-decision consistency and zero train/eval semantic overlap | L3 | gate | the measured number is not explained by the previously discovered probability-to-logit evaluator defect or obvious episode-key leakage | absence of all possible implementation leakage | the integrity gate constrains known attack surfaces; it is not a proof of arbitrary absence of leakage |
+
+The C15 result is therefore a bounded Layer 3 integration result. It moves the
+immediate blocker from “can the integrated chain function at all?” to “can the
+same chain function when explicit addressing and operator scaffolds are
+relaxed?” The next lane should attack those scaffolds without reusing the
+E2E-006 held-out outcomes for selection.
+
+---
+
+
+
+## E2E-007 residual-state integration evidence
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| E2E-007 mean q2 = 0.9350 on a new held-out composition set | L3 | integration | the development-selected residual-linear state-write configuration works end to end on a second fresh synthetic benchmark | real-world multimodal understanding, semantic memory, learned addressing, learned operator discovery, scaling or efficiency | operator dispatch and entity addressing remain explicit scaffolds |
+| Mean memory drop = 0.3135 with all modal controls below normal | L3 | localization | persistent state and multimodal observations materially contribute under the registered interventions | causal generality outside the synthetic benchmark | controls are diagnostic, not independent primary endpoints |
+| XOR reaches 1.00 across every seed while AND remains 0.71–0.77 | L3 | mechanism diagnostic | the prior XOR state-content bottleneck was substantially repaired; the current residual failure moved toward AND | general Boolean-computation superiority | per-operator endpoints are secondary and not separately preregistered primaries |
+| Residual-linear development selection: mean q2 0.9080 vs linear 0.8470 | L2 | mechanism | state-write transformation is a measurable optimization lever in this synthetic implementation | universal superiority | selection occurred on the registered development split only |
+
+The evidence frontier has therefore moved from “make the integrated chain work”
+to “remove its remaining explicit scaffolds and diagnose operator-specific
+failure without reusing confirmatory outcomes.”
+
+---
+
+## E2E-001 post-measurement evidence disposition
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Integrated multimodal E2E-001: mean q2 = 0.5200, seed-bootstrap 95% CI [0.5020, 0.5385] | L3 | negative | the registered synthetic integrated implementation failed its 0.80 primary criterion | no general PLM impossibility; no real-world multimodal claim; no scaling claim | all five seeds retained; artifact 11251182171; workflow 37062142549 |
+| Memory and image-alignment controls exactly equal the integrated arm | L3 | localization | no measurable persistence or image-alignment contribution under this protocol | no claim that persistence/fusion is useless generally | paired evaluation episodes and zero bootstrap drops |
+| Target memory attention ≈ 0.06094 with 16 slots | L3 | diagnostic | supports the hypothesis that target-specific state addressing did not emerge | not a formal hypothesis test of uniform attention | uniform reference is 0.0625; attention diagnostic was secondary |
+| Operator selection = 1.0000 | L3 | diagnostic | query-label echoing is working | autonomous operator discovery/routing | operator ID was explicit and supervised |
+
+The evidence therefore moves the immediate blocker from "can the integrated chain
+be trained?" to "can a trainable persistent-state address space be made coherent
+between write and read?" The next experiment must test that interface directly.
+
+
+---
+
+## Integrated E2E generator audit — invalidation
+
+| Evidence | Layer | Type | Disposition | Reason |
+|---|---|---|---|---|
+| E2E-001 measured q2=0.5200 and controls | L3 | negative/localization | **VOID** | shared generator ignored the query entity argument and made q1 and q2 target the same entity, violating the registered temporal protocol |
+| E2E-002 address diagnosis run 37067955696 | L3 | pre-confirmatory | **VOID / no scientific result** | inherited the same malformed generator; runner failed before artifact creation |
+| E2E-001 artifact 11251182171 | provenance only | historical artifact | retained but non-evidentiary | historical reproducibility record only; no number may be used for tuning or baseline selection |
+
+The corrected experiment must independently generate q1 and q2 and assert
+that their entity identities differ before any measurement is reported.
+
+
+---
+
+## E2E-003 corrected temporal/address diagnosis
+
+| Evidence | Layer | Disposition | What it supports | Boundary |
+|---|---|---|---|---|
+| explicit-write, explicit-read, explicit-both arms | L3 | VALID | correct structural addressing did not improve held-out q2 capability | no learned semantic addressing claim |
+| explicit-both paired controls | L3 | VALID | no measurable persistence, image-alignment, or unimodal contribution under this protocol | no general multimodal/memory impossibility claim |
+| combined seed results | L3 | VALID | all three arms produced the same five q2 values | bounded to corrected synthetic benchmark |
+
+Primary explicit-both q2 = **0.5200**; seed-bootstrap 95% interval
+**[0.5020, 0.5385]**; minimum seed **0.4925**.
+
+Next diagnostic: explicitly align state content representation with CASM rather
+than changing addressing again.
+
+
+---
+
+## E2E-008 clean collision-free integrated evidence
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| E2E-008 q2 = 1.0000 across five seeds and 12 held-out compositions | L3 | integration | the integrated PLM executes the registered synthetic multimodal task end to end | real-world multimodal understanding; learned memory; general scaling | benchmark is synthetic and scaffolded; score is saturated |
+| All four fixed operators reach 1.0000 | L3 | mechanism diagnostic | the integrated execution path handles the registered AND/OR/XOR/XNOR compositions on this benchmark | learned operator discovery or open-ended program synthesis | operator identity is public/query-conditioned and Boolean execution is closed-form CASM |
+| Benchmark identity and leakage gates pass | L3 | validity gate | the E2E-008 result is tied to the collision-free generator and clean held-out split | arbitrary absence of all possible leakage | known image/entity side-channel collision was removed; train/eval semantic overlap was zero |
+| Five exact evaluation fingerprints and benchmark SHA-256 are later reproduced by the reset/recompute run | L3 | provenance | attribution uses the same evaluation objects as E2E-008 | new generalization evidence | reset/recompute is an attribution follow-up, not a fresh capability test |
+
+---
+
+## Matched feed-forward architectural controls
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| FF-002 mean q2 = 0.6287 versus PLM 1.0000 with disjoint composition-bootstrap intervals | L3 | architectural attribution | a bounded integrated-PLM advantage over the registered feed-forward control | temporal persistence as the unique cause | FF-002 removes persistent state/CASM/verifier/state update machinery as well as temporal carry |
+| FF-002 receives detached q1 environment outcome | L3 | confound control | giving the baseline the same cross-boundary outcome information does not close the gap | equality of mechanisms | q1 outcome is detached; the control remains feed-forward |
+| Parameter count 74,124 vs 74,126 | L3 | matched-control gate | the comparison is effectively parameter matched | compute/runtime equivalence | parameter match is not architecture equivalence |
+| FF-001 mean q2 = 0.6317 and FF-002 = 0.6287 | L3 | replication/diagnostic | direct q1 feedback does not rescue the feed-forward family | causal attribution of persistence | FF-001 is diagnostic; FF-002 is the stronger registered control |
+
+---
+
+## Reset/recompute temporal-carry attribution
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Normal and reset/recompute q2 = 1.0000 across all five seeds | L3 | causal ablation | temporal carry across q1→q2 is not necessary for E2E-008 | persistence is useless generally | reset/recompute still reconstructs the state from all original observations |
+| Normal-minus-reset = 0.0000; paired composition-bootstrap 95% CI = [0.0000, 0.0000] | L3 | decision endpoint | preregistered temporal-carry materiality criterion is not met | absence of temporal effects on other tasks | threshold was 0.05 and the decision rule was registered before measurement |
+| q1 prediction/action/outcome equality and recomputed-state identity both pass | L3 | intervention gate | the reset intervention changed the carry variable without changing the q1 path or the pre-q1 state | complete causal isolation of every implementation detail | the experiment isolates the outcome-gated cross-boundary carry within this architecture |
+| Independent validator passes; artifact 11469064681; run 37593010244 | L3 | provenance/validity | the reported negative attribution is a measured, inspectable result | new generalization evidence | the branch was scientifically file-equivalent to the clean master-lineage PR; no model selection was performed |
+
+
+
+---
+
+## Latent operator induction evidence
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Hidden operator removed from model input; q2 mean = 0.9293 | L3 | scaffold-removal | the integrated state/CASM path can operate without explicit operator-ID dispatch on the registered synthetic task | robust learned operator discovery | seed 3 q2 = 0.7117 and operator selection = 0.75 |
+| Operator-selection mean = 0.9500; composition-bootstrap 95% CI [0.9000, 1.0000] | L3 | mechanism | the support truth-table context is sufficient for strong operator inference in most seeds | uniform all-seed robustness | preregistered minimum was 0.80; seed 3 failed |
+| Shuffle-support q2 mean = 0.6793 versus normal = 0.9293 | L3 | context-use diagnostic | performance depends materially on the supplied support context | causal generality of the support mechanism | shuffle is a diagnostic intervention, not a new capability benchmark |
+| Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | seed-3 weakness is largely operator selection rather than the underlying state/content path | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
+| No-memory q2 mean = 0.6250 | L3 | mechanism diagnostic | the multimodal state representation remains functionally important | temporal persistence necessity | temporal carry was separately ruled out as necessary on E2E-008 |

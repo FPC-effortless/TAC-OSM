@@ -1,0 +1,537 @@
+{
+  "schema": "pnds.tac_osm.variant_math_links.v1",
+  "foundation_version": "1.0.0",
+  "coverage": "17_indexed_historical_versions_only_not_full_archive",
+  "canonical_authority": {
+    "mathematics": "FPC-effortless/pnds-lean",
+    "source_and_evidence": "FPC-effortless/TAC-OSM"
+  },
+  "files": {
+    "pnds": "foundation/v1/variant-math-links.json",
+    "tac_osm": "research/pnds-variant-math-links.json"
+  },
+  "requirement": "For every variant, both Lean and Python expressions and a pinned TAC source lineage must be maintained; shared partial kernels do not satisfy full-source-equivalence gates.",
+  "variants": [
+    {
+      "id": "CORE-DIAGKEY004",
+      "lane": "core",
+      "version": "DIAGKEY004",
+      "state_kind": "nonlinear_persistent",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "081e534a074001c6a3b2251b3ff31ad20ec4fca8",
+        "pull_request": 362,
+        "evidence_path": "research/mathematical-engineering/diagkey004/RESULTS.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "delta",
+      "formula": "M' = Project_R(alpha*M + beta*(v-alpha*M*k)*k^T)",
+      "operator_contracts": [
+        "OP-GATE",
+        "OP-DELTA",
+        "OP-COMPLETE"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "SYSTEM1-ME076",
+      "lane": "system1",
+      "version": "ME076",
+      "state_kind": "nonlinear_recurrent",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "9690bba1e226a8bc0de139dadb6225933e322875",
+        "pull_request": 360,
+        "evidence_path": "research/mathematical-engineering/me076/RESULTS.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "gated",
+      "formula": "h' = (1-g)*h+g*v (one coordinate; not full recurrence)",
+      "operator_contracts": [
+        "OP-GATE"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "SYSTEM1-ME077A",
+      "lane": "system1",
+      "version": "ME077A",
+      "state_kind": "nonlinear_recurrent",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "971f302f2cfb5d2f43c02884f111ebbacf2bff62",
+        "pull_request": 367,
+        "evidence_path": "research/replay-bundles/ME077A/ORIGINAL_REAL_MOTION_RANKING.json",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "gated",
+      "formula": "h' = (1-g)*h+g*v (one coordinate; not full recurrence)",
+      "operator_contracts": [],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "SYSTEM1-ME079",
+      "lane": "system1",
+      "version": "ME079",
+      "state_kind": "nonlinear_recurrent",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "40433af2493e6c64f254e5ef49d3eedac448c5da",
+        "pull_request": 369,
+        "evidence_path": "research/mathematical-engineering/me079/RESULTS.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "gated",
+      "formula": "h' = (1-g)*h+g*v (one coordinate; not full recurrence)",
+      "operator_contracts": [
+        "OP-COMPLETE"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "PHYSICAL-ME080",
+      "lane": "physical",
+      "version": "ME080",
+      "state_kind": "nonlinear_recurrent_distributional",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "afea4dd91830e32c3aec8881d5213e52d853dc2d",
+        "pull_request": 371,
+        "evidence_path": "research/mathematical-engineering/me080/RESULTS.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "distribution",
+      "formula": "p(y_future|S, horizon); full mixture head not formally reconstructed",
+      "operator_contracts": [],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "PHYSICAL-ME094",
+      "lane": "physical",
+      "version": "ME094",
+      "state_kind": "nonlinear_recurrent_distributional",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "f1d5fd08cb89044a1838eddc55315ab11e7085f6",
+        "pull_request": 377,
+        "evidence_path": "research/mathematical-engineering/me094/RESULTS.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "median",
+      "formula": "F(y) = B(y-m+q), with B(q)=1/2",
+      "operator_contracts": [
+        "OP-GATE",
+        "OP-MEDIAN",
+        "OP-COMPLETE"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "PHYSICAL-ME095",
+      "lane": "physical",
+      "version": "ME095",
+      "state_kind": "nonlinear_plus_affine_filter",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "f1d5fd08cb89044a1838eddc55315ab11e7085f6",
+        "pull_request": 377,
+        "evidence_path": null,
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "affine",
+      "formula": "k' = A*k+B; compose (A2,B2) o (A1,B1)",
+      "operator_contracts": [
+        "OP-AFFINE"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "ENTERPRISE-ME069",
+      "lane": "enterprise",
+      "version": "ME069",
+      "state_kind": "nonlinear_recurrent_event",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "65a41dd9b8aa34bc29a570e72c9c7117abcbf74d",
+        "pull_request": 348,
+        "evidence_path": "research/mathematical-engineering/me069/RESULTS.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "event",
+      "formula": "P(EOR)=1-s; P(activity)=s*p(activity) (partial)",
+      "operator_contracts": [],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "ENTERPRISE-ME073",
+      "lane": "enterprise",
+      "version": "ME073",
+      "state_kind": "nonlinear_recurrent_event",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "166d60d8d897f1f8be5f48410e7d90b8af46048c",
+        "pull_request": 353,
+        "evidence_path": "research/mathematical-engineering/me073/RESULTS.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "event",
+      "formula": "P(EOR)=1-s; P(activity)=s*p(activity) (partial)",
+      "operator_contracts": [
+        "OP-EOR",
+        "OP-COMPLETE"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "TEMPORAL-V1",
+      "lane": "temporal",
+      "version": "v1 adapter",
+      "state_kind": "deterministic_versioned_evidence",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "a09b9e21c91cb6c8ed96d5846545aeffe63b3e01",
+        "pull_request": 358,
+        "evidence_path": "research/SIX_VARIANT_ARCHITECTURE_AND_EVIDENCE.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "temporal",
+      "formula": "valid_start<=v<valid_end and record_start<=k<record_end",
+      "operator_contracts": [
+        "OP-TEMPORAL"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "EDGE-V1",
+      "lane": "edge",
+      "version": "v1 adapter",
+      "state_kind": "deployment_contract",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "a09b9e21c91cb6c8ed96d5846545aeffe63b3e01",
+        "pull_request": 358,
+        "evidence_path": "research/SIX_VARIANT_ARCHITECTURE_AND_EVIDENCE.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "edge",
+      "formula": "edge_transform approximates reference; numerical error bound remains unproved",
+      "operator_contracts": [],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "COUNTERFACTUAL-V1",
+      "lane": "counterfactual",
+      "version": "v1 adapter",
+      "state_kind": "causal_hypothesis_only",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "a09b9e21c91cb6c8ed96d5846545aeffe63b3e01",
+        "pull_request": 358,
+        "evidence_path": "research/SIX_VARIANT_ARCHITECTURE_AND_EVIDENCE.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "causal",
+      "formula": "P(y|s,a) does not identify P(y|s,do(a)) absent SCM",
+      "operator_contracts": [
+        "OP-CAUSAL"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "ESWAM-ESWAM010",
+      "lane": "eswam",
+      "version": "ESWAM010",
+      "state_kind": "structured_entity_evidence",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "14e8686ad78b1081532f2735bb98b31d24a8eb7e",
+        "pull_request": 381,
+        "evidence_path": "research/mathematical-engineering/eswam010/WHOLE_MODEL_SPEC.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "window",
+      "formula": "sum_i normalized(w_i)*observed_actor_state_i (partial)",
+      "operator_contracts": [
+        "OP-MULTIAGENT"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "ESWAM-ESWAM012",
+      "lane": "eswam",
+      "version": "ESWAM012",
+      "state_kind": "window_fed_entity_memory",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "d9db3a0ac68d2bbabe3febe6cfe3d40bf322ea1d",
+        "pull_request": 383,
+        "evidence_path": null,
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "window",
+      "formula": "sum_i normalized(w_i)*observed_actor_state_i (partial)",
+      "operator_contracts": [],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "ESWAM-ESWAM013",
+      "lane": "eswam",
+      "version": "ESWAM013",
+      "state_kind": "window_fed_entity_memory",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "cfb2e25cb87112281243dcc48e5ebd4d52c88d83",
+        "pull_request": 384,
+        "evidence_path": "research/mathematical-engineering/eswam013/RESULTS.md",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "window",
+      "formula": "sum_i normalized(w_i)*observed_actor_state_i (partial)",
+      "operator_contracts": [
+        "OP-MULTIAGENT",
+        "OP-COMPLETE"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "ESWAM-ESWAM014",
+      "lane": "eswam",
+      "version": "ESWAM014",
+      "state_kind": "window_fed_entity_memory",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "3117a77ee57d3aca4d7cc27c691ac46d6f7fca7c",
+        "pull_request": 385,
+        "evidence_path": "research/mathematical-engineering/eswam014/PAIRED_REAL_CASE_AUDIT.json",
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "motion",
+      "formula": "gamma(v)=v^2/(v^2+c), c>0",
+      "operator_contracts": [
+        "OP-MOTION"
+      ],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    },
+    {
+      "id": "QUAL-001",
+      "lane": "qualification",
+      "version": "QUAL001",
+      "state_kind": "evaluation_only",
+      "tac": {
+        "repository": "FPC-effortless/TAC-OSM",
+        "commit": "01735e2929449b949db9c83da53fce51e75fd88b",
+        "pull_request": 386,
+        "evidence_path": null,
+        "bridge_path": "research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md"
+      },
+      "pnds": {
+        "repository": "FPC-effortless/pnds-lean",
+        "pull_request": 5,
+        "lean_path": "PNDS/TACOSMVariantContracts.lean",
+        "lean_symbol": "PNDS.VariantContracts.indexedVariants",
+        "python_path": "foundation/v1/variant_math.py",
+        "python_symbol": "evaluate_variant",
+        "policy_path": "foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md"
+      },
+      "kernel": "qualification",
+      "formula": "independent capability claim requires authentic held-out proof; no auto-promotion",
+      "operator_contracts": [],
+      "formalization_status": "PARTIAL_SHARED_KERNEL_NOT_WHOLE_MODEL",
+      "lean_full_graph_proved": false,
+      "python_source_equivalence_verified": false,
+      "real_world_capability_inferred": false
+    }
+  ]
+}

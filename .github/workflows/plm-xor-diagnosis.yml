@@ -1,0 +1,52 @@
+name: Research PLM XOR diagnosis
+
+on:
+  push:
+    branches:
+      - research/plm-e2e-xor-diagnosis-2026-10-07
+    paths:
+      - contracts/TACOSM-PLM-XOR-DIAG-001.json
+      - scripts/run_plm_e2e_xor_diag.py
+      - src/tac_osm/integrated_e2e_005.py
+      - src/tac_osm/integrated_e2e_005_benchmark.py
+      - src/tac_osm/integrated_e2e_006_benchmark.py
+      - scripts/run_integrated_e2e_005.py
+      - tests/test_integrated_e2e_005.py
+      - .github/workflows/plm-xor-diagnosis.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  development:
+    name: XOR state-versus-CASM development diagnosis
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest numpy==2.3.3 torch
+          python -m pip install --quiet "ruff==0.13.0"
+      - name: Static gate
+        run: |
+          ruff check --select F821 src/tac_osm/integrated_e2e_005.py             src/tac_osm/integrated_e2e_005_benchmark.py             src/tac_osm/integrated_e2e_006_benchmark.py             scripts/run_integrated_e2e_005.py             scripts/run_plm_e2e_xor_diag.py
+      - name: Integrity tests
+        run: |
+          python -m pytest tests/test_integrated_e2e_005.py tests/test_integrated_e2e_006.py -q
+      - name: XOR development diagnosis
+        run: python scripts/run_plm_e2e_xor_diag.py
+      - name: Upload diagnostic artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-XOR-DIAG-001
+          path: artifacts/TACOSM-PLM-XOR-DIAG-001.json
+          if-no-files-found: error
+
+# Development only. This diagnosis does not use E2E-006 outcomes for model selection.

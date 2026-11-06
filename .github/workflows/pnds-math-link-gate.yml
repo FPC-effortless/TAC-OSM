@@ -1,0 +1,21 @@
+name: PNDS mathematics links
+on:
+  pull_request:
+    paths:
+      - research/pnds-variant-math-links.json
+      - research/scripts/check_pnds_math_links.py
+      - research/scripts/check_pnds_remote_parity.py
+      - .github/workflows/pnds-math-link-gate.yml
+  workflow_dispatch:
+
+jobs:
+  mathematical-variant-links:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate every original source-pinned variant and dual formulation reference
+        run: python3 research/scripts/check_pnds_math_links.py
+      - name: Verify byte-equivalent semantic JSON in PNDS remote draft branch
+        run: python3 research/scripts/check_pnds_remote_parity.py

@@ -38,6 +38,14 @@ import subprocess
 import sys
 from pathlib import Path
 
+try:
+    import torch  # noqa: F401
+except ImportError as exc:
+    raise RuntimeError(
+        "canonical test counting requires the CI test environment, including torch; "
+        "install project test dependencies before running sync_test_count.py"
+    ) from exc
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DOC = REPO_ROOT / "docs" / "TACOSM-BASELINE-001.md"
 

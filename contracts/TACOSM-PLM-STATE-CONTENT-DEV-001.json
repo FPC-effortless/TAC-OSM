@@ -1,0 +1,95 @@
+{
+  "experiment_id": "TACOSM-PLM-STATE-CONTENT-DEV-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Development comparison of state-content write interfaces",
+  "question": "Can the current XOR-limited integrated PLM recover queried latent bits more reliably when the persistent-state write uses a residual transform rather than the single linear projection?",
+  "hypothesis": "A residual state-write interface will improve queried-bit recovery and therefore improve development XOR accuracy without changing the encoder, CASM, optimizer, task distribution or held-out test sets.",
+  "arms": [
+    {
+      "name": "linear",
+      "intervention": "single Linear(hidden,hidden) state write",
+      "acts_on": "persistent state content"
+    },
+    {
+      "name": "residual_linear",
+      "intervention": "z + Linear(hidden,hidden)(z)",
+      "acts_on": "persistent state content"
+    },
+    {
+      "name": "residual_mlp",
+      "intervention": "z + 2-layer MLP hidden->hidden->hidden(z)",
+      "acts_on": "persistent state content"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "development_xor_q2_accuracy",
+      "role": "primary",
+      "primary": true,
+      "description": "Mean XOR q2 accuracy on the registered development split."
+    },
+    {
+      "name": "queried_bit_joint_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "xor_state_error_rate",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "training_evaluation_overlap",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "classifier_decision_integrity",
+      "role": "integrity gate",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "if an alternative write arm improves development XOR q2 accuracy over linear and does not violate integrity gates",
+      "licenses": "select the best preregistered write interface for a later confirmatory test",
+      "does_not_license": "general state-write superiority or any claim on E2E-006 held-out outcomes"
+    },
+    {
+      "condition": "if no alternative improves the primary endpoint",
+      "licenses": "retain the linear write interface and diagnose other state-content bottlenecks",
+      "does_not_license": "state persistence is inadequate generally"
+    }
+  ],
+  "interpretation_order": [
+    "development split and sealed-test exclusion",
+    "training/evaluation disjointness",
+    "classifier-decision integrity",
+    "queried bit recovery",
+    "primary XOR accuracy",
+    "selection boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 200,
+  "held_constant": [
+    "same 32-composition development set",
+    "same five seeds",
+    "same 300-step budget and batch size",
+    "same optimizer, learning rate and weight decay",
+    "same multimodal encoders and CASM",
+    "sealed E2E-005 and E2E-006 held-out compositions never used for selection",
+    "no payload-bit auxiliary supervision",
+    "same evaluation episode objects across write arms within each seed"
+  ]
+}
