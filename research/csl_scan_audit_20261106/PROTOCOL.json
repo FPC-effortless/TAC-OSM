@@ -1,0 +1,56 @@
+{
+  "study_id": "CSL_SCAN_AUDIT_20261106",
+  "execution_level": "internal_research",
+  "kind": "constructed_operator_diagnostic_no_model",
+  "parent_commit": "3191344e54247305f823a624773cfbcc0b21e72d",
+  "source_sha256": {
+    "src/tac_osm/csl125_r2.py": "e1349869ea05efe59fc12fee2bf386779760570395e419dd90578b26a24e9afa",
+    "src/tac_osm/csl125_r2_fast_scan.py": "2f7553ef194051a9b0a98a3c30fd1e8b84e5b6fe31c97bd72b17295e3fc23aff",
+    "src/tac_osm/csl125_r2_math_reference.py": "bc17228e043d4b937646ace16d915fa2ee3c92914be987f24fc3a401060b74e2"
+  },
+  "priorities": [
+    "Cancellation/near-empty/all-argument gradient gate for existing unpromoted fast scan",
+    "Learned admission usefulness on a valid source/assay; not demonstrated",
+    "Full physical-device offline inference qualification when hardware exists"
+  ],
+  "source_scope": "Existing two original operator implementations unchanged. No CSL model instantiation, parameter allocation, weights/checkpoint load, optimizer or real-data scoring.",
+  "cases": [
+    "alternating",
+    "constructed_cancellation",
+    "near_empty",
+    "long_tau_tiny_gate",
+    "closed_after_write",
+    "signed_zero_hold",
+    "stationary"
+  ],
+  "geometry": "FP32 CPU B1,T65,R2,E2,pair2; valid bounded numerator/mass and initial carry; rates in[1/32768,0.5], gates[0,1]. Four chunkings1,7,32,64.",
+  "losses": [
+    "fixed signed linear mean over both state coordinates",
+    "normalized numerator/(occupancy+1e-6) signed mean"
+  ],
+  "references": [
+    "original stable associative scan",
+    "independent differentiable float64 serial recurrence, shared PyTorch primitives",
+    "original independent NumPy float64 serial forward",
+    "Decimal80-digit serial forward for each scalar path where run"
+  ],
+  "gradients": "All four input arguments z,carry,rate,gate via same scalar objective; require exact gradient schema/shape and finite values. Finite zeros allowed. Record per-argument max abs/scaled error for candidate and stable versus double and each other.",
+  "tolerances": {
+    "forward_atol": 1e-05,
+    "forward_rtol": 1e-05,
+    "gradient_atol": 5e-06,
+    "gradient_rtol": 5e-05
+  },
+  "decision": "Never tune tolerances after results. Any nonfinite or tolerance miss is recorded FAIL and BLOCKS kernel promotion; completed audit may contain failures. No speed claim, retry/re-fit or model promotion.",
+  "causal_boundary": "prefix-only scans; suffix input/gate mutation must leave earlier outputs identical within frozen forward tolerance. Labels absent.",
+  "math": "PNDS116 scalar beta/eta and bound statements inherited only; normalized-read conditioning and whole prefix-source IEEE/AD reassociation proof OPEN. No new neural graph or theorem is claimed by numerical parity.",
+  "resources": {
+    "backend": "GitHub CPU",
+    "cpu_minutes": 5,
+    "GPU_minutes": 0,
+    "models_constructed": 0,
+    "training_updates": 0,
+    "protected_TEST": false
+  },
+  "limits": "Engineering fixtures only. Does not establish learned memory, real-world quality, full-model parameter gradient equivalence or device speed. Standard100k prospective policy unchanged; no125M model fit/exception used."
+}
