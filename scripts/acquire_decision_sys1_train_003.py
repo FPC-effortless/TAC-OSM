@@ -16,19 +16,18 @@ import urllib.request
 from pathlib import Path
 
 READOUT_SHA256 = 'e01cb0bd87dfab4c9dbad215d51d81282fc0d413be96d6f819ea872fb7a3c715'
+TTE_SHA256 = 'd8c2379ed7c95a575dd869730b2b3b96d660317f49e57de300518ff3b08d53a5'
 ALLOWED = {'train_operational_readouts.csv': (1_300_000_000, READOUT_SHA256),
-           'train_tte.csv': (10_000_000, None)}
-HOSTS = {'api.researchdata.se', 'doris.snd.se'}
+           'train_tte.csv': (10_000_000, TTE_SHA256)}
+HOSTS = {'api.researchdata.se'}
 
 
 def check_url(url: str, filename: str) -> None:
     p = urllib.parse.urlsplit(url)
-    q = urllib.parse.parse_qs(p.query)
     if (filename not in ALLOWED or p.scheme != 'https' or p.hostname not in HOSTS
             or p.username or p.password or p.port not in (None, 443)
-            or q != {'filePath': [filename]}
-            or p.path not in ('/dataset/2024-34/3/file/data', '/api/file/2024-34/3/data',
-                              '//api/file/2024-34/3/data')):
+            or p.query or p.fragment
+            or p.path != '/dataset/2024-34/3/file/data/' + filename):
         raise ValueError('URL outside exact publisher TRAIN-only allowlist')
 
 
@@ -56,8 +55,7 @@ def acquire(filename: str, directory: Path, attempts: list, opener_factory=None)
     limit, expected = ALLOWED[filename]
     target = directory / filename
     partial = directory / (filename + '.partial')
-    urls = [f'https://api.researchdata.se/dataset/2024-34/3/file/data?filePath={filename}',
-            f'https://doris.snd.se/api/file/2024-34/3/data?filePath={filename}']
+    urls = [f'https://api.researchdata.se/dataset/2024-34/3/file/data/{filename}']
     for url in urls:
         check_url(url, filename)
         entry = {'requested_url': url, 'filename': filename, 'status': 'STARTED'}
@@ -103,8 +101,8 @@ def acquire(filename: str, directory: Path, attempts: list, opener_factory=None)
                 raise ValueError('unexpected readout header')
             partial.replace(target)
             entry['status'] = 'ACQUIRED'
-            entry['hash_attestation'] = ('matches_recovered_original' if expected else
-                                        'new_publisher_receipt_not_independent_attestation')
+            entry['hash_attestation'] = ('matches_historical_and_publisher' if filename == 'train_operational_readouts.csv' else
+                                        'matches_publisher_catalogue_not_independent_attestation')
             print(json.dumps({'file': filename, 'bytes': count, 'sha256': digest,
                               'status': 'ACQUIRED'}), flush=True)
             return entry
