@@ -75,7 +75,11 @@ def schema_target(calls, tools: Sequence[ToolSpec], max_calls: int = 4) -> str:
     by_name = {t.name: t for t in specs}
     rows = [{'name': c['name'], 'arguments': _ordered(c['arguments'], by_name[c['name']].parameters)}
             for c in checked.function_calls]
-    return json.dumps({'function_calls': rows}, ensure_ascii=True, allow_nan=False, separators=(',', ':'))
+    # Emit Unicode as raw UTF-8, matching the explicitly raw-byte tokenizer.
+    # The original ASCII-escaped targets failed the bounded-string grammar for
+    # accented and non-BMP values (hosted run 42255115460). Preserve that receipt.
+    # Do not change argument values, string-length constraints or test cases.
+    return json.dumps({'function_calls': rows}, ensure_ascii=False, allow_nan=False, separators=(',', ':'))
 
 
 def prepare_schema_supervision(user_text, tools, gold_calls, *, prior_observations=(), max_context_bytes=8192):
