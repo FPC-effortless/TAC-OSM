@@ -4,7 +4,8 @@ import argparse,json,statistics
 from pathlib import Path
 from tac_osm.csl125_training_data import (
     SOURCE_HASHES,SOURCE_REVISION,read_jsonl,digest,api_catalogue,prepare_records,
-    render_example,ToolBPE,BPEToolGrammar,DataContractError)
+    render_example,ToolBPE,DataContractError)
+from tac_osm.csl125_bpe_schema import EscapedBPEToolGrammar as BPEToolGrammar
 
 def save(path,obj):path.write_text(json.dumps(obj,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
 def jsonl(path,rows):path.write_text(''.join(json.dumps(r,ensure_ascii=False,separators=(',',':'))+'\n' for r in rows))
@@ -39,6 +40,7 @@ def build(out):
         codec=ToolBPE.fit(fit,tools,capacity)
         path=out/f'tokenizer_{capacity}.json';codec.save(path)
         grammar=BPEToolGrammar(codec,tools)
+        (out/f'grammar_{capacity}.ebnf').write_text(grammar.ebnf)
         lengths={'FIT':{'prompt':[],'response':[],'total':[]},'DEV':{'prompt':[],'response':[],'total':[]}}
         too_long=[];checked=0
         for r in records:
@@ -60,16 +62,22 @@ def build(out):
             stats[split]['fraction_over_2048']=sum(x>2048 for x in lengths[split]['total'])/len(lengths[split]['total'])
             stats[split]['fraction_over_4096']=sum(x>4096 for x in lengths[split]['total'])/len(lengths[split]['total'])
         raw_bytes=sum(len(p.encode('utf-8'))+len(y.encode('utf-8')) for p,y in rendered.values())
+        import torch
+        from tac_osm.csl125_r3 import CSL125R3Config
+        from tac_osm.csl125_tool_model import CSL125R4
+        with torch.device('meta'):
+            meta=CSL125R4(CSL125R3Config(vocab_size=codec.vocab_size),device='meta')
+        parameters=meta.parameter_count()
+        assert parameters==98_707_439+codec.vocab_size*768 and parameters<=125_000_000
         results[str(capacity)]={'requested_capacity':capacity,'actual_vocab_size':codec.vocab_size,
             'tokenizer_sha256':digest(path.read_bytes()),'tokenizer_file_bytes':path.stat().st_size,
             'fit_record_count':len(fit),'FIT_ids_hash':digest(sorted(r['id'] for r in fit)),
             'DEV_used_in_tokenizer_fit':False,'statistics':stats,'oversized_no_truncation':too_long,
             'exact_roundtrip_and_gold_grammar_accepted':checked,'source_rows_checked':len(records),
             'all_record_raw_bytes':raw_bytes,'all_record_BPE_tokens_with_EOS':sum(lengths['FIT']['total'])+sum(lengths['DEV']['total']),
-            'full_20L_model_parameter_count_analytical':98_707_439+codec.vocab_size*768,
-            'grammar_fingerprint':grammar.fingerprint}
+            'full_20L_model_parameters_meta_verified':parameters,'grammar_fingerprint':grammar.fingerprint}
+        save(out/'TOKENIZER_RESULTS.json',results);save(out/'GRAMMAR_FAILURES.json',failures)
         print('TOKENIZER_RESULT',capacity,json.dumps(results[str(capacity)],sort_keys=True),flush=True)
-    save(out/'TOKENIZER_RESULTS.json',results);save(out/'GRAMMAR_FAILURES.json',failures)
     status={'stage':'DATA_TOKENIZER_PREPARATION_COMPLETE' if not failures else 'COMPLETE_WITH_GRAMMAR_FAILURES',
             'neural_optimizer_steps':0,'neural_checkpoint_trained':False,'training_admitted':False,
             'source_revision':SOURCE_REVISION,'synthetic_data':True,'official_TEST_opened':False,

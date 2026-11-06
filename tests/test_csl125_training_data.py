@@ -3,9 +3,10 @@ import copy,json
 from dataclasses import replace
 import pytest
 from tac_osm.csl125_training_data import (
-    DataContractError,ToolBPE,BPEToolGrammar,api_catalogue,
+    DataContractError,ToolBPE,api_catalogue,
     prepare_records,render_example,query_group,split_for,digest,collate,padded_tool_loss,propose_bpe_tools,
 )
+from tac_osm.csl125_bpe_schema import EscapedBPEToolGrammar as BPEToolGrammar
 
 def api():
     return {'name':'weather','description':'Read weather for a city',

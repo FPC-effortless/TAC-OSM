@@ -5,7 +5,9 @@ on:
       - 'scripts/prepare_csl125_droidcall.py'
       - 'scripts/build_csl125_training_bundle.py'
       - 'src/tac_osm/csl125_training_data.py'
+      - 'src/tac_osm/csl125_bpe_schema.py'
       - 'tests/test_csl125_training_data.py'
+      - 'tests/test_csl125_bpe_escapes.py'
       - 'research/csl125_training_data/**'
       - 'research/phone_queue/csl125_training_data_20261106.json'
       - '.github/workflows/csl125-training-data.yml'
@@ -44,7 +46,7 @@ jobs:
       - name: Corpus, tokenizer, schema and precise-model loss integration tests
         run: |
           set -euo pipefail
-          python -m pytest -q tests/test_csl125_training_data.py tests/test_csl125_memory_precision.py tests/test_csl125_schema_edges.py --junitxml=ci-artifacts/csl125-training-data/tests.xml | tee ci-artifacts/csl125-training-data/TESTS.log
+          python -m pytest -q tests/test_csl125_training_data.py tests/test_csl125_bpe_escapes.py tests/test_csl125_memory_precision.py tests/test_csl125_schema_edges.py --junitxml=ci-artifacts/csl125-training-data/tests.xml | tee ci-artifacts/csl125-training-data/TESTS.log
       - name: Build grouped splits and FIT-only tokenizers; validate every retained target
         run: |
           set -euo pipefail
@@ -55,8 +57,8 @@ jobs:
           mkdir -p ci-artifacts/csl125-training-data/source
           git rev-parse HEAD > ci-artifacts/csl125-training-data/COMMIT.txt
           python -m pip freeze > ci-artifacts/csl125-training-data/ENVIRONMENT.txt
-          cp scripts/prepare_csl125_droidcall.py scripts/build_csl125_training_bundle.py src/tac_osm/csl125_training_data.py tests/test_csl125_training_data.py research/csl125_training_data/PROTOCOL.md ci-artifacts/csl125-training-data/source/
-          sha256sum src/tac_osm/csl125_training_data.py scripts/build_csl125_training_bundle.py tests/test_csl125_training_data.py > ci-artifacts/csl125-training-data/SOURCE_HASHES.txt
+          cp scripts/prepare_csl125_droidcall.py scripts/build_csl125_training_bundle.py src/tac_osm/csl125_training_data.py src/tac_osm/csl125_bpe_schema.py tests/test_csl125_training_data.py tests/test_csl125_bpe_escapes.py research/csl125_training_data/*.md ci-artifacts/csl125-training-data/source/
+          sha256sum src/tac_osm/csl125_training_data.py src/tac_osm/csl125_bpe_schema.py scripts/build_csl125_training_bundle.py tests/test_csl125_training_data.py tests/test_csl125_bpe_escapes.py > ci-artifacts/csl125-training-data/SOURCE_HASHES.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
