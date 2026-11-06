@@ -23,11 +23,41 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Inspect public catalogue metadata only
+        run: |
+          python - <<'PY'
+          import hashlib, html.parser, json, pathlib, re, urllib.request
+          urls = ['https://researchdata.se/en/catalogue/dataset/2024-34/3']
+          records = []
+          class Links(html.parser.HTMLParser):
+              def __init__(self): super().__init__(); self.links=[]
+              def handle_starttag(self, tag, attrs):
+                  for k,v in attrs:
+                      if k == 'href' and v and any(n in v for n in ('train_operational_readouts.csv','train_tte.csv')):
+                          self.links.append(v)
+          for url in urls:
+              r={'url':url,'scope':'PUBLIC_CATALOGUE_METADATA_NO_DATA'}
+              try:
+                  with urllib.request.urlopen(url,timeout=30) as response:
+                      body=response.read(3_000_001)
+                      if len(body)>3_000_000: raise ValueError('metadata size limit')
+                      text=body.decode('utf-8')
+                  parser=Links(); parser.feed(text)
+                  snippets=[text[max(0,m.start()-140):m.end()+180] for m in re.finditer(r'train_operational_readouts\.csv|train_tte\.csv',text)][:12]
+                  r.update(sha256=hashlib.sha256(body).hexdigest(),links=parser.links,filename_contexts=snippets,status='METADATA_ONLY')
+              except Exception as e: r.update(status='BLOCKED',error=f'{type(e).__name__}: {e}')
+              records.append(r)
+          p=pathlib.Path('artifacts/decision-sys1-003');p.mkdir(parents=True,exist_ok=True)
+          (p/'catalogue_metadata.json').write_text(json.dumps(records,indent=2)+'\n')
+          print('CATALOGUE_METADATA='+json.dumps(records))
+          PY
       - name: Install pinned CPU audit dependencies
+        if: github.event.action == 'opened'
         run: |
           python -m pip install numpy==2.2.6
           python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
       - name: Acquire only two allowed TRAIN files and audit
+        if: github.event.action == 'opened'
         env:
           PYTHONPATH: src
         run: |
