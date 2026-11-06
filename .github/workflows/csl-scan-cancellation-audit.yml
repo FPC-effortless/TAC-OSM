@@ -1,0 +1,65 @@
+name: CSL scan cancellation audit - no models or fits
+on:
+  pull_request:
+    paths:
+      - 'scripts/audit_csl_scan_cancellation.py'
+      - 'tests/test_csl_scan_cancellation_audit.py'
+      - 'research/csl_scan_audit_20261106/**'
+      - '.github/workflows/csl-scan-cancellation-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  operator-audit:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == 'cf430017900bc6edfb0e49515a82326578333627'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install pytest==8.4.2 numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Frozen CPU plan and audit-enforcement tests
+        run: |
+          mkdir -p scan-audit-evidence
+          python scripts/phone_lab.py plan research/phone_queue/csl_scan_audit_20261106.json > scan-audit-evidence/CPU_PLAN.json
+          cmp scan-audit-evidence/CPU_PLAN.json research/csl_scan_audit_20261106/COMPUTE_DECISION.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_csl_scan_cancellation_audit.py tests/test_csl125_r2_fast_scan.py
+      - name: Complete ledger includes numerical failures - NEVER a promotion gate pass
+        run: |
+          set -o pipefail
+          PYTHONPATH=src:. python scripts/audit_csl_scan_cancellation.py --output scan-audit-evidence/RESULTS.json | tee scan-audit-evidence/AUDIT.log
+          python - <<'PY'
+          import json
+          x=json.load(open('scan-audit-evidence/RESULTS.json'))
+          assert x['case_rows']==84 and len(x['rows'])==84
+          assert x['kernel_promotion_authorized'] is False and x['models_constructed']==0
+          assert x['failed_rows']==sum(bool(r['failed_checks']) for r in x['rows'])
+          assert all(len([k for k in r['checks'] if k.startswith('candidate_grad_')])==4 for r in x['rows'])
+          print('Ledger complete; inspect failed_rows. Job success does NOT mean numerical qualification.')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: CSL-SCAN-AUDIT-20261106-negative-evidence
+          path: scan-audit-evidence/
+          retention-days: 90
+  saved-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Recompute saved failure decisions without numerical execution
+        if: hashFiles('research/csl_scan_audit_20261106/HOSTED_RECEIPT.json') != ''
+        run: python3 -B research/csl_scan_audit_20261106/verify_saved.py

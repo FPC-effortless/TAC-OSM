@@ -1,0 +1,18 @@
+{
+  "amendment": "SOURCE_DEFAULT_EPSILON_COVERAGE",
+  "reason": "Original normalized objective uses1e-6; inspection found actual R1/R2 default1e-8. Preserve56row results and add separate source-default objective before running it; no tolerance change or dropped cases.",
+  "new_objective": "normalized_read_source_default",
+  "source_epsilon": 1e-08,
+  "source_path": "src/tac_osm/csl125_r1.py",
+  "source_sha256": "1dfe5a6d1855ef6c07a6ec5209227981a4df1995a97f944f764f042a49a79793",
+  "additional_case_rows": 28,
+  "total_case_rows": 84,
+  "previous_results": [
+    "INITIAL_LOCAL_RESULTS.json",
+    "LOCAL_56_RESULTS.json"
+  ],
+  "model_parameters_allocated": 0,
+  "training_updates": 0,
+  "GPU_minutes": 0,
+  "limits": "Scalar normalized objective correspondence only, not role aggregation/full model gradient or proof of harmful training."
+}
