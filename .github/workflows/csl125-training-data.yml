@@ -1,0 +1,48 @@
+name: CSL125 training data and tokenizer preparation
+on:
+  pull_request:
+    paths:
+      - 'scripts/prepare_csl125_droidcall.py'
+      - 'src/tac_osm/csl125_training_data.py'
+      - 'tests/test_csl125_training_data.py'
+      - 'research/csl125_training_data/**'
+      - 'research/phone_queue/csl125_training_data_20261106.json'
+      - '.github/workflows/csl125-training-data.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: csl125-training-data-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-preparation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: src
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Record bounded CPU source-preparation plan
+        run: |
+          mkdir -p ci-artifacts/csl125-training-data
+          python scripts/phone_lab.py plan research/phone_queue/csl125_training_data_20261106.json > ci-artifacts/csl125-training-data/COMPUTE_DECISION.json
+      - name: Acquire original publisher TRAIN and inspect before adaptation
+        run: |
+          set -euo pipefail
+          python scripts/prepare_csl125_droidcall.py | tee ci-artifacts/csl125-training-data/PREPARATION.log
+      - name: Preserve source environment and exact executable
+        if: always()
+        run: |
+          git rev-parse HEAD > ci-artifacts/csl125-training-data/COMMIT.txt
+          python -m pip freeze > ci-artifacts/csl125-training-data/ENVIRONMENT.txt
+          cp scripts/prepare_csl125_droidcall.py research/csl125_training_data/PROTOCOL.md ci-artifacts/csl125-training-data/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: csl125-training-data
+          path: ci-artifacts/csl125-training-data/
