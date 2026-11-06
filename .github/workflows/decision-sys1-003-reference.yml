@@ -1,0 +1,51 @@
+name: DECISION-SYS1-003 numerical reference checks
+on:
+  push:
+    branches: [research/decision-sys1-003-source-ssm-2026-11-06]
+    paths:
+      - src/tac_osm/decision_sys1*003.py
+      - scripts/*decision_sys1*003.py
+      - tests/test_decision_sys1*003.py
+      - .github/workflows/decision-sys1-003-reference.yml
+permissions:
+  contents: read
+jobs:
+  no-fit-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install CPU-only dependencies
+        run: |
+          python -m pip install numpy==2.2.6
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Run actual-source fixtures and parity receipt; no data or fitting
+        env:
+          PYTHONPATH: src
+        run: |
+          mkdir -p artifacts/decision-sys1-003-reference
+          python scripts/preflight_decision_sys1_003.py --output artifacts/decision-sys1-003-reference/PREFLIGHT.json
+          python -m unittest discover -s tests -p 'test_decision_sys1*.py' -v 2>&1 | tee artifacts/decision-sys1-003-reference/TEST_LOG.txt
+      - name: Preserve exact file hashes
+        if: always()
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          paths=sorted(set(p for pattern in ('src/tac_osm/*decision_sys1*.py','scripts/*decision_sys1*.py','tests/test_decision_sys1*.py') for p in pathlib.Path('.').glob(pattern)))
+          rows=[]
+          for p in paths:
+              b=p.read_bytes();rows.append({'path':str(p),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(f'blob {len(b)}\0'.encode()+b).hexdigest()})
+          d=pathlib.Path('artifacts/decision-sys1-003-reference');d.mkdir(parents=True,exist_ok=True)
+          (d/'SOURCE_HASHES.json').write_text(json.dumps(rows,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: decision-sys1-003-reference-${{ github.sha }}
+          path: artifacts/decision-sys1-003-reference/
+          retention-days: 30

@@ -19,15 +19,18 @@ READOUT_SHA256 = 'e01cb0bd87dfab4c9dbad215d51d81282fc0d413be96d6f819ea872fb7a3c7
 TTE_SHA256 = 'd8c2379ed7c95a575dd869730b2b3b96d660317f49e57de300518ff3b08d53a5'
 ALLOWED = {'train_operational_readouts.csv': (1_300_000_000, READOUT_SHA256),
            'train_tte.csv': (10_000_000, TTE_SHA256)}
-HOSTS = {'api.researchdata.se'}
+HOST_PATHS = {
+    'api.researchdata.se': '/dataset/2024-34/3/file/data/',
+    'scania.open.care.snd.se': '/downloads/public/2024-34/3/data/',
+}
 
 
 def check_url(url: str, filename: str) -> None:
     p = urllib.parse.urlsplit(url)
-    if (filename not in ALLOWED or p.scheme != 'https' or p.hostname not in HOSTS
+    if (filename not in ALLOWED or p.scheme != 'https' or p.hostname not in HOST_PATHS
             or p.username or p.password or p.port not in (None, 443)
             or p.query or p.fragment
-            or p.path != '/dataset/2024-34/3/file/data/' + filename):
+            or p.path != HOST_PATHS.get(p.hostname, '') + filename):
         raise ValueError('URL outside exact publisher TRAIN-only allowlist')
 
 

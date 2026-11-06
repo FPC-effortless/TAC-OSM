@@ -14,6 +14,13 @@ class AcquisitionGuards(unittest.TestCase):
     def test_allowed_urls(self):
         for name in m.ALLOWED:
             m.check_url(f'https://api.researchdata.se/dataset/2024-34/3/file/data/{name}', name)
+    def test_publisher_redirect_exact_host_path_pair(self):
+        for name in m.ALLOWED:
+            m.check_url(f'https://scania.open.care.snd.se/downloads/public/2024-34/3/data/{name}',name)
+        for url in ('https://scania.open.care.snd.se/dataset/2024-34/3/file/data/train_tte.csv',
+                    'https://api.researchdata.se/downloads/public/2024-34/3/data/train_tte.csv',
+                    'https://scania.open.care.snd.se/downloads/public/2024-34/3/data/test_labels.csv'):
+            with self.assertRaises(ValueError):m.check_url(url,'train_tte.csv')
     def test_wrong_resource_rejected(self):
         base='https://api.researchdata.se/dataset/2024-34/3/file/data/'
         for name in ['test_labels.csv','validation_operational_readouts.csv',
