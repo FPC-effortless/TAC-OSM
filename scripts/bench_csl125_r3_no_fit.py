@@ -13,7 +13,7 @@ import time
 
 import torch
 
-from scripts.profile_csl125_r2_scales import configs
+from profile_csl125_r2_scales import configs
 from tac_osm.csl125_r3 import CSL125R3, CSL125R3Config
 
 
