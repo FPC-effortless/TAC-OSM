@@ -120,3 +120,36 @@ def test_invalid_config_and_unregistered_depth_fail_closed():
     m=CSL125R3(small_cfg())
     with pytest.raises(ValueError,match='depth'):
         m(torch.randint(0,64,(1,5)),depth=0)
+
+
+def test_candidate_topk_matches_full_revision_on_selected_candidates():
+    torch.manual_seed(17)
+    model = CSL125R3(small_cfg()).eval()
+    x = torch.randint(0,64,(1,9))
+    with torch.no_grad():
+        outs,_ = model(x, depth=4, emit_repair_logits=True,
+                       candidate_repair_topk=5)
+    y=outs[4]
+    ids=y['repair_candidate_ids']
+    scores=y['repair_candidate_scores']
+    assert ids.shape == scores.shape == (1,9,5)
+    assert torch.equal(y['token_logits'].topk(5,dim=-1).indices,ids)
+    assert torch.allclose(scores,y['repair_logits'].gather(-1,ids),atol=2e-5,rtol=2e-5)
+    assert torch.unique(ids).numel() <= 45
+
+
+def test_candidate_topk_fails_closed_and_never_adds_non_candidates():
+    torch.manual_seed(29)
+    model = CSL125R3(small_cfg()).eval()
+    x = torch.randint(0,64,(1,5))
+    with pytest.raises(ValueError,match='candidate_repair_topk'):
+        model(x,depth=2,candidate_repair_topk=0)
+    with pytest.raises(ValueError,match='candidate_repair_topk'):
+        model(x,depth=2,candidate_repair_topk=65)
+    with pytest.raises(ValueError,match='requires base token logits'):
+        model(x,depth=2,candidate_repair_topk=5,emit_token_logits=False)
+    with torch.no_grad():
+        y,_ = model(x,depth=2,candidate_repair_topk=5)
+    assert 'repair_logits' not in y[2]
+    assert set(y[2]['repair_candidate_ids'].flatten().tolist()).issubset(
+        set(y[2]['token_logits'].topk(5,dim=-1).indices.flatten().tolist()))
