@@ -27,3 +27,26 @@ def test_e2e005_full_authorization_is_push_marker_or_dispatch_only():
     assert "github.event.head_commit.message" in workflow_text
     assert "toJSON(github.event.commits)" not in workflow_text
     assert "if: \\${{" not in workflow_text
+
+
+def test_invalidated_c5_lane_stays_manual_and_audit_only():
+    """Reconciling legacy PRs must not resurrect the quarantined experiment."""
+    path = WORKFLOWS / "research-c5-execution-feedback-productkey.yml"
+    workflow_text = path.read_text(encoding="utf-8")
+    assert "on:\n  workflow_dispatch:\n" in workflow_text
+    assert not re.search(r"^\s+(pull_request(?:_target)?|push|schedule):", workflow_text, re.M)
+    assert "permissions:\n  contents: read" in workflow_text
+    assert "jobs:\n  audit-only:" in workflow_text
+    assert "test ! -f scripts/run_c5_execution_feedback_productkey_001.py" in workflow_text
+    assert not SCRIPT_RE.findall(workflow_text), "the legacy lane must not execute a measurement"
+    assert not (ROOT / "scripts" / "run_c5_execution_feedback_productkey_001.py").exists()
+
+
+def test_e2e005_full_suite_jobs_install_signed_attestation_dependency():
+    workflow_text = (WORKFLOWS / "integrated-e2e-005.yml").read_text(encoding="utf-8")
+    test_installs = [line.split() for line in workflow_text.splitlines()
+                     if "pip install" in line and "pytest" in line]
+    assert len(test_installs) == 2, "both smoke and confirmatory jobs run the repository suite"
+    assert all("cryptography" in command for command in test_installs), (
+        "the complete suite must collect the signed source/reward-attestation tests"
+    )
