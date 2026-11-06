@@ -68,7 +68,8 @@ def _check_schema(s: Any, depth: int = 0) -> None:
         props = s.get("properties", {})
         req = s.get("required", [])
         if (type(props) is not dict or len(props) > 16 or
-                type(req) is not list or len(req) != len(set(req)) or
+                type(req) is not list or any(type(k) is not str for k in req) or
+                len(req) != len(set(req)) or
                 s.get("additionalProperties") is not False):
             raise ToolContractError("object schema must be closed and have bounded fields")
         if any(type(k) is not str or not _NAME.fullmatch(k) for k in props):
