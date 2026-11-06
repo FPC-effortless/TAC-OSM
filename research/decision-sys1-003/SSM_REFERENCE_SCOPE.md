@@ -1,0 +1,11 @@
+# Mamba-2 reference scope, DECISION-SYS1-003
+
+Implemented as a comparator/reference, not a change to the native model and not an invented simple-SSM substitute. Original NativeRiskStateModel, correction, GRU, Transformer and source auditor are byte-unchanged.
+
+Two width64 pre-norm residual blocks; expand2; d_state64; head dimension32; four heads; one B/C group; causal depthwise convolution4; input-dependent dt/B/C; per-head negative A and skip D; gate-before-RMS normalization; no projection biases; final four-logit hazard head with hidden61. All 99,857 learned parameters are active, with no padding. Count=13,632 input+68,888 blocks+192 outer norms+17,145 head. Reference state=2*(256*4+4*32*64)=18,432 scalars=73,728 FP32 bytes/entity. Native state is128 scalars=512 bytes: parameter matching does NOT imply matching state capacity or a speed/quality advantage.
+
+Upstream commit6b72c122713bb769cc82c6b8e6d019c53d27d6a1, exact module/SSD provenance in third_party/MAMBA_NOTICE.md. Chunked SSD is compared with independent NumPy scalar recurrence, differentiable serial recurrence and finite differences. Full-model full/step/chunk outputs and gradients, future poison, state gradient credit, entity isolation and checkpoint restart are tested. Nineteen SSM tests passed locally; with85 inherited and7 current acquisition guards the111-test suite passed. Constructed fixtures only, zero optimizer updates or real-data predictions.
+
+Reference FP64 preserves FP64 A/RMS arithmetic instead of emulating upstream float casts. No fused CUDA kernel was executed. `backend='official'` requires actual CUDA, installed upstream Mamba2 and exact module Git-blob pin; it never silently falls back. Transitive dependency/kernel provenance is still OPEN. The explicit CUDA checker is implemented but not run on a GPU. Its PASS would only mean bounded FP32 numerical agreement, not training admission, whole-graph formal proof or efficiency qualification.
+
+Source-pinned Lean registry/full graph correspondence, official kernel/tuning/hardware qualification, matched training registration and independent evaluator gates remain OPEN. No training, model promotion or merge follows from these engineering tests. CPU-reference timing must not be presented as official Mamba speed.
