@@ -36,7 +36,7 @@ def score_tool_case(predicted: str, gold: str, tools: Sequence[ToolSpec]) -> Too
         guess=validate_tool_proposal(predicted,tools)
     except ToolContractError as exc:
         return ToolCaseScore(bool(truth.function_calls),False,False,False,False,
-            False,False,False,bool(truth.function_calls),str(exc))
+            False,False,not bool(truth.function_calls),bool(truth.function_calls),str(exc))
     gold_seq=[c["name"] for c in truth.function_calls]
     guess_seq=[c["name"] for c in guess.function_calls]
     sequence_exact=(gold_seq==guess_seq)
