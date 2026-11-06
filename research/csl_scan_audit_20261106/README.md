@@ -57,8 +57,8 @@ Do NOT promote the candidate or describe this as a numerical gate pass. CI may
 PASS for completing an honest audit and tests while the numerical ledger FAILS;
 the workflow explicitly checks completeness and false promotion authorization,
 not absence of failed rows. No tolerance was loosened to make a pass. Hosted
-PyTorch2.10 results will be reported separately from local2.14.1; no cross-runtime
-identity is assumed.
+PyTorch2.10.0 reproduced the same11failed row identities as local2.14.1; no
+bitwise equality of all intermediate values or gradients is inferred.
 
 PNDS116 at0fa31e981681f511c601c5fd069432061061c509 has verified limited exact-real
 write/admission/bound definitions and NumPy reference: dedicated42044323840 and
@@ -81,3 +81,18 @@ rounding before any new source-specific kernel promotion or model experiment;
 full-model parameter gradients, compiler/CUDA/AMP and actual device profiling
 remain distinct NOT RUN gates. Do not use this source-only audit to reopen any
 old training allocation or bypass genuine-source requirements.
+
+## Original hosted evidence
+
+[Audit42177402088](https://github.com/FPC-effortless/TAC-OSM/actions/runs/42177402088)
+completed atcf430017900bc6edfb0e49515a82326578333627:64enforcement/parent tests PASS,
+84operator rows complete,11numerical FAILS. [Artifact13482689849](https://github.com/FPC-effortless/TAC-OSM/actions/runs/42177402088/artifacts/13482689849),
+ZIP SHA2562a94bff3822e939e0b4a94441860e98069b3eb1e613fc798f99b348214a49d15,
+downloaded/hash verified; lossless base64 archived beyond Actions retention.
+Every earlier local ledger is losslessly gzip/base64 preserved with original
+JSON SHA hashes; source-default amendment and both CPU plans stay immutable.
+The stdlib saved-evidence checker recomputes coverage/status/counts from saved
+rows and verifies original-source and archive hashes; it does not rerun math
+operators or prove that self-recorded reference numbers are correct. No
+qualification signature is produced. Report-only closure skips the completed
+operator batch; explicit workflow dispatch remains available.

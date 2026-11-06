@@ -11,6 +11,7 @@ permissions:
   contents: read
 jobs:
   operator-audit:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == 'cf430017900bc6edfb0e49515a82326578333627'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
@@ -52,3 +53,13 @@ jobs:
           name: CSL-SCAN-AUDIT-20261106-negative-evidence
           path: scan-audit-evidence/
           retention-days: 90
+  saved-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Recompute saved failure decisions without numerical execution
+        if: hashFiles('research/csl_scan_audit_20261106/HOSTED_RECEIPT.json') != ''
+        run: python3 -B research/csl_scan_audit_20261106/verify_saved.py
