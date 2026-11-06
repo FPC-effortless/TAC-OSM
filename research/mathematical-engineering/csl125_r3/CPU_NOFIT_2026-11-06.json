@@ -1,0 +1,125 @@
+{
+  "batch": 1,
+  "device": "github-cpu-or-local-cpu",
+  "full_projection_includes_base_vocab": true,
+  "model_optimizer_steps": 0,
+  "numerical_11_of_84": "STILL_FAILED",
+  "precision": "fp32",
+  "repetitions": 7,
+  "scales": {
+    "10m": {
+      "benchmarks": {
+        "base": {
+          "max_ms": 29.5095,
+          "median_ms": 29.2048,
+          "min_ms": 29.1261,
+          "samples_ms": [
+            29.1261,
+            29.1582,
+            29.2083,
+            29.2048,
+            29.187,
+            29.5095,
+            29.4167
+          ]
+        },
+        "candidate_k32": {
+          "max_ms": 30.7445,
+          "median_ms": 30.3696,
+          "min_ms": 29.6374,
+          "samples_ms": [
+            30.7445,
+            30.4322,
+            29.6374,
+            29.9798,
+            30.3696,
+            30.1056,
+            30.4655
+          ]
+        },
+        "full_repair": {
+          "max_ms": 32.0369,
+          "median_ms": 31.3435,
+          "min_ms": 31.1528,
+          "samples_ms": [
+            31.1528,
+            31.1719,
+            31.1625,
+            31.3435,
+            31.4004,
+            31.5552,
+            32.0369
+          ]
+        }
+      },
+      "layers": 12,
+      "parameter_count": 9748126,
+      "rank": 16,
+      "vocab_size": 8192,
+      "width": 256
+    },
+    "1m": {
+      "benchmarks": {
+        "base": {
+          "max_ms": 10.3408,
+          "median_ms": 10.1559,
+          "min_ms": 10.0956,
+          "samples_ms": [
+            10.0956,
+            10.1425,
+            10.1267,
+            10.1559,
+            10.3103,
+            10.3408,
+            10.2738
+          ]
+        },
+        "candidate_k32": {
+          "max_ms": 10.8226,
+          "median_ms": 10.7124,
+          "min_ms": 10.543,
+          "samples_ms": [
+            10.7124,
+            10.8226,
+            10.543,
+            10.6933,
+            10.763,
+            10.7672,
+            10.6852
+          ]
+        },
+        "full_repair": {
+          "max_ms": 10.7497,
+          "median_ms": 10.6252,
+          "min_ms": 10.447,
+          "samples_ms": [
+            10.5241,
+            10.7497,
+            10.4481,
+            10.447,
+            10.7217,
+            10.6252,
+            10.647
+          ]
+        }
+      },
+      "layers": 8,
+      "parameter_count": 1040869,
+      "rank": 16,
+      "vocab_size": 4096,
+      "width": 112
+    }
+  },
+  "schema": "woyengi.csl125-r3.cpu-no-fit-screen.v1",
+  "seed": 53,
+  "sequence_length": 16,
+  "trained_quality": "NOT_MEASURED",
+  "warmups": 2,
+  "git_head_sha": "60d2a7dd4642b4e9ad2e55a86eeedc36d370045e",
+  "run_id": 42242399316,
+  "job_id": 127975759347,
+  "github_action_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/42242399316",
+  "cpu_workflow_completed_success": true,
+  "capture_method": "decoded original Actions job logs, parsed machine JSON",
+  "limitation": "random untrained weights; host single machine; 7 repeats; no GPU or energy; no error-correction quality; parent scan 11/84 gradient failures retained"
+}
