@@ -37,7 +37,15 @@ class AllowedRedirect(urllib.request.HTTPRedirectHandler):
         super().__init__()
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        check_url(newurl, self.filename)
+        try:
+            check_url(newurl, self.filename)
+        except ValueError as exc:
+            parsed = urllib.parse.urlsplit(newurl)
+            # No token/query values: retain only enough public route metadata to
+            # review a redirect before adding it to the allowlist.
+            route = {'scheme': parsed.scheme, 'host': parsed.hostname,
+                     'path': parsed.path, 'query_keys': sorted(urllib.parse.parse_qs(parsed.query))}
+            raise ValueError('rejected publisher redirect: ' + json.dumps(route, sort_keys=True)) from exc
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
