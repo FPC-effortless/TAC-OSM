@@ -62,3 +62,39 @@ Fail claim if: inherited R2 gradient failure affects training, unseen tool gener
 - tests/test_csl125_tool_*.py — engineering/causal/security/gradient tests, not trained capability evidence.
 
 NO optimizer updates, actual learned tool-call accuracy, calibration, signed dataset, mobile export, CQ2 weights, arbitrary JSON-Schema compile, external effects, real-world benchmark or Needle 3 parity. Keep draft; no auto-merge, auto-fit, or device superiority claims.
+
+
+## No-fit vocabulary/packing alternatives (not competing trained models)
+
+The 32,768-token vocabulary is not sacrosanct for tool calling. A smaller vocabulary
+reduces the tied embedding and entire-vocabulary output projection, but may
+increase prompt and output token counts. All three below use exactly the same
+20-layer width/state/attention configuration and untrained meta-device allocation.
+The numbers are **ideal 2-bit weight-only lower bounds, NOT quantized binaries**:
+
+| Vocabulary | Full untrained R4 params | Ideal 2-bit weight bytes | Tied embedding/output MAC per token |
+| ---: | ---: | ---: | ---: |
+| 8,192 | 104,998,895 | 26,249,724 | 6,291,456 |
+| 16,384 | 111,290,351 | 27,822,588 | 12,582,912 |
+| 32,768 | 123,873,263 | 30,968,316 | 25,165,824 |
+
+Source: scripts/profile_csl125_r4_tool_vocab.py. The compressed model could
+exceed any of these values after scales, tokenizer, runtime, KV caches, grammar
+and state; no numerical precision/quantized-accuracy/mobile power validation.
+**Preregister 8K and 16K tokenization on a qualified FIT-only corpus**, compare
+tool-name/JSON-argument fragmentation and total training/inference compute.
+Do not claim that the 16K configuration is more intelligent or faster until
+token-length and device measurements are available.
+
+## Independent evaluation semantics
+
+Source: src/tac_osm/csl125_tool_eval.py. Explicitly score:
+- exact tool-name sequence (including order), typed argument AST exactness
+  and complete exact-call match;
+- no-call task false attempts, actual abstention, missing required calls;
+- malformed/unregistered/invalid output as FAILURE, never reclassified
+  as a successful empty list.
+
+The source-owned test fixtures are pipeline correctness controls; they are not
+a benchmark dataset and cannot substitute for source-qualified independent
+BFCL/mobile tool-use testing.
