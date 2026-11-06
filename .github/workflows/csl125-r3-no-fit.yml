@@ -1,0 +1,41 @@
+name: CSL125-R3 error-correction no-fit engineering
+
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/csl125_r3.py'
+      - 'tests/test_csl125_r3.py'
+      - 'research/mathematical-engineering/csl125_r3/**'
+      - '.github/workflows/csl125-r3-no-fit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r3-no-fit-cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU research-test dependencies
+        run: python -m pip install --quiet 'pytest>=8,<9' 'numpy==2.3.3' torch
+      - name: R3 source, parent parity, causality, gradients and meta-cap tests
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m pytest -q tests/test_csl125_r3.py tests/test_csl125_r2.py
+      - name: Assert no-fit provenance and separate correction source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          x=Path('research/mathematical-engineering/csl125_r3/PROTOCOL.md').read_text()
+          assert 'NOT TRAINED' in x and '11/84' in x and '123,873,263' in x
+          assert Path('src/tac_osm/csl125_r3.py').is_file()
+          print('PASS: isolated no-fit R3; parent gradient failures stay OPEN')
+          PY
