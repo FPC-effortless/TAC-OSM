@@ -69,10 +69,17 @@ class CSL125R3(CSL125R2):
                 state: Optional[CSL125State] = None, all_rungs: bool = False,
                 stream_ids: Optional[Tuple[str, ...]] = None,
                 emit_token_logits: bool = True,
-                emit_repair_logits: bool = False) -> tuple[Dict[int, Dict[str, Tensor]], CSL125State]:
+                emit_repair_logits: bool = False,
+                candidate_repair_topk: Optional[int] = None) -> tuple[Dict[int, Dict[str, Tensor]], CSL125State]:
         # Keep the R2 state and causal layer ordering; add only an output read.
         if tokens.ndim != 2 or tokens.dtype != torch.long or tokens.shape[1] < 1:
             raise ValueError('tokens must be nonempty [B,T] integer IDs')
+        if candidate_repair_topk is not None:
+            if (type(candidate_repair_topk) is not int or
+                not 1 <= candidate_repair_topk <= min(128, self.config.vocab_size)):
+                raise ValueError('candidate_repair_topk outside bounded valid range')
+            if not emit_token_logits:
+                raise ValueError('candidate-only repair requires base token logits')
         d = self.config.layers if depth is None else depth
         if type(d) is not int or d not in self.config.rungs:
             raise ValueError('only preregistered exit depths supported')
@@ -112,6 +119,16 @@ class CSL125R3(CSL125R2):
                 if emit_repair_logits:
                     out['repair_logits'] = F.linear(
                         self._revised_features(z, error_logit), self.embedding.weight)
+                if candidate_repair_topk is not None:
+                    # No second full-vocabulary projection. This is NOT a full
+                    # distribution: a target outside the base top-K is lost.
+                    ids = out['token_logits'].topk(candidate_repair_topk, dim=-1).indices
+                    delta = self._revised_features(z, error_logit) - z
+                    selected = F.embedding(ids, self.embedding.weight)
+                    out['repair_candidate_ids'] = ids
+                    out['repair_candidate_scores'] = (
+                        out['token_logits'].gather(-1, ids) +
+                        (selected * delta.unsqueeze(-2)).sum(dim=-1))
                 outs[layer_id] = out
         return outs, CSL125State(tuple(layers), tuple(caches), state.stream_ids)
 
