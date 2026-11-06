@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'scripts/prepare_csl125_droidcall.py'
+      - 'scripts/build_csl125_training_bundle.py'
       - 'src/tac_osm/csl125_training_data.py'
       - 'tests/test_csl125_training_data.py'
       - 'research/csl125_training_data/**'
@@ -17,11 +18,12 @@ concurrency:
 jobs:
   source-preparation:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       PYTHONPATH: src
       OMP_NUM_THREADS: '1'
       MKL_NUM_THREADS: '1'
+      TOKENIZERS_PARALLELISM: 'false'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -31,16 +33,30 @@ jobs:
         run: |
           mkdir -p ci-artifacts/csl125-training-data
           python scripts/phone_lab.py plan research/phone_queue/csl125_training_data_20261106.json > ci-artifacts/csl125-training-data/COMPUTE_DECISION.json
-      - name: Acquire original publisher TRAIN and inspect before adaptation
+      - name: Pin preprocessing and CPU integration dependencies
+        run: |
+          python -m pip install --quiet torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet 'pytest>=8,<9' numpy==2.3.3 jsonschema==4.26.0 xgrammar==0.2.8 tokenizers==0.22.1
+      - name: Acquire immutable original publisher TRAIN only
         run: |
           set -euo pipefail
-          python scripts/prepare_csl125_droidcall.py | tee ci-artifacts/csl125-training-data/PREPARATION.log
-      - name: Preserve source environment and exact executable
+          python scripts/prepare_csl125_droidcall.py --revision 42563ae614280d2891d57f1e7057c4bc50dd27bd | tee ci-artifacts/csl125-training-data/SOURCE_INSPECTION.log
+      - name: Corpus, tokenizer, schema and precise-model loss integration tests
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_csl125_training_data.py tests/test_csl125_memory_precision.py tests/test_csl125_schema_edges.py --junitxml=ci-artifacts/csl125-training-data/tests.xml | tee ci-artifacts/csl125-training-data/TESTS.log
+      - name: Build grouped splits and FIT-only tokenizers; validate every retained target
+        run: |
+          set -euo pipefail
+          python scripts/build_csl125_training_bundle.py | tee ci-artifacts/csl125-training-data/PREPARATION.log
+      - name: Preserve exact source, hashes and environment
         if: always()
         run: |
+          mkdir -p ci-artifacts/csl125-training-data/source
           git rev-parse HEAD > ci-artifacts/csl125-training-data/COMMIT.txt
           python -m pip freeze > ci-artifacts/csl125-training-data/ENVIRONMENT.txt
-          cp scripts/prepare_csl125_droidcall.py research/csl125_training_data/PROTOCOL.md ci-artifacts/csl125-training-data/
+          cp scripts/prepare_csl125_droidcall.py scripts/build_csl125_training_bundle.py src/tac_osm/csl125_training_data.py tests/test_csl125_training_data.py research/csl125_training_data/PROTOCOL.md ci-artifacts/csl125-training-data/source/
+          sha256sum src/tac_osm/csl125_training_data.py scripts/build_csl125_training_bundle.py tests/test_csl125_training_data.py > ci-artifacts/csl125-training-data/SOURCE_HASHES.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
