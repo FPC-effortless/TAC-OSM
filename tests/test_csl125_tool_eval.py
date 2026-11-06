@@ -46,7 +46,7 @@ def test_argument_error_and_no_call_false_positive():
 
 def test_malformed_prediction_is_not_relabelled_as_abstention():
     invalid=score_tool_case('{"function_calls":[{"name":"bad","arguments":{}}]}',js([]),ts())
-    assert not invalid.valid_prediction and not invalid.abstention_correct
+    assert not invalid.valid_prediction and not invalid.abstention_correct and invalid.false_call
     assert not invalid.full_exact
     real=score_tool_case(js([]),js([]),ts())
     agg=aggregate_tool_scores([invalid,real])
