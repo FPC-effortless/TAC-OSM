@@ -1,0 +1,7 @@
+{
+  "kind": "source_memory_accounting_extension",
+  "source_commit": "e0753b2c90ad7e21bffa2d66f009ab385d6d4645",
+  "reason": "Small-model evidence found retained storage exceeds logical state, and existing R2 report quotes logical bytes as persistent memory. Test same default R2 source at full width to quantify the actual discrepancy.",
+  "scope": "One untrained default CSL125R2 FP32 CPU instance, seed11, no_grad T64/128 plus one next token from original/compact carries. Exact parameter count, logical/deduplicated underlying storage, cloned output equality. No optimizer/data/quality/latency benchmark. Estimated <=2 CPU minutes, no GPU.",
+  "historical_results": "preserved"
+}
