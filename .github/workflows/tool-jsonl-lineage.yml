@@ -1,0 +1,46 @@
+name: Tool TRAIN byte-lineage audit - no model or tokenizer fit
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/jsonl_byte_lineage.py'
+      - 'scripts/audit_tool_jsonl_lineage.py'
+      - 'tests/test_jsonl_byte_lineage.py'
+      - 'research/tool_lineage_20261107/**'
+      - '.github/workflows/tool-jsonl-lineage.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-train-lineage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install pytest==8.4.2 jsonschema==4.26.0
+      - name: Frozen no-fit CPU plan and provenance controls
+        run: |
+          mkdir -p lineage-evidence
+          python -B scripts/phone_lab.py plan research/phone_queue/tool_lineage_20261107.json > lineage-evidence/CPU_PLAN.json
+          cmp lineage-evidence/CPU_PLAN.json research/tool_lineage_20261107/COMPUTE_DECISION.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_jsonl_byte_lineage.py
+      - name: Reuse exact original publisher TRAIN acquisition without reacquisition
+        run: gh run download 42262433533 --repo FPC-effortless/TAC-OSM --name csl125-training-data --dir original-source
+      - name: Hash-pinned publisher-line audit, unchanged adapter
+        run: |
+          set -o pipefail
+          python -B scripts/audit_tool_jsonl_lineage.py --publisher-dir original-source/publisher --output lineage-evidence/audit | tee lineage-evidence/AUDIT.log
+          git diff --exit-code -- src/tac_osm/csl125_training_data.py src/tac_osm/csl125_bpe_schema.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: TOOL-LINEAGE-20261107-source-audit
+          path: lineage-evidence/
+          retention-days: 90

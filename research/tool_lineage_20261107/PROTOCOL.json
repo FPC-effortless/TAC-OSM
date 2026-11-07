@@ -1,0 +1,45 @@
+{
+  "study_id": "TOOL_LINEAGE_20261107",
+  "execution_level": "internal_research",
+  "scope": "Additive original-byte provenance audit only; no tokenizer/model training or inference",
+  "parent_commit": "48efdd33491ef4c76994d4eb35e78e0539c8cf99",
+  "master_plan_commit": "af307318a18d7fbd97b94ada9f383ff5ed614a4d",
+  "source_adapter_sha256": "d59a735e2ca95c48a191d0bf047855335e8f178f15a7cbf2d3af5b5e9a926f8d",
+  "source": {
+    "publisher": "mllmTeam/DroidCall",
+    "revision": "42563ae614280d2891d57f1e7057c4bc50dd27bd",
+    "license_declaration": "Apache-2.0",
+    "synthetic": true,
+    "qualification": "Original publisher synthetic TRAIN bytes, not real operational outcomes",
+    "original_run": 42262433533,
+    "original_artifact": 13524439750,
+    "artifact_sha256": "1961ffdf01f7979d61c0ff9b04093dea3d5a2b7afb1e7c46c8ea6966cf667dc7",
+    "allowed_files": [
+      "README.md",
+      "annotated_api.jsonl",
+      "DroidCall_train.jsonl"
+    ],
+    "protected_TEST": "NEVER_OPEN",
+    "source_sha256": "4cb2d5691c1b95b0908c59efcb361c8a9c9b12f0a4d182acfc2df0ccc92e6d3b"
+  },
+  "hypothesis": "Existing source_sha256 fields identify canonical JSON object bytes, not original lines. Add a sidecar bijection from every old logical record/disposition to exact original byte span, physical line and raw-line hash without changing canonical identities or data decisions.",
+  "method": "Reuse original archived TRAIN acquisition; no new publisher download. Verify original artifact and all3pinned source hashes/license declaration. Run unchanged adapter; build optional read-only provenance sidecar. Validate complete unique accepted/quarantine/duplicate accounting, original canonical digest identity, duplicate representative validity and exact raw spans. No corpus values in output beyond existing canonical adapter outputs/summary; source hashes/offsets and disposition names suffice.",
+  "tests": [
+    "Whitespace/key-order/escaped-Unicode canonical equivalence versus distinct raw byte hashes",
+    "CRLF/blank physical lines/no final newline retain exact spans",
+    "UTF-8 validation/duplicate keys/nonfinite JSON fail closed",
+    "Reject missing/duplicate/out-of-range disposition lines and bad canonical hashes",
+    "Accepted group/split and duplicate kept-line/group/label invariants unchanged",
+    "Frozen adapter source unchanged; no Torch, tokenizers, xgrammar/model/checkpoint import or fit"
+  ],
+  "preservation": "Do not rename existing source_sha256, repartition, rewrite labels, retrain tokenizer, modifyold artifacts or claim improved tool quality. Explicitly label old hashes canonical_object_sha256 in sidecar.",
+  "math": "No neural graph/variant change. Formal parser/hash collision/source authority and whole model/Lean/IEEE/AD remain OPEN. Byte equality checks are not source/outcome qualification; PNDS116 scalar operator proofs unchanged.",
+  "resource": {
+    "backend": "GitHub CPU",
+    "estimated_cpu_minutes": 5,
+    "GPU_minutes": 0,
+    "neural_optimizer_steps": 0,
+    "tokenizer_fit_steps": 0
+  },
+  "limits": "Exact bytes authenticity/provenance mapping only. Synthetic source cannot establish real-world outcomes, no-call competence, unseen-tool or paraphrase generalization. Standard100k/matched<=1%data/train/tune gates unchanged; no125M fit exception used."
+}
