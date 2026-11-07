@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-07",
+  "status": "EXPLORATORY_REVIEW_AMENDMENT_BEFORE_FOLLOWUP_EXECUTION",
+  "prior_results": "RESULTS_INITIAL.json and script_initial.py retained unchanged",
+  "correction": "Initial dyadic32 objective divided by tensor length260, so coefficients were not exactly dyadic. Correct coefficient normalization to next power of two>=size, with /4. Original native32/promoted64 results remain valid; initial dyadic32 label is withdrawn. New dyadic objective changes scalar loss scale and is a diagnostic, not retroactive resolution of the historical gate.",
+  "additions": [
+    "Measure deduplicated tensor storage bytes versus logical state bytes under torch.no_grad for small-model T13/64/65/128. Test detached and compact cloned state and next-token exact output equality. This targets visible slicing aliases in conv tails, scan end states and KV caches.",
+    "Check FP32 beta rounding to1 while eta remains positive for original valid long_tau_tiny_gate fixture. Report conditional exact-real versus machine arithmetic distinction; no long-run capability claim."
+  ],
+  "tolerances": "unchanged"
+}
