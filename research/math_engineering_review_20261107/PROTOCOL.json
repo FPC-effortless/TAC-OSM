@@ -1,0 +1,39 @@
+{
+  "study_id": "MATH_ENGINEERING_REVIEW_20261107",
+  "status": "PREREGISTERED_SOURCE_DIAGNOSTIC_NO_FIT",
+  "source_commit": "e0753b2c90ad7e21bffa2d66f009ab385d6d4645",
+  "pnds_commit": "0fa31e981681f511c601c5fd069432061061c509",
+  "historical_audit": "CSL_SCAN_AUDIT_20261106 immutable; all original failures retained",
+  "scope": "Deep review of CSL125 R2 and inherited R1/CSL125/CSL001 graph, paired PNDS scalar formalization. Not all TAC variants; no architecture modification.",
+  "planned_checks": [
+    "Replay unchanged original 84-row operator audit; report exact environment and hashes.",
+    "Seven original fixtures x four chunks x two epsilon values. Compare original FP32 stable/candidate operators to FP64 serial with coefficients frozen once in FP64. Three objective precisions: native32 coefficients rounded to32; promoted64 with common64 coefficients; exactly dyadic coefficients shared across dtypes. No post-result tolerance tuning.",
+    "Independent NumPy analytical reverse recurrence for every z/carry/rate/gate derivative with normalized objectives; compare to Torch FP64 AD and Decimal80 analytic reverse for near-empty/stationary scalar paths. Central directional finite differences with recorded step sweep.",
+    "Map fixture constraints: numerator bounded by mass, positive mass, shared channel value, channel-independent write address, role address sum, gate range; distinguish boundary from interior reachable inputs.",
+    "Source-graph small-model no-fit controls seeds 11/22/33, two layers width16 state8 roles2 ff32 vocab32 heads2 KV1 attention at layer2 window8. Monolithic vs [3,4,6] chunking on T13: logits and all parameter gradients, attached carries, unchanged stream IDs; no optimizer.",
+    "Adversarial source contracts: permitted tiny epsilon1e-100 and ordinary default1e-8; zero-write normalization; nonfinite z with closed gate; invalid carried numerator/mass; configuration rate-bound mismatch. Record exact behavior, no patch to original.",
+    "Exact analytical review of retention, read conditioning, boundary derivatives, residual stability, source/Lean coverage, memory and compute."
+  ],
+  "tolerances": {
+    "gradient_atol": 0.000005,
+    "gradient_rtol": 0.00005,
+    "forward_atol": 0.00001,
+    "forward_rtol": 0.00001,
+    "independent_float64_gradient_atol": 1e-8,
+    "independent_float64_gradient_rtol": 1e-7
+  },
+  "resources": {
+    "local_preflight_cpu_minutes": 10,
+    "hosted_route": "github_actions",
+    "gpu_minutes": 0,
+    "optimizer_steps": 0,
+    "protected_test": false,
+    "learned_capability_evaluation": false
+  },
+  "limits": [
+    "New tests are diagnostic and internally reviewed, not independent scientific qualification.",
+    "Original code unchanged; analytic reference is not a new neural variant or full Lean proof.",
+    "A reduced-model parity test does not qualify default 125M graph or all trained checkpoints.",
+    "Failed checks never upgraded by relaxing tolerance."
+  ]
+}
