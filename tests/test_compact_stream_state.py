@@ -4,6 +4,9 @@ import copy
 
 import pytest
 import torch
+import numpy as np
+
+from research.compact_state_20261108.reference import copy_values, copy_pullback
 
 from tac_osm.csl001 import CSLState, LayerState
 from tac_osm.csl125 import CSL125State, LocalKVState
@@ -64,6 +67,9 @@ def test_noncontiguous_aliases_empty_nan_signed_zero_and_metadata():
     exact(small, compact_stream_state(small))
     assert torch.equal(rng, torch.get_rng_state())
     for old, new in zip(leaves(state), leaves(small)):
+        reference=copy_values([old.detach().numpy()])[0]
+        assert new.detach().numpy().tobytes()==reference.tobytes()
+        assert not np.shares_memory(reference,old.detach().numpy())
         assert new.is_contiguous()
         assert new.untyped_storage().nbytes() == new.numel() * new.element_size()
         if new.numel():
@@ -86,6 +92,11 @@ def test_detach_alone_retains_storage_and_copy_identity_jacobian():
     torch.autograd.backward(list(leaves(compact)), [torch.ones_like(t) for t in leaves(compact)])
     reference = torch.zeros_like(source); reference[-2:] += 1; reference[-3:] += 1; reference[-4:] += 1
     assert torch.equal(source.grad, reference)
+    pullback=copy_pullback([np.ones(2),np.ones(3),np.ones(4)])
+    independent=np.zeros(100)
+    for length,grad in zip((2,3,4),pullback):
+        independent[-length:]+=grad
+    assert np.array_equal(source.grad.numpy(),independent)
 
 
 @pytest.mark.parametrize('seed', [11,22,33])

@@ -41,6 +41,9 @@ exact-real scalar hypotheses/proofs are unchanged. No new whole-model or
 allocation theorem is claimed; PNDS source/IEEE/AD mathematical-readiness remains
 **OPEN**. No canonical variant registry is rewritten for a value-preserving
 storage utility. New neural operations would require both PNDS formulations.
+`reference.py` independently expresses value-copy and identity pullback in NumPy
+without importing the Torch implementation; tests compare exact bytes and a
+shared-view input adjoint. It is explicitly partial, not a new full-model proof.
 
 This uses established [PyTorch storage/view semantics](https://docs.pytorch.org/docs/stable/notes/serialization.html#saving-and-loading-tensors-preserves-views),
 [differentiable clone](https://docs.pytorch.org/docs/stable/generated/torch.clone.html)
