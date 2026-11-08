@@ -1,0 +1,47 @@
+{
+  "study_id": "COMPACT_STATE_20261108",
+  "execution_level": "internal_research",
+  "scope": "Untrained engineering state-copy and storage audit only; no fit/corpus/checkpoint/TEST",
+  "no_new_model_fits": true,
+  "parent_commit": "e0065a9158195155cf4c246ae9457692e3d3d890",
+  "master_plan_commit": "af307318a18d7fbd97b94ada9f383ff5ed614a4d",
+  "prior_evidence": "PR724 ME-R01; prior source and complete negative ledgers unchanged",
+  "source_pins": {
+    "src/tac_osm/csl001.py": "45ef72bf9303849d3b1eebdae0cee87937ce837d3c5f8d4b91b942b299f3902f",
+    "src/tac_osm/csl125.py": "0bf0ba779cf570084179675dd83a8b2a423867275282a129359a5f5a5828e85b",
+    "src/tac_osm/csl125_r1.py": "1dfe5a6d1855ef6c07a6ec5209227981a4df1995a97f944f764f042a49a79793",
+    "src/tac_osm/csl125_r2.py": "e1349869ea05efe59fc12fee2bf386779760570395e419dd90578b26a24e9afa"
+  },
+  "prior_art": [
+    "https://docs.pytorch.org/docs/stable/notes/serialization.html#saving-and-loading-tensors-preserves-views",
+    "https://docs.pytorch.org/docs/stable/generated/torch.clone.html",
+    "https://docs.pytorch.org/docs/stable/generated/torch.Tensor.detach.html"
+  ],
+  "hypothesis": "An explicit graph-preserving contiguous clone of every supported carried-state tensor removes storage aliases while preserving values, metadata, source ownership and identity Jacobians. detach alone does not compact. This is existing framework semantics, not architectural novelty.",
+  "boundary": "State contains only the observed prefix. Copy reads existing state only, no model/corpus/labels/network/RNG. No cast, reset, detach or mutation. Only known CSL/CSL125 state classes accepted; unsupported layouts/types fail. Device/dtype/state-version and stream/depth metadata preserved.",
+  "tests": [
+    "Exact bytes/dtype/shape/device metadata; noncontiguous slices/empty tensors/NaN/signed zero",
+    "No alias with source or peers; mutation isolation; logical versus unique backing storage separately",
+    "Preserve AD across copies, every participating parameter tensor and incoming state gradients; no silent detach",
+    "Reduced original R2: seeds11/22/33, exits2/4, prefill65+next chunks1/7/17; compare all heads/state against same-weight unmodified continuation",
+    "Default original R2: untrained123822574 parameters; exits2/8/20; prefix64/128+one next token. Every output/state exact at identical chunk partitions",
+    "Changed stream/depth rejection inherited; future poison prefix control; parameter/checkpoint/RNG unchanged",
+    "Unknown dataclass/subtype/layout rejected; idempotent values and retained byte bound"
+  ],
+  "metrics": {
+    "state_values_and_same_partition_outputs": "bitwise same tensor bytes on CPU; no tolerance relaxation",
+    "gradient_atol": 5e-06,
+    "gradient_rtol": 5e-05,
+    "storage": "unique backing tensor storage, not RSS/allocator/total RAM. For copied state each nonempty dense tensor owns exactly numel*element_size storage; no cross-tensor alias",
+    "timing": "CPU one thread, 2warmups/7repeats per default geometry; all sample ms retained; not end-to-end inference",
+    "copy_overlap": "deduplicated source+copy backing bytes while both live, not process peak RAM"
+  },
+  "math": "No recurrence/readout/learned operator change. clone has identity value map/Jacobian; independent Python reference and all-state AD checks. Existing PNDS116 exact-real proofs unchanged; source-to-full-IEEE/AD/whole-graph qualification OPEN. No new mathematical variant or safety certification.",
+  "resources": {
+    "backend": "GitHub CPU",
+    "estimated_cpu_minutes": 10,
+    "GPU_minutes": 0,
+    "optimizer_steps": 0
+  },
+  "policy": "Current100k trained/deployed and<=1% matched-arm resource gates unchanged; no new fits of125M/500k/reduced fixtures. No independent signers required for internal engineering. Sealed TEST never opened. All physical device/operator/p50p95/RAM/energy/airplane evidence NOT_RUN. No cross-family capability transfer."
+}
