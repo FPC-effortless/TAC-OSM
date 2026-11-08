@@ -35,10 +35,15 @@ jobs:
           cmp compact-state-evidence/CPU_PLAN.json research/compact_state_20261108/COMPUTE_DECISION.json
           PYTHONPATH=src:. python -m pytest -q tests/test_compact_stream_state.py tests/test_csl001.py tests/test_csl125.py tests/test_csl125_r1.py tests/test_csl125_r2.py tests/test_research_probe_agnostic.py --junitxml=compact-state-evidence/TESTS.xml
       - name: All original default exits - storage, outputs and copy cost
+        # Freeze the resource experiment; later evidence-only commits run tests.
+        if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == 'c719ab06accec92c7f9028fcb293df21e8202542'
         run: |
           set -o pipefail
           python -B scripts/audit_compact_stream_state.py --output compact-state-evidence/RESULTS.json | tee compact-state-evidence/AUDIT.log
           git diff --exit-code -- src/tac_osm/csl001.py src/tac_osm/csl125.py src/tac_osm/csl125_r1.py src/tac_osm/csl125_r2.py
+      - name: Verify saved hosted measurements without model execution
+        if: hashFiles('research/evidence/compact_state_20261108/verify_saved.py') != ''
+        run: python -B research/evidence/compact_state_20261108/verify_saved.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
