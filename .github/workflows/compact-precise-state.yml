@@ -37,10 +37,15 @@ jobs:
           cmp precise-copy-evidence/CPU_PLAN.json research/compact_precise_state_20261109/COMPUTE_DECISION.json
           PYTHONPATH=src:. python -m pytest -q tests/test_compact_stream_state.py tests/test_compact_precise_state.py tests/test_csl125_memory_precision.py tests/test_csl125_r3.py tests/test_csl125_tool_model.py tests/test_research_probe_agnostic.py --junitxml=precise-copy-evidence/TESTS.xml
       - name: Actual full-size FP64 carry across all registered exits
+        # Keep resource measurements pinned; evidence closure runs tests only.
+        if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == '11ad36d2d1591769b887b263ecb6c2d639910756'
         run: |
           set -o pipefail
           python -B scripts/audit_compact_precise_state.py --output precise-copy-evidence/RESULTS.json | tee precise-copy-evidence/AUDIT.log
           git diff --exit-code -- src/tac_osm/csl125_memory_precision.py src/tac_osm/csl125_r3.py src/tac_osm/csl125_tool_model.py
+      - name: Saved hosted evidence - zero model calls
+        if: hashFiles('research/evidence/compact_precise_state_20261109/verify_saved.py') != ''
+        run: python -B research/evidence/compact_precise_state_20261109/verify_saved.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
