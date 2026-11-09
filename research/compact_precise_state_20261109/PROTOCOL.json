@@ -1,0 +1,55 @@
+{
+  "study_id": "COMPACT_PRECISE_STATE_20261109",
+  "execution_level": "internal_research",
+  "no_new_model_fits": true,
+  "scope": "Source-reviewed FP64 state-copy integration only; untrained fixtures/no corpus or TEST",
+  "parent_commit": "087eee4b9d571c201fd24e62f559a13ba15b8648",
+  "reused_compact_helper_commit": "f9b6aec018c069dec0217c9cafb4589ca58601eb",
+  "master_plan_commit": "af307318a18d7fbd97b94ada9f383ff5ed614a4d",
+  "source_pins": {
+    "src/tac_osm/csl001.py": "45ef72bf9303849d3b1eebdae0cee87937ce837d3c5f8d4b91b942b299f3902f",
+    "src/tac_osm/csl125.py": "0bf0ba779cf570084179675dd83a8b2a423867275282a129359a5f5a5828e85b",
+    "src/tac_osm/csl125_r1.py": "1dfe5a6d1855ef6c07a6ec5209227981a4df1995a97f944f764f042a49a79793",
+    "src/tac_osm/csl125_r2.py": "e1349869ea05efe59fc12fee2bf386779760570395e419dd90578b26a24e9afa",
+    "src/tac_osm/csl125_r3.py": "ef4e3be70db12fa5ca9c80725181f0742fda052b75fdf4e7a46bf0cb8f9717d6",
+    "src/tac_osm/csl125_tool_model.py": "3a98d6d4f07665c4f47047944f69295d7a2d07b9907e24422797f8a24ccb0dc7",
+    "src/tac_osm/csl125_memory_precision.py": "f6db2c04aea934b66d25cab365d1b579d2a949f92cba2a85b06dd11c8855729c"
+  },
+  "reuse_pins": {
+    "src/tac_osm/compact_stream_state.py": "4749aeeaefc0e414374ae6f7ec2815f26dffe7d0b2fca0eacd5db27739c7caa6",
+    "tests/test_compact_stream_state.py": "50d5f15fc4c924f84c924a35fdf850a8bc669fec644f9704c5c17a18dd462f00",
+    "research/compact_state_20261108/reference.py": "3970714668b21fd520911323e303a7d52c96aa93d113199efefd53639bc2c736"
+  },
+  "hypothesis": "Adding only the reviewed exact PreciseMemoryState class to the known copy-state versions permits explicit compact FP64 carry without any cast, downgrade, detach, reset/ownership bypass or learned-law change. Unknown subclasses remain rejected.",
+  "boundary": "Observed prefix state only; no labels, corpus, retrieval oracle or network access. Source class/state law frozen. Copy does not opt a model into precision mode or validate/repair invalid carry. Original default/precision model APIs and checkpoints unchanged.",
+  "falsifiers": [
+    "FP64 values unrepresentable in FP32 must replay exactly with class/dtype intact",
+    "Copying old FP32 carry must NOT make it acceptable to precision model; reset/replay rejection preserved",
+    "Unknown precise subclasses fail; aliases independent; empty cache and stream/depth ownership intact",
+    "Actual R4 reduced same-weight pair: seeds61/62/63, exits2/4, prefixes33+chunks1/5/7, originalFP32 and optionalFP64 modes; all heads/repair/candidates exact at same partitions",
+    "Attached FP64 state/full parameter gradients vs uncopied original: seeds61/62/63, all heads; original atols5e-6/rtols5e-5; no omitted participating tensor",
+    "CPU BF16-autocast reduced precision state staysFP64, conv and KV dtypes unchanged, next outputs finite/exact under copying",
+    "Future poison leaves pre-boundary token/field logits identical; parameters/checkpoint hash/RNG unchanged",
+    "Full actual untrained123873263p R4 with optionalFP64 memory, exits2/8/20 and prefixes64/128, next1token: all heads/repair/candidates/state exact, copied backing equals logical; prefill skips unneeded logits only"
+  ],
+  "metrics": {
+    "value_output_state": "bitwise-identical bytes at same execution partitions; no tolerance change",
+    "gradient_atol": 5e-06,
+    "gradient_rtol": 5e-05,
+    "copy_cost": "oneCPUthread,2warmups/7repeats with all samples; statecopy only, not inference latency",
+    "memory": "deduplicated retained tensor storage, logical, source+copy overlap separately; no peak allocator/device/totalRAM claim"
+  },
+  "prior_art": [
+    "https://docs.pytorch.org/docs/stable/generated/torch.clone.html",
+    "https://docs.pytorch.org/docs/stable/generated/torch.Tensor.detach.html",
+    "TAC drafts721 precision state and725 storage-copy implementation/evidence"
+  ],
+  "math": "Same C(S)=S identity value map/Jacobian; reused independent NumPy reference. PNDS116 scalar assumptions unchanged. Full source/Lean/IEEE/AD/allocation refinement OPEN; no new neural variant or new exact-real theorem claimed.",
+  "resource": {
+    "backend": "GitHub CPU",
+    "estimated_cpu_minutes": 10,
+    "GPU_minutes": 0,
+    "optimizer_steps": 0
+  },
+  "limits": "Internal engineering fixtures, not independently qualified/model intelligence. Standard95k\u2013105k and<=1% matched-arm, identical originaldata/train/tune remain; no125M fit exemption or deployment. No corpus/TEST/GPU/merge/promotion. All physical target/operators/numerical/p50p95/RAM/energy/airplane-mode NOT_RUN. Six families aligned, no transfer claim. Preserve H64/483,11/84 FP32 negatives and all original checkpoints."
+}
