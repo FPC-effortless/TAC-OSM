@@ -1,0 +1,54 @@
+name: Compact precise memory state - no fit
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/compact_stream_state.py'
+      - 'tests/test_compact_stream_state.py'
+      - 'tests/test_compact_precise_state.py'
+      - 'scripts/audit_compact_precise_state.py'
+      - 'research/compact_state_20261108/reference.py'
+      - 'research/compact_precise_state_20261109/**'
+      - '.github/workflows/compact-precise-state.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  precise-copy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install pytest==8.4.2 numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: CPU plan and actual inherited-source controls
+        run: |
+          mkdir -p precise-copy-evidence
+          python -B scripts/phone_lab.py plan research/phone_queue/compact_precise_state_20261109.json > precise-copy-evidence/CPU_PLAN.json
+          cmp precise-copy-evidence/CPU_PLAN.json research/compact_precise_state_20261109/COMPUTE_DECISION.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_compact_stream_state.py tests/test_compact_precise_state.py tests/test_csl125_memory_precision.py tests/test_csl125_r3.py tests/test_csl125_tool_model.py tests/test_research_probe_agnostic.py --junitxml=precise-copy-evidence/TESTS.xml
+      - name: Actual full-size FP64 carry across all registered exits
+        # Keep resource measurements pinned; evidence closure runs tests only.
+        if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == '11ad36d2d1591769b887b263ecb6c2d639910756'
+        run: |
+          set -o pipefail
+          python -B scripts/audit_compact_precise_state.py --output precise-copy-evidence/RESULTS.json | tee precise-copy-evidence/AUDIT.log
+          git diff --exit-code -- src/tac_osm/csl125_memory_precision.py src/tac_osm/csl125_r3.py src/tac_osm/csl125_tool_model.py
+      - name: Saved hosted evidence - zero model calls
+        if: hashFiles('research/evidence/compact_precise_state_20261109/verify_saved.py') != ''
+        run: python -B research/evidence/compact_precise_state_20261109/verify_saved.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: COMPACT-PRECISE-STATE-20261109-engineering
+          path: precise-copy-evidence/
+          retention-days: 90

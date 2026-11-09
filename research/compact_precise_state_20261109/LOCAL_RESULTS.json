@@ -1,0 +1,331 @@
+{
+  "GPU_minutes": 0,
+  "RSS_scope": "Linux process lifetime high-water including weights/tests/runtime; NOT isolated copy peak or device RAM",
+  "allocator_reserved_and_isolated_peak_copy_RAM": "NOT_RUN",
+  "config": {
+    "attention_layers": [
+      4,
+      8,
+      14,
+      20
+    ],
+    "attention_window": 128,
+    "chunk_size": 64,
+    "conv_kernel": 3,
+    "correction_rank": 32,
+    "denominator_epsilon": 1e-08,
+    "fast_tau_max": 128.0,
+    "fast_tau_min": 8.0,
+    "ff_width": 1408,
+    "field_classes": 16,
+    "initial_error_bias": -2.0,
+    "kv_heads": 3,
+    "layers": 20,
+    "max_correction_gain": 0.25,
+    "max_parameters": 125000000,
+    "query_heads": 12,
+    "role_count": 8,
+    "role_init_std": 1.0,
+    "rungs": [
+      2,
+      8,
+      20
+    ],
+    "slow_tau_max": 8192.0,
+    "slow_tau_min": 256.0,
+    "state_width": 256,
+    "tau_hard_max": 32768.0,
+    "tau_hard_min": 2.0,
+    "tool_classes": 16,
+    "vocab_size": 32768,
+    "width": 768,
+    "write_bias_initial": -1.0
+  },
+  "corpus_or_TEST_access": false,
+  "device": {
+    "RAM": "NOT_RUN",
+    "airplane_mode": "NOT_RUN",
+    "energy": "NOT_RUN",
+    "numerical_agreement": "NOT_RUN",
+    "operators": "NOT_RUN",
+    "physical_p50_p95": "NOT_RUN",
+    "target": "NOT_RUN"
+  },
+  "execution_level": "internal_research",
+  "limits": "State-only backing bytes exclude weights, allocations and autograd. Old aliases/attached graphs may retain allocations; release old state. Copy adds time and transient storage. No latency superiority or model intelligence claim.",
+  "math": "Identity value copy with identity Jacobian tested; inherited recurrence/IEEE/AD/PNDS qualification OPEN",
+  "model_weights_changed": false,
+  "optimizer_steps": 0,
+  "process_lifetime_peak_RSS_KiB": 1028704,
+  "python": "3.12.14",
+  "qualification": "engineering fixtures only; not independently qualified; not learned capability",
+  "rows": [
+    {
+      "before": {
+        "logical_bytes": 143360,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 8794112,
+        "tensor_count": 10,
+        "unique_nonempty_storages": 6
+      },
+      "checks": {
+        "all_emitted_outputs_bitwise_identical": true,
+        "compact_retained_equals_logical": true,
+        "copy_uses_no_rng": true,
+        "detach_did_not_compact": true,
+        "memory_stays_fp64": true,
+        "next_state_bitwise_identical": true,
+        "precise_state_version_retained": true,
+        "retained_storage_reduced": true,
+        "state_bitwise_identical": true,
+        "weights_stay_fp32": true
+      },
+      "compact": {
+        "logical_bytes": 143360,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 143360,
+        "tensor_count": 10,
+        "unique_nonempty_storages": 10
+      },
+      "copy_median_ms": 0.031206,
+      "copy_samples_ms": [
+        0.08098,
+        0.03367,
+        0.032429,
+        0.030946,
+        0.030846,
+        0.030355,
+        0.031206
+      ],
+      "depth": 2,
+      "prefix_tokens": 64,
+      "source_plus_one_copy_storage_bytes": 8937472,
+      "status": "PASS"
+    },
+    {
+      "before": {
+        "logical_bytes": 143360,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 9187328,
+        "tensor_count": 10,
+        "unique_nonempty_storages": 6
+      },
+      "checks": {
+        "all_emitted_outputs_bitwise_identical": true,
+        "compact_retained_equals_logical": true,
+        "copy_uses_no_rng": true,
+        "detach_did_not_compact": true,
+        "memory_stays_fp64": true,
+        "next_state_bitwise_identical": true,
+        "precise_state_version_retained": true,
+        "retained_storage_reduced": true,
+        "state_bitwise_identical": true,
+        "weights_stay_fp32": true
+      },
+      "compact": {
+        "logical_bytes": 143360,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 143360,
+        "tensor_count": 10,
+        "unique_nonempty_storages": 10
+      },
+      "copy_median_ms": 0.032198,
+      "copy_samples_ms": [
+        0.032198,
+        0.033159,
+        0.031757,
+        0.031707,
+        0.031316,
+        0.132617,
+        0.039989
+      ],
+      "depth": 2,
+      "prefix_tokens": 128,
+      "source_plus_one_copy_storage_bytes": 9330688,
+      "status": "PASS"
+    },
+    {
+      "before": {
+        "logical_bytes": 770048,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 35373056,
+        "tensor_count": 44,
+        "unique_nonempty_storages": 28
+      },
+      "checks": {
+        "all_emitted_outputs_bitwise_identical": true,
+        "compact_retained_equals_logical": true,
+        "copy_uses_no_rng": true,
+        "detach_did_not_compact": true,
+        "memory_stays_fp64": true,
+        "next_state_bitwise_identical": true,
+        "precise_state_version_retained": true,
+        "retained_storage_reduced": true,
+        "state_bitwise_identical": true,
+        "weights_stay_fp32": true
+      },
+      "compact": {
+        "logical_bytes": 770048,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 770048,
+        "tensor_count": 44,
+        "unique_nonempty_storages": 44
+      },
+      "copy_median_ms": 0.133628,
+      "copy_samples_ms": [
+        0.133038,
+        0.245635,
+        0.136562,
+        0.133288,
+        0.133628,
+        0.166487,
+        0.131065
+      ],
+      "depth": 8,
+      "prefix_tokens": 64,
+      "source_plus_one_copy_storage_bytes": 36143104,
+      "status": "PASS"
+    },
+    {
+      "before": {
+        "logical_bytes": 963584,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 37142528,
+        "tensor_count": 44,
+        "unique_nonempty_storages": 28
+      },
+      "checks": {
+        "all_emitted_outputs_bitwise_identical": true,
+        "compact_retained_equals_logical": true,
+        "copy_uses_no_rng": true,
+        "detach_did_not_compact": true,
+        "memory_stays_fp64": true,
+        "next_state_bitwise_identical": true,
+        "precise_state_version_retained": true,
+        "retained_storage_reduced": true,
+        "state_bitwise_identical": true,
+        "weights_stay_fp32": true
+      },
+      "compact": {
+        "logical_bytes": 963584,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 963584,
+        "tensor_count": 44,
+        "unique_nonempty_storages": 44
+      },
+      "copy_median_ms": 0.139938,
+      "copy_samples_ms": [
+        0.14148,
+        0.171644,
+        0.139938,
+        0.137855,
+        0.247097,
+        0.139508,
+        0.136192
+      ],
+      "depth": 8,
+      "prefix_tokens": 128,
+      "source_plus_one_copy_storage_bytes": 38106112,
+      "status": "PASS"
+    },
+    {
+      "before": {
+        "logical_bytes": 1826816,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 88334336,
+        "tensor_count": 108,
+        "unique_nonempty_storages": 68
+      },
+      "checks": {
+        "all_emitted_outputs_bitwise_identical": true,
+        "compact_retained_equals_logical": true,
+        "copy_uses_no_rng": true,
+        "detach_did_not_compact": true,
+        "memory_stays_fp64": true,
+        "next_state_bitwise_identical": true,
+        "precise_state_version_retained": true,
+        "retained_storage_reduced": true,
+        "state_bitwise_identical": true,
+        "weights_stay_fp32": true
+      },
+      "compact": {
+        "logical_bytes": 1826816,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 1826816,
+        "tensor_count": 108,
+        "unique_nonempty_storages": 108
+      },
+      "copy_median_ms": 0.330911,
+      "copy_samples_ms": [
+        0.413094,
+        0.322529,
+        0.317151,
+        0.328257,
+        0.389178,
+        0.330911,
+        0.495176
+      ],
+      "depth": 20,
+      "prefix_tokens": 64,
+      "source_plus_one_copy_storage_bytes": 90161152,
+      "status": "PASS"
+    },
+    {
+      "before": {
+        "logical_bytes": 2213888,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 92659712,
+        "tensor_count": 108,
+        "unique_nonempty_storages": 68
+      },
+      "checks": {
+        "all_emitted_outputs_bitwise_identical": true,
+        "compact_retained_equals_logical": true,
+        "copy_uses_no_rng": true,
+        "detach_did_not_compact": true,
+        "memory_stays_fp64": true,
+        "next_state_bitwise_identical": true,
+        "precise_state_version_retained": true,
+        "retained_storage_reduced": true,
+        "state_bitwise_identical": true,
+        "weights_stay_fp32": true
+      },
+      "compact": {
+        "logical_bytes": 2213888,
+        "requires_grad_tensors": 0,
+        "retained_storage_bytes": 2213888,
+        "tensor_count": 108,
+        "unique_nonempty_storages": 108
+      },
+      "copy_median_ms": 0.359854,
+      "copy_samples_ms": [
+        0.368638,
+        0.338252,
+        0.359854,
+        0.51785,
+        0.335309,
+        0.376339,
+        0.331222
+      ],
+      "depth": 20,
+      "prefix_tokens": 128,
+      "source_plus_one_copy_storage_bytes": 94873600,
+      "status": "PASS"
+    }
+  ],
+  "source_pins": {
+    "src/tac_osm/csl001.py": "45ef72bf9303849d3b1eebdae0cee87937ce837d3c5f8d4b91b942b299f3902f",
+    "src/tac_osm/csl125.py": "0bf0ba779cf570084179675dd83a8b2a423867275282a129359a5f5a5828e85b",
+    "src/tac_osm/csl125_memory_precision.py": "f6db2c04aea934b66d25cab365d1b579d2a949f92cba2a85b06dd11c8855729c",
+    "src/tac_osm/csl125_r1.py": "1dfe5a6d1855ef6c07a6ec5209227981a4df1995a97f944f764f042a49a79793",
+    "src/tac_osm/csl125_r2.py": "e1349869ea05efe59fc12fee2bf386779760570395e419dd90578b26a24e9afa",
+    "src/tac_osm/csl125_r3.py": "ef4e3be70db12fa5ca9c80725181f0742fda052b75fdf4e7a46bf0cb8f9717d6",
+    "src/tac_osm/csl125_tool_model.py": "3a98d6d4f07665c4f47047944f69295d7a2d07b9907e24422797f8a24ccb0dc7"
+  },
+  "status": "PASS",
+  "study_id": "COMPACT_PRECISE_STATE_20261109",
+  "torch": "2.14.1+cpu",
+  "untrained_parameters": 123873263,
+  "weights_after_sha256": "e1930a36e300184b60e40047f35f322242aca4086eec38f3fc6c7b770014cf32",
+  "weights_before_sha256": "e1930a36e300184b60e40047f35f322242aca4086eec38f3fc6c7b770014cf32"
+}
