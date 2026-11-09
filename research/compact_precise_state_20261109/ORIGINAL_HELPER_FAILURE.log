@@ -1,0 +1,48 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________ test_precise_version_and_precision_are_preserved _______________
+
+    def test_precise_version_and_precision_are_preserved():
+        backing=torch.tensor([1.+2.**-40, -2.**-50, 1.+2.**-39, 2.**-60],dtype=torch.float64)
+        v=backing[::2]
+        state=CSL125State((PreciseMemoryState(v,v,torch.ones(0,dtype=torch.bfloat16),v,v),),(None,),('one',))
+>       compact=compact_stream_state(state)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_compact_precise_state.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/tac_osm/compact_stream_state.py:49: in compact_stream_state
+    return _map(state, lambda t: t.clone(memory_format=torch.contiguous_format))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/tac_osm/compact_stream_state.py:26: in _map
+    return replace(node, **{f.name: _map(getattr(node, f.name), tensor_fn) for f in fields(node)})
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/tac_osm/compact_stream_state.py:28: in _map
+    return tuple(_map(item, tensor_fn) for item in node)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/tac_osm/compact_stream_state.py:28: in <genexpr>
+    return tuple(_map(item, tensor_fn) for item in node)
+                 ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = PreciseMemoryState(fast=tensor([1.0000, 1.0000], dtype=torch.float64), slow=tensor([1.0000, 1.0000], dtype=torch.float...t16), fast_mass=tensor([1.0000, 1.0000], dtype=torch.float64), slow_mass=tensor([1.0000, 1.0000], dtype=torch.float64))
+tensor_fn = <function compact_stream_state.<locals>.<lambda> at 0x7f046b4cd3a0>
+
+    def _map(node, tensor_fn):
+        if isinstance(node, torch.Tensor):
+            if node.layout != torch.strided or node.device.type == 'meta' or node.is_quantized:
+                raise TypeError('only materialized dense unquantized state tensors supported')
+            return tensor_fn(node)
+        if type(node) in _STATES:
+            return replace(node, **{f.name: _map(getattr(node, f.name), tensor_fn) for f in fields(node)})
+        if type(node) is tuple:
+            return tuple(_map(item, tensor_fn) for item in node)
+        if node is None or type(node) in (str, int):
+            return node
+>       raise TypeError('unregistered state type; explicit source review required')
+E       TypeError: unregistered state type; explicit source review required
+
+src/tac_osm/compact_stream_state.py:31: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_compact_precise_state.py::test_precise_version_and_precision_are_preserved
+1 failed in 1.41s
