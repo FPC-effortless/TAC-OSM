@@ -47,6 +47,9 @@ jobs:
           git rev-parse HEAD > ingress-evidence/COMMIT.txt
           sha256sum src/tac_osm/state_ingress.py research/state_ingress_20261110/reference.py > ingress-evidence/SOURCE_SHA256.txt
           cp research/state_ingress_20261110/PROTOCOL.json ingress-evidence/
+      - name: Verify original saved evidence without model execution
+        if: hashFiles('research/evidence/state_ingress_20261110/verify_saved.py') != ''
+        run: python -B research/evidence/state_ingress_20261110/verify_saved.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
