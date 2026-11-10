@@ -6,6 +6,9 @@ import pytest
 import torch
 from tac_osm.csl125 import CSL125State
 from tac_osm.csl125_r3 import CSL125R3Config
+from tac_osm.csl125_r1 import CSL125R1
+from tac_osm.csl125_r2 import CSL125R2
+from tac_osm.csl125_r3 import CSL125R3
 from tac_osm.csl125_tool_model import CSL125R4
 from tac_osm.csl125_memory_precision import enable_precise_memory_
 from tac_osm.compact_stream_state import compact_stream_state
@@ -155,3 +158,17 @@ def test_cpu_BF16_autocast_existing_state_layout_and_invalid_context():
     for key,value in [('depth',True),('observed_tokens',True),('stream_ids',('owner','owner'))]:
         args=dict(depth=4,observed_tokens=17,stream_ids=('owner',));args[key]=value
         with pytest.raises(StateIngressError):validate_restored_stream_state(m,s,**args)
+
+
+@pytest.mark.parametrize('family',[CSL125R1,CSL125R2,CSL125R3])
+def test_other_exact_reviewed_model_families(family):
+    config=model().config;m=family(config).eval()
+    with torch.no_grad():
+        _,s=m(torch.ones((1,17),dtype=torch.long),depth=4,stream_ids=('owner',))
+        validate(m,s,17)
+
+
+def test_non_embedding_learned_precision_is_also_checked():
+    m=model();s=m.initial_state(1,torch.device('cpu'),torch.float32,depth=4,stream_ids=('owner',))
+    m.error_head.double()
+    with pytest.raises(StateIngressError,match='learned_dtype_or_device'):validate(m,s,0)

@@ -47,6 +47,8 @@ def validate_restored_stream_state(model, state, *, depth, stream_ids, observed_
             'learned_dtype_or_device')
     require(len(model.blocks)>=depth, 'model_layout')
     device=model.embedding.weight.device
+    require(all(p.dtype==torch.float32 and p.device==device for p in model.parameters()),
+            'learned_dtype_or_device')
     batch=len(stream_ids)
     tensors=0
 

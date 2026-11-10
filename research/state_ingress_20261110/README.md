@@ -43,10 +43,10 @@ or checkpoint. Independent source/hash/access checks remain separate.
 ## Protocol and actual checks
 
 Preregistered protocol/router72c4551f before execution; bounded GitHub CPU5min.
-**60 new tests passed locally**: 36 seed/mode/exit/prefix combinations on actual
+**64 new tests passed locally**: 36 seed/mode/exit/prefix combinations on actual
 reduced original R4 plus16invalid-state controls,2dtype-aware epsilon cases,
 2NumPy randomized domain checks,3all-parameter/incoming-state AD checks and1AMP/
-context check. Original/detached/compact state metadata/values/RNG preserved;
+context check plus3exact model-family cases and1non-embedding learned-dtype rejection. Original/detached/compact state metadata/values/RNG preserved;
 paired next-token outputs/state unchanged; gradient tolerances5e-6/5e-5 unchanged.
 Selected inherited checks are recorded separately. Fixture sizes are no-fit;
 no125M full resource rerun or fit exception, standard95k–105k/<=1%trained-arm and
