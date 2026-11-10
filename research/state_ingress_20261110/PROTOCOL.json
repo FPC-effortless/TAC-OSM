@@ -1,0 +1,37 @@
+{
+  "study_id": "STATE_INGRESS_20261110",
+  "execution_level": "internal_research",
+  "scope": "No-fit original-state ingress contract and scalar math reference only",
+  "no_new_model_fits": true,
+  "parent_commit": "777dcebab6e58b4db611dfb2c93c100a598c33d7",
+  "master_plan_commit": "af307318a18d7fbd97b94ada9f383ff5ed614a4d",
+  "PNDS_parent": "0fa31e981681f511c601c5fd069432061061c509",
+  "source_pins": {
+    "src/tac_osm/csl125.py": "0bf0ba779cf570084179675dd83a8b2a423867275282a129359a5f5a5828e85b",
+    "src/tac_osm/csl125_r1.py": "1dfe5a6d1855ef6c07a6ec5209227981a4df1995a97f944f764f042a49a79793",
+    "src/tac_osm/csl125_r2.py": "e1349869ea05efe59fc12fee2bf386779760570395e419dd90578b26a24e9afa",
+    "src/tac_osm/csl125_r3.py": "ef4e3be70db12fa5ca9c80725181f0742fda052b75fdf4e7a46bf0cb8f9717d6",
+    "src/tac_osm/csl125_tool_model.py": "3a98d6d4f07665c4f47047944f69295d7a2d07b9907e24422797f8a24ccb0dc7",
+    "src/tac_osm/csl125_memory_precision.py": "f6db2c04aea934b66d25cab365d1b579d2a949f92cba2a85b06dd11c8855729c",
+    "src/tac_osm/compact_stream_state.py": "23e626935058037de369abdb940eb51bb6f4cc89dfb4d0c7f471df290173ed64"
+  },
+  "objective": "Enforce explicit source proof preconditions on restored R1/R2/R3/R4 mass memory and ownership before reuse; original forward/defaults/invalid counterexamples unchanged. No checkpoint authenticity or security qualification claim.",
+  "boundary": "Caller supplies trusted stream_ids, observed_tokens and depth independently of restored state. Validator reads only in-memory state/config, checks shape/version/dtype/device/ownership/KV cutoff/numeric cone. No labels, files, network, conversion, repair, mutation or model forward inside validator. Caller must quiesce writes; validation is not an atomic snapshot/authenticator.",
+  "domain": "Exact finite N,D and D>=0 and abs(N)<=D, no slack or clipping. Epsilon must be positive NORMAL in actual FP32 or FP64 memory dtype (reject subnormal/underflow; conservative ingress policy, not a change to old constructor). All conv/KV tensors finite, layouts/dtypes/positions match source. Learned FP32 models only in first reviewed API; CPU BF16-autocast covered, GPU/MPS NOT_RUN.",
+  "tests": [
+    "Original constructor admits1e-100 (review724); new ingress rejects it inFP32, allows normalFP64; subnormal positive epsilon rejected even if roundable",
+    "Negative/NaN/Inf mass/numerator, abs(N)>D, invalid empty-mass numerator rejected; signed zero and exactcone boundary accepted",
+    "Bad root/layer/KV class,dtype,shape,stream,depth,batch/position/cache-length/device/meta rejected with stable error codes",
+    "Read-only actual reduced source R4, seeds11/22/33, FP32/FP64, exits2/4, prefix0/17/65; validate original/detached/compact state then next-token all-head output/state exact vs unvalidated paired input",
+    "Attach AD to source prefix, validate, retain original parameter/state identities/RNG; continuation all parameter and incoming-state gradients same (no optimizer)",
+    "Independent NumPy cone/epsilon reference vs Torch validator on registered edge/random arrays; no synthetic accuracy metric",
+    "Scoped PNDS Lean exact-real domain: D>=0,absN<=D,epsilon>0 gives positive denominator and bounded read; explicit source/IEEE/AD/provenance obligations OPEN"
+  ],
+  "resource": {
+    "backend": "GitHub CPU",
+    "estimated_cpu_minutes": 5,
+    "GPU_minutes": 0,
+    "optimizer_steps": 0
+  },
+  "limits": "Engineering fixtures not learned capability/independent qualification. No corpora/checkpoints/TEST/GPU/promotion/merge. 95k\u2013105k active/deployed,<=1%matched and identicaldata/train/tune unchanged; no125Mfit exemption/500khistory rewrite. Physical-device target/operators/numerical/p50p95/RAM/energy/airplane-mode NOT_RUN. H64/483,11/84 FP32 and cross-host initialization hash mismatch preserved. Same checkpoint cross-host replay NOT_RUN. No new neural graph."
+}
