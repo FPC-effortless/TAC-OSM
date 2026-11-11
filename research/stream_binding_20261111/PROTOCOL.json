@@ -1,0 +1,43 @@
+{
+  "study_id": "STREAM_BINDING_20261111",
+  "execution_level": "internal_research",
+  "no_new_model_fits": true,
+  "scope": "CPU-only in-memory tensor/config/mode/state integrity receipt; no checkpoint loader or new serialization",
+  "parent_commit": "8da3ddfedf5fa8c2fb094266fb4f3bb1a426377d",
+  "master_plan_commit": "af307318a18d7fbd97b94ada9f383ff5ed614a4d",
+  "source_pins": {
+    "src/tac_osm/state_ingress.py": "8310dd19f7f472dbc55700118fa6fdbb04c6dfb0605ed0a78e27bfd1b867fada",
+    "src/tac_osm/compact_stream_state.py": "23e626935058037de369abdb940eb51bb6f4cc89dfb4d0c7f471df290173ed64",
+    "src/tac_osm/csl125.py": "0bf0ba779cf570084179675dd83a8b2a423867275282a129359a5f5a5828e85b",
+    "src/tac_osm/csl125_r1.py": "1dfe5a6d1855ef6c07a6ec5209227981a4df1995a97f944f764f042a49a79793",
+    "src/tac_osm/csl125_r2.py": "e1349869ea05efe59fc12fee2bf386779760570395e419dd90578b26a24e9afa",
+    "src/tac_osm/csl125_r3.py": "ef4e3be70db12fa5ca9c80725181f0742fda052b75fdf4e7a46bf0cb8f9717d6",
+    "src/tac_osm/csl125_tool_model.py": "3a98d6d4f07665c4f47047944f69295d7a2d07b9907e24422797f8a24ccb0dc7",
+    "src/tac_osm/csl125_memory_precision.py": "f6db2c04aea934b66d25cab365d1b579d2a949f92cba2a85b06dd11c8855729c"
+  },
+  "hypothesis": "Ingress-valid state is not necessarily associated with the intended model weights. A caller-pinned receipt over named model tensors (parameters AND buffers), configuration, exact reviewed classes/memory mode, logical state tensor bytes and source-time context can detect accidental swaps/tampering before continuation, assuming SHA256 integrity and a trusted external receipt pin.",
+  "boundary": "Capture only during known owning-model execution with writers quiesced. Verify a previously frozen receipt against independently supplied expected hash/context. Receipt regeneration at restore cannot authenticate provenance. No model call, loaded checkpoint, source data, labels, network, keys/signatures or remote fallback. Ignore storage strides/aliases intentionally; preserve semantic tensor bytes/class/dtype/shape. No mutating/repair/casting/detaching live model/state.",
+  "tests": [
+    "Concrete prior limitation: state from seed11 passes #727 numeric ingress on same-geometry seed22; new pinned binding must reject different weights",
+    "Successful exact copied-model/independent parameter objects and original/detached/compact state verification; JSON receipt roundtrip stable; CPU only",
+    "One-value parameter, non-learned RoPE buffer, config, memory policy, valid-cone state and caller cutoff/owner/depth mutations rejected with named errors",
+    "Missing/malformed trusted pin and edited/re-signed receipt with old pin rejected; unknown schema/missing keys fail closed",
+    "Three seeds,FP32/FP64,exits2/4,prefix0/17/65; all-head/repair/candidate continuation remains exact, weight/state/RNG identities unchanged",
+    "Attached-prefix AD/parameter gradients preserved; hashing may detach temporary views only, never live state",
+    "Independent stdlib hash of explicit known tensor bytes verifies helper fingerprints; support signedzero/FP64precision, no raw tensor values in receipt",
+    "No identical-checkpoint cross-host replay or real-data quality claimed; previous initialization mismatch stays preserved"
+  ],
+  "math": "No learned graph/value operator change. PNDS118c8744f69 conditional scalar domain and independent NumPy predicate remain inherited and scoped; SHA256 collision resistance/code provenance/whole model IEEE/AD are not Lean-proved here. No vacuous new identity/security theorem or canonical model variant upgrade.",
+  "prior_art": [
+    "https://docs.pytorch.org/docs/stable/notes/serialization.html",
+    "https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.state_dict",
+    "NIST FIPS180-4 SHA256 integrity, not independent signatures"
+  ],
+  "resource": {
+    "backend": "GitHub CPU",
+    "estimated_cpu_minutes": 5,
+    "GPU_minutes": 0,
+    "optimizer_steps": 0
+  },
+  "limits": "Internal engineering fixtures, not independently qualified/intelligence/safety/reward. No corpus/checkpoint/TEST/training/GPU/promotion/merge/deployment. New standard95k\u2013105k/<=1%matched/identicaldata/train+tune unchanged, no125Mfit exemption/500khistory rewrite. Physical target/operators/numerical/p50p95/RAM/energy/airplane-mode NOT_RUN. O(model+state bytes) integrity check, not hot decoding. H64/483,11/84FP32 and initializer mismatch preserved."
+}
