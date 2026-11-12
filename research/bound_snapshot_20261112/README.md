@@ -93,3 +93,20 @@ inference/preprocessing/embedding/state/speech fallback is introduced.
 Next: source-review actual preserved trained-checkpoint import and authentic
 matched learned-memory utility; separately qualify full offline physical-device
 runtime. Fixture cold replay is a prerequisite engineering result, not that result.
+
+## First hosted runtime blocker and recovery
+
+Original capture43173654413 passed219tests and preserved actual untrained
+50,205-parameter FP32/FP64 fixtures. Cold reader failed BEFORE import/replay: the
+Safetensors Torch adapter imports packaging, absent in its clean environment.
+This is a runtime prerequisite failure, not a numerical/model result.
+Original artifact13923122104/ZIP and exact relevant error excerpt are preserved.
+Recovery pins packaging25.0 explicitly, reads the SAME first capture, and passes
+its independently checked index hash via job output from REPLAY_SOURCE.json.
+No weights/model/code/inputs/tolerances are regenerated or changed.
+The two50,205p objects are untrained software fixtures, never compliant new fits
+or deployed learned models. Standard100k/matched gates remain unchanged.
+
+Build-time research environment dependencies: torch2.10.0 CPU, numpy2.3.5,
+safetensors0.6.2, packaging25.0; pytest8.4.2 for controls. Runtime never invokes
+pip or downloads a model. Physical platform/operator packaging NOT RUN.

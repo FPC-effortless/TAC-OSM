@@ -10,6 +10,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 jobs:
   capture:
     runs-on: ubuntu-24.04
@@ -29,7 +30,7 @@ jobs:
         with:
           python-version: '3.13'
       - run: |
-          python -m pip install pytest==8.4.2 numpy==2.3.5 safetensors==0.6.2
+          python -m pip install pytest==8.4.2 numpy==2.3.5 safetensors==0.6.2 packaging==25.0
           python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
       - name: CPU plan and source-bound regression controls
         run: |
@@ -38,15 +39,20 @@ jobs:
           cmp capture-evidence/CPU_PLAN.json research/bound_snapshot_20261112/COMPUTE_DECISION.json
           python -c 'from scripts.replay_bound_snapshot import check_source; check_source()'
           python -m pytest -q tests/test_bound_snapshot.py tests/test_stream_binding.py tests/test_state_ingress.py tests/test_csl125_memory_precision.py tests/test_csl125_r3.py tests/test_csl125_tool_model.py tests/test_research_probe_agnostic.py --junitxml=capture-evidence/TESTS.xml
-      - name: Capture owned untrained fixtures and external index pin
+      - name: Pin original owned capture - never regenerate its weights
         id: capture
         run: |
-          python -B scripts/replay_bound_snapshot.py capture --output capture-evidence/snapshots
-          echo "index_sha=$(sha256sum capture-evidence/snapshots/INDEX.json | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          python - <<'PY'
+          import json,os
+          p=json.load(open('research/bound_snapshot_20261112/REPLAY_SOURCE.json'))
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('index_sha='+p['index_sha256']+'\n')
+          print('Reusing original capture43173654413; source3f98a9f1; no model recapture')
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: BOUND-SNAPSHOT-20261112-CAPTURE
+          name: BOUND-SNAPSHOT-20261112-CHECKS
           path: capture-evidence/
           retention-days: 90
   cold-replay:
@@ -59,6 +65,7 @@ jobs:
       MKL_NUM_THREADS: '1'
       CUDA_VISIBLE_DEVICES: ''
       EXPECTED_INDEX_SHA: ${{ needs.capture.outputs.index_sha }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -67,12 +74,10 @@ jobs:
         with:
           python-version: '3.13'
       - run: |
-          python -m pip install numpy==2.3.5 safetensors==0.6.2
+          python -m pip install numpy==2.3.5 safetensors==0.6.2 packaging==25.0
           python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
-      - uses: actions/download-artifact@v4
-        with:
-          name: BOUND-SNAPSHOT-20261112-CAPTURE
-          path: original-capture
+      - name: Download the frozen first-run capture artifact (read only)
+        run: gh run download 43173654413 --repo FPC-effortless/TAC-OSM --name BOUND-SNAPSHOT-20261112-CAPTURE --dir original-capture
       - name: New runner, different seed and RoPE buffer; load saved bytes then predict
         run: |
           python -B scripts/phone_lab.py plan research/phone_queue/bound_snapshot_20261112.json > /tmp/bound-snapshot-replay-plan.json
