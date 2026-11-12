@@ -1,0 +1,43 @@
+{
+  "study_id": "BOUND_SNAPSHOT_20261112",
+  "execution_level": "internal_research",
+  "no_new_model_fits": true,
+  "parent_commit": "58d5e73891dea20c2c9d7b6c2f73b94aca8feba7",
+  "master_plan_commit": "af307318a18d7fbd97b94ada9f383ff5ed614a4d",
+  "scope": "New untrained inference-only Safetensors fixture snapshot and cold restore; NOT historical trained-checkpoint replay or training-resume checkpoint",
+  "source_pins": {
+    "src/tac_osm/stream_binding.py": "63df644f6ff34e4951d7f33a9948b661ad28113ae5f55e042c9e4cf8b43dcac5",
+    "src/tac_osm/state_ingress.py": "8310dd19f7f472dbc55700118fa6fdbb04c6dfb0605ed0a78e27bfd1b867fada",
+    "src/tac_osm/compact_stream_state.py": "23e626935058037de369abdb940eb51bb6f4cc89dfb4d0c7f471df290173ed64",
+    "src/tac_osm/csl125.py": "0bf0ba779cf570084179675dd83a8b2a423867275282a129359a5f5a5828e85b",
+    "src/tac_osm/csl125_r1.py": "1dfe5a6d1855ef6c07a6ec5209227981a4df1995a97f944f764f042a49a79793",
+    "src/tac_osm/csl125_r2.py": "e1349869ea05efe59fc12fee2bf386779760570395e419dd90578b26a24e9afa",
+    "src/tac_osm/csl125_r3.py": "ef4e3be70db12fa5ca9c80725181f0742fda052b75fdf4e7a46bf0cb8f9717d6",
+    "src/tac_osm/csl125_tool_model.py": "3a98d6d4f07665c4f47047944f69295d7a2d07b9907e24422797f8a24ccb0dc7",
+    "src/tac_osm/csl125_memory_precision.py": "f6db2c04aea934b66d25cab365d1b579d2a949f92cba2a85b06dd11c8855729c"
+  },
+  "hypothesis": "Persist actual parameters, all buffers including nonpersistent RoPE, and validated logical carried state; with fixed source/prototype/context and caller-pinned raw manifest/file hashes, a cold reader can restore the exact binding despite different initialization. Original trained checkpoints/history/formats remain untouched.",
+  "format": "safetensors0.6.2+fixed manifest.json/tensors.safetensors; no pickle/dynamic class import/metadata-selected factory/path/network. CPU; learnedFP32 and FP32/FP64 memories; 64MiB tensor-file/1MiB manifest budget. Refuse overwrite, file symlinks, malformed/missing/extra keys/shapes/dtypes/hashes. Caller-owned immutable filesystem and externally trusted manifest pin remain required.",
+  "restore_contract": "Caller supplies already constructed trusted model prototype and depth/owner/token cutoff. Deepcopy prototype; only copy exact validated named tensor/layouts into new model. Rebuild state using source initial-state class templates and trusted cutoff, then run unchanged ingress/binding. No caller model/state mutation on success/failure. No optimizer/RNG/AD graph persistence; inference only, not resumable training.",
+  "tests": [
+    "Unit roundtrip seeds11/22/33,modesFP32/FP64,exits2/4,prefix0/17/65; parameters/buffers/state exact and all next-head/repair/candidate outputs equal within host",
+    "Alter/missing manifest or tensor raw bytes/pin/schema/key/shape/dtype, symlink/oversize and existing destination reject; wrong prototype config/mode/context reject and caller prototype remains unchanged",
+    "Independent raw SHA256/safetensors inspection and nonpersistent-buffer restoration",
+    "Two GitHub jobs: writer captures fixed fp32/fp64 cases from seed11,depth4,prefix17; reader seed101 and perturbed RoPE buffer restores exact payload/binding. Index raw SHA passed outside artifact via job output. Expected outputs loaded ONLY after reader predicts, never fed to model.",
+    "Before advancing restored model/state identity byte exact; cross-run next outputs and carried tensors use frozen atol1e-5/rtol1e-5; record exactness separately, integer IDs exact. No posthoc tolerance change",
+    "Keep earlier init mismatch/11of84/H64 and prior prototype buffer failure; do not reinterpret untrained checkpoint fixture as genuine-data/qualified model evidence"
+  ],
+  "prior_art": [
+    "https://huggingface.co/docs/safetensors/en/index",
+    "https://docs.pytorch.org/docs/stable/notes/serialization.html",
+    "Original CASM/benchmark torch.save/checkpoint paths inspected; left unchanged. Reuse728 binding,727 ingress,726 copy state semantics."
+  ],
+  "math": "No neural law or learned graph change. Existing PNDS118c8744f69 scalar Lean/NumPy scope inherited. Hash/source authority, serialization decoder/full IEEE/AD/security refinement OPEN. No new vacuous theorem or independent qualification proof.",
+  "resource": {
+    "backend": "GitHub CPU",
+    "estimated_cpu_minutes": 10,
+    "GPU_minutes": 0,
+    "optimizer_steps": 0
+  },
+  "limits": "Internally measured software fixtures; no authentic dataset or trained model quality/safety/reward/promotion claim. User95k\u2013105k actual trained/deployed,<=1%matched/equal authenticdata/train+tune unchanged; no125Mfit exemption/500khistory rewrite. No existing checkpoint overwrite/TEST/GPU/merge/deploy/product work. Actual physical target/operators/numerical/p50p95/RAM/energy/airplane-mode NOT_RUN; inference/preproc/embeddings/state/speech local/offline without fallback."
+}
