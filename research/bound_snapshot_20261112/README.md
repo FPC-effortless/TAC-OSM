@@ -110,3 +110,31 @@ or deployed learned models. Standard100k/matched gates remain unchanged.
 Build-time research environment dependencies: torch2.10.0 CPU, numpy2.3.5,
 safetensors0.6.2, packaging25.0; pytest8.4.2 for controls. Runtime never invokes
 pip or downloads a model. Physical platform/operator packaging NOT RUN.
+
+## Hosted result and permanent evidence
+
+[Recovery run43174631095](https://github.com/FPC-effortless/TAC-OSM/actions/runs/43174631095)
+passed219controls and cold replay on a new runner. It downloaded the original
+[capture43173654413](https://github.com/FPC-effortless/TAC-OSM/actions/runs/43173654413)
+instead of generating replacements. Both FP32/FP64 cases restored the original
+binding byte-exactly into different-initialization/perturbed-buffer prototypes;
+all40output/state tensors per case were byte-exact, maximum absolute error0.
+These are observed results, stronger than the preregistered1e-5 tolerance for
+these fixtures, not a general cross-platform guarantee. No real data was scored.
+
+Original capture artifact13923122104, recovered replay artifact13924430231 and
+controls artifact13923427080 are preserved losslessly as ZIPs under
+`research/evidence/bound_snapshot_20261112/`. Raw ZIP digests are independently
+pinned in `verify_saved_evidence.py`; that stdlib-only command checks archived
+source/manifest/payload/expected-output identities,219tests, CPU plans and two
+receipts without importing Torch or executing a model:
+
+```sh
+python -B research/bound_snapshot_20261112/verify_saved_evidence.py
+```
+
+The first packaging import failure remains recorded in REPLAY_SOURCE.json and
+INITIAL_COLD_READER_ERROR.log. Compulsory preflight43174631235 also passed. This
+closes fixture persistence/cold replay only. Authentic trained-checkpoint import,
+learned-memory utility and physical offline qualification remain NOT RUN here;
+PNDS Lean was not rerun and serialization/provenance refinement remains OPEN.

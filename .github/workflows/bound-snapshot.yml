@@ -39,6 +39,8 @@ jobs:
           cmp capture-evidence/CPU_PLAN.json research/bound_snapshot_20261112/COMPUTE_DECISION.json
           python -c 'from scripts.replay_bound_snapshot import check_source; check_source()'
           python -m pytest -q tests/test_bound_snapshot.py tests/test_stream_binding.py tests/test_state_ingress.py tests/test_csl125_memory_precision.py tests/test_csl125_r3.py tests/test_csl125_tool_model.py tests/test_research_probe_agnostic.py --junitxml=capture-evidence/TESTS.xml
+      - name: Check permanently preserved receipts without running a model
+        run: python -B research/bound_snapshot_20261112/verify_saved_evidence.py
       - name: Pin original owned capture - never regenerate its weights
         id: capture
         run: |
