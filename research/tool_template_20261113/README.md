@@ -17,7 +17,9 @@ are the relevant source limitation here, not an excuse to request private keys.
 
 Protocol and router were committed before tests/source audit in ccdc7d7f. First
 router receipt rejected an unknown execution_level field in this historical
-router's exact schema. INITIAL_PLAN_BLOCKED.json retains it. Commit33cf2a24 uses
+router's exact schema. The initial redirected stdout file was empty (errors went to stderr).
+INITIAL_PLAN_BLOCKED.json explicitly records a reproduction of that exact
+rejection, not an invented original transcript. Commit33cf2a24 uses
 the existing schema unchanged; execution level remains explicit in PROTOCOL.json.
 No research execution preceded the successful READY_NO_FIT plan. CPU5min/GPU0.
 
@@ -101,3 +103,13 @@ deploy/product work. Actual device target/operators/numerical/p50p95/RAM/energy/
 airplane-mode NOT_RUN. Full inference/preprocessing/embedding/state/speech must
 remain offline on user-controlled hardware. No remote fallback is introduced.
 Six families share evidence vocabulary; no cross-domain skill transfer is claimed.
+
+## First hosted runtime failure
+
+Run43386367881 failed collecting the inherited model-independent probe tests:
+CPU Torch was missing from the clean CI environment. No source audit ran there.
+INITIAL_HOSTED_COLLECTION_ERROR.log preserves the exact relevant log excerpt;
+failed artifact14019101594 retains the original test-error XML. Repair adds
+torch2.10.0 from the official CPU index for inherited tests only. The source
+audit remains a separate process that rejects any Torch/tokenizer import.
+No method, source bytes, split, labels or local result was changed.
