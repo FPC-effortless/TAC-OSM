@@ -113,3 +113,21 @@ failed artifact14019101594 retains the original test-error XML. Repair adds
 torch2.10.0 from the official CPU index for inherited tests only. The source
 audit remains a separate process that rejects any Torch/tokenizer import.
 No method, source bytes, split, labels or local result was changed.
+
+## Hosted completion and permanent evidence
+
+[Source replay43386549854](https://github.com/FPC-effortless/TAC-OSM/actions/runs/43386549854)
+and [compulsory preflight43386550226](https://github.com/FPC-effortless/TAC-OSM/actions/runs/43386550226)
+PASS at ee13ed28. All59software tests passed and the complete original-source
+summary equals LOCAL_RESULTS.json byte-for-byte. Artifact14019275408, original
+ZIP SHA2561ff02f12d2be7ba2977624f57b14f9d8aed418fe939cc48fce4486d9892a41c0,
+is permanently preserved under research/evidence/tool_template_20261113, including
+all10,071hash-only rows, original source indices and raw-line hash identities.
+Initial failed artifact14019101594 is also preserved losslessly, ZIP SHA256
+d54972fdcc4729c8f0ffb2506f1af68d0005738af015bc69528024c7075fafb2.
+
+`python -B research/tool_template_20261113/verify_saved_evidence.py` validates
+ZIPs, exact local/hosted summary, frozen source pins, full original lineage joins,
+recomputed overlap counts,59controls and original collection error without
+Torch, new source acquisition or rerunning the request audit. This does not
+reconstruct semantic truth from the fingerprints or certify data rights.

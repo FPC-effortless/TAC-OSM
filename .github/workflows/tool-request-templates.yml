@@ -34,6 +34,8 @@ jobs:
           python -B scripts/phone_lab.py plan research/phone_queue/tool_template_20261113.json > template-evidence/CPU_PLAN.txt
           cmp template-evidence/CPU_PLAN.txt research/tool_template_20261113/COMPUTE_DECISION.json
           python -m pytest -q tests/test_request_template_audit.py tests/test_jsonl_byte_lineage.py tests/test_research_probe_agnostic.py --junitxml=template-evidence/TESTS.xml
+      - name: Verify permanent original source receipts without model execution
+        run: python -B research/tool_template_20261113/verify_saved_evidence.py
       - name: Reuse original publisher TRAIN acquisition only
         run: gh run download 42262433533 --repo FPC-effortless/TAC-OSM --name csl125-training-data --dir original-source
       - name: Audit requests against unchanged original frozen lineage
