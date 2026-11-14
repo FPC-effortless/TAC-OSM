@@ -1,7 +1,9 @@
 # Authentic causal byte-corpus adapter — 14 November 2026
 
 **Internal authentic-source engineering, not independently qualified or a model
-improvement.** No neural model is constructed, trained, scored or promoted here.
+improvement.** The source adapter/audit constructs or executes no neural model.
+Inherited generic probe tests separately use untrained engineering fixtures;
+no model is trained, scored on this corpus or promoted.
 Continue the source-to-model gap after729/730, without repeating their completed
 fixture/lexical audits. Implement one reusable local raw-byte/document/state
 handoff path; inherited recurrent/memory/precision/snapshot sources stay unchanged.
@@ -128,3 +130,22 @@ target/operators/numerical/p50p95/RAM/energy/airplane-mode NOT_RUN. Full inferen
 preprocessing, embedding, state and speech must run offline on user-controlled
 devices with no remote fallback. Six-family alignment is an evidence/time/source
 contract, not cross-domain skill transfer. Customer utility/pilots NOT_MEASURED.
+
+## Hosted original source replay and permanent archive
+
+[Hosted43570638629](https://github.com/FPC-effortless/TAC-OSM/actions/runs/43570638629)
+PASS at367fe271:51tests and full original-source summary byte-identical to local.
+Artifact14104595203, ZIP SHA256
+9054ef6516a09498f873cf9e26a2239b604f392c91f30c74063603d5e4ede8cf, is preserved
+losslessly under research/evidence/causal_byte_corpus_20261114. It contains all
+2,905chunk receipts, source summary, CPU plan and original JUnit51test results.
+Raw source/LICENSE/NOTICE are already permanent original Git bytes in this PR.
+
+```sh
+python -B research/causal_byte_corpus_20261114/verify_saved_evidence.py
+```
+
+This stdlib saved verifier checks original source/Gitblob/license/file pins,
+all saved byte-range/hash identities, gap-free per-document target coverage,
+reset/role/count summaries,51test outcomes and exact local/hosted receipt without
+importing the adapter or executing a model. No trained score is reconstructed.
