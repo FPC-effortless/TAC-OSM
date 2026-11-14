@@ -1,0 +1,55 @@
+{
+  "study_id": "CAUSAL_BYTE_CORPUS_20261114",
+  "execution_level": "internal_research",
+  "scope": "Authentic-source adapter and opaque-state boundary contract only; no neural training/evaluation",
+  "parent_commit": "17da26f75a897155bd20506515a3f30803ce373b",
+  "master_plan_commit": "af307318a18d7fbd97b94ada9f383ff5ed614a4d",
+  "corpus_manifest_sha256": "7ba30bb967b9bddc17fe728138c509822f5b4e002a5f12a0870f2464c25245f1",
+  "source": "Reuse unchanged Git-owned LANGUAGE-SOURCE023 CPythonv3.13.0 original18files/LICENSE/NOTICE;13FIT+1FIT_SUPPLEMENT mapped toFIT,4exposedDEV. Original receipts preserved. No publisher network acquisition or TEST source.",
+  "question": "Can a reusable raw-byte source adapter enumerate every within-document next-byte pair exactly once, with replayable chunk identities and fail-closed stream/offset ownership, without mixing FIT/DEV or carried state across documents?",
+  "frozen_design": {
+    "codec": "Raw unsigned bytes0..255, no tokenizer fit, no normalized/re-encoded text, no artificial EOS or byte concatenation",
+    "chunk_lengths": [
+      128,
+      512
+    ],
+    "order": "Lexicographic original document path, source offsets increase; roles requested separately, onlyFIT orDEV",
+    "pair": "For chunk input offsets[a,b), inputs=raw[a:b], labels=raw[a+1:b+1],0<=a<b<=len(raw)-1. Final partial chunk retained, exactlylen(raw)-1targets per document.",
+    "state": "At document start force stateNone. At other chunks require exact role/path/source digest stream identity and next offset; missing/wrong-stream/reordered/repeated carry rejected. Opaque state returned unchanged, no cast/copy/detach or numerical/source attestation. Current numeric/binding snapshot APIs remain separate.",
+    "inputs": "Explicit input-only projection returns raw token tuple and stream identity; labels and receipts are never model feature keys. Stream identity is metadata, not token features. Whole sequence includes later observed inputs; actual model causal masking/time graph still independently required."
+  },
+  "checks": [
+    "Path/symlink/hash/Gitblob/length/license/manifest tampering fail before chunking",
+    "Role selection deniesTEST/unknown role; fixed original split/documentlist and raw hashes retained",
+    "Constructed all256bytes/nonASCII/one-label/finalpartial/exactboundary tests",
+    "Chunk targetindices cover1..len(raw)-1once andnevercrossdocument",
+    "Change only next-targetbyte cannot alter current step observed byte; input-onlyprojection excludeslabels; complete model noninterference remainsOPEN",
+    "Carry same-owner/offset exact identity, reset atdocboundary, wrongrole/stream/order/missing carry rejected; no live detach",
+    "Run original18file source admission and hash per-role/chunk stream receipts; no predictive metrics/checkpoints touched"
+  ],
+  "prior_art": [
+    {
+      "url": "https://willdabney.com/publication/r2d2/",
+      "reuse": "Recurrent state ownership, replay/burn-in principles. This is a source adapter, not a new recurrent replay algorithm."
+    }
+  ],
+  "math": "No neural graph/variant/kernel change; PNDS118c8744f6990a29ab4a6daecabeb1073a7ab7366c0 partial Lean/Python remainsunchanged. Integer offset identities tested independently; full source IEEE/AD/endtoend information flow/serialization refinement OPEN, freshLean NOT_RUN.",
+  "resource": {
+    "backend": "GitHub CPU",
+    "CPU_minutes": 5,
+    "GPU_minutes": 0,
+    "optimizer_updates": 0,
+    "model_executions": 0
+  },
+  "claim_policy": "Internal authentic-source engineering, not independently qualified or learned skill. No language/perplexity/retrieval/speed/energy gain. DEV alreadyexposed; rawbyte completeness not multilingual ability.",
+  "capability_to_value": {
+    "target": "Future native next-byte prediction with source-causal recurrent history",
+    "data": "Existing publicly licensed human-authored CPython documentation",
+    "operator_question": "Could useful offline next-byte suggestions eventually improve? UNKNOWN_NOT_MEASURED",
+    "pilot": "NOT_RUN",
+    "checkpoint": "NO_NEW_FIT",
+    "business_stage": "RESEARCH_INTERFACE_ONLY"
+  },
+  "remaining_gates": "No fit permission from source audit. Future study requires actual95k\u2013105kactive/deployed,<=1%matchedwhencomparing,equaldata/train/tune,fullscientificregistration/liveguard,applicablePNDSsourceobligations,originalresumablecheckpoints/Gitreplay. Noexternal signer needed for ordinaryauthorizedinternalFIT/DEV; strictprotectedqualification unchanged.",
+  "preservation": "No existingcheckpoint/score/sourcechanged;H64/#483,11of84FP32,andall500khistoryimmutable; noGPU/TEST/promotion/merge/deploy/productwork; physicaldeviceallNOT_RUN; fullofflineinference/preprocess/embedding/state/speech nofallback."
+}
