@@ -113,3 +113,53 @@ Reader verifies frozen code/index/actual original model/buffer identities before
 forward. Original prediction/state/parameter-gradient files open **after** the
 new outputs are computed, then all registered tensors are checked at unchanged
 tolerance. This is ordinary controlled CI, not an independent scientific assessor.
+
+## Hosted original-weight replay and partial mathematical build
+
+TAC [43687712956](https://github.com/FPC-effortless/TAC-OSM/actions/runs/43687712956)
+PASS at ccac3f8a:59tests, original three untrained snapshots, six authentic FIT
+checks, then six actual-original-weight replays on another clean runner. All
+105observed output/state/gradient tensors per case reproduce with maxerror0.
+Within-host full-vs-stream parameter-gradient max error is2.384185791015625e-7
+on that runner, within the fixed3e-5absolute/relative gate; output/state/prefix/
+label errors are0. These scopes differ: no general bitwise-gradient claim.
+Compulsory preflight43687712907 also PASS. Local/hosted captures remain separate.
+
+[PNDS119](https://github.com/FPC-effortless/pnds-lean/pull/119), exact9f49b380:
+[Lean43688101837](https://github.com/FPC-effortless/pnds-lean/actions/runs/43688101837)
+and [Python43688101743](https://github.com/FPC-effortless/pnds-lean/actions/runs/43688101743)
+PASS. All four Nat count/offset declarations compiled and were explicitly
+axiom-printed; only standard propext/Classical.choice/Quot.sound appear, no
+admitted/custom axiom. Exact relevant build/axiom excerpt and original Lean
+source copy are retained here. This does not prove source neural graph/IEEE/AD.
+
+First PNDS43687889457 failed canonical reciprocal-index equality before Lean
+ran. The attempted proposed canonical index and exact error excerpt remain in
+PNDS. Repair keeps the canonical indexes and their validators byte-identical to
+parents and uses separate reciprocal **proposed** indexes. Full canonical
+integration remains OPEN, no proof/qualification status upgraded. PNDS_STATUS.json
+records the exact failed/fixed commits/runs; MATH_LINK.json is source-pinned.
+
+## Permanent original bytes and offline replay
+
+Original hosted capture artifact14151176548 and replay14150273918 are preserved
+losslessly, along with the original local capture. Each original ZIP is split
+into500,000-byte parts for transport only under research/evidence/byte100k_001.
+ARCHIVES.json pins every ordered part and the assembled original ZIP hash/length.
+All actual model/state snapshots and observed tensors are permanent Git bytes,
+not just temporary Actions links. Local replay receipt/INDEX are separate and
+refer to the identical original local tensor files. Original failed fixture
+source/log/error records remain untouched.
+
+```sh
+python -B research/byte100k_001/verify_saved_evidence.py
+python -B research/byte100k_001/verify_saved_evidence.py --extract-original NEW_DIRECTORY
+# prints actual original INDEX SHA; then:
+python -B scripts/check_byte100k_integration.py --original NEW_DIRECTORY/capture --expected-index-sha PRINTED_SHA --output NEW_REPLAY
+```
+
+The saved verifier checks exact archive/model/observed/index/source bytes and
+recorded scope/count/59tests/all six105tensor replays without Torch/model calls.
+It verifies preservation/receipts, not source authority or independent security.
+Final CI reuses the first saved hosted weights instead of recapturing random
+initialization. No optimizer/RNG training resume or learned checkpoint promotion.

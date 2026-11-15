@@ -1,0 +1,11 @@
+2026-11-15T07:03:19.5405000Z ✔ [5698/5713] Built PNDS.ByteLanguage100K
+2026-11-15T07:03:39.6949019Z info: ././././Audit.lean:125:0: ByteLanguage100K.parameter_count : ByteLanguage100K.modelParameters = 99050
+2026-11-15T07:03:39.6950011Z info: ././././Audit.lean:126:0: ByteLanguage100K.parameter_band : 95000 ≤ ByteLanguage100K.modelParameters ∧ ByteLanguage100K.modelParameters ≤ 105000
+2026-11-15T07:03:39.6950940Z info: ././././Audit.lean:127:0: ByteLanguage100K.target_follows_input : ∀ (start position : ℕ),
+2026-11-15T07:03:39.6951603Z   ByteLanguage100K.inputOffset start position + 1 = ByteLanguage100K.targetOffset start position
+2026-11-15T07:03:39.6952377Z info: ././././Audit.lean:128:0: ByteLanguage100K.target_inside_source : ∀ (start stop length position : ℕ),
+2026-11-15T07:03:39.6953182Z   start < stop → stop < length → position < stop - start → ByteLanguage100K.targetOffset start position < length
+2026-11-15T07:03:39.6954082Z info: ././././Audit.lean:129:0: 'ByteLanguage100K.parameter_count' depends on axioms: [propext]
+2026-11-15T07:03:39.6954826Z info: ././././Audit.lean:130:0: 'ByteLanguage100K.parameter_band' depends on axioms: [propext, Classical.choice, Quot.sound]
+2026-11-15T07:03:39.6955569Z info: ././././Audit.lean:131:0: 'ByteLanguage100K.target_follows_input' does not depend on any axioms
+2026-11-15T07:03:39.6956261Z info: ././././Audit.lean:132:0: 'ByteLanguage100K.target_inside_source' depends on axioms: [propext, Quot.sound]

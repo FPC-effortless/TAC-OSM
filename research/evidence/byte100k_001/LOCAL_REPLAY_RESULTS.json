@@ -1,0 +1,3158 @@
+{
+  "DEV_model_scoring": false,
+  "GPU_minutes": 0,
+  "PNDS": "PARTIAL_ONLY; source graph/IEEE/AD/provenance refinement OPEN",
+  "cases": [
+    {
+      "checks": {
+        "all_parameters_connected_nonzero_and_matching": true,
+        "count": true,
+        "document_boundary_reset": true,
+        "finite_objective": true,
+        "future_prefix_noninterference": true,
+        "incoming_slow_state_connected": true,
+        "independent_objective_and_logit_gradient": true,
+        "label_poison_noninterference": true,
+        "parameters_buffers_unchanged": true,
+        "stream_outputs": true,
+        "stream_state": true
+      },
+      "document": "Doc/howto/unicode.rst",
+      "errors": {
+        "future_prefix": 0.0,
+        "label_poison": 0.0,
+        "stream_output": 0.0,
+        "stream_state": 0.0
+      },
+      "gradient_rows": {
+        "core.attention.2.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.attention.2.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.attention.4.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.attention.4.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.6193447411060333e-10,
+          "within_tolerance": true
+        },
+        "core.attention.4.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.0.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.6566128730773926e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.6566128730773926e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.0186340659856796e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.729816621169448e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.1.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.6566128730773926e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.1.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.6193447411060333e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 8.549250196665525e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1175870895385742e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.2.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 6.51925802230835e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.3969838619232178e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.637978807091713e-12,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.0477378964424133e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.2.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.092726157978177e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.3.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.1827872842550278e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.7939677238464355e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.7939677238464355e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.3.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.7853275241795927e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.8189894035458565e-12,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.embedding.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.final_norm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        }
+      },
+      "gradient_tensors": 80,
+      "seed": 1701,
+      "source_sha256": "c5cf5081618e2b06a519d2ede00fb52a53922c5a8d636c4be337810fed2bd17c",
+      "status": "PASS",
+      "targets_checked": 256
+    },
+    {
+      "checks": {
+        "all_parameters_connected_nonzero_and_matching": true,
+        "count": true,
+        "document_boundary_reset": true,
+        "finite_objective": true,
+        "future_prefix_noninterference": true,
+        "incoming_slow_state_connected": true,
+        "independent_objective_and_logit_gradient": true,
+        "label_poison_noninterference": true,
+        "parameters_buffers_unchanged": true,
+        "stream_outputs": true,
+        "stream_state": true
+      },
+      "document": "Doc/tutorial/appendix.rst",
+      "errors": {
+        "future_prefix": 0.0,
+        "label_poison": 0.0,
+        "stream_output": 0.0,
+        "stream_state": 0.0
+      },
+      "gradient_rows": {
+        "core.attention.2.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9802322387695312e-08,
+          "within_tolerance": true
+        },
+        "core.attention.2.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.attention.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.attention.4.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.attention.4.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.attention.4.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1175870895385742e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.0.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.6566128730773926e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.0.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.0910383707596338e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.2351741790771484e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.1.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.1.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 6.548361852765083e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.3655745685100555e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.1827872842550278e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1175870895385742e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.2.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.3655745685100555e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.587935447692871e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.7939677238464355e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.2.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.637978807091713e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.6370904631912708e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.3.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.960464477539063e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.3.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.275957614183426e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.0472514228895307e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.embedding.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9802322387695312e-08,
+          "within_tolerance": true
+        },
+        "core.final_norm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        }
+      },
+      "gradient_tensors": 80,
+      "seed": 1701,
+      "source_sha256": "a932d7c8e7a180520ff7a83a12195be9d48cef684baf95045dd263d3f2e1fb0c",
+      "status": "PASS",
+      "targets_checked": 256
+    },
+    {
+      "checks": {
+        "all_parameters_connected_nonzero_and_matching": true,
+        "count": true,
+        "document_boundary_reset": true,
+        "finite_objective": true,
+        "future_prefix_noninterference": true,
+        "incoming_slow_state_connected": true,
+        "independent_objective_and_logit_gradient": true,
+        "label_poison_noninterference": true,
+        "parameters_buffers_unchanged": true,
+        "stream_outputs": true,
+        "stream_state": true
+      },
+      "document": "Doc/howto/unicode.rst",
+      "errors": {
+        "future_prefix": 0.0,
+        "label_poison": 0.0,
+        "stream_output": 0.0,
+        "stream_state": 0.0
+      },
+      "gradient_rows": {
+        "core.attention.2.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.2.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.attention.2.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.attention.4.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.attention.4.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.attention.4.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.0.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.6298145055770874e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.6007106751203537e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3646862246096134e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1175870895385742e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.1.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.3969838619232178e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.1.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.546585164964199e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1175870895385742e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.2.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.3969838619232178e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.259629011154175e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.2.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3646862246096134e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.0489096641540527e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.3.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.587935447692871e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.3.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.7280399333685637e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.275957614183426e-12,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.embedding.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.final_norm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.384185791015625e-07,
+          "within_tolerance": true
+        }
+      },
+      "gradient_tensors": 80,
+      "seed": 1702,
+      "source_sha256": "c5cf5081618e2b06a519d2ede00fb52a53922c5a8d636c4be337810fed2bd17c",
+      "status": "PASS",
+      "targets_checked": 256
+    },
+    {
+      "checks": {
+        "all_parameters_connected_nonzero_and_matching": true,
+        "count": true,
+        "document_boundary_reset": true,
+        "finite_objective": true,
+        "future_prefix_noninterference": true,
+        "incoming_slow_state_connected": true,
+        "independent_objective_and_logit_gradient": true,
+        "label_poison_noninterference": true,
+        "parameters_buffers_unchanged": true,
+        "stream_outputs": true,
+        "stream_state": true
+      },
+      "document": "Doc/tutorial/appendix.rst",
+      "errors": {
+        "future_prefix": 0.0,
+        "label_poison": 0.0,
+        "stream_output": 0.0,
+        "stream_state": 0.0
+      },
+      "gradient_rows": {
+        "core.attention.2.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.attention.2.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.attention.4.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.attention.4.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.attention.4.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1175870895385742e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.0.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.3969838619232178e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.384185791015625e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.0.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 8.731149137020111e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.911715561524034e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.0913936421275139e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1175870895385742e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.1.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.637978807091713e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 6.984919309616089e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.1.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.7462298274040222e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.091837814077735e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1175870895385742e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.2.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.2.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.275957614183426e-12,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.6298145055770874e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.2.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 6.548361852765083e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.17985654369113e-12,
+          "within_tolerance": true
+        },
+        "core.blocks.2.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.2.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.3969838619232178e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.7462298274040222e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.000888343900442e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.embedding.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9802322387695312e-08,
+          "within_tolerance": true
+        },
+        "core.final_norm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.384185791015625e-07,
+          "within_tolerance": true
+        }
+      },
+      "gradient_tensors": 80,
+      "seed": 1702,
+      "source_sha256": "a932d7c8e7a180520ff7a83a12195be9d48cef684baf95045dd263d3f2e1fb0c",
+      "status": "PASS",
+      "targets_checked": 256
+    },
+    {
+      "checks": {
+        "all_parameters_connected_nonzero_and_matching": true,
+        "count": true,
+        "document_boundary_reset": true,
+        "finite_objective": true,
+        "future_prefix_noninterference": true,
+        "incoming_slow_state_connected": true,
+        "independent_objective_and_logit_gradient": true,
+        "label_poison_noninterference": true,
+        "parameters_buffers_unchanged": true,
+        "stream_outputs": true,
+        "stream_state": true
+      },
+      "document": "Doc/howto/unicode.rst",
+      "errors": {
+        "future_prefix": 0.0,
+        "label_poison": 0.0,
+        "stream_output": 0.0,
+        "stream_state": 0.0
+      },
+      "gradient_rows": {
+        "core.attention.2.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.2.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.attention.4.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.attention.4.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.attention.4.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.3969838619232178e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.0372681319713593e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.4569682106375694e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.77351466845721e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 8.381903171539307e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.7939677238464355e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.6298145055770874e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.1.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.637978807091713e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.2278178473934531e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.546585164964199e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 8.731149137020111e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.2.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.275957614183426e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.318767317570746e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.0913936421275139e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1175870895385742e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.3.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.3969838619232178e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.3.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.0186340659856796e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.318767317570746e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.embedding.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.final_norm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        }
+      },
+      "gradient_tensors": 80,
+      "seed": 1703,
+      "source_sha256": "c5cf5081618e2b06a519d2ede00fb52a53922c5a8d636c4be337810fed2bd17c",
+      "status": "PASS",
+      "targets_checked": 256
+    },
+    {
+      "checks": {
+        "all_parameters_connected_nonzero_and_matching": true,
+        "count": true,
+        "document_boundary_reset": true,
+        "finite_objective": true,
+        "future_prefix_noninterference": true,
+        "incoming_slow_state_connected": true,
+        "independent_objective_and_logit_gradient": true,
+        "label_poison_noninterference": true,
+        "parameters_buffers_unchanged": true,
+        "stream_outputs": true,
+        "stream_state": true
+      },
+      "document": "Doc/tutorial/appendix.rst",
+      "errors": {
+        "future_prefix": 0.0,
+        "label_poison": 0.0,
+        "stream_output": 0.0,
+        "stream_state": 0.0
+      },
+      "gradient_rows": {
+        "core.attention.2.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.attention.2.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.attention.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.attention.2.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.attention.4.gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.attention.4.kv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.out.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.attention.4.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.attention.4.q.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.0.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.0.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.587935447692871e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.6298145055770874e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.0.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        },
+        "core.blocks.0.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.0372681319713593e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.4569682106375694e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.8198777474462986e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.0.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.1.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.725290298461914e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.1.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.1.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.9554136088117957e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 4.656612873077393e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.1.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.2.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.094947017729282e-12,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 5.820766091346741e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.862645149230957e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.3969838619232178e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 3.637978807091713e-12,
+          "within_tolerance": true
+        },
+        "core.blocks.2.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.2.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 8.731149137020111e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.0913936421275139e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.2.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1641532182693481e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.conv.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4901161193847656e-08,
+          "within_tolerance": true
+        },
+        "core.blocks.3.down.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.fast_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9103830456733704e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ff_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 7.450580596923828e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.ffnorm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.3283064365386963e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.key.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.pre.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 9.313225746154785e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_fast.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 8.149072527885437e-10,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.read_slow.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.0954757928848267e-09,
+          "within_tolerance": true
+        },
+        "core.blocks.3.residual_gain": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.roles": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 6.548361852765083e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.slow_tau_logits": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.546140993013978e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.up.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.value.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.bias": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.4551915228366852e-11,
+          "within_tolerance": true
+        },
+        "core.blocks.3.write_gate.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 0.0,
+          "within_tolerance": true
+        },
+        "core.embedding.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 2.9802322387695312e-08,
+          "within_tolerance": true
+        },
+        "core.final_norm.weight": {
+          "connected": true,
+          "finite_nonzero": true,
+          "max_abs_error": 1.1920928955078125e-07,
+          "within_tolerance": true
+        }
+      },
+      "gradient_tensors": 80,
+      "seed": 1703,
+      "source_sha256": "a932d7c8e7a180520ff7a83a12195be9d48cef684baf95045dd263d3f2e1fb0c",
+      "status": "PASS",
+      "targets_checked": 256
+    }
+  ],
+  "code_sha256": {
+    "research/byte100k_001/AMENDMENT_OBJECTIVE_FP64.json": "439014369019e913e8df425ef4318c8ef18e82019b03b24ec6f442ce26d7bd24",
+    "research/byte100k_001/PROTOCOL.json": "521b42427a5714de8a99ab314297d419f1efadec20b961f4a26586987d67da9e",
+    "research/byte100k_001/checks.py": "94e6922489b7476ef6e8d99e1da9dd57649028aea5076859ec55a0dc8d3289d4",
+    "research/byte100k_001/math_reference.py": "8ace007dfa65422ab47be862488c911a1387c28987edb166307f7f20e0c1ab98",
+    "scripts/check_byte100k_integration.py": "39c34037cfdd59231d4b3f4f936bc793243066d0a1e714cc568902034bebc58e",
+    "src/tac_osm/byte100k_001.py": "976691e975604978d6251a22838350ba2d6abf93a0f4c82b8b648d4743d31108"
+  },
+  "execution_level": "internal_research",
+  "historical_FP32_11of84": "PRESERVED_UNCHANGED",
+  "independently_qualified": false,
+  "initial_FP32_CE_fixture_failure": "PRESERVED_UNCHANGED",
+  "limits": "No learned NLL/accuracy/recall/efficiency gain. No optimizer/RNG training resume. Original saved models are untrained inference snapshots only; local and hosted initializations are separate. Clean-runner replay requires actual original index/files.",
+  "models": [
+    {
+      "deployed": 99050,
+      "different_prototype_restored": true,
+      "model_identity_after": "02c6dc0697e28f00164008262a3a3624c2b7c9c13afb52ac1c38973be724a189",
+      "model_identity_before": "02c6dc0697e28f00164008262a3a3624c2b7c9c13afb52ac1c38973be724a189",
+      "seed": 1701,
+      "trainable": 99050,
+      "unchanged": true
+    },
+    {
+      "deployed": 99050,
+      "different_prototype_restored": true,
+      "model_identity_after": "db7ab3f3a03656b4a665ceedc989937e34936c05d3d552984a0bd390a9a76908",
+      "model_identity_before": "db7ab3f3a03656b4a665ceedc989937e34936c05d3d552984a0bd390a9a76908",
+      "seed": 1702,
+      "trainable": 99050,
+      "unchanged": true
+    },
+    {
+      "deployed": 99050,
+      "different_prototype_restored": true,
+      "model_identity_after": "6510156e791d56ec22c86efaeaf5635ec5949909200fa622fe3bf78bbcd417db",
+      "model_identity_before": "6510156e791d56ec22c86efaeaf5635ec5949909200fa622fe3bf78bbcd417db",
+      "seed": 1703,
+      "trainable": 99050,
+      "unchanged": true
+    }
+  ],
+  "optimizer_updates": 0,
+  "original_tensor_replay": [
+    {
+      "document": "Doc/howto/unicode.rst",
+      "maximum_absolute_error": 0.0,
+      "seed": 1701,
+      "status": "PASS",
+      "tensors": 105
+    },
+    {
+      "document": "Doc/tutorial/appendix.rst",
+      "maximum_absolute_error": 0.0,
+      "seed": 1701,
+      "status": "PASS",
+      "tensors": 105
+    },
+    {
+      "document": "Doc/howto/unicode.rst",
+      "maximum_absolute_error": 0.0,
+      "seed": 1702,
+      "status": "PASS",
+      "tensors": 105
+    },
+    {
+      "document": "Doc/tutorial/appendix.rst",
+      "maximum_absolute_error": 0.0,
+      "seed": 1702,
+      "status": "PASS",
+      "tensors": 105
+    },
+    {
+      "document": "Doc/howto/unicode.rst",
+      "maximum_absolute_error": 0.0,
+      "seed": 1703,
+      "status": "PASS",
+      "tensors": 105
+    },
+    {
+      "document": "Doc/tutorial/appendix.rst",
+      "maximum_absolute_error": 0.0,
+      "seed": 1703,
+      "status": "PASS",
+      "tensors": 105
+    }
+  ],
+  "physical_device": "NOT_RUN",
+  "promotion_authorized": false,
+  "protected_TEST_opened": false,
+  "scope": "UNTRAINED_GENUINE_FIT_INTEGRATION_NOT_CAPABILITY",
+  "source_manifest_sha256": "7ba30bb967b9bddc17fe728138c509822f5b4e002a5f12a0870f2464c25245f1",
+  "status": "PASS",
+  "torch": "2.14.1+cpu",
+  "trained": false,
+  "training_authorized": false,
+  "variant_id": "BYTE100K-001"
+}

@@ -37,10 +37,12 @@ jobs:
           python -B scripts/phone_lab.py plan research/phone_queue/byte100k_001_20261115.json > evidence/CPU_PLAN.json
           cmp evidence/CPU_PLAN.json research/byte100k_001/COMPUTE_DECISION.json
           python -m pytest -q tests/test_byte100k_001.py tests/test_causal_byte_corpus.py tests/test_research_probe_agnostic.py --junitxml=evidence/TESTS.xml
-      - name: Original untrained source-model causal and gradient checks, no optimizer
+      - name: Verify permanent original evidence and extract original saved untrained model bytes
+        run: python -B research/byte100k_001/verify_saved_evidence.py --extract-original /tmp/byte100k-original
+      - name: Replay original untrained model checks without recapturing initialization
         id: capture
         run: |
-          python -B scripts/check_byte100k_integration.py --output evidence/capture
+          python -B scripts/check_byte100k_integration.py --original /tmp/byte100k-original/capture --expected-index-sha "509865baa2b1bd903a4634e94e47101335519ecc65099d5c4370e5abb422fdc9" --output evidence/capture
           python - <<'PY'
           import hashlib,os
           from pathlib import Path
