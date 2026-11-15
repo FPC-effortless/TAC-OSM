@@ -1,0 +1,78 @@
+{
+  "variant_id": "BYTE100K-001",
+  "execution_level": "internal_research",
+  "study_type": "no_fit_source_model_integration",
+  "no_new_model_fits": true,
+  "parent_commit": "e695e342f85f2c10251f416c9d9b212c3dee752c",
+  "master_plan_commit": "af307318a18d7fbd97b94ada9f383ff5ed614a4d",
+  "question": "Can one native byte-language-only 100k candidate connect the authentic corpus adapter to actual causal, streamed, gradient-connected prediction without unused tool heads, optimizer updates or source-boundary violations?",
+  "frozen_geometry": {
+    "vocab_size": 256,
+    "width": 48,
+    "layers": 4,
+    "ff_width": 96,
+    "role_count": 4,
+    "state_width": 8,
+    "rungs": [
+      4
+    ],
+    "attention_layers": [
+      2,
+      4
+    ],
+    "query_heads": 4,
+    "kv_heads": 2,
+    "attention_window": 128,
+    "chunk_size": 32,
+    "conv_kernel": 3,
+    "max_parameters": 105000,
+    "memory": "existing opt-in FP64 numerator/mass recurrence/read; FP32 learned parameters",
+    "readout": "original tied byte projection only; parent tool/field/accept heads replaced with parameter-free identity placeholders and never exported. No auxiliary horizon/risk/tool loss.",
+    "expected_unique_active_and_deployed_parameters": 99050
+  },
+  "source": {
+    "manifest": "research/causal_byte_corpus_20261114/CORPUS.json",
+    "manifest_sha256": "7ba30bb967b9bddc17fe728138c509822f5b4e002a5f12a0870f2464c25245f1",
+    "publisher_commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+    "license": "Original PSF License2/0BSD documentation examples, Git-owned original18files",
+    "real_FIT_documents": [
+      "Doc/howto/unicode.rst",
+      "Doc/tutorial/appendix.rst"
+    ],
+    "positions": "First256inputbytes/next256labels from each specified FIT document; split at128. All other corpus documents only source-hash verified. No DEV prediction/scoring, no new source or TEST."
+  },
+  "seeds": [
+    1701,
+    1702,
+    1703
+  ],
+  "frozen_checks": [
+    "Actual full model trainable/deployed count must equal99050 and pass unchanged standalone100k parameter gate; no count tuning after input/metric inspection",
+    "All remaining named parameters finite, connected and finite nonzero aggregate gradients under same full next-byte CE; no optimizer created",
+    "Same-weight one256token pass versus two128token carried passes: output/state/all parameter gradients at3e-5absolute+3e-5relative; no implicit detach",
+    "Both real FIT documents restart from zero state and agree with fresh execution regardless of other-document prior carry; futuretoken edit afterposition64 cannot change preceding64logits",
+    "Changing labels only cannot alter input-only actual model invocation/predictions/state; prefix128state remains connected to nextchunk objective",
+    "Independent NumPy stable log-softmax meanbyteCE and final-logit derivative match actual loss/AD at1e-6; not wholegraph sourceequivalence",
+    "Initial and final actual parameter+buffer hashes identical for every seed; no training or model update",
+    "Preserve per-seed/per-document failures and worst errors; stop if any registered gatefails. No hidden seedselection, objective rescaling or tolerance change"
+  ],
+  "resource": {
+    "backend": "GitHub CPU",
+    "CPU_minutes": 10,
+    "GPU_minutes": 0,
+    "optimizer_updates": 0
+  },
+  "model_evidence": "Untrained source-integration diagnostics only, not learned NLL/accuracy/retention/architecture superiority. Do not publish untrained CE as model capability. Local/hosted initializations can differ by Torch version; keep original per-host identities and never call separate initializations identical-checkpoint replay.",
+  "math": "Append source-pinned NONCANONICAL proposed link to both reciprocal indexes; PNDS partial typed graph plus Lean parameter/offset obligations and executable NumPy byteCE/count reference. Full graph/IEEE/AD/provenance OPEN. No fit/promotion until applicable gates; no external signers for ordinary authorized internal work.",
+  "prior_art": [
+    {
+      "url": "https://willdabney.com/publication/r2d2/",
+      "reuse": "Recurrent replay/state ownership, no claim of new replay method"
+    },
+    {
+      "url": "https://proceedings.mlr.press/v235/dao24a.html",
+      "reuse": "Structured recurrent mathematics/scan verification, not a conversion of native TAC into an SSM"
+    }
+  ],
+  "preservation": "All originalmodels/kernels/500khistory/H64/11of84 remain unchanged.95k\u2013105kactive/deployed and<=1%matched/equaldata/train+tune unchanged. No training/GPU/TEST/qualification/merge/deploy/productwork. PhysicaldeviceallNOT_RUN; local/offline inference only."
+}

@@ -1,0 +1,38 @@
+.FF.....                                                                 [100%]
+=================================== FAILURES ===================================
+___________ test_whole_model_stream_causal_gradient_falsifiers[1701] ___________
+
+seed = 1701
+
+    @pytest.mark.parametrize('seed',[1701,1702,1703])
+    def test_whole_model_stream_causal_gradient_falsifiers(seed):
+        torch.manual_seed(seed);m=ByteLanguage100K().eval()
+        row,_=check_case(m,doc())
+>       assert row['status']=='PASS',row
+E       AssertionError: {'document': 'fixture', 'source_sha256': '2ac6d9e2b50bdd65511fb4dc0f24b7f6a0c1b2e92d1cf6901df565802e380234', 'targets_...: True, 'finite_objective': True, 'independent_objective_and_logit_gradient': False, 'stream_outputs': True, ...}, ...}
+E       assert 'FAIL' == 'PASS'
+E         
+E         - PASS
+E         + FAIL
+
+tests/test_byte100k_001.py:37: AssertionError
+___________ test_whole_model_stream_causal_gradient_falsifiers[1702] ___________
+
+seed = 1702
+
+    @pytest.mark.parametrize('seed',[1701,1702,1703])
+    def test_whole_model_stream_causal_gradient_falsifiers(seed):
+        torch.manual_seed(seed);m=ByteLanguage100K().eval()
+        row,_=check_case(m,doc())
+>       assert row['status']=='PASS',row
+E       AssertionError: {'document': 'fixture', 'source_sha256': '2ac6d9e2b50bdd65511fb4dc0f24b7f6a0c1b2e92d1cf6901df565802e380234', 'targets_...: True, 'finite_objective': True, 'independent_objective_and_logit_gradient': False, 'stream_outputs': True, ...}, ...}
+E       assert 'FAIL' == 'PASS'
+E         
+E         - PASS
+E         + FAIL
+
+tests/test_byte100k_001.py:37: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_byte100k_001.py::test_whole_model_stream_causal_gradient_falsifiers[1701]
+FAILED tests/test_byte100k_001.py::test_whole_model_stream_causal_gradient_falsifiers[1702]
+2 failed, 6 passed in 3.02s

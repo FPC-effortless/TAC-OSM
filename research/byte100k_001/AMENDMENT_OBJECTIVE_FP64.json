@@ -1,0 +1,10 @@
+{
+  "status": "PROSPECTIVE_AMENDMENT_BEFORE_REPAIR_OR_REAL_FIT_EXECUTION",
+  "variant_id": "BYTE100K-001",
+  "original_gate": "FAIL2of8 fixturetests; original protocol/result retained",
+  "diagnosis": "Original FP32 mean CE differs from independent FP64 reference by3.331051573e-6/4.492887442e-6 for seeds1701/1702; final-logit derivative error <=2.9e-10. This localizes this fixture mismatch to objective value arithmetic, not new evidence that source memory IEEE/AD is complete.",
+  "change": "New explicit language-only loss computes the identical mean next-byte categorical CE in FP64 from FP32 logits. No target/denominator/objective rescaling/smoothing/weights or model/memory kernel changed. Apply to full and streamed objectives including incoming-state probe.",
+  "fixed_gates": "Retain1e-6 objective/logit derivative gate and3e-5 absolute/relative wholemodel output/state/parametergradient gates. All3seeds/allcases retained. No prior FAIL relabeled PASS.",
+  "scope": "New no-fit precision policy tested on same fixtures before original genuine FIT preflight; no optimizer/training/evaluation-score claims.",
+  "preservation": "initial source/tests/reproduced failure log and measured errors retained. Future live training still blocked on its separate full registration/gates, not on external signer setup."
+}
