@@ -1,0 +1,21 @@
+{
+  "variant": "BYTE100K-001",
+  "status": "PROPOSED_NONCANONICAL_UNTRAINED_PARTIAL_SOURCE_CHECKS",
+  "input": "raw original byte token IDs [B,T] int64 in0..255; actual corpus runner B1, document/role/source identity metadata only, predictions precede labels",
+  "geometry": {"vocabulary":256,"D":48,"FF":96,"R":4,"E":8,"layers":4,"attention_layers":[2,4],"query_heads":4,"kv_heads":2,"window":128,"chunk":32,"exit":4},
+  "learned_parameters": "99050 unique active/deployed; FP32; tied embedding/readout counted once. All80remaining named Parameter tensors participate in final byte loss. No tool/field/accept/risk/horizon heads.",
+  "state": {"per_layer_memory":"fast N,D and slow N,D [B,4,8] FP64","conv":"previous2normalized features [B,2,48] FP32","attention":"layers2/4 K,V [B,2,min(observed,127),12] FP32 and integer observed position","ownership":"same source stream ID, exact next observed input offset, reset at every original document boundary"},
+  "layers": [
+    "e_t=embedding[x_t], [B,T,48]",
+    "For each of4unchanged R2/PreciseRoleStateBlocks: h=RMSNorm(e); local=causal depthwise3conv(previous2h,h); q=W_key h [B,T,8]; p=softmax(q roles^T/sqrt8) [B,T,4]; v=tanh(W_value h) [B,T,8]; g=sigmoid(W_write h+b) [B,T,4]",
+    "rates from inherited bounded log-timescale map, [4,8]; for each fast/slow bank beta=exp(-rate*g), eta=-expm1(-rate*g); S_t=beta*S_previous+eta*(p*v,p); FP64 paired numerator/mass scan inclusive for next-byte prediction",
+    "read_fast/slow=sum_roles p*N/(D+1e-8), normalized/reduced FP64 then cast to FP32; h_read=e+residual_gain*(local+sigmoid(W_gate h)*W_fast read_fast+(1-sigmoid(W_gate h))*W_slow read_slow)",
+    "FF residual: h_read+ff_gain*W_down(SiLU(first_half(W_up RMSNorm(h_read)))*second_half(...))",
+    "After layers2/4: inherited local causal GQA; RMSNorm; q4heads,kv2heads; FP64 nonlearned RoPE angles; window128 prediction-time mask; attention output projection/residual gain; retain preceding127keys/values",
+    "Final RMSNorm; logits=features*embedding.weight^T [B,T,256]; discard parameter-free parent auxiliary views"
+  ],
+  "objective": "Amended explicit FP64 mean categorical next-byte CE on all genuine source labels in each registered prefix; weights/logits FP32. No objective rescaling, smoothing, selection, action/reward/policy objective or optimizer step.",
+  "causality": "source byte t predicts t+1. No future target in token feature or metadata-selected tool catalogue. Observed source order is not wall-clock causality or intervention. Full typed Lean/PyTorch information-flow refinement remains OPEN.",
+  "AD": "Differentiable native scans/projections/FF/attention/tied readout; live state returned without detach. Actual full256 vs128+128 output/state/all80parameter-gradient comparisons and incoming slow-state gradient; integer source offsets and stream identifiers are not differentiable features.",
+  "scope_limits": ["No complete Lean graph/source IEEE/AD proof", "Only fixed aligned128/256partitions and first256inputs of2FITdocuments in3untrained seeds", "No trained capability, long-history retrieval, architecture or speed/energy superiority", "No prior FP32 failure or checkpoint overwritten", "No promotion, TEST or external qualification"]
+}
