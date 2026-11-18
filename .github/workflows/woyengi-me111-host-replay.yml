@@ -1,0 +1,93 @@
+name: Woyengi ME111 frozen-APK host replay (no physical qualification)
+
+on:
+  push:
+    branches:
+      - product/tac-neural-android-local-runtime-20261028
+    paths:
+      - .github/workflows/woyengi-me111-host-replay.yml
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  woyengi-host-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Download the exact ARM64 APK from TAC build run #133
+        uses: actions/download-artifact@v4
+        with:
+          name: tac-me111-android-arm64-phone-small-debug
+          repository: FPC-effortless/TAC-OSM
+          run-id: 44259602001
+          github-token: ${{ github.token }}
+          path: artifacts
+
+      - name: Checkout the reviewed Woyengi host bridge
+        uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/Woyengi
+          ref: a9707c6084428c3c542664d6f97c65ab17cf5f9f
+          path: woyengi
+
+      - name: Set up Node 24.12.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.12.0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned host CPU runtime
+        run: |
+          python -m pip install --disable-pip-version-check 'numpy==2.3.5' 'onnxruntime==1.23.2'
+          node --version
+          python --version
+          python -c 'import numpy, onnxruntime; print("NUMPY="+numpy.__version__); print("ONNXRUNTIME="+onnxruntime.__version__)'
+
+      - name: Verify exact APK bytes and run the Woyengi host quickstart twice
+        working-directory: woyengi
+        env:
+          APK: ${{ github.workspace }}/artifacts/me111-phone-arm64-debug.apk
+        run: |
+          set -euo pipefail
+          mkdir -p ../host-replay-receipts
+          sha256sum "$APK" | tee ../host-replay-receipts/apk.sha256
+          printf '%s  %s\n' '917553ac4c0fc04ee5f4215164cb1844550effcb2d9076c2816d3e53c096da0f' "$APK" | sha256sum -c -
+          PY="$(python -c 'import sys; print(sys.executable)')"
+          node packages/predictive-sdk/examples/me111_host_quickstart.ts "$APK" "$PY" > ../host-replay-receipts/first.json
+          node packages/predictive-sdk/examples/me111_host_quickstart.ts "$APK" "$PY" > ../host-replay-receipts/second.json
+          cmp ../host-replay-receipts/first.json ../host-replay-receipts/second.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt=json.loads(Path('../host-replay-receipts/first.json').read_text(encoding='utf-8'))
+          assert receipt['schema']=='woyengi.me111-host-demonstration.v1'
+          assert receipt['execution']=='HOST_ONNX_CPU'
+          assert receipt['runtime']=='1.23.2'
+          assert receipt['apkSha256']=='917553ac4c0fc04ee5f4215164cb1844550effcb2d9076c2816d3e53c096da0f'
+          assert receipt['modelSha256']=='dd65519a9e4f3388966538af53119b56e9292b46a9209d63ad4927b87f0a176b'
+          assert receipt['checkpointSha256']=='337b882e9a10631dc85700846ef2b15ca8908699499668186ad3a248dc108449'
+          assert receipt['stateReplay']=='PASSED_ACROSS_TWO_LOCAL_RUNTIME_PROCESSES'
+          assert receipt['physicalDeviceQualification']=='NOT_RUN'
+          assert receipt['physicalNetworkTrace']=='NOT_RUN'
+          assert receipt['cases']['unauthorizedSource']=='DENIED'
+          assert receipt['cases']['remoteFallback']=='REJECTED'
+          assert receipt['cases']['canonicalHistoryDuringPrediction']=='UNCHANGED'
+          assert len(receipt['forecasts'])==2
+          print('PASS: Woyengi host replay receipt schema, frozen identities, state replay and adversarial cases')
+          PY
+          bash packages/predictive-sdk/examples/verify_me111_host_replay.sh "$APK" "$PY" | tee ../host-replay-receipts/verify.log
+
+      - name: Preserve constructed host replay receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: woyengi-me111-host-replay-receipts
+          path: host-replay-receipts/
+          if-no-files-found: error
+          retention-days: 14
