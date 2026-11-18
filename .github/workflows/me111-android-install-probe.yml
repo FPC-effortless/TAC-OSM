@@ -1,0 +1,110 @@
+name: TAC Android install-probe APK (tiny, Java only, NO neural model)
+on:
+  push:
+    branches:
+      - product/tac-neural-android-local-runtime-20261028
+    paths:
+      - 'mobile/android/model01/sample-app/installprobe/**'
+      - 'mobile/android/model01/sample-app/settings.gradle'
+      - '.github/workflows/me111-android-install-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tac-install-probe-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  tiny-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Android build tools
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Build minimal independently installable Java-only APK
+        run: |
+          gradle -p mobile/android/model01/sample-app :installprobe:assembleDebug --no-daemon
+          mkdir -p deliverables
+          cp mobile/android/model01/sample-app/installprobe/build/outputs/apk/debug/installprobe-debug.apk deliverables/TAC-Android-Install-Probe-debug.apk
+      - name: Verify probe size, signature, no INTERNET and no native code
+        run: |
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs deliverables/TAC-Android-Install-Probe-debug.apk | tee /tmp/probe-signer.txt
+          grep -q 'Verified using v2 scheme (APK Signature Scheme v2): true' /tmp/probe-signer.txt
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging deliverables/TAC-Android-Install-Probe-debug.apk | tee /tmp/probe-badging.txt
+          grep -q "package: name='org.tacosm.mobile.installprobe'" /tmp/probe-badging.txt
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump permissions deliverables/TAC-Android-Install-Probe-debug.apk | tee /tmp/probe-permissions.txt
+          ! grep -q 'android.permission.INTERNET' /tmp/probe-permissions.txt
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 deliverables/TAC-Android-Install-Probe-debug.apk
+          python - <<'PY'
+          import hashlib,zipfile
+          from pathlib import Path
+          f=Path('deliverables/TAC-Android-Install-Probe-debug.apk')
+          assert f.stat().st_size < 1_000_000, 'diagnostic APK too large; no framework dependency expected'
+          with zipfile.ZipFile(f) as z:
+              assert z.testzip() is None
+              assert all(not n.startswith('lib/') for n in z.namelist())
+              assert 'classes.dex' in z.namelist() and 'AndroidManifest.xml' in z.namelist()
+              assert all(not n.endswith('.onnx') for n in z.namelist())
+          print('PROBE_JAVA_ONLY_NATIVE_LIBRARIES_ZERO=PASS')
+          print('PROBE_APK_BYTES='+str(f.stat().st_size))
+          print('PROBE_APK_SHA256='+hashlib.sha256(f.read_bytes()).hexdigest())
+          print('PROBE_SCIENTIFIC_QUALIFICATION=NOT_APPLICABLE')
+          PY
+      - name: Publish independently signed offline phone install probe
+        uses: actions/upload-artifact@v4
+        with:
+          name: TAC-Android-Install-Probe-java-only-signed
+          path: deliverables/TAC-Android-Install-Probe-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+      - name: Enable emulator hardware acceleration
+        run: |
+          test -c /dev/kvm
+          sudo chmod a+rw /dev/kvm
+      - name: Install and launch Java-only diagnostic on Android 16
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          disable-animations: true
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -memory 1536
+          script: |
+            adb shell getprop ro.build.version.sdk | tee /tmp/probe-android-api.txt
+            grep -q '^36$' /tmp/probe-android-api.txt
+            adb install -r deliverables/TAC-Android-Install-Probe-debug.apk
+            adb shell am start -W -n org.tacosm.mobile.installprobe/.ProbeActivity | tee /tmp/probe-activity-launch.txt
+            grep -q 'Status: ok' /tmp/probe-activity-launch.txt
+            adb shell pm path org.tacosm.mobile.installprobe | tee /tmp/probe-package.txt
+            grep -q 'base.apk' /tmp/probe-package.txt
+            echo 'ANDROID16_EMULATOR_JAVA_ONLY_PROBE_INSTALLED_AND_LAUNCHED=PASS'
+      - name: Preserve Android install-probe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TAC-install-probe-installation-evidence
+          path: |
+            /tmp/probe-signer.txt
+            /tmp/probe-badging.txt
+            /tmp/probe-permissions.txt
+            /tmp/probe-android-api.txt
+            /tmp/probe-activity-launch.txt
+            /tmp/probe-package.txt
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Truthful physical-device gate
+        if: always()
+        run: |
+          echo 'REAL_SAMSUNG_INSTALL_PROBE=NOT_RUN'
+          echo 'REAL_SAMSUNG_NEURAL_APP_INSTALL=PREVIOUSLY_FAILED_UNKNOWN_CAUSE'
+          echo 'ME111_NEURAL_WEIGHTS=UNCHANGED'
+          echo 'ME111_SCIENTIFIC_GATE=FAILED_MIXED_TRADEOFF'

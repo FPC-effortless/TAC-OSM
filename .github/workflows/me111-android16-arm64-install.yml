@@ -1,0 +1,142 @@
+name: ME111 Android 16 APK installation and small ARM64 phone build
+on:
+  push:
+    branches:
+      - product/tac-neural-android-local-runtime-20261028
+    paths:
+      - '.github/workflows/me111-android16-arm64-install.yml'
+      - 'mobile/android/model01/sample-app/app/build.gradle'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me111-android16-arm64-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  android16-installer-and-arm64:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Retrieve exact previously verified offline debug APK
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 40791544647
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: tac-me111-android-local-cpu-unqualified-debug
+          path: original-apk
+      - name: Verify the previously Android 15 emulator tested original APK
+        run: |
+          python - <<'PY'
+          import hashlib,zipfile
+          from pathlib import Path
+          apk=Path('original-apk/app-debug.apk')
+          assert apk.is_file()
+          assert apk.stat().st_size==80446353
+          assert hashlib.sha256(apk.read_bytes()).hexdigest()=='ff751d25dd53af3f1156046391398ff97ec6c680dfa967c847fa371558ba8505'
+          with zipfile.ZipFile(apk) as z:
+              assert z.testzip() is None
+              assert hashlib.sha256(z.read('assets/tac_me111.onnx')).hexdigest()=='dd65519a9e4f3388966538af53119b56e9292b46a9209d63ad4927b87f0a176b'
+              assert hashlib.sha256(z.read('assets/me111-original-fit-first256.csv')).hexdigest()=='1ead29a7ec06e1048cd7a9a6dcd4372afa868261723509a5b78c8dbc7af241dc'
+              assetdir=Path('mobile/android/model01/sample-app/app/src/main/assets')
+              assetdir.mkdir(parents=True,exist_ok=True)
+              for name in ('tac_me111.onnx','me111-original-fit-first256.csv','me111_reference_vectors.json'):
+                  (assetdir/name).write_bytes(z.read('assets/'+name))
+          print('EXACT_EXISTING_APK_AND_FROZEN_SOURCE_CHECKSUMS=PASS')
+          PY
+      - name: Install Android SDK build tools and prove existing APK signing
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35' 'build-tools;35.0.0'
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs original-apk/app-debug.apk | tee /tmp/me111-universal-apksigner.txt
+          grep -q 'Verified using v2 scheme (APK Signature Scheme v2): true' /tmp/me111-universal-apksigner.txt
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging original-apk/app-debug.apk | tee /tmp/me111-universal-badging.txt
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 original-apk/app-debug.apk
+          echo 'ORIGINAL_SIGNED_DEBUG_APK_VERIFIED=PASS'
+      - name: Configure Gradle for offline phone packaging
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Build small source-equivalent ARM64-only phone APK
+        run: |
+          gradle -p mobile/android/model01/sample-app :app:assembleDebug -Pme111Arm64Phone --no-daemon
+          mkdir -p deliverables
+          cp mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk deliverables/TAC-OSM-ME111-Android16-ARM64-offline-debug.apk
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,zipfile
+          original=Path('original-apk/app-debug.apk')
+          phone=Path('deliverables/TAC-OSM-ME111-Android16-ARM64-offline-debug.apk')
+          with zipfile.ZipFile(original) as a,zipfile.ZipFile(phone) as b:
+              x={n for n in a.namelist() if n.startswith('lib/') and n.endswith('.so')}
+              y={n for n in b.namelist() if n.startswith('lib/') and n.endswith('.so')}
+              assert len(x)==8,(len(x),x)
+              assert len(y)==2 and all(n.startswith('lib/arm64-v8a/') for n in y),y
+              for n in y:
+                  assert a.read(n)==b.read(n),'native CPU runtime differs from emulator-verified source'
+              for n in ('assets/tac_me111.onnx','assets/me111-original-fit-first256.csv','assets/me111_reference_vectors.json'):
+                  assert a.read(n)==b.read(n),'frozen original model or research source changed'
+              assert b.testzip() is None
+          assert phone.stat().st_size<30_000_000,phone.stat().st_size
+          print('ARM64_PHONE_APK_BYTES='+str(phone.stat().st_size))
+          print('ARM64_PHONE_APK_SHA256='+hashlib.sha256(phone.read_bytes()).hexdigest())
+          print('SIGNED_ARM64_SAME_FROZEN_SOURCE_AS_EXACT_ANDROID15_VERIFIED_APK=PASS')
+          PY
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs deliverables/TAC-OSM-ME111-Android16-ARM64-offline-debug.apk | tee /tmp/me111-arm64-apksigner.txt
+          grep -q 'Verified using v2 scheme (APK Signature Scheme v2): true' /tmp/me111-arm64-apksigner.txt
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging deliverables/TAC-OSM-ME111-Android16-ARM64-offline-debug.apk | tee /tmp/me111-arm64-badging.txt
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 deliverables/TAC-OSM-ME111-Android16-ARM64-offline-debug.apk
+      - name: Make KVM device available to emulator
+        run: |
+          test -c /dev/kvm
+          sudo chmod a+rw /dev/kvm
+      - name: Validate original signed APK installs and starts on Android 16 API 36
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          disable-animations: true
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -memory 2048
+          script: |
+            adb shell getprop ro.build.version.sdk | tee /tmp/me111-android36-api.txt
+            grep -q '^36$' /tmp/me111-android36-api.txt
+            adb install -r original-apk/app-debug.apk
+            adb shell pm path org.tacosm.mobile.model01.demo | tee /tmp/me111-android36-package.txt
+            grep -q 'base.apk' /tmp/me111-android36-package.txt
+            adb shell monkey -p org.tacosm.mobile.model01.demo -c android.intent.category.LAUNCHER 1
+            echo 'ORIGINAL_FULL_APK_INSTALLS_AND_LAUNCHES_ON_ANDROID16_EMULATOR=PASS_NOT_PHYSICAL'
+      - name: Publish small ARM64 APK for phone installation
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TAC-OSM-ME111-arm64-Android16-debug-signed
+          path: deliverables/TAC-OSM-ME111-Android16-ARM64-offline-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve signing and Android16 installer evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me111-android16-apk-compatibility-evidence
+          path: |
+            /tmp/me111-universal-apksigner.txt
+            /tmp/me111-arm64-apksigner.txt
+            /tmp/me111-universal-badging.txt
+            /tmp/me111-arm64-badging.txt
+            /tmp/me111-android36-api.txt
+            /tmp/me111-android36-package.txt
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Do not mistake emulator installation for phone qualification
+        if: always()
+        run: |
+          echo 'ANDROID16_REAL_SAMSUNG_INSTALL=NOT_RUN'
+          echo 'PHYSICAL_ON_DEVICE_BENCHMARK=NOT_RUN'
+          echo 'ME111_INDEPENDENT_SCIENTIFIC_GATE=FAILED_MIXED_TRADEOFF'
+          echo 'TRAINING_AND_WEIGHTS=UNCHANGED'
