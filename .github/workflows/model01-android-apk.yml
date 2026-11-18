@@ -224,7 +224,14 @@ jobs:
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -memory 2048
           script: |
             adb shell getprop ro.build.version.sdk | tee /tmp/me111-android36-api.txt
-            grep -q '^36        uses: actions/upload-artifact@v4
+            grep -q '^36$' /tmp/me111-android36-api.txt
+            adb install -r /tmp/me111-verified-universal-debug.apk
+            adb shell pm path org.tacosm.mobile.model01.demo | tee /tmp/me111-android36-package.txt
+            grep -q 'base.apk' /tmp/me111-android36-package.txt
+            adb shell monkey -p org.tacosm.mobile.model01.demo -c android.intent.category.LAUNCHER 1
+            echo 'ME111_ANDROID16_API36_PACKAGE_INSTALL_AND_LAUNCH=PASS_EMULATOR_NOT_SAMSUNG_PHONE'
+      - name: Preserve Android instrumentation and emulator diagnostic evidence
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: me111-android-emulator-jni-test-evidence
@@ -283,34 +290,6 @@ jobs:
             /tmp/me111-android36-package.txt
             /tmp/me111-phone-arm64-signature.txt
             /tmp/me111-phone-arm64-badging.txt
-          if-no-files-found: warn
-          retention-days: 14
-      - name: Truthful hardware/science gate
-        if: always()
-        run: |
-          echo 'PHYSICAL_ANDROID=NOT_RUN'
-          echo 'ANDROID_REAL_DEVICE_ONNX_EXECUTION=NOT_RUN'
-          echo 'ANDROID_EMULATOR_JNI=CHECK_STEP_CONCLUSION_NOT_PHYSICAL'
-          echo 'AIRPLANE_MODE=NOT_RUN'
-          echo 'P50_P95_RAM_ENERGY=NOT_RUN'
-          echo 'RESTART_ON_PHONE=NOT_RUN'
-          echo 'ME111_INDEPENDENT_SCIENTIFIC_GATE=FAIL_MIXED_TRADEOFF'
- /tmp/me111-android36-api.txt
-            adb install -r /tmp/me111-verified-universal-debug.apk
-            adb shell pm path org.tacosm.mobile.model01.demo | tee /tmp/me111-android36-package.txt
-            grep -q 'base.apk' /tmp/me111-android36-package.txt
-            adb shell monkey -p org.tacosm.mobile.model01.demo -c android.intent.category.LAUNCHER 1
-            echo 'ME111_ANDROID16_API36_PACKAGE_INSTALL_AND_LAUNCH=PASS_EMULATOR_NOT_SAMSUNG_PHONE'
-      - name: Preserve Android instrumentation and emulator diagnostic evidence
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: me111-android-emulator-jni-test-evidence
-          path: |
-            mobile/android/model01/sample-app/app/build/outputs/androidTest-results/connected/**
-            mobile/android/model01/sample-app/app/build/reports/androidTests/connected/**
-            /tmp/me111-process-seed.txt
-            /tmp/me111-process-restore.txt
           if-no-files-found: warn
           retention-days: 14
       - name: Truthful hardware/science gate
