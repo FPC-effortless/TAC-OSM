@@ -63,12 +63,22 @@ class ByteGRU(nn.Module):
         return self.readout(features), state
 
 
-def make(name):
-    torch.manual_seed(SEED)
+def selected_native_byte():
+    """10,103,943 learned parameters. Tied byte matrix initialized at inverse width."""
+    model = NativeByte(1, 896, 128, 2304)
+    with torch.no_grad():
+        model.core.embedding.weight.mul_(1 / model.core.config.width)
+    return model
+
+
+def make(name, seed=SEED):
+    torch.manual_seed(seed)
     if name == 'nanochat':
         model = GPT(GPTConfig(sequence_len=512, vocab_size=256, n_layer=4,
                               n_head=8, n_kv_head=8, n_embd=448))
         model.init_weights()
+    elif name == 'tac_selected':
+        model = selected_native_byte()
     elif name == 'gru':
         model = ByteGRU()
     else:
