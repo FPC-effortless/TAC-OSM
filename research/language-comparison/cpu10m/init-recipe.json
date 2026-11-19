@@ -1,0 +1,35 @@
+{
+  "schema": "trainlab.experiment.v1",
+  "execution_purpose": "engineering_diagnostic",
+  "name": "Tied byte embedding initialization screen",
+  "description": "Three paired initialization seeds and three matrix scales on six source-pinned FIT excerpts.",
+  "command": [
+    "python",
+    "initialization.py"
+  ],
+  "seed": 1901,
+  "timeout_seconds": 600,
+  "source_kind": "AUTHENTIC_CANDIDATE",
+  "split_identity": "LANGUAGE-SOURCE023-six-FIT-excerpts",
+  "inputs": [
+    "benchmark.py",
+    "PROTOCOL.md",
+    "source-hashes.json",
+    "FOLLOWUP.md",
+    "followup.py",
+    "INITIALIZATION.md",
+    "initialization.py"
+  ],
+  "artifacts": [
+    "initialization.json"
+  ],
+  "metrics": {
+    "unit_passing_cases": "max",
+    "inverse_sqrt_width_passing_cases": "max",
+    "inverse_width_passing_cases": "max"
+  },
+  "budget": {
+    "optimizer_updates": 0,
+    "cases": 54
+  }
+}
