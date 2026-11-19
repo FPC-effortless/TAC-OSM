@@ -1,0 +1,37 @@
+{
+  "schema": "trainlab.experiment.v1",
+  "execution_purpose": "engineering_diagnostic",
+  "name": "tac_selected 10M WikiText-103 FIT pilot",
+  "description": "Owner-authorized 64-update exploratory fit before independent signoff. Checkpoints stay local.",
+  "command": [
+    "python",
+    "pilot.py",
+    "tac_selected"
+  ],
+  "seed": 10301,
+  "timeout_seconds": 900,
+  "source_kind": "AUTHENTIC_CANDIDATE",
+  "split_identity": "WikiText-103-raw-FIT-order-10301-prefix512",
+  "inputs": [
+    "pilot.py",
+    "prepare_pilot.py",
+    "owner.json",
+    "INPUT.json",
+    "pins.json",
+    "PROTOCOL.md"
+  ],
+  "artifacts": [
+    "checkpoint.pt",
+    "curve.json"
+  ],
+  "metrics": {
+    "initial_fit_bpb": "min",
+    "final_fit_bpb": "min",
+    "first8_fit_nats": "min",
+    "last8_fit_nats": "min"
+  },
+  "budget": {
+    "optimizer_updates": 64,
+    "training_bytes": 131072
+  }
+}
