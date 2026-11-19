@@ -8,7 +8,6 @@ import platform
 import random
 import statistics
 import sys
-from dataclasses import replace
 from pathlib import Path
 from time import perf_counter_ns
 
@@ -17,9 +16,7 @@ from torch import nn
 from nanochat.common import COMPUTE_DTYPE
 from nanochat.engine import KVCache
 from nanochat.gpt import GPT, GPTConfig
-from tac_osm.byte100k_001 import byte100k_config
-from tac_osm.csl125_memory_precision import enable_precise_memory_
-from tac_osm.csl125_r2 import CSL125R2
+from model import NativeByte, selected_native_byte
 
 HERE = Path(__file__).resolve().parent
 SEED = 1901
@@ -34,23 +31,6 @@ def verify_sources():
             raise ValueError(f'Source pin differs for {module}')
 
 
-class NativeByte(nn.Module):
-    def __init__(self, depth, width, state_width, ff):
-        super().__init__()
-        cfg = replace(byte100k_config(), layers=depth, rungs=(depth,), width=width,
-                      state_width=state_width, ff_width=ff, query_heads=8, kv_heads=4,
-                      attention_layers=(1,) if depth == 1 else tuple(range(2, depth + 1, 2)), max_parameters=10_500_000)
-        self.core = CSL125R2(cfg)
-        self.core.tool_head = nn.Identity()
-        self.core.field_head = nn.Identity()
-        self.core.accept_head = nn.Identity()
-        enable_precise_memory_(self.core)
-
-    def forward(self, ids, state=None):
-        outputs, state = self.core(ids, state=state, stream_ids=('request',))
-        return outputs[self.core.config.layers]['token_logits'], state
-
-
 class ByteGRU(nn.Module):
     def __init__(self):
         super().__init__()
@@ -61,14 +41,6 @@ class ByteGRU(nn.Module):
     def forward(self, ids, state=None):
         features, state = self.recurrent(self.embed(ids), state)
         return self.readout(features), state
-
-
-def selected_native_byte():
-    """10,103,943 learned parameters. Tied byte matrix initialized at inverse width."""
-    model = NativeByte(1, 896, 128, 2304)
-    with torch.no_grad():
-        model.core.embedding.weight.mul_(1 / model.core.config.width)
-    return model
 
 
 def make(name, seed=SEED):

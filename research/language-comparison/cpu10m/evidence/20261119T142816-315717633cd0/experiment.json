@@ -1,0 +1,36 @@
+{
+  "artifacts": [
+    "timings.json"
+  ],
+  "budget": {
+    "optimizer_updates": 0,
+    "timed_requests": 144
+  },
+  "command": [
+    "python",
+    "confirm.py"
+  ],
+  "description": "Fresh interleaved cost measurement for the initialization-screened candidate and both controls.",
+  "execution_purpose": "engineering_diagnostic",
+  "inputs": [
+    "benchmark.py",
+    "PROTOCOL.md",
+    "source-hashes.json",
+    "CONFIRM.md",
+    "confirm.py"
+  ],
+  "metrics": {
+    "gru_256_ms": "min",
+    "gru_32_ms": "min",
+    "nanochat_256_ms": "min",
+    "nanochat_32_ms": "min",
+    "tac_selected_256_ms": "min",
+    "tac_selected_32_ms": "min"
+  },
+  "name": "Selected native 10M CPU cost confirmation",
+  "schema": "trainlab.experiment.v1",
+  "seed": 1901,
+  "source_kind": "CONSTRUCTED",
+  "split_identity": "protocol-prefix-byte-fixtures",
+  "timeout_seconds": 600
+}

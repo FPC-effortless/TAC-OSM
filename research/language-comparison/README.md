@@ -22,3 +22,7 @@ Before starting, pin the dataset, rights, splits, tokenizer, source commits and 
 ## Check a completed report
 
 Run python assess.py measurements.json. It takes heldout_bits_per_byte as a list of rows with an integer seed and a scores object, and inference_profiles as a list of rows with a unique id and a median_end_to_end_ms object. In both score objects use keys tac_osm, nanochat, gru and mamba3. The checker verifies the arithmetic only. Preserve the full receipts and independently verify matched inputs, run conditions, complete profiles, checkpoint replay, and reported measurements before making a claim.
+
+## Executed native-model research
+
+The first larger prototype, original measurements, initialization diagnosis and fresh confirmation are available in the [10M CPU study](cpu10m). The [WikiText-103 FIT schedule](wikitext103) prepares 33.55 million distinct next-byte targets per seed. The four-way quality and deployment-cost target above remains open.
