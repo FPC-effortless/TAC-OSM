@@ -1,0 +1,159 @@
+name: TAC Unified 005A1 Veritas diagnostic
+on:
+  push:
+    branches: [research/tac-unified-005a1-generations-20261119]
+    paths:
+      - 'research/tac-unified/005a1/**'
+      - '.github/workflows/tac-unified-005a1-veritas.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    if: github.ref == 'refs/heads/research/tac-unified-005a1-generations-20261119'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            src
+            research/phone_queue
+            research/tac-unified
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: eec439492407b0aa26922c23b5ae40d95289f4eb
+          path: _veritas
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          ref: a7ec101ee67fce09aaf42b5c8e880586f77be0e9
+          path: _native
+          persist-credentials: false
+          sparse-checkout: |
+            src
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          ref: db0804f444b4125451a3b0d25ee081903c53fe36
+          path: _wrapper
+          persist-credentials: false
+          sparse-checkout: |
+            research/language-comparison/cpu10m
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Frozen compute decision, inputs and environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/evidence"
+          E="${RUNNER_TEMP}/evidence"
+          python scripts/phone_lab.py plan research/phone_queue/tac-unified-005a1.json > "$E/compute-plan.json"
+          python -c 'import json,sys; x=json.load(open(sys.argv[1])); assert x["backend"]=="github_actions" and x["state"]=="READY_NO_FIT" and x["approved_to_train"] is False' "$E/compute-plan.json"
+          git -C _veritas rev-parse HEAD > "$E/veritas-commit.txt"
+          test "$(cat "$E/veritas-commit.txt")" = eec439492407b0aa26922c23b5ae40d95289f4eb
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip freeze > "$E/environment.txt"
+          git rev-parse HEAD > "$E/tac-commit.txt"
+          test "$(git hash-object research/tac-unified/004/pilot.py)" = 43934ed5376852ec8dca330356ce72ee48a0a83b
+          cp research/tac-unified/004/pilot.py research/tac-unified/005a1/prior004.py
+          test "$(git hash-object research/tac-unified/005a/pilot.py)" = c2e8d488603ef0b8892a74dc60ac95d29b3833b2
+          cp research/tac-unified/005a/pilot.py research/tac-unified/005a1/prior005a.py
+          test "$(git -C _native rev-parse HEAD)" = a7ec101ee67fce09aaf42b5c8e880586f77be0e9
+          test "$(git -C _wrapper rev-parse HEAD)" = db0804f444b4125451a3b0d25ee081903c53fe36
+          cp _wrapper/research/language-comparison/cpu10m/model.py research/tac-unified/005a1/native_model.py
+          cp _wrapper/research/language-comparison/cpu10m/source-hashes.json research/tac-unified/005a1/source-hashes.json
+          echo 'd3e1f4c4601ef08e19c41d71c283745e274b4cf436974c338cf546f51d51ecad  research/tac-unified/005a1/native_model.py' | sha256sum -c -
+          echo 'e1ab2af7081cb9064d32750ce4f4e16a014005b5ba7c4081d298397bf99c8909  research/tac-unified/005a1/source-hashes.json' | sha256sum -c -
+          cp research/tac-unified/archive/TAC_UNIFIED_003AB.zip research/tac-unified/005a1/
+          cd research/tac-unified/005a1
+          echo '34866019d1e0dd9293f82dcea61ce904cc88ce9168bf377fd79443d8d46cf73a  TAC_UNIFIED_003AB.zip' | sha256sum -c - | tee "$E/archive-check.txt"
+          sha256sum pilot.py prior004.py prior005a.py native_model.py source-hashes.json PROTOCOL.md recipe-*.json TAC_UNIFIED_003AB.zip > "$E/input-sha256.txt"
+          python -m py_compile pilot.py prior004.py prior005a.py native_model.py
+      - name: Actual TrainLab runs and Research Lab evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          E="${RUNNER_TEMP}/evidence"
+          export PYTHONPATH="$GITHUB_WORKSPACE/_native/src:$GITHUB_WORKSPACE/_veritas/integrations/trainlab/src:$GITHUB_WORKSPACE/_veritas/integrations/research_lab/src"
+          python -m research_lab --root "$E/lab" init --program tac-unified-005a1 --objective 'Owned generation leases and set-valued outcome supervision; constructed no-fit' --seconds 1500 --microusd 0 --cpu-slots 1 > "$E/lab-init.json"
+          cd research/tac-unified/005a1
+          failed=0
+          for seed in 201 202 203; do
+            mkdir -p "$E/runs-$seed"
+            python -m trainlab run "recipe-$seed.json" --runs "$E/runs-$seed" > "$E/trainlab-$seed.json" 2> "$E/trainlab-$seed.stderr" || failed=1
+            for run in "$E/runs-$seed"/*; do
+              if [ ! -d "$run" ]; then failed=1; continue; fi
+              name="$(basename "$run")"
+              python -m trainlab verify "$run" > "$E/$name-verify.json" 2> "$E/$name-verify.stderr" || { failed=1; continue; }
+              python -m research_lab --root "$E/lab" import-trainlab "$run" > "$E/$name-import.json" 2> "$E/$name-import.stderr" || failed=1
+            done
+          done
+          python -m research_lab --root "$E/lab" memory > "$E/research-memory.json"
+          python -m research_lab --root "$E/lab" status > "$E/lab-status.json"
+          python - <<'PY'
+          import json, os, pathlib
+          e=pathlib.Path(os.environ['RUNNER_TEMP'])/'evidence'
+          summary=[]
+          for seed in range(201,204):
+              for f in (e/f'runs-{seed}').glob('*/output/results.json'):
+                  x=json.loads(f.read_text())
+                  summary.append(x)
+          (e/'summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(summary,indent=2))
+          if len(summary)!=3: raise SystemExit('missing results')
+          PY
+          exit "$failed"
+      - name: Archive receipts and all failure logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-unified-005a1-veritas-evidence
+          path: ${{ runner.temp }}/evidence
+          if-no-files-found: error
+          retention-days: 90
+  preserve:
+    if: always() && github.ref == 'refs/heads/research/tac-unified-005a1-generations-20261119'
+    needs: diagnostic
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/tac-unified-005a1-generations-20261119
+          fetch-depth: 1
+          sparse-checkout: |
+            research/tac-unified
+      - uses: actions/download-artifact@v4
+        with:
+          name: tac-unified-005a1-veritas-evidence
+          path: ${{ runner.temp }}/evidence
+      - name: Commit immutable evidence only on research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          dest="research/tac-unified/evidence/005a1/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test ! -e "$dest"
+          mkdir -p "$dest"
+          cp -a "$RUNNER_TEMP/evidence/." "$dest/"
+          cd "$dest"
+          find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
+          cd "$GITHUB_WORKSPACE"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$dest"
+          git commit -m "Preserve TAC-UNIFIED-005A1 Veritas evidence $GITHUB_RUN_ID"
+          git push origin HEAD:refs/heads/research/tac-unified-005a1-generations-20261119
