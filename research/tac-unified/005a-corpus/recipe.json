@@ -1,0 +1,35 @@
+{
+  "schema": "trainlab.experiment.v1",
+  "execution_purpose": "engineering_diagnostic",
+  "name": "005A-CORPUS-001 original Mind2Web train shard eligibility",
+  "description": "Source-only authentic candidate audit; no model or protected assessment",
+  "command": [
+    "python",
+    "audit.py"
+  ],
+  "seed": 201,
+  "timeout_seconds": 180,
+  "source_kind": "AUTHENTIC_CANDIDATE",
+  "split_identity": "publisher-train-only-6314166-shard10-audit-not-frozen",
+  "inputs": [
+    "audit.py",
+    "PROTOCOL.md",
+    "SOURCE_PINS.json",
+    "train_10.json"
+  ],
+  "artifacts": [
+    "results.json"
+  ],
+  "metrics": {
+    "episodes": "max",
+    "actions": "max",
+    "distinct_sites": "max",
+    "duplicate_ids": "min"
+  },
+  "budget": {
+    "updates": 0,
+    "gpu_minutes": 0,
+    "tuning_trials": 0,
+    "source_shards": 1
+  }
+}
