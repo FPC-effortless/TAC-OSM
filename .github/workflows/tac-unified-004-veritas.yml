@@ -1,0 +1,125 @@
+name: TAC Unified 004 Veritas diagnostic
+on:
+  push:
+    branches: [research/tac-unified-archive-004-20261119]
+    paths:
+      - 'research/tac-unified/004/**'
+      - '.github/workflows/tac-unified-004-veritas.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    if: github.ref == 'refs/heads/research/tac-unified-archive-004-20261119'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: eec439492407b0aa26922c23b5ae40d95289f4eb
+          path: _veritas
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Frozen compute decision, inputs and environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/evidence"
+          E="${RUNNER_TEMP}/evidence"
+          python scripts/phone_lab.py plan research/phone_queue/tac-unified-004ab.json > "$E/compute-plan.json"
+          python -c 'import json,sys; x=json.load(open(sys.argv[1])); assert x["backend"]=="github_actions" and x["state"]=="READY_NO_FIT" and x["approved_to_train"] is False' "$E/compute-plan.json"
+          cd _veritas
+          git rev-parse HEAD > "$E/veritas-commit.txt"
+          test "$(cat "$E/veritas-commit.txt")" = eec439492407b0aa26922c23b5ae40d95289f4eb
+          cd ..
+          python -m pip install numpy==2.3.5
+          python -m pip freeze > "$E/environment.txt"
+          git rev-parse HEAD > "$E/tac-commit.txt"
+          cp research/tac-unified/archive/TAC_UNIFIED_003AB.zip research/tac-unified/004/
+          cd research/tac-unified/004
+          echo '34866019d1e0dd9293f82dcea61ce904cc88ce9168bf377fd79443d8d46cf73a  TAC_UNIFIED_003AB.zip' | sha256sum -c - | tee "$E/archive-check.txt"
+          sha256sum pilot.py PROTOCOL.md recipe-*.json TAC_UNIFIED_003AB.zip > "$E/input-sha256.txt"
+      - name: Actual TrainLab runs and Research Lab evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          E="${RUNNER_TEMP}/evidence"
+          export PYTHONPATH="$GITHUB_WORKSPACE/_veritas/integrations/trainlab/src:$GITHUB_WORKSPACE/_veritas/integrations/research_lab/src"
+          python -m research_lab --root "$E/lab" init --program tac-unified-004ab --objective 'Adaptive cue failure and coupled dependency diagnostics; constructed no-fit' --seconds 1200 --microusd 0 --cpu-slots 1 > "$E/lab-init.json"
+          cd research/tac-unified/004
+          failed=0
+          for seed in 201 202 203 204 205; do
+            mkdir -p "$E/runs-$seed"
+            python -m trainlab run "recipe-$seed.json" --runs "$E/runs-$seed" > "$E/trainlab-$seed.json" 2> "$E/trainlab-$seed.stderr" || failed=1
+            for run in "$E/runs-$seed"/*; do
+              if [ ! -d "$run" ]; then continue; fi
+              name="$(basename "$run")"
+              python -m trainlab verify "$run" > "$E/$name-verify.json" 2> "$E/$name-verify.stderr" || { failed=1; continue; }
+              python -m research_lab --root "$E/lab" import-trainlab "$run" > "$E/$name-import.json" 2> "$E/$name-import.stderr" || failed=1
+            done
+          done
+          python -m research_lab --root "$E/lab" memory > "$E/research-memory.json"
+          python -m research_lab --root "$E/lab" status > "$E/lab-status.json"
+          python - <<'PY'
+          import json, os, pathlib
+          e=pathlib.Path(os.environ['RUNNER_TEMP'])/'evidence'
+          summary=[]
+          for seed in range(201,206):
+              files=list((e/f'runs-{seed}').glob('*/output/results.json'))
+              for f in files:
+                  x=json.loads(f.read_text())
+                  summary.append(dict(seed=x['seed'],gates=x['gates'],a={r:{a:{k:v for k,v in r0.items() if k!='groups'} for a,r0 in x0.items()} for r,x0 in x['a'].items()},b={k:v for k,v in x['b'].items() if k!='arms'},b_arms={a:{'correct':x0['correct'],'planned':x0['planned']} for a,x0 in x['b']['arms'].items()}))
+          (e/'summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(summary,indent=2))
+          PY
+          exit "$failed"
+      - name: Archive receipts and all failure logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-unified-004-veritas-evidence
+          path: ${{ runner.temp }}/evidence
+          if-no-files-found: error
+          retention-days: 90
+  preserve:
+    if: always() && github.ref == 'refs/heads/research/tac-unified-archive-004-20261119'
+    needs: diagnostic
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/tac-unified-archive-004-20261119
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: tac-unified-004-veritas-evidence
+          path: ${{ runner.temp }}/evidence
+      - name: Commit immutable evidence only on research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          dest="research/tac-unified/evidence/004/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test ! -e "$dest"
+          mkdir -p "$dest"
+          cp -a "$RUNNER_TEMP/evidence/." "$dest/"
+          cd "$dest"
+          find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
+          cd "$GITHUB_WORKSPACE"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$dest"
+          git commit -m "Preserve TAC-UNIFIED-004 Veritas evidence $GITHUB_RUN_ID"
+          git push origin HEAD:refs/heads/research/tac-unified-archive-004-20261119

@@ -1,0 +1,39 @@
+{
+  "artifacts": [
+    "results.json"
+  ],
+  "budget": {
+    "chain_actions": 1024,
+    "chains_per_regime": 128,
+    "goal_cases": 64,
+    "gpu_minutes": 0,
+    "tuning_trials": 0,
+    "updates": 0
+  },
+  "command": [
+    "python",
+    "pilot.py"
+  ],
+  "description": "Constructed no-fit diagnostic: adaptive observations and coupled-cluster planning using the frozen 003 archive.",
+  "execution_purpose": "engineering_diagnostic",
+  "inputs": [
+    "pilot.py",
+    "PROTOCOL.md",
+    "TAC_UNIFIED_003AB.zip"
+  ],
+  "metrics": {
+    "adaptive_exact8_accuracy": "max",
+    "adaptive_exact8_reads": "min",
+    "adaptive_variable_accuracy": "max",
+    "adaptive_variable_reads": "min",
+    "edge_errors": "min",
+    "joint_goal_accuracy": "max",
+    "passed_gates": "max"
+  },
+  "name": "TAC-UNIFIED-004AB seed 201",
+  "schema": "trainlab.experiment.v1",
+  "seed": 201,
+  "source_kind": "CONSTRUCTED",
+  "split_identity": "tac-unified-004ab-frozen-201-205-diagnostic-seed-201",
+  "timeout_seconds": 300
+}
