@@ -1,0 +1,40 @@
+{
+  "schema": "trainlab.experiment.v1",
+  "execution_purpose": "engineering_diagnostic",
+  "name": "TAC-UNIFIED-004F seed 204",
+  "description": "Budgeted curiosity and hidden-target structural revision in constructed worlds.",
+  "command": [
+    "python",
+    "pilot_f.py"
+  ],
+  "seed": 204,
+  "timeout_seconds": 300,
+  "source_kind": "CONSTRUCTED",
+  "split_identity": "tac-unified-004f-frozen-204",
+  "inputs": [
+    "pilot_f.py",
+    "PROTOCOL.md",
+    "prior004.py",
+    "prior004cd.py",
+    "prior004e.py",
+    "TAC_UNIFIED_003AB.zip"
+  ],
+  "artifacts": [
+    "results.json"
+  ],
+  "metrics": {
+    "passed_gates": "max",
+    "passive_detected": "max",
+    "quarter_detected": "max",
+    "full_detected": "max",
+    "quarter_active": "min"
+  },
+  "budget": {
+    "updates": 0,
+    "gpu_minutes": 0,
+    "tuning_trials": 0,
+    "worlds": 32,
+    "clean_worlds": 4,
+    "snapshot_cap": 4096
+  }
+}
