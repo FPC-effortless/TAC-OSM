@@ -1,0 +1,39 @@
+{
+  "artifacts": [
+    "timings.json",
+    "gradients.json"
+  ],
+  "budget": {
+    "optimizer_updates": 0,
+    "timed_requests": 192
+  },
+  "command": [
+    "python",
+    "followup.py"
+  ],
+  "description": "Second prospectively frozen CPU cost screen plus two authentic source prefixes for gradient engineering checks.",
+  "execution_purpose": "engineering_diagnostic",
+  "inputs": [
+    "benchmark.py",
+    "PROTOCOL.md",
+    "source-hashes.json",
+    "FOLLOWUP.md",
+    "followup.py"
+  ],
+  "metrics": {
+    "gru_256_ms": "min",
+    "gru_32_ms": "min",
+    "nanochat_256_ms": "min",
+    "nanochat_32_ms": "min",
+    "tac_one_512_256_ms": "min",
+    "tac_one_512_32_ms": "min",
+    "tac_one_896_256_ms": "min",
+    "tac_one_896_32_ms": "min"
+  },
+  "name": "One-layer native CSL CPU timing and initial gradients",
+  "schema": "trainlab.experiment.v1",
+  "seed": 1901,
+  "source_kind": "CONSTRUCTED",
+  "split_identity": "protocol-prefix-byte-fixtures",
+  "timeout_seconds": 600
+}

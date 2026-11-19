@@ -1,0 +1,7 @@
+# Tied byte embedding initialization
+
+The preceding FIT diagnostics found 256 current-byte copies across 256 predictions per native configuration, with 77 true repeats. PyTorch initializes the shared embedding at unit scale. A normalized residual enters the same matrix transposed for prediction, so the same byte can receive a very large self-dot-product. Test this numerical explanation without changing execution cost, parameter count, graph, objective or data.
+
+Freeze the one-layer width-896 configuration. For each of seeds 1901, 1902 and 1903 recreate exactly the same initial weights in each arm. Scale only the tied byte matrix once by one of 1, 1/sqrt(896) and 1/896. Use all three factors on each seed. Check the first 128 targets of unicode.rst and appendix.rst plus 128 targets after byte offset 512 of the FIT tutorial documents appetite, classes, datastructures and errors. Use the same pinned source bundle as the previous run. The four additional excerpts were selected by FIT source order. Reinitialize state every document. Save per-case next-byte loss, current-byte copies, true repeats, count of missing, nonfinite or all-zero parameter gradients and total gradient norm before any optimization.
+
+A configuration clears this diagnostic if every case has finite nonzero gradients for each named tensor, initial cross-entropy at most ln(256)+0.5 nats/byte, and current-byte copying below 75%. These thresholds measure excessive confidence at initialization. They establish neither convergence nor held-out performance. Publish every arm and seed.

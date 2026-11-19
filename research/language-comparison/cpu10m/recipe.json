@@ -1,0 +1,37 @@
+{
+  "schema": "trainlab.experiment.v1",
+  "execution_purpose": "engineering_diagnostic",
+  "name": "Native byte model 10M CPU inference screen",
+  "description": "Matched live sizes, initialized weights and byte prompts from the preregistration. Measures runtime only.",
+  "command": [
+    "python",
+    "benchmark.py"
+  ],
+  "seed": 1901,
+  "timeout_seconds": 600,
+  "source_kind": "CONSTRUCTED",
+  "split_identity": "protocol-prefix-byte-fixtures",
+  "inputs": [
+    "benchmark.py",
+    "PROTOCOL.md",
+    "source-hashes.json",
+    "model.py"
+  ],
+  "artifacts": [
+    "timings.json"
+  ],
+  "metrics": {
+    "tac_four_32_ms": "min",
+    "tac_two_32_ms": "min",
+    "nanochat_32_ms": "min",
+    "gru_32_ms": "min",
+    "tac_four_256_ms": "min",
+    "tac_two_256_ms": "min",
+    "nanochat_256_ms": "min",
+    "gru_256_ms": "min"
+  },
+  "budget": {
+    "optimizer_updates": 0,
+    "timed_requests": 192
+  }
+}

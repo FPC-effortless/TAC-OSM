@@ -1,0 +1,74 @@
+{
+  "artifacts": {
+    "timings.json": "fc382874d9de0b7b958af10a599c1c3635c985cfc925a761695a99813dc2ecdd"
+  },
+  "budget": {
+    "optimizer_updates": 0,
+    "timed_requests": 192
+  },
+  "claim_eligibility": "NOT_ESTABLISHED",
+  "command": [
+    "python",
+    "benchmark.py"
+  ],
+  "description": "Matched live sizes, initialized weights and byte prompts from the preregistration. Measures runtime only.",
+  "elapsed_seconds": 51.848015,
+  "error": null,
+  "evidence_capture": "UNASSESSED",
+  "execution_limits": {
+    "log_bytes_per_stream": 16777216
+  },
+  "execution_purpose": "engineering_diagnostic",
+  "exit_code": 0,
+  "files": {
+    "experiment.json": "b0472bbd52860153d97cada7359c0afcc99ded773c65d9908eae158926d637b0",
+    "output/metrics.json": "e5d20d59bffdec5af2b186f12b9d89a068ca0d7bf689324a105a80f74e43286c",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "finished_at": "2026-11-19T14:22:52.266249+00:00",
+  "git": {
+    "commit": "21ec5c6bea09a2c73799bb63f92d91d1e1d8f790",
+    "dirty": false
+  },
+  "id": "20261119T142200-55b8a2e2e7c1",
+  "inputs": {
+    "PROTOCOL.md": "d31dd2b6e1c3fc1f2f677dca91282815408de02c937863376bfeb9d4ba2716e9",
+    "benchmark.py": "f49ed6eb931ace6b5510c5c30fd88ba2b732ec8228d2ac583da43e52ba5683cb",
+    "source-hashes.json": "e1ab2af7081cb9064d32750ce4f4e16a014005b5ba7c4081d298397bf99c8909"
+  },
+  "metric_directions": {
+    "gru_256_ms": "min",
+    "gru_32_ms": "min",
+    "nanochat_256_ms": "min",
+    "nanochat_32_ms": "min",
+    "tac_four_256_ms": "min",
+    "tac_four_32_ms": "min",
+    "tac_two_256_ms": "min",
+    "tac_two_32_ms": "min"
+  },
+  "metrics": {
+    "gru_256_ms": 370.6678235,
+    "gru_32_ms": 90.69575900000001,
+    "nanochat_256_ms": 172.297012,
+    "nanochat_32_ms": 101.482057,
+    "tac_four_256_ms": 298.7711655,
+    "tac_four_32_ms": 184.9438815,
+    "tac_two_256_ms": 218.797978,
+    "tac_two_32_ms": 127.17819499999999
+  },
+  "name": "Native byte model 10M CPU inference screen",
+  "qualification": "NOT_QUALIFIED",
+  "research_adequacy": "UNASSESSED",
+  "runtime": {
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "python": "3.12.14"
+  },
+  "schema": "trainlab.run.v1",
+  "seed": 1901,
+  "source_kind": "CONSTRUCTED",
+  "source_rights": "NOT_INDEPENDENTLY_VERIFIED",
+  "split_identity": "protocol-prefix-byte-fixtures",
+  "started_at": "2026-11-19T14:22:00.400486+00:00",
+  "status": "succeeded"
+}
