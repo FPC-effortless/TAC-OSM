@@ -32,19 +32,20 @@ def repair(world,model,s,b,a,actual):
     p=model.ins[b];active=[i for i in range(B) if i not in (p,b) and s[i]&1]
     base=s.copy();base[active]&=~1
     probes=0
+    anchor_residual=actual ^ model.step(s,b,a)
     def run(sub):
         nonlocal probes
         x=base.copy();x[sub]|=1; probes+=1
-        return world.step(x,b,a)
-    if not active or not np.array_equal(run([]),model.step(base,b,a)):
+        return world.step(x,b,a) ^ model.step(x,b,a)
+    if not active or np.any(run([])):
         return None,probes,'baseline inconsistent'
     # keep a half of active bits; if neither reproduces effect, reject interaction
     while len(active)>1:
         half=len(active)//2; left,right=active[:half],active[half:]
-        if np.array_equal(run(left),actual):active=left
-        elif np.array_equal(run(right),actual):active=right
+        if np.array_equal(run(left),anchor_residual):active=left
+        elif np.array_equal(run(right),anchor_residual):active=right
         else:return None,probes,'no isolated half reproduces residual'
-    if not np.array_equal(run(active),actual):return None,probes,'singleton fails'
+    if not np.array_equal(run(active),anchor_residual):return None,probes,'singleton fails'
     i=active[0]
     # verify full local gate; all other unknown bits off, known parent off
     x=np.repeat(base[None,:],N,0); x[:,b]=np.arange(N);x[:,p]&=~1;x[:,i]&=~1
@@ -56,7 +57,7 @@ def repair(world,model,s,b,a,actual):
     return (i,b,mask),probes,None
 
 def run1(tab,truth,seed):
-    r=np.random.default_rng(seed+90000);rows=[]
+    r=np.random.default_rng(seed+190000);rows=[]
     for case in range(16):
         order=r.permutation(B);edges=list(zip(map(int,order[::2]),map(int,order[1::2])))
         p,b=edges[0]; ds=np.flatnonzero(tab[1]!=tab[2]);v=int(r.choice(ds[1:]))
@@ -91,7 +92,7 @@ def run1(tab,truth,seed):
     return {'rows':rows,'repaired':len(success),'and_rejected':rule is None,'and_reason':reason,'and_probes':probes,'gate':bool(gate)}
 
 def run2(code,tab,truth,seed):
-    r=np.random.default_rng(seed+91000);a=r.integers(K,size=(T,S));b=r.integers(16,size=a.shape);state=r.integers(N,size=(S,16));rr=np.arange(S)
+    r=np.random.default_rng(seed+191000);a=r.integers(K,size=(T,S));b=r.integers(16,size=a.shape);state=r.integers(N,size=(S,16));rr=np.arange(S)
     pre=np.empty_like(a);post=np.empty_like(a)
     for t in range(T):
         pre[t]=state[rr,b[t]];post[t]=truth[a[t],pre[t]];state[rr,b[t]]=post[t]

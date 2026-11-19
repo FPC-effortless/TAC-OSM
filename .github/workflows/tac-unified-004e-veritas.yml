@@ -55,7 +55,7 @@ jobs:
           cp research/tac-unified/archive/TAC_UNIFIED_003AB.zip research/tac-unified/004e/
           cd research/tac-unified/004e
           echo '34866019d1e0dd9293f82dcea61ce904cc88ce9168bf377fd79443d8d46cf73a  TAC_UNIFIED_003AB.zip' | sha256sum -c - | tee "$E/archive-check.txt"
-          sha256sum pilot_e.py prior004.py prior004cd.py PROTOCOL.md recipe-*.json TAC_UNIFIED_003AB.zip > "$E/input-sha256.txt"
+          sha256sum pilot_e.py prior004.py prior004cd.py PROTOCOL.md REPAIR_AMENDMENT_R1.md recipe-*.json TAC_UNIFIED_003AB.zip > "$E/input-sha256.txt"
           python -m py_compile pilot_e.py prior004.py prior004cd.py
       - name: Actual TrainLab runs and Research Lab evidence
         shell: bash
