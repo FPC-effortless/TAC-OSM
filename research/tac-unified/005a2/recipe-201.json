@@ -1,0 +1,40 @@
+{
+  "schema": "trainlab.experiment.v1",
+  "execution_purpose": "engineering_diagnostic",
+  "name": "TAC-UNIFIED-005A2 seed 201",
+  "description": "Distinct state selection, gated credit, full native request latency",
+  "command": [
+    "python",
+    "pilot.py"
+  ],
+  "seed": 201,
+  "timeout_seconds": 300,
+  "source_kind": "CONSTRUCTED",
+  "split_identity": "005a2-fixture-201",
+  "inputs": [
+    "pilot.py",
+    "PROTOCOL.md",
+    "native_model.py",
+    "source-hashes.json",
+    "prior004.py",
+    "prior005a.py",
+    "prior005a1.py",
+    "TAC_UNIFIED_003AB.zip"
+  ],
+  "artifacts": [
+    "results.json"
+  ],
+  "metrics": {
+    "passed_gates": "max",
+    "active_two": "max",
+    "active_six": "max",
+    "strict_bad": "min",
+    "lease_ms": "min"
+  },
+  "budget": {
+    "updates": 0,
+    "gpu_minutes": 0,
+    "tuning_trials": 0,
+    "parameters": 10103943
+  }
+}
