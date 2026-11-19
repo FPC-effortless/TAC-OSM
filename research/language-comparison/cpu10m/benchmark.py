@@ -35,12 +35,11 @@ def verify_sources():
 
 
 class NativeByte(nn.Module):
-    def __init__(self, depth):
+    def __init__(self, depth, width, state_width, ff):
         super().__init__()
-        width, state_width, ff = (448, 64, 1392) if depth == 4 else (640, 96, 1920)
         cfg = replace(byte100k_config(), layers=depth, rungs=(depth,), width=width,
                       state_width=state_width, ff_width=ff, query_heads=8, kv_heads=4,
-                      attention_layers=tuple(range(2, depth + 1, 2)), max_parameters=10_500_000)
+                      attention_layers=(1,) if depth == 1 else tuple(range(2, depth + 1, 2)), max_parameters=10_500_000)
         self.core = CSL125R2(cfg)
         self.core.tool_head = nn.Identity()
         self.core.field_head = nn.Identity()
@@ -73,7 +72,11 @@ def make(name):
     elif name == 'gru':
         model = ByteGRU()
     else:
-        model = NativeByte(4 if name == 'tac_four' else 2)
+        geometry = {
+            'tac_four': (4, 448, 64, 1392), 'tac_two': (2, 640, 96, 1920),
+            'tac_one_512': (1, 512, 96, 5664), 'tac_one_896': (1, 896, 128, 2304),
+        }
+        model = NativeByte(*geometry[name])
     return model.eval()
 
 
@@ -109,15 +112,15 @@ def request(model, prompt, verify=False):
 
 
 @torch.inference_mode()
-def main():
+def measure(arms=ARMS):
     verify_sources()
     if COMPUTE_DTYPE != torch.float32:
         raise ValueError('nanochat CPU FP32 required')
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
-    models = {name: make(name) for name in ARMS}
+    models = {name: make(name) for name in arms}
     counts = {name: sum(p.numel() for p in model.parameters()) for name, model in models.items()}
-    trainable = {name: sum(p.numel() for p in m.parameters() if p.requires_grad) for name,m in models.items()}
+    trainable = {name: sum(p.numel() for p in m.parameters() if p.requires_grad) for name, m in models.items()}
     lo, hi = min(counts.values()), max(counts.values())
     if trainable != counts or not (9_500_000 <= lo <= hi <= 10_500_000 and hi / lo <= 1.01):
         raise ValueError(f'Matched live count gate failed: {counts}')
@@ -127,14 +130,14 @@ def main():
     rng = random.Random(SEED)
     for length in (32, 256):
         prompt = torch.tensor([list(data[:length])])
-        samples = {name: [] for name in ARMS}
+        samples = {name: [] for name in arms}
         errors = {}
         for name, model in models.items():
             _, errors[name] = request(model, prompt, verify=True)
             for _ in range(2):
                 request(model, prompt)
         for _ in range(24):
-            order = list(ARMS)
+            order = list(arms)
             rng.shuffle(order)
             for name in order:
                 sample, _ = request(models[name], prompt)
@@ -163,4 +166,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    measure()
