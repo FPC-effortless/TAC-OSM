@@ -1,0 +1,5 @@
+# TAC-UNIFIED-004C/D
+
+Prospective bounded no-fit diagnostic. Original 001–003 archives and bit-identical original 004AB Veritas evidence are retained on this branch. Read PROTOCOL.md before execution. The GitHub workflow runs the repository phone planner, checks the pinned prior source and ZIP, prepares the exact inputs, invokes the real Veritas TrainLab and Research Lab OS at eec439492407b0aa26922c23b5ae40d95289f4eb, verifies run receipts, imports evidence and commits the evidence bundle. No autonomous review, no new training or real-data qualification. All supported and negative fixtures are retained. The workflow's summary is descriptive and never substitutes for the raw artifacts.
+
+Reproduction: from repository root run `python scripts/phone_lab.py plan research/phone_queue/tac-unified-004cd.json`. Prepare the directory as shown by the workflow (copy ../004/pilot.py as prior004.py and ../archive/TAC_UNIFIED_003AB.zip). Set the pinned Veritas source paths in PYTHONPATH, install numpy==2.3.5, run the five TrainLab recipes and verify/import each run. No mutation of prior source, protected evaluation or merge.

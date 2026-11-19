@@ -1,0 +1,42 @@
+{
+  "schema": "trainlab.experiment.v1",
+  "execution_purpose": "engineering_diagnostic",
+  "name": "TAC-UNIFIED-004CD seed 204",
+  "description": "No-fit intervention economy and independent-evidence diagnostic. Preserve all failures, including dormant graph and correlated-view controls.",
+  "command": [
+    "python",
+    "pilot_cd.py"
+  ],
+  "seed": 204,
+  "timeout_seconds": 300,
+  "source_kind": "CONSTRUCTED",
+  "split_identity": "tac-unified-004cd-frozen-201-205-diagnostic-seed-204",
+  "inputs": [
+    "pilot_cd.py",
+    "PROTOCOL.md",
+    "prior004.py",
+    "TAC_UNIFIED_003AB.zip"
+  ],
+  "artifacts": [
+    "results.json"
+  ],
+  "metrics": {
+    "passed_gates": "max",
+    "targeted_queries": "min",
+    "full_queries": "min",
+    "joint_accuracy": "max",
+    "diverse_exact8_accuracy": "max",
+    "diverse_variable_accuracy": "max",
+    "diverse_exact8_reads": "min",
+    "diverse_variable_reads": "min",
+    "dormant_false_accept": "min"
+  },
+  "budget": {
+    "updates": 0,
+    "gpu_minutes": 0,
+    "tuning_trials": 0,
+    "chains_per_regime": 128,
+    "chain_actions": 1024,
+    "goal_cases": 64
+  }
+}
