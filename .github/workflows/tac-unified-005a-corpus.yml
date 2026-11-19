@@ -1,0 +1,115 @@
+name: TAC Unified 005A corpus source audit
+on:
+  push:
+    branches: [research/tac-unified-005a-corpus-20261119]
+    paths:
+      - 'research/tac-unified/005a-corpus/**'
+      - '.github/workflows/tac-unified-005a-corpus.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    if: github.ref == 'refs/heads/research/tac-unified-005a-corpus-20261119'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            src
+            scripts
+            research/phone_queue
+            research/tac-unified
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: eec439492407b0aa26922c23b5ae40d95289f4eb
+          path: _veritas
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Frozen source-only plan
+        shell: bash
+        run: |
+          set -euo pipefail
+          E="$RUNNER_TEMP/evidence"
+          mkdir -p "$E"
+          python scripts/phone_lab.py plan research/phone_queue/tac-unified-005a-corpus.json > "$E/compute-plan.json"
+          python -c 'import json,sys; x=json.load(open(sys.argv[1])); assert x["backend"]=="github_actions" and x["state"]=="READY_NO_FIT" and x["approved_to_train"] is False' "$E/compute-plan.json"
+          git rev-parse HEAD > "$E/tac-commit.txt"
+          git -C _veritas rev-parse HEAD > "$E/veritas-commit.txt"
+          python -m pip freeze > "$E/environment.txt"
+      - name: Retrieve only original publisher TRAIN shard
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/tac-unified/005a-corpus
+          curl --fail --silent --show-error --location --max-time 150 --retry 1 --max-filesize 30000000 'https://huggingface.co/datasets/osunlp/Mind2Web/resolve/6314166657eec4aa0e22c00f8d801e609ce8e80f/data/train/train_10.json' -o train_10.json
+          echo '182542d7947b3fa9e90fc57a3d82d4d8f2997ca5a06664217720d7a78a956e33  train_10.json' | sha256sum -c - | tee "$RUNNER_TEMP/evidence/source-check.txt"
+          test "$(wc -c < train_10.json)" = 28366146
+          sha256sum audit.py SOURCE_PINS.json PROTOCOL.md recipe.json train_10.json > "$RUNNER_TEMP/evidence/input-sha256.txt"
+      - name: Actual TrainLab and Research Lab source receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          E="$RUNNER_TEMP/evidence"
+          export PYTHONPATH="$GITHUB_WORKSPACE/_veritas/integrations/trainlab/src:$GITHUB_WORKSPACE/_veritas/integrations/research_lab/src"
+          python -m research_lab --root "$E/lab" init --program tac-unified-005a-corpus --objective 'Original publisher TRAIN eligibility; no training or protected evaluation' --seconds 600 --microusd 0 --cpu-slots 1 > "$E/lab-init.json"
+          cd research/tac-unified/005a-corpus
+          python -m trainlab run recipe.json --runs "$E/runs" > "$E/trainlab.json" 2> "$E/trainlab.stderr"
+          for r in "$E/runs"/*; do
+            python -m trainlab verify "$r" > "$E/verify.json"
+            python -m research_lab --root "$E/lab" import-trainlab "$r" > "$E/import.json"
+            cp "$r/output/results.json" "$E/summary.json"
+          done
+          python -m research_lab --root "$E/lab" memory > "$E/research-memory.json"
+          python -m research_lab --root "$E/lab" status > "$E/lab-status.json"
+          cat "$E/summary.json"
+      - name: Remove source bytes before archiving receipts
+        if: always()
+        run: rm -f research/tac-unified/005a-corpus/train_10.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tac-unified-005a-corpus-evidence
+          path: ${{ runner.temp }}/evidence
+          if-no-files-found: error
+          retention-days: 90
+  preserve:
+    if: always() && github.ref == 'refs/heads/research/tac-unified-005a-corpus-20261119'
+    needs: diagnostic
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/tac-unified-005a-corpus-20261119
+          fetch-depth: 1
+          sparse-checkout: |
+            research/tac-unified
+      - uses: actions/download-artifact@v4
+        with:
+          name: tac-unified-005a-corpus-evidence
+          path: ${{ runner.temp }}/evidence
+      - name: Preserve redacted evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          dest="research/tac-unified/evidence/005a-corpus/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test ! -e "$dest"
+          mkdir -p "$dest"
+          cp -a "$RUNNER_TEMP/evidence/." "$dest/"
+          cd "$dest"
+          find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
+          cd "$GITHUB_WORKSPACE"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$dest"
+          git commit -m "Preserve 005A corpus source audit $GITHUB_RUN_ID"
+          git push origin HEAD:refs/heads/research/tac-unified-005a-corpus-20261119
