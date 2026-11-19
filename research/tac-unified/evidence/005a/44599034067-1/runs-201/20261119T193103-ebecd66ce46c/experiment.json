@@ -1,0 +1,40 @@
+{
+  "artifacts": [
+    "results.json"
+  ],
+  "budget": {
+    "anchors": 6,
+    "gpu_minutes": 0,
+    "parameters": 10103943,
+    "tuning_trials": 0,
+    "updates": 0,
+    "variants": 6
+  },
+  "command": [
+    "python",
+    "pilot.py"
+  ],
+  "description": "Actual untrained CSL 10M latent interface + versioned deterministic structural execution, no optimizer",
+  "execution_purpose": "engineering_diagnostic",
+  "inputs": [
+    "pilot.py",
+    "PROTOCOL.md",
+    "native_model.py",
+    "source-hashes.json",
+    "prior004.py",
+    "TAC_UNIFIED_003AB.zip"
+  ],
+  "metrics": {
+    "anchor_accuracy": "max",
+    "feature_ms": "min",
+    "hash_ms": "min",
+    "passed_gates": "max",
+    "variant_accuracy": "max"
+  },
+  "name": "TAC-UNIFIED-005A0 seed 201",
+  "schema": "trainlab.experiment.v1",
+  "seed": 201,
+  "source_kind": "CONSTRUCTED",
+  "split_identity": "005a0-fixture-201",
+  "timeout_seconds": 300
+}
