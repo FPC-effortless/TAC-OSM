@@ -1,0 +1,40 @@
+{
+  "schema": "trainlab.experiment.v1",
+  "execution_purpose": "engineering_diagnostic",
+  "name": "TAC-UNIFIED-004E seed 204",
+  "description": "No-fit residual-triggered repair and post-action guard, including identification ambiguity and dormant interactions.",
+  "command": [
+    "python",
+    "pilot_e.py"
+  ],
+  "seed": 204,
+  "timeout_seconds": 300,
+  "source_kind": "CONSTRUCTED",
+  "split_identity": "tac-unified-004e-frozen-201-205-diagnostic-seed-204",
+  "inputs": [
+    "pilot_e.py",
+    "PROTOCOL.md",
+    "prior004.py",
+    "prior004cd.py",
+    "TAC_UNIFIED_003AB.zip"
+  ],
+  "artifacts": [
+    "results.json"
+  ],
+  "metrics": {
+    "passed_gates": "max",
+    "repaired": "max",
+    "guard_accuracy": "max",
+    "cue_accuracy": "max",
+    "unique_coverage": "max"
+  },
+  "budget": {
+    "updates": 0,
+    "gpu_minutes": 0,
+    "tuning_trials": 0,
+    "chains_per_regime": 128,
+    "chain_actions": 1024,
+    "worlds": 16,
+    "discovery_snapshot_cap": 2048
+  }
+}
